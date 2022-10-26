@@ -26,6 +26,14 @@ const updateUser = async data => {
     } catch (err) { console.log(err) }
 }
 
+const setUserVoid = async data => {
+    try {
+        const user = await axios.get(`${API_URL}/api/user/logout`, data)
+        localStorage.removeItem('user')
+        return user
+    } catch (err) { console.log(err) }
+}
+
 const resetPassordByEmail = async data => {
     try {
         const user = await axios.post(`${API_URL}/api/user/resetByEmail`, data)
@@ -72,6 +80,7 @@ export {
     loginUser,
     registerUser,
     updateUser,
+    setUserVoid,
     resetPassordByEmail,
     changePass,
     getAllResumes,

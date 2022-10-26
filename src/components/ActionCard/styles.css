@@ -1,0 +1,23 @@
+.action-card-container {
+    border-radius: 0.5vw;
+    box-shadow: 2px 2px 10px gray;
+    padding: 0.5vw 1vw;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.action-card-container:hover {
+    box-shadow: 4px 4px 15px gray;
+    transform: scale(1.02);
+    opacity: 0.8;
+}
+
+.action-card-label {
+    font-size: 1.2vw;
+    margin: 1vw;
+}
+
+.action-card-details {
+    margin: 1vw;
+    font-size: 0.9vw;
+}

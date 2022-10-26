@@ -1,0 +1,250 @@
+/* --- Home --- */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- Login --- */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.login-box {
+    padding: 2vw 3vw;
+    margin: 4vw 0;
+    box-shadow: 2px 2px 10px lightgray;
+    width: 15vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-logo {
+    height: 50px;
+    width: auto;
+    margin: 0;
+}
+
+.login-text {
+    margin: 1vw 0 0 0;
+}
+
+.login-image {
+    margin: 0 0 3vw 0;
+}
+
+.login-fill {
+    
+}
+
+/* --- Create User --- */
+.register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0 2vw;
+}
+
+.register-box {
+    padding: 2vw 3vw;
+    margin: 1vw 0;
+    box-shadow: 2px 2px 10px lightgray;
+    width: 15vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.register-fill {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+    margin: 0;
+}
+
+.register-logo {
+    height: 50px;
+    width: auto;
+    margin: 0;
+}
+
+.register-text {
+    margin: 0
+}
+
+.register-image {
+    margin: 0 0 1vw 0;
+}
+
+.register-fill {
+    
+}
+
+
+
+/* --- Home --- */
+.home-container {
+    padding: 2vw;
+    margin-top: 4vw;
+}
+
+.home-action-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2vw;
+}
+
+
+
+/* --- My Resumes ---  */
+.my-resumes-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5vw 2vw;
+}
+
+.page-title {
+    font-size: 1vw;
+    padding: 0;
+    margin: 0;
+}
+
+.resumes-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 1vw;
+    align-self: center;
+    justify-content: center;
+}
+
+.resume-card {
+    margin: 1vw;
+    background-color: rgb(250, 235, 235);
+    box-shadow: 2px 2px 10px lightgray;
+    width: fit-content;
+    padding: 1vw 1.5vw;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.resume-card:hover {
+    transform: scale(1.02);
+    box-shadow: 4px 4px 15px lightgray;
+}
+
+.resume-text {}
+
+.resume-name {
+    font-size: 1.3vw;
+    margin: 0;
+}
+
+.resume-role {
+    font-size: 1vw;
+    /* font-style: italic; */
+    color: rgb(110, 110, 110);
+    margin: 0;  
+}
+
+.resume-description {
+    margin: 0.5vw 0;
+    font-size: 0.8vw;
+    max-width: 15vw;
+    height: 3vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.resume-icons {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.resume-icon {
+    height: 20px;
+    margin: 0.5vw;
+    transition: 0.2s;
+}
+
+.resume-icon:hover {
+    filter: invert(12%) sepia(90%) saturate(2046%) hue-rotate(353deg) brightness(94%) contrast(111%);
+}
+
+/* --- NEW RESUME ---  */
+.new-resume-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0 2vw;
+}
+
+.new-resume-fill {
+    width: 80%;
+    margin: 2vw 0;
+}
+
+.resume-fill-col {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+
+.remove-modal {
+    display: flex;
+    flex-direction: column;
+    padding: 2VW;
+    position: absolute;
+    Background-color: white;
+    /* border: 1px solid lightgray; */
+    border-radius: 0.5vw;
+    box-shadow: 2px 2px 10px lightgray;
+    margin-top: 4vw;
+}
+
+.remove-modal-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2vw;
+}
+
+/* --- PDF MODAL ---  */
+.pdf-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1vw;
+    z-index: 1;
+    width: 80vw;
+    height: fit-content;
+    min-height: 70%;
+    background-color: white;
+    border: 2px solid gray;
+    border-radius: 0.5vw;
+    box-shadow: 2px 2px 10px lightgray;
+    padding: 1vw;
+    position: absolute;
+}
+
+.close-modal {
+    align-self: flex-end;
+    margin: 0 0 1vw 0;
+    color: #6D0E00;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.close-modal:hover {
+    opacity: 0.7;
+}

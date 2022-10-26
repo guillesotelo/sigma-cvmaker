@@ -1,0 +1,33 @@
+.item-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.item-dropdown-label {
+    font-size: 1vw;
+    margin: 0.5vw 0;
+}
+
+.item-dropdown-row {
+    display: flex;
+    flex-direction: row;
+    height: 2vw;
+    line-height: 2vw;
+    align-items: center;
+    gap: 1vw;
+}
+
+.item-dropdown-name {
+    font-size: 0.8vw;
+}
+
+.item-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.item-dropdown-option {
+    font-size: 0.8vw;
+}
