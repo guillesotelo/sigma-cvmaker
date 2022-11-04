@@ -55,6 +55,7 @@ export default function NewResume() {
             resumeData.skills = removeVoids(skills)
             resumeData.education = removeVoids(education)
             resumeData.certifications = removeVoids(certifications)
+            resumeData.experience = experience
             resumeData.strengths = strengths
             resumeData.expertise = expertise
             resumeData.profilePic = profilePic

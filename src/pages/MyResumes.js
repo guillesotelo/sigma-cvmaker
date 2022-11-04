@@ -30,27 +30,22 @@ export default function MyResumes() {
 
     useEffect(() => {
         if (!user || !user.email) history.push('/login')
-
         getAllResumes()
-
-        // if(allResumes) setResumes(allResumes)
-        // let resArr = []
-        // for (let i = 0; i < 10; i++) {
-        //     resArr.push({
-        //         id: i,
-        //         full_name: 'Guillermo Sotelo',
-        //         role: 'Software Engineer',
-        //         description: 'Guillermo is a Full Stack Developer with an inclination towards electronics and Industrial Design. He is currently developing web and mobile applications all the way from back to frontend for diverse projects around the globe.'
-        //     })
-        // }
-
-        // setResumes(resArr)
     }, [])
 
     const getAllResumes = async () => {
         if (user && user.email) {
-            const cvs = await dispatch(getResumes(user)).then(data => data.payload)
-            if (cvs && cvs.length) setResumes(cvs)
+            try {
+                setLoading(true)
+                const cvs = await dispatch(getResumes(user)).then(data => data.payload)
+                if (cvs && cvs.length) {
+                    setResumes(cvs)
+                }
+                setLoading(false)
+            } catch (err) { 
+                setLoading(false) 
+                console.error(err)
+            }
         }
     }
 
@@ -106,7 +101,8 @@ export default function MyResumes() {
                             </div>
                         </div>
                     )
-                    : ''
+                    : loading ? <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#6D0E00' /></div>
+                    : <h4 style={{ textAlign: 'center', marginTop: '6vw', color: 'gray' }}> ~ No resumes found ~ </h4>
                 }
             </div>
             {openModal && isPdf ?

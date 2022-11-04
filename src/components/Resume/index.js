@@ -245,7 +245,7 @@ export default function Resume({ resumeData }) {
             <PDFViewer style={styles.PDFContainer}>
                 <Document>
                     <Page size="A4" style={styles.page}>
-                        <View style={{...styles.rowContainer, border: 'none'}} wrap={false} fixed>
+                        <View style={{ ...styles.rowContainer, border: 'none' }} wrap={false} fixed>
                             <View style={styles.column1}>
                                 <Image style={styles.logo} src={SigmaLogo} />
                             </View>
@@ -366,6 +366,28 @@ export default function Resume({ resumeData }) {
                         <View style={styles.rowContainer} wrap={false}>
                             <View style={styles.sectionColumn1}>
                                 <View style={styles.infoView1}>
+                                    <Text style={styles.sectionTitle}>EXPERIENCE</Text>
+                                </View>
+                            </View>
+                            <View style={styles.sectionColumn2}>
+                                <View style={styles.infoView2}>
+                                    {res.experience && res.experience.map((exp, i) => (
+                                        <View key={i} style={styles.bullet}>
+                                            <Text style={styles.skill}>{exp.period || ''}</Text>
+                                            <Text style={styles.skill}>{exp.company || ''}</Text>
+                                            <Text style={styles.skill}>{exp.role || ''}</Text>
+                                            <Text style={styles.skill}>{exp.description || ''}</Text>
+                                            {exp.bullets.map(resp => resp && <Text style={styles.skill}>●{resp}</Text>)}
+                                            <Text style={styles.skill}>{exp.technologies || ''}</Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            </View>
+                        </View>
+
+                        <View style={styles.rowContainer} wrap={false}>
+                            <View style={styles.sectionColumn1}>
+                                <View style={styles.infoView1}>
                                     <Text style={styles.sectionTitle}>TOOLS</Text>
                                 </View>
                             </View>
@@ -377,9 +399,6 @@ export default function Resume({ resumeData }) {
                         </View>
 
                         <View style={styles.footer} wrap={false} fixed>
-                            {/* <View style={styles.column1}></View> */}
-                            {/* <View style={styles.column2}> */}
-                            {/* <View style={styles.infoView2}> */}
                             <View style={styles.footerCol}>
                                 <View style={styles.footerRow}>
                                     <Text style={styles.footerItem}>Concact:</Text>
@@ -400,8 +419,6 @@ export default function Resume({ resumeData }) {
                                     <Text style={styles.footerValue}>{res.footer_location || '-'}</Text>
                                 </View>
                             </View>
-                            {/* </View> */}
-                            {/* </View> */}
                         </View>
 
                     </Page>
