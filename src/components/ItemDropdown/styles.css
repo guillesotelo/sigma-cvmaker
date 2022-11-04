@@ -2,32 +2,98 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    color: rgb(105, 104, 105);
+    margin: 0.5vw 0;
+    width: 100%;
 }
 
-.item-dropdown-label {
-    font-size: 1vw;
-    margin: 0.5vw 0;
+.item-label {
+    font-size: 0.9vw;
+    margin: 0 0 0.5vw 0;
+    text-align: left;
+    color: rgb(105, 104, 105);
 }
 
 .item-dropdown-row {
     display: flex;
     flex-direction: row;
-    height: 2vw;
-    line-height: 2vw;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1vw;
     align-items: center;
-    gap: 1vw;
+}
+
+.item-dropdown-blocked {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 3vw;
+    align-items: center;
+    gap: 0.5vw;
+    text-align: left;
 }
 
 .item-dropdown-name {
-    font-size: 0.8vw;
+    border: 2px solid #696869;
+    background-color: #e5e5e5;
+    font-weight: normal;
+    border-radius: 0.5vw;
+    padding: 0.7vw;
+    font-size: 0.9vw;
+    width: 40%;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.item-dropdown {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.item-dropdown-select {
+    border: 2px solid #696869;
+    background-color: #e5e5e5;
+    border-radius: 0.5vw;
+    font-size: 0.9vw;
+    padding: 0.65vw;
+    width: 40%;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .item-dropdown-option {
     font-size: 0.8vw;
+}
+
+.item-dropdown-new {
+    margin: 0.5vw 0 0.5vw 0;
+    color: gray;
+    height: 1.5vw;
+    width: 1.5vw;
+    line-height: 1.5vw;
+    border: 2px solid #adadad;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #adadad;
+    transition: 0.3s;
+}
+
+.item-dropdown-remove {
+    margin: 0.5vw 0 0.5vw 0;
+    color: gray;
+    height: 1.5vw;
+    width: 1.5vw;
+    line-height: 1.5vw;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 4%;
+    color: #adadad;
+}
+.item-dropdown-remove:hover {
+    color: #6D0E00;
+}
+
+.item-dropdown-new:hover {
+    color: #6D0E00;
+    border-color: #6D0E00;
 }

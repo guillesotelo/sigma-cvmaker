@@ -57,12 +57,7 @@ export default function Register() {
   return (
     <div className='register-container'>
       <ToastContainer autoClose={2000} />
-      <CTAButton
-        label='Go back'
-        handleClick={() => history.goBack()}
-        style={{ alignSelf: 'flex-start' }}
-        color={APP_COLORS.GRAY}
-      />
+      <h4 className='go-back-btn' onClick={() => history.goBack()}>Go back</h4>
       <div className='register-box'>
         <div className='register-image'>
           <img src='https://cdn-images-1.medium.com/max/1200/1*nTO69kRH04bgcPD65JcM_A.png' className='register-logo' />
@@ -73,7 +68,7 @@ export default function Register() {
           :
           <div className='register-fill'>
             <InputField
-              label='Name and Surname'
+              label='Full Name'
               type='text'
               name='username'
               updateData={updateData}

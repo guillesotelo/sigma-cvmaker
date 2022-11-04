@@ -1,15 +1,16 @@
 .action-card-container {
     border-radius: 0.5vw;
-    box-shadow: 2px 2px 10px gray;
+    box-shadow: 2px 2px 7px gray;
     padding: 0.5vw 1vw;
     transition: 0.5s;
     cursor: pointer;
 }
 
 .action-card-container:hover {
-    box-shadow: 4px 4px 15px gray;
+    box-shadow: 4px 4px 20px gray;
     transform: scale(1.02);
     opacity: 0.8;
+    background-color: rgb(214, 196, 196) !important;
 }
 
 .action-card-label {

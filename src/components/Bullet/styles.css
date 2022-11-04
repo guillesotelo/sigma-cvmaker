@@ -1,0 +1,27 @@
+.bullet-container {
+    margin: 1vw 0;
+    color: rgb(105, 104, 105);
+}
+
+.bullet {
+    font-size: 0.9vw;
+}
+
+.bullet-text {
+    font-size: 0.9vw;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bullet-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    height: 2vw;
+    gap: 1vw;
+    width: 100%;
+    margin: 0 0 1vw 2vw;
+    align-items: center;
+}

@@ -1,0 +1,26 @@
+.footer-container {
+    margin: 1vw 0 5vw 0;
+    display: flex;
+    flex-direction: row;
+    gap: 5vw;
+    justify-content: flex-end;
+    color: rgb(105, 104, 105);
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1vw;
+}
+
+.footer-row input {
+    width: 16vw;
+    padding: 0.4vw;
+}

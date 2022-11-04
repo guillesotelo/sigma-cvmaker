@@ -30,7 +30,7 @@ const setUserVoid = async data => {
     try {
         const user = await axios.get(`${API_URL}/api/user/logout`, data)
         localStorage.removeItem('user')
-        return user
+        return user.data
     } catch (err) { console.log(err) }
 }
 
@@ -50,14 +50,22 @@ const changePass = async data => {
 
 const getAllResumes = async data => {
     try {
-        const resumes = await axios.get(`${API_URL}/api/resume`, { params: data })
-        return resumes
+        const resumes = await axios.get(`${API_URL}/api/resume/getAll`, { params: data })
+        return resumes.data
     } catch (err) { console.log(err) }
 }
 
+const getResumeByEmail = async data => {
+    try {
+        const resumes = await axios.get(`${API_URL}/api/resume/myResume`, data)
+        return resumes.data
+    } catch (err) { console.log(err) }
+}
+
+
 const createResume = async data => {
     try {
-        const resume = await axios.post(`${API_URL}/api/resume`, data)
+        const resume = await axios.post(`${API_URL}/api/resume/create`, data)
         return resume
     } catch (err) { console.log(err) }
 }
@@ -84,6 +92,7 @@ export {
     resetPassordByEmail,
     changePass,
     getAllResumes,
+    getResumeByEmail,
     createResume,
     updateResume,
     deleteResume

@@ -8,11 +8,11 @@ import { APP_COLORS } from '../constants/app'
 import { logIn } from '../store/reducers/user'
 import MoonLoader from "react-spinners/MoonLoader"
 import ActionCard from '../components/ActionCard'
-import { deleteResume, getAllResumes } from '../store/services/reduxServices'
 import DownloadIcon from '../icons/download-icon.svg'
 import EditIcon from '../icons/edit-icon.svg'
 import TrashCan from '../icons/trash-icon.svg'
 import Resume from '../components/Resume'
+import { getResumes, removeResume } from '../store/reducers/resume'
 
 export default function MyResumes() {
     const [resumes, setResumes] = useState([])
@@ -20,30 +20,36 @@ export default function MyResumes() {
     const [openModal, setOpenModal] = useState(false)
     const [loading, setLoading] = useState(false)
     const [isPdf, setIsPdf] = useState(false)
-    const user = localStorage.getItem('user')
+    const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
     const dispatch = useDispatch()
     const history = useHistory()
 
     useEffect(() => {
-        const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
-        if (!user || !user.email) history.push('/login')
-        // getResumes()
-        let resArr = []
-        for (let i = 0; i < 10; i++) {
-            resArr.push({
-                id: i,
-                full_name: 'Guillermo Sotelo',
-                role: 'Software Engineer',
-                description: 'Guillermo is a Full Stack Developer with an inclination towards electronics and Industrial Design. He is currently developing web and mobile applications all the way from back to frontend for diverse projects around the globe.'
-            })
-        }
+        // console.log("resumes", resumes)
+    }, [resumes])
 
-        setResumes(resArr)
+    useEffect(() => {
+        if (!user || !user.email) history.push('/login')
+
+        getAllResumes()
+
+        // if(allResumes) setResumes(allResumes)
+        // let resArr = []
+        // for (let i = 0; i < 10; i++) {
+        //     resArr.push({
+        //         id: i,
+        //         full_name: 'Guillermo Sotelo',
+        //         role: 'Software Engineer',
+        //         description: 'Guillermo is a Full Stack Developer with an inclination towards electronics and Industrial Design. He is currently developing web and mobile applications all the way from back to frontend for diverse projects around the globe.'
+        //     })
+        // }
+
+        // setResumes(resArr)
     }, [])
 
-    const getResumes = async () => {
-        if (user && user.manager) {
-            const cvs = await dispatch(getAllResumes(user)).then(data => data.payload)
+    const getAllResumes = async () => {
+        if (user && user.email) {
+            const cvs = await dispatch(getResumes(user)).then(data => data.payload)
             if (cvs && cvs.length) setResumes(cvs)
         }
     }
@@ -51,7 +57,7 @@ export default function MyResumes() {
     const removeResume = () => {
         try {
             setLoading(true)
-            const removed = dispatch(deleteResume(resumeData)).then(data => data.payload)
+            const removed = dispatch(removeResume(resumeData)).then(data => data.payload)
 
             if (removed) {
                 setLoading(false)
@@ -74,24 +80,20 @@ export default function MyResumes() {
 
     return (
         <div className='my-resumes-container'>
-            <CTAButton
-                label='Go back'
-                handleClick={() => history.goBack()}
-                style={{ alignSelf: 'flex-start' }}
-                color={APP_COLORS.GRAY}
-            />
+            <h4 className='go-back-btn' onClick={() => history.goBack()}>Go back</h4>
             <h2 className='page-title' style={{ filter: openModal && 'blur(10px)' }}>MY RESUMES</h2>
             <div className='resumes-list' style={{ filter: openModal && 'blur(10px)' }}>
                 {resumes && resumes.length ?
-                    resumes.map(resume =>
-                        <div className='resume-card'>
+                    resumes.map((resume, i) =>
+                        <div className='resume-card' key={i}>
                             <div className='resume-text' onClick={() => {
                                 setOpenModal(true)
                                 setIsPdf(true)
                                 setResumeData(resume)
                             }}>
-                                <h4 className='resume-name'>{resume.full_name || ''}</h4>
+                                <h4 className='resume-name'>{resume.username || resume.user || ''}</h4>
                                 <h4 className='resume-role'>{resume.role || ''}</h4>
+                                <h4 className='resume-role'>{resume.email || ''}</h4>
                                 <h4 className='resume-description'>{resume.description || ''}</h4>
                             </div>
                             <div className='resume-icons'>

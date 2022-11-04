@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { APP_COLORS } from '../../constants/app'
 import './styles.css'
 
 export default function InputField(props) {
+
     const {
         name,
         type,
@@ -13,7 +14,10 @@ export default function InputField(props) {
         autoComplete,
         value,
         cols,
-        rows
+        rows,
+        filename,
+        image,
+        setImage
     } = props
 
     const handleChange = (newValue) => {
@@ -25,6 +29,25 @@ export default function InputField(props) {
             updateData(name, value)
         }
     }
+
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader()
+            fileReader.readAsDataURL(file)
+            fileReader.onload = () => {
+                resolve(fileReader.result)
+            }
+            fileReader.onerror = (error) => {
+                reject(error)
+            }
+        })
+    }
+
+    const uploadFile = async e => {
+        const file = e.target.files[0]
+        const base64 = await convertToBase64(file)
+        setImage({ ...image, [filename]: base64 })
+    };
 
     return (
         <div className='inputfield-container'>
@@ -40,15 +63,25 @@ export default function InputField(props) {
                     value={value}
                 />
                 :
-                <input
-                    className='inputfield-field'
-                    autoComplete={autoComplete}
-                    onChange={handleChange}
-                    placeholder={placeholder || ''}
-                    type={type || 'text'}
-                    style={style || null}
-                    value={value}
-                />
+                type === 'file' ?
+                    <input
+                        type="file"
+                        label="Image"
+                        name={filename || 'file'}
+                        accept=".jpeg, .png, .jpg"
+                        onChange={(e) => uploadFile(e)}
+                        style={{ color: 'gray' }}
+                    />
+                    :
+                    <input
+                        className='inputfield-field'
+                        autoComplete={autoComplete}
+                        onChange={handleChange}
+                        placeholder={placeholder || ''}
+                        type={type || 'text'}
+                        style={style || null}
+                        value={value}
+                    />
 
             }
         </div>
