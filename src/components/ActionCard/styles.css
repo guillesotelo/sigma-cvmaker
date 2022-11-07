@@ -4,6 +4,7 @@
     padding: 0.5vw 1vw;
     transition: 0.5s;
     cursor: pointer;
+    min-width: 12vw;
 }
 
 .action-card-container:hover {

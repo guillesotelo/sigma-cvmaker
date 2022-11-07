@@ -14,7 +14,7 @@ import TrashCan from '../icons/trash-icon.svg'
 import Resume from '../components/Resume'
 import { getResumes, removeResume } from '../store/reducers/resume'
 
-export default function MyResumes() {
+export default function MyResumes({ showAll }) {
     const [resumes, setResumes] = useState([])
     const [resumeData, setResumeData] = useState({})
     const [openModal, setOpenModal] = useState(false)
@@ -25,19 +25,16 @@ export default function MyResumes() {
     const history = useHistory()
 
     useEffect(() => {
-        // console.log("resumes", resumes)
-    }, [resumes])
-
-    useEffect(() => {
         if (!user || !user.email) history.push('/login')
-        getAllResumes()
+        const getAll = showAll || false
+        getAllResumes(getAll)
     }, [])
 
-    const getAllResumes = async () => {
+    const getAllResumes = async getAll => {
         if (user && user.email) {
             try {
                 setLoading(true)
-                const cvs = await dispatch(getResumes(user)).then(data => data.payload)
+                const cvs = await dispatch(getResumes({...user, getAll})).then(data => data.payload)
                 if (cvs && cvs.length) {
                     setResumes(cvs)
                 }
@@ -89,7 +86,6 @@ export default function MyResumes() {
                                 <h4 className='resume-name'>{resume.username || resume.user || ''}</h4>
                                 <h4 className='resume-role'>{resume.role || ''}</h4>
                                 <h4 className='resume-role'>{resume.email || ''}</h4>
-                                <h4 className='resume-description'>{resume.description || ''}</h4>
                             </div>
                             <div className='resume-icons'>
                                 <img src={DownloadIcon} className='resume-icon' />

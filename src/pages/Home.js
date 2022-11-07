@@ -11,26 +11,36 @@ import ActionCard from '../components/ActionCard'
 import { getAllResumes } from '../store/services/reduxServices'
 
 export default function Home() {
+  const [user, setUser] = useState({})
   const dispatch = useDispatch()
   const history = useHistory()
 
   useEffect(() => {
-    const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
-    if (!user || !user.email) history.push('/login')
-  })
+    const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
+    if (!localUser || !localUser.email) history.push('/login')
+    setUser(localUser)
+  }, [])
 
   return (
     <div className='home-container'>
       <div className='home-action-cards'>
         <ActionCard
-          label='My Resumes'
+          label='My CVs'
           details="Show consultant's CVs"
           color={APP_COLORS.SPACE}
           onClick={() => history.push('/myResumes')}
         />
+        {user.isManager ?
+          <ActionCard
+            label='All CVs'
+            details="Show all submitted CVs"
+            color={APP_COLORS.SPACE}
+            onClick={() => history.push('/allResumes')}
+          />
+          : ''}
         <ActionCard
-          label='New Resume'
-          details="Create a new Resume"
+          label='New CV'
+          details="Create a new CV"
           color={APP_COLORS.SPACE}
           onClick={() => history.push('/createResume')}
         />

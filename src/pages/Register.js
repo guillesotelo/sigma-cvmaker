@@ -92,7 +92,6 @@ export default function Register() {
               name='manager'
               updateData={updateData}
               style={{ marginBottom: '1vw' }}
-              value={(data.manager || data.manager === '') ? data.manager : user && user.email || ''}
             />
             <SwitchBTN
               label='Is Manager?'

@@ -29,6 +29,10 @@ function App() {
         <Header/>
         <MyResumes/>
       </Route>
+      <Route path="/allResumes">
+        <Header/>
+        <MyResumes showAll={true}/>
+      </Route>
       <Route path="/createResume">
         <Header/>
         <NewResume/>

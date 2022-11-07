@@ -6,6 +6,7 @@ import CTAButton from '../CTAButton'
 import InputField from '../InputField'
 import { APP_COLORS } from '../../constants/app'
 import { createUser } from '../../store/reducers/user'
+import { getProfileImage } from '../../store/reducers/resume'
 import SwitchBTN from '../SwitchBTN'
 import MoonLoader from "react-spinners/MoonLoader"
 import ReactDOM from 'react-dom';
@@ -19,18 +20,29 @@ import './styles.css'
 export default function Resume({ resumeData }) {
     const [data, setData] = useState(resumeData)
     const [res, setRes] = useState({})
-    const [loading, setLoading] = useState(false)
+    const [profileImage, setProfileImage] = useState({})
     const [numPages, setNumPages] = useState(null)
     const [pageNumber, setPageNumber] = useState(1)
 
     useEffect(() => {
         const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
         if (!user || !user.email) history.push('/login')
-
-        const parsedData = JSON.parse(data.data)
-        setRes(parsedData)
-        console.log("parsedData", parsedData)
+        getResumeData()
     }, [])
+
+    const getResumeData = async () => {
+        try {
+            const parsedData = JSON.parse(data.data)
+
+            const profilePic = await dispatch(getProfileImage(resumeData)).then(data => data.payload)
+
+            if (profilePic) setProfileImage(profilePic.data)
+
+            setRes(parsedData)
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     const onDocumentLoadSuccess = ({ numPages }) => {
         setNumPages(numPages)
@@ -242,195 +254,195 @@ export default function Resume({ resumeData }) {
         const fullName = `${res.name || ''} ${res.middlename || ''} ${res.surname || ''}`
 
         return (
-            <PDFViewer style={styles.PDFContainer}>
-                <Document>
-                    <Page size="A4" style={styles.page}>
-                        <View style={{ ...styles.rowContainer, border: 'none' }} wrap={false} fixed>
-                            <View style={styles.column1}>
-                                <Image style={styles.logo} src={SigmaLogo} />
+            Object.keys(res).length ?
+                <PDFViewer style={styles.PDFContainer}>
+                    <Document>
+                        <Page size="A4" style={styles.page}>
+                            <View style={{ ...styles.rowContainer, border: 'none' }} wrap={false} fixed>
+                                <View style={styles.column1}>
+                                    <Image style={styles.logo} src={SigmaLogo} />
+                                </View>
+                                <View style={styles.column2}>
+                                    <Text style={styles.name}>{res.name.toUpperCase()}</Text>
+                                    {res.middlename ? <Text style={styles.name}>{res.middlename.toUpperCase()}</Text> : null}
+                                    <Text style={styles.name}>{res.surname.toUpperCase() || 'Full Name'}</Text>
+                                    <Text style={styles.role}>{res.role.toUpperCase() || 'Role'}</Text>
+                                </View>
                             </View>
-                            <View style={styles.column2}>
-                                <Text style={styles.name}>{res.name.toUpperCase()}</Text>
-                                {res.middlename && <Text style={styles.name}>{res.middlename.toUpperCase()}</Text>}
-                                <Text style={styles.name}>{res.surname.toUpperCase()}</Text>
-                                <Text style={styles.role}>{res.role.toUpperCase()}</Text>
-                            </View>
-                        </View>
 
-                        <View style={styles.rowContainer} wrap={false}>
-                            <View style={styles.column1}>
-                                <Image style={styles.profilePic} src={res.profilePic && res.profilePic.profileImage} />
-                                <View style={styles.infoView1}>
-                                    <Text style={styles.infoItem}>Name</Text>
-                                    <Text style={styles.regularText}>{fullName}</Text>
+                            <View style={styles.rowContainer} wrap={false}>
+                                <View style={styles.column1}>
+                                    <Image style={styles.profilePic} src={profileImage} />
+                                    <View style={styles.infoView1}>
+                                        <Text style={styles.infoItem}>Name</Text>
+                                        <Text style={styles.regularText}>{fullName || ''}</Text>
+                                    </View>
+                                    <View style={styles.infoView1}>
+                                        <Text style={styles.infoItem}>Gender</Text>
+                                        <Text style={styles.regularText}>{res.gender || ''}</Text>
+                                    </View>
+                                    <View style={styles.infoView1}>
+                                        <Text style={styles.infoItem}>Location</Text>
+                                        <Text style={styles.regularText}>{res.location || ''}</Text>
+                                    </View>
+                                    <View style={styles.infoView1}>
+                                        <Text style={styles.infoItem}>Language</Text>
+                                        {res.languages.map((lan, i) => lan ? <Text key={i} style={styles.regularText}>{`${lan.name} - ${lan.option}`}</Text> : null)}
+                                    </View>
                                 </View>
-                                <View style={styles.infoView1}>
-                                    <Text style={styles.infoItem}>Gender</Text>
-                                    <Text style={styles.regularText}>{res.gender}</Text>
-                                </View>
-                                <View style={styles.infoView1}>
-                                    <Text style={styles.infoItem}>Location</Text>
-                                    <Text style={styles.regularText}>{res.location}</Text>
-                                </View>
-                                <View style={styles.infoView1}>
-                                    <Text style={styles.infoItem}>Language</Text>
-                                    {res.languages.map((lan, i) => <Text key={i} style={styles.regularText}>{`${lan.name} - ${lan.option}`}</Text>)}
-                                </View>
-                            </View>
-                            <View style={styles.column2}>
-                                <View style={styles.infoView2}>
-                                    <Text style={styles.description}>{res.description}</Text>
-                                </View>
-                                <View style={styles.infoView2}>
-                                    <Text style={styles.title}>Strengths</Text>
-                                    {res.strengths.map((str, i) => {
-                                        if (str) return <Text key={i} style={styles.dropItems}>• {str}</Text>
-                                    }
-                                    )}
-                                </View>
-                                <View style={styles.infoView2}>
-                                    <Text style={styles.signature}>{fullName}</Text>
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.rowContainer} wrap={false}>
-                            <View style={styles.sectionColumn1}>
-                                <View style={styles.infoView1}>
-                                    <Text style={styles.sectionTitle}>EXPERTISE</Text>
-                                </View>
-                            </View>
-                            <View style={styles.sectionColumn2}>
-                                <View style={styles.infoView2}>
-                                    {res.expertise.map((exp, i) => {
-                                        if (exp) return <Text key={i} style={styles.dropItems}>• {exp}</Text>
-                                    })}
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.rowContainer} wrap={false}>
-                            <View style={styles.sectionColumn1}>
-                                <View style={styles.infoView1}>
-                                    <Text style={styles.sectionTitle}>EDUCATION</Text>
-                                </View>
-                            </View>
-                            <View style={styles.sectionColumn2}>
-                                <View style={styles.infoView2}>
-                                    {res.education.map((ed, i) => (
-                                        <View key={i} style={styles.bullet}>
-                                            <Text style={styles.infoItem}>{ed.bullet}</Text>
-                                            <Text key={i} style={{ ...styles.regularText, marginLeft: '3vw' }}>{ed.value}</Text>
+                                <View style={styles.column2}>
+                                    <View style={styles.infoView2}>
+                                        <Text style={styles.description}>{res.description || ''}</Text>
+                                    </View>
+                                    {res.strengths.length ?
+                                        <View style={styles.infoView2}>
+                                            <Text style={styles.title}>Strengths</Text>
+                                            {res.strengths.map((str, i) => str ? <Text key={i} style={styles.dropItems}>• {str}</Text> : null)}
                                         </View>
-                                    ))}
+                                        :
+                                        null}
+                                    <View style={styles.infoView2}>
+                                        <Text style={styles.signature}>{fullName || ''}</Text>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
 
-                        <View style={styles.rowContainer} wrap={false}>
-                            <View style={styles.sectionColumn1}>
-                                <View style={styles.infoView1}>
-                                    <Text style={styles.sectionTitle}>CERTIFICATIONS</Text>
+                            <View style={styles.rowContainer} wrap={false}>
+                                <View style={styles.sectionColumn1}>
+                                    <View style={styles.infoView1}>
+                                        <Text style={styles.sectionTitle}>EXPERTISE</Text>
+                                    </View>
+                                </View>
+                                <View style={styles.sectionColumn2}>
+                                    <View style={styles.infoView2}>
+                                        {res.expertise.map((exp, i) => exp ? <Text key={i} style={styles.dropItems}>• {exp}</Text> : null)}
+                                    </View>
                                 </View>
                             </View>
-                            <View style={styles.sectionColumn2}>
-                                <View style={styles.infoView2}>
-                                    {res.certifications.map((cert, i) => (
-                                        <View key={i} style={styles.bullet}>
-                                            <Text style={styles.infoItem}>{cert.bullet}</Text>
-                                            <Text key={i} style={{ ...styles.regularText, marginLeft: '3vw' }}>{cert.value}</Text>
-                                        </View>
-                                    ))}
-                                </View>
-                            </View>
-                        </View>
 
-                        <View style={styles.rowContainer} wrap={false}>
-                            <View style={styles.sectionColumn1}>
-                                <View style={styles.infoView1}>
-                                    <Text style={styles.sectionTitle}>MAIN SKILLS</Text>
+                            <View style={styles.rowContainer} wrap={false}>
+                                <View style={styles.sectionColumn1}>
+                                    <View style={styles.infoView1}>
+                                        <Text style={styles.sectionTitle}>EDUCATION</Text>
+                                    </View>
+                                </View>
+                                <View style={styles.sectionColumn2}>
+                                    <View style={styles.infoView2}>
+                                        {res.education.map((ed, i) => (
+                                            <View key={i} style={styles.bullet}>
+                                                <Text style={styles.infoItem}>{ed.bullet || ''}</Text>
+                                                <Text key={i} style={{ ...styles.regularText, marginLeft: '3vw' }}>{ed.value || ''}</Text>
+                                            </View>
+                                        ))}
+                                    </View>
                                 </View>
                             </View>
-                            <View style={styles.sectionColumn2}>
-                                <View style={styles.infoView2}>
-                                    {res.skills.map((skill, i) => (
-                                        <View key={i} style={styles.bullet}>
-                                            <Text style={styles.skill}>{skill.name}</Text>
-                                            <Text key={i} style={styles.year}>{skill.option.toLowerCase()}</Text>
-                                        </View>
-                                    ))}
-                                </View>
-                            </View>
-                        </View>
 
-                        <View style={styles.rowContainer} wrap={false}>
-                            <View style={styles.sectionColumn1}>
-                                <View style={styles.infoView1}>
-                                    <Text style={styles.sectionTitle}>EXPERIENCE</Text>
+                            <View style={styles.rowContainer} wrap={false}>
+                                <View style={styles.sectionColumn1}>
+                                    <View style={styles.infoView1}>
+                                        <Text style={styles.sectionTitle}>CERTIFICATIONS</Text>
+                                    </View>
+                                </View>
+                                <View style={styles.sectionColumn2}>
+                                    <View style={styles.infoView2}>
+                                        {res.certifications.map((cert, i) => (
+                                            <View key={i} style={styles.bullet}>
+                                                <Text style={styles.infoItem}>{cert.bullet || ''}</Text>
+                                                <Text key={i} style={{ ...styles.regularText, marginLeft: '3vw' }}>{cert.value || ''}</Text>
+                                            </View>
+                                        ))}
+                                    </View>
                                 </View>
                             </View>
-                            <View style={styles.sectionColumn2}>
-                                <View style={styles.infoView2}>
-                                    {res.experience && res.experience.map((exp, i) => (
-                                        <View key={i} style={styles.bullet}>
-                                            <Text style={styles.skill}>{exp.period || ''}</Text>
-                                            <Text style={styles.skill}>{exp.company || ''}</Text>
-                                            <Text style={styles.skill}>{exp.role || ''}</Text>
-                                            <Text style={styles.skill}>{exp.description || ''}</Text>
-                                            {exp.bullets.map(resp => resp && <Text style={styles.skill}>●{resp}</Text>)}
-                                            <Text style={styles.skill}>{exp.technologies || ''}</Text>
-                                        </View>
-                                    ))}
-                                </View>
-                            </View>
-                        </View>
 
-                        <View style={styles.rowContainer} wrap={false}>
-                            <View style={styles.sectionColumn1}>
-                                <View style={styles.infoView1}>
-                                    <Text style={styles.sectionTitle}>TOOLS</Text>
+                            <View style={styles.rowContainer} wrap={false}>
+                                <View style={styles.sectionColumn1}>
+                                    <View style={styles.infoView1}>
+                                        <Text style={styles.sectionTitle}>MAIN SKILLS</Text>
+                                    </View>
+                                </View>
+                                <View style={styles.sectionColumn2}>
+                                    <View style={styles.infoView2}>
+                                        {res.skills.map((skill, i) => (
+                                            <View key={i} style={styles.bullet}>
+                                                <Text style={styles.skill}>{skill.name || ''}</Text>
+                                                <Text key={i} style={styles.year}>{skill.option.toLowerCase() || ''}</Text>
+                                            </View>
+                                        ))}
+                                    </View>
                                 </View>
                             </View>
-                            <View style={styles.sectionColumn2}>
-                                <View style={styles.infoView2}>
-                                    <Text style={{ ...styles.infoItem, alignSelf: 'flex-start' }}>{res.tools}</Text>
-                                </View>
-                            </View>
-                        </View>
 
-                        <View style={styles.footer} wrap={false} fixed>
-                            <View style={styles.footerCol}>
-                                <View style={styles.footerRow}>
-                                    <Text style={styles.footerItem}>Concact:</Text>
-                                    <Text style={styles.footerValue}>{res.footer_contact || '-'}</Text>
+                            <View style={styles.rowContainer} wrap={false}>
+                                <View style={styles.sectionColumn1}>
+                                    <View style={styles.infoView1}>
+                                        <Text style={styles.sectionTitle}>EXPERIENCE</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.footerRow}>
-                                    <Text style={styles.footerItem}>E-mail:</Text>
-                                    <Text style={styles.footerValue}>{res.footer_email || '-'}</Text>
+                                <View style={styles.sectionColumn2}>
+                                    <View style={styles.infoView2}>
+                                        {res.experience ? res.experience.map((exp, i) => (
+                                            <View key={i} style={styles.bullet}>
+                                                <Text style={styles.skill}>{exp.period || ''}</Text>
+                                                <Text style={styles.skill}>{exp.company || ''}</Text>
+                                                <Text style={styles.skill}>{exp.role || ''}</Text>
+                                                <Text style={styles.skill}>{exp.description || ''}</Text>
+                                                {exp.bullets.map((resp, j) => resp ? <Text key={j} style={styles.skill}>●{resp}</Text> : null)}
+                                                <Text style={styles.skill}>{exp.technologies || ''}</Text>
+                                            </View>
+                                        )) : null}
+                                    </View>
                                 </View>
                             </View>
-                            <View style={styles.footerCol}>
-                                <View style={styles.footerRow}>
-                                    <Text style={styles.footerItem}>Phone:</Text>
-                                    <Text style={styles.footerValue}>{res.footer_phone || '-'}</Text>
-                                </View>
-                                <View style={styles.footerRow}>
-                                    <Text style={styles.footerItem}>Location:</Text>
-                                    <Text style={styles.footerValue}>{res.footer_location || '-'}</Text>
-                                </View>
-                            </View>
-                        </View>
 
-                    </Page>
-                </Document>
-            </PDFViewer >
+                            <View style={styles.rowContainer} wrap={false}>
+                                <View style={styles.sectionColumn1}>
+                                    <View style={styles.infoView1}>
+                                        <Text style={styles.sectionTitle}>TOOLS</Text>
+                                    </View>
+                                </View>
+                                <View style={styles.sectionColumn2}>
+                                    <View style={styles.infoView2}>
+                                        <Text style={{ ...styles.infoItem, alignSelf: 'flex-start' }}>{res.tools || ''}</Text>
+                                    </View>
+                                </View>
+                            </View>
+
+                            <View style={styles.footer} wrap={false} fixed>
+                                <View style={styles.footerCol}>
+                                    <View style={styles.footerRow}>
+                                        <Text style={styles.footerItem}>Concact:</Text>
+                                        <Text style={styles.footerValue}>{res.footer_contact || '-'}</Text>
+                                    </View>
+                                    <View style={styles.footerRow}>
+                                        <Text style={styles.footerItem}>E-mail:</Text>
+                                        <Text style={styles.footerValue}>{res.footer_email || '-'}</Text>
+                                    </View>
+                                </View>
+                                <View style={styles.footerCol}>
+                                    <View style={styles.footerRow}>
+                                        <Text style={styles.footerItem}>Phone:</Text>
+                                        <Text style={styles.footerValue}>{res.footer_phone || '-'}</Text>
+                                    </View>
+                                    <View style={styles.footerRow}>
+                                        <Text style={styles.footerItem}>Location:</Text>
+                                        <Text style={styles.footerValue}>{res.footer_location || '-'}</Text>
+                                    </View>
+                                </View>
+                            </View>
+
+                        </Page>
+                    </Document>
+                </PDFViewer >
+                : ''
         )
     }
 
     return (
         <div className='view-resume-container'>
             <div className='view-resume-page'>
-                {res && res.name && <ResumePDF />}
+                {res && res.name ? <ResumePDF /> : ''}
             </div>
         </div>
     )

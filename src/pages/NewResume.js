@@ -28,7 +28,6 @@ export default function NewResume() {
     const [strengths, setStrengths] = useState([''])
     const [expertise, setExpertise] = useState([''])
     const [profilePic, setProfilePic] = useState({})
-    const [signature, setSignature] = useState({})
     const [user, setUser] = useState({})
     const dispatch = useDispatch()
     const history = useHistory()
@@ -58,12 +57,10 @@ export default function NewResume() {
             resumeData.experience = experience
             resumeData.strengths = strengths
             resumeData.expertise = expertise
-            resumeData.profilePic = profilePic
-            resumeData.signature = signature
-            resumeData.footer_contact = data.footer_contact || user.manager || ''
-            resumeData.footer_email = data.footer_email || user.manager || ''
-            resumeData.footer_phone = data.footer_phone || ''
-            resumeData.footer_location = data.footer_location || ''
+            resumeData.footer_contact = data.footer_contact || user.manager || '-'
+            resumeData.footer_email = data.footer_email || user.manager || '-'
+            resumeData.footer_phone = data.footer_phone || '-'
+            resumeData.footer_location = data.footer_location || 'Mobilvägen 10, Lund, Sweden'
 
             const strData = JSON.stringify(resumeData)
             resumeData.data = strData
@@ -71,7 +68,7 @@ export default function NewResume() {
             resumeData.username = user.username
             resumeData.manager = user.email
             resumeData.email = data.email || ''
-            // return console.log("Saving resumeData:", resumeData)
+            if (profilePic && profilePic.profileImage) resumeData.profilePic = profilePic.profileImage
 
             const saved = dispatch(saveResume(resumeData)).then(data => data.payload)
             if (saved) {
@@ -103,22 +100,6 @@ export default function NewResume() {
             <h2 className='section-title-row'>Personal Information</h2>
             <div className='new-resume-fill'>
                 <div className='resume-fill-col1'>
-                    {/* <InputField
-                        label='Logo URL (jpg/png)'
-                        value='https://'
-                        type='text'
-                        name='logoUrl'
-                        updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)' }}
-                    /> */}
-                    {/* <InputField
-                        label='Image URL (jpg/png)'
-                        value='https://'
-                        type='text'
-                        name='imageUrl'
-                        updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)' }}
-                    /> */}
                     <InputField
                         label='Profile Image'
                         type='file'
@@ -198,14 +179,6 @@ export default function NewResume() {
                         setItems={setStrengths}
                         placeholder='Add new strength...'
                     />
-                    {/* <InputField
-                        label='Signature URL (jpg/png)'
-                        value='https://'
-                        type='text'
-                        name='signatureUrl'
-                        updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)' }}
-                    /> */}
                     <InputField
                         label='Email'
                         type='text'
@@ -213,15 +186,6 @@ export default function NewResume() {
                         updateData={updateData}
                         placeholder='full.name@sigma.se'
                         style={{ color: 'rgb(71, 71, 71)', width: '55%', marginBottom: '1vw' }}
-                    />
-                    <InputField
-                        label='Signature'
-                        type='file'
-                        name='signature'
-                        filename='signature'
-                        image={signature}
-                        setImage={setSignature}
-                        style={{ color: 'rgb(71, 71, 71)' }}
                     />
                     {<h4 className='signature-text'>{fullName || ''}</h4>}
                 </div>
