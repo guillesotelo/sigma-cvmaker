@@ -204,6 +204,15 @@
     justify-content: space-evenly;
 }
 
+.profile-image {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 1vw 0;
+    align-self: center
+}
+
 .resume-fill-col1 {
     display: flex;  
     flex-direction: column;

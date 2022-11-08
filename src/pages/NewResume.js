@@ -29,13 +29,11 @@ export default function NewResume() {
     const [strengths, setStrengths] = useState([''])
     const [expertise, setExpertise] = useState([''])
     const [profilePic, setProfilePic] = useState({})
-    const [preview, setPreview] = useState({})
     const [user, setUser] = useState({})
     const localResumes = useSelector(state => state.resume)
     const dispatch = useDispatch()
     const history = useHistory()
 
-    console.log("preview", preview)
     const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
 
     useEffect(() => {
@@ -82,7 +80,7 @@ export default function NewResume() {
     const getPreview = async resData => {
         try {
             const image = await dispatch(getProfileImage(resData)).then(data => data.payload)
-            if (image) setPreview(image.data)
+            if (image) setProfilePic({ profileImage: image.data })
         } catch (err) {
             console.error(err)
         }
@@ -147,20 +145,8 @@ export default function NewResume() {
             <h2 className='section-title-row'>Personal Information</h2>
             <div className='new-resume-fill'>
                 <div className='resume-fill-col1'>
-                    {isEdit && preview ?
-                        <>
-                            <img src={preview} style={{ height: 130, width: 130, borderRadius: '50%' }} />
-                            <InputField
-                                label='Profile Image'
-                                type='file'
-                                name='profileImage'
-                                filename='profileImage'
-                                image={profilePic}
-                                setImage={setProfilePic}
-                                style={{ color: 'rgb(71, 71, 71)' }}
-                            />
-                        </>
-                        :
+                    <>
+                        {profilePic.profileImage ? <img src={profilePic.profileImage} className='profile-image'/> : ''}
                         <InputField
                             label='Profile Image'
                             type='file'
@@ -170,7 +156,7 @@ export default function NewResume() {
                             setImage={setProfilePic}
                             style={{ color: 'rgb(71, 71, 71)' }}
                         />
-                    }
+                    </>
                     <InputField
                         label='Name'
                         type='text'
