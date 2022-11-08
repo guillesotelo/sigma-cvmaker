@@ -12,7 +12,7 @@ export default function CVFooter(props) {
           <h4 className='inputfield-label'>Contact:</h4>
           <InputField
             label=''
-            value={data.footer_contact || user.username}
+            value={data.footer_contact}
             type='text'
             name='footer_contact'
             updateData={updateData}
@@ -23,7 +23,7 @@ export default function CVFooter(props) {
           <h4 className='inputfield-label'>Email:</h4>
           <InputField
             label=''
-            value={data.footer_email || user.email}
+            value={data.footer_email}
             type='text'
             name='footer_email'
             updateData={updateData}

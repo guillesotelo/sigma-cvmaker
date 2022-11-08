@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { ToastContainer, toast } from 'react-toastify'
-import CTAButton from '../CTAButton'
-import InputField from '../InputField'
-import { APP_COLORS } from '../../constants/app'
-import { createUser } from '../../store/reducers/user'
 import { getProfileImage } from '../../store/reducers/resume'
-import SwitchBTN from '../SwitchBTN'
-import MoonLoader from "react-spinners/MoonLoader"
-import ReactDOM from 'react-dom';
 import ReactPDF, { PDFViewer, Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer'
 import SigmaLogo from '../../assets/logos/sigma.png'
 import RobotoRegular from '../../assets/fonts/Roboto-Regular.ttf'
@@ -33,7 +25,7 @@ export default function Resume({ resumeData }) {
     const getResumeData = async () => {
         try {
             const parsedData = JSON.parse(data.data)
-
+            
             const profilePic = await dispatch(getProfileImage(resumeData)).then(data => data.payload)
 
             if (profilePic) setProfileImage(profilePic.data)
@@ -91,7 +83,7 @@ export default function Resume({ resumeData }) {
         },
         rowContainer: {
             flexDirection: 'row',
-            padding: '3vw 0',
+            padding: '3vw 0 4vw 0',
             alignSelf: 'center',
             width: '90%',
             borderTop: '1px solid gray',
@@ -122,6 +114,8 @@ export default function Resume({ resumeData }) {
         },
         profilePic: {
             width: 130,
+            height: 130,
+            objectFit: 'cover',
             borderRadius: '50%',
             margin: '1vw 0 2vw 0',
             alignSelf: 'center'
@@ -205,8 +199,8 @@ export default function Resume({ resumeData }) {
             fontFamily: 'Roboto',
             fontWeight: 'bold',
             marginBottom: '0.3vw',
-            borderBottom: '1px solid gray',
-            paddingBottom: '.7vw',
+            borderBottom: '1px solid rgb(86, 86, 86)',
+            paddingBottom: '.5vw',
             marginBottom: '1vw'
         },
         year: {
@@ -217,6 +211,75 @@ export default function Resume({ resumeData }) {
             borderBottom: '1px solid gray',
             paddingBottom: '.7vw',
             marginBottom: '1vw'
+        },
+        experienceContainer: {
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '3vw 0 4vw 0',
+            alignSelf: 'center',
+            borderTop: '1px solid gray',
+            width: '90%'
+        },
+        experienceRow: {
+            display: 'flex',
+            flexDirection: 'row',
+            marginBottom: '2vw',
+            paddingLeft: '4w',
+            paddingBottom: '5w'
+        },
+        experienceCol1: {
+            flexDirection: 'column',
+            marginHorizontal: '2vw',
+            width: '20%'
+        },
+        experienceCol2: {
+            flexDirection: 'column',
+            width: '70%',
+            alignSelf: 'flex-end'
+        },
+        experiencePeriod: {
+            fontSize: '1.6vw',
+            fontFamily: 'Roboto',
+            fontWeight: 'bold',
+            alignSelf: 'flex-start',
+            color: 'rgb(86, 86, 86)'
+        },
+        experienceCompany: {
+            fontSize: '1.8vw',
+            fontFamily: 'Roboto',
+            fontWeight: 'bold',
+            alignSelf: 'flex-start'
+        },
+        experienceRole: {
+            fontSize: '1.6vw',
+            fontFamily: 'Roboto',
+            alignSelf: 'flex-start',
+            color: 'rgb(99, 99, 99)'
+        },
+        experienceDescription: {
+            fontSize: '1.6vw',
+            fontFamily: 'Roboto',
+            alignSelf: 'flex-start',
+            marginTop: '1vw'
+        },
+        experienceResponsibilities: {
+            fontSize: '1.6vw',
+            fontFamily: 'Roboto',
+            alignSelf: 'flex-start',
+            fontWeight: 'bold',
+            margin: '2vw 0 1vw 0'
+        },
+        experienceResponsibility: {
+            fontSize: '1.6vw',
+            fontFamily: 'Roboto',
+            alignSelf: 'flex-start',
+            margin: '0 2vw'
+        },
+        experienceTech: {
+            fontFamily: 'Roboto',
+            fontSize: '1.7vw',
+            alignSelf: 'left',
+            margin: 0
         },
         footerCol: {
             flexDirection: 'column',
@@ -327,9 +390,9 @@ export default function Resume({ resumeData }) {
                                     </View>
                                 </View>
                                 <View style={styles.sectionColumn2}>
-                                    <View style={styles.infoView2}>
+                                    <View style={styles.infoView2} wrap={false}>
                                         {res.education.map((ed, i) => (
-                                            <View key={i} style={styles.bullet}>
+                                            <View key={i} style={styles.bullet} wrap={false}>
                                                 <Text style={styles.infoItem}>{ed.bullet || ''}</Text>
                                                 <Text key={i} style={{ ...styles.regularText, marginLeft: '3vw' }}>{ed.value || ''}</Text>
                                             </View>
@@ -345,9 +408,9 @@ export default function Resume({ resumeData }) {
                                     </View>
                                 </View>
                                 <View style={styles.sectionColumn2}>
-                                    <View style={styles.infoView2}>
+                                    <View style={styles.infoView2} wrap={false}>
                                         {res.certifications.map((cert, i) => (
-                                            <View key={i} style={styles.bullet}>
+                                            <View key={i} style={styles.bullet} wrap={false}>
                                                 <Text style={styles.infoItem}>{cert.bullet || ''}</Text>
                                                 <Text key={i} style={{ ...styles.regularText, marginLeft: '3vw' }}>{cert.value || ''}</Text>
                                             </View>
@@ -363,9 +426,9 @@ export default function Resume({ resumeData }) {
                                     </View>
                                 </View>
                                 <View style={styles.sectionColumn2}>
-                                    <View style={styles.infoView2}>
+                                    <View style={styles.infoView2} wrap={false}>
                                         {res.skills.map((skill, i) => (
-                                            <View key={i} style={styles.bullet}>
+                                            <View key={i} style={styles.bullet} wrap={false}>
                                                 <Text style={styles.skill}>{skill.name || ''}</Text>
                                                 <Text key={i} style={styles.year}>{skill.option.toLowerCase() || ''}</Text>
                                             </View>
@@ -374,24 +437,40 @@ export default function Resume({ resumeData }) {
                                 </View>
                             </View>
 
-                            <View style={styles.rowContainer} wrap={false}>
+                            <View style={styles.experienceContainer}>
                                 <View style={styles.sectionColumn1}>
                                     <View style={styles.infoView1}>
                                         <Text style={styles.sectionTitle}>EXPERIENCE</Text>
                                     </View>
                                 </View>
-                                <View style={styles.sectionColumn2}>
-                                    <View style={styles.infoView2}>
-                                        {res.experience ? res.experience.map((exp, i) => (
-                                            <View key={i} style={styles.bullet}>
-                                                <Text style={styles.skill}>{exp.period || ''}</Text>
-                                                <Text style={styles.skill}>{exp.company || ''}</Text>
-                                                <Text style={styles.skill}>{exp.role || ''}</Text>
-                                                <Text style={styles.skill}>{exp.description || ''}</Text>
-                                                {exp.bullets.map((resp, j) => resp ? <Text key={j} style={styles.skill}>●{resp}</Text> : null)}
-                                                <Text style={styles.skill}>{exp.technologies || ''}</Text>
-                                            </View>
-                                        )) : null}
+                                <View style={styles.sectionColumn1}>
+                                    <View style={styles.infoView1}>
+                                        {res.experience ? res.experience.map((exp, i) =>
+                                            exp.company ?
+                                                <View key={i} style={{
+                                                    ...styles.experienceRow,
+                                                    borderTop: i !== 0 && '1px solid rgb(227, 227, 227)',
+                                                    paddingTop: i !== 0 && '2vw'
+                                                }} wrap={false}>
+                                                    <View key={i} style={styles.experienceCol1}>
+                                                        <Text style={styles.experiencePeriod}>{exp.period || ''}</Text>
+                                                    </View>
+                                                    <View key={i} style={styles.experienceCol2}>
+                                                        <Text style={styles.experienceCompany}>{exp.company || ''}</Text>
+                                                        <Text style={styles.experienceRole}>{exp.role || ''}</Text>
+                                                        <Text style={styles.experienceDescription}>{exp.description || ''}</Text>
+                                                        <View>
+                                                            <Text style={styles.experienceResponsibilities}>Key responsibilities:</Text>
+                                                            {exp.bullets.map((resp, j) => resp ?
+                                                                <Text key={j} style={styles.experienceResponsibility}>• {resp}</Text>
+                                                                : null)}
+                                                        </View>
+                                                        <Text style={styles.experienceResponsibilities}>Technologies:</Text>
+                                                        <Text style={styles.experienceTech}>{exp.technologies || ''}</Text>
+                                                    </View>
+                                                </View>
+                                                : null
+                                        ) : null}
                                     </View>
                                 </View>
                             </View>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 import { APP_COLORS } from '../../constants/app'
 import './styles.css'
 
@@ -31,23 +32,34 @@ export default function InputField(props) {
     }
 
     const convertToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const fileReader = new FileReader()
-            fileReader.readAsDataURL(file)
-            fileReader.onload = () => {
-                resolve(fileReader.result)
-            }
-            fileReader.onerror = (error) => {
-                reject(error)
-            }
-        })
+        try {
+            return new Promise((resolve, reject) => {
+                const fileReader = new FileReader()
+                fileReader.readAsDataURL(file)
+                fileReader.onload = () => {
+                    resolve(fileReader.result)
+                }
+                fileReader.onerror = (error) => {
+                    reject(error)
+                }
+            })
+        } catch (err) {
+            console.error(err)
+            toast.error('Error loading file. Please try again')
+        }
     }
 
     const uploadFile = async e => {
-        const file = e.target.files[0]
-        const base64 = await convertToBase64(file)
-        setImage({ ...image, [filename]: base64 })
-    };
+        try {
+            const file = e.target.files[0]
+            if(file) {
+                const base64 = await convertToBase64(file)
+                setImage({ ...image, [filename]: base64 })
+            }
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     return (
         <div className='inputfield-container'>

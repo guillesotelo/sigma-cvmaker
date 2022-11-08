@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import CTAButton from '../components/CTAButton'
@@ -13,13 +13,14 @@ import Bullet from '../components/Bullet'
 import InputBullet from '../components/InputBullet'
 import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
-import { saveResume } from '../store/reducers/resume'
+import { editResume, getProfileImage, saveResume } from '../store/reducers/resume'
 import PostSection from '../components/PostSection'
 
 export default function NewResume() {
     const [data, setData] = useState({})
     const [openModal, setOpenModal] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
     const [languages, setLanguages] = useState([{ name: '' }])
     const [skills, setSkills] = useState([{ name: '' }])
     const [education, setEducation] = useState([{ bullet: '', value: '' }])
@@ -28,22 +29,64 @@ export default function NewResume() {
     const [strengths, setStrengths] = useState([''])
     const [expertise, setExpertise] = useState([''])
     const [profilePic, setProfilePic] = useState({})
+    const [preview, setPreview] = useState({})
     const [user, setUser] = useState({})
+    const localResumes = useSelector(state => state.resume)
     const dispatch = useDispatch()
     const history = useHistory()
 
+    console.log("preview", preview)
     const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
 
     useEffect(() => {
+        setLoading(true)
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
         if (!localUser || !localUser.email) history.push('/login')
         setUser(localUser)
+
+        const { edit } = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        })
+
+        if (edit) {
+            if (localResumes && localResumes.length) {
+                localResumes.forEach(resume => {
+                    if (resume._id === edit) {
+                        const resData = JSON.parse(resume.data)
+                        setData(resData)
+                        setLanguages(resData.languages)
+                        setSkills(resData.skills)
+                        setEducation(resData.education)
+                        setCertifications(resData.certifications)
+                        setExperience(resData.experience)
+                        setStrengths(resData.strengths)
+                        setExpertise(resData.expertise)
+                        getPreview(resume)
+                        setIsEdit(true)
+                    }
+                })
+            }
+        }
+
+        else if (user.username && user.email && user.isManager) {
+            setData({ ...data, footer_contact: user.username, footer_email: user.email })
+        }
+
+        setLoading(false)
     }, [])
 
     const updateData = (key, value) => {
         setData({ ...data, [key]: value })
     }
 
+    const getPreview = async resData => {
+        try {
+            const image = await dispatch(getProfileImage(resData)).then(data => data.payload)
+            if (image) setPreview(image.data)
+        } catch (err) {
+            console.error(err)
+        }
+    }
     const onSaveResume = async () => {
         try {
             setLoading(true)
@@ -57,8 +100,8 @@ export default function NewResume() {
             resumeData.experience = experience
             resumeData.strengths = strengths
             resumeData.expertise = expertise
-            resumeData.footer_contact = data.footer_contact || user.manager || '-'
-            resumeData.footer_email = data.footer_email || user.manager || '-'
+            resumeData.footer_contact = data.footer_contact || '-'
+            resumeData.footer_email = data.footer_email || '-'
             resumeData.footer_phone = data.footer_phone || '-'
             resumeData.footer_location = data.footer_location || 'Mobilvägen 10, Lund, Sweden'
 
@@ -70,7 +113,11 @@ export default function NewResume() {
             resumeData.email = data.email || ''
             if (profilePic && profilePic.profileImage) resumeData.profilePic = profilePic.profileImage
 
-            const saved = dispatch(saveResume(resumeData)).then(data => data.payload)
+            let saved = {}
+
+            if (isEdit) saved = await dispatch(editResume(resumeData)).then(data => data.payload)
+            else saved = await dispatch(saveResume(resumeData)).then(data => data.payload)
+
             if (saved) {
                 setLoading(false)
                 toast.success('Resume saved successfully! Redirecting...')
@@ -100,21 +147,37 @@ export default function NewResume() {
             <h2 className='section-title-row'>Personal Information</h2>
             <div className='new-resume-fill'>
                 <div className='resume-fill-col1'>
-                    <InputField
-                        label='Profile Image'
-                        type='file'
-                        name='profileImage'
-                        filename='profileImage'
-                        image={profilePic}
-                        setImage={setProfilePic}
-                        style={{ color: 'rgb(71, 71, 71)' }}
-                    />
+                    {isEdit && preview ?
+                        <>
+                            <img src={preview} style={{ height: 130, width: 130, borderRadius: '50%' }} />
+                            <InputField
+                                label='Profile Image'
+                                type='file'
+                                name='profileImage'
+                                filename='profileImage'
+                                image={profilePic}
+                                setImage={setProfilePic}
+                                style={{ color: 'rgb(71, 71, 71)' }}
+                            />
+                        </>
+                        :
+                        <InputField
+                            label='Profile Image'
+                            type='file'
+                            name='profileImage'
+                            filename='profileImage'
+                            image={profilePic}
+                            setImage={setProfilePic}
+                            style={{ color: 'rgb(71, 71, 71)' }}
+                        />
+                    }
                     <InputField
                         label='Name'
                         type='text'
                         name='name'
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
+                        value={data.name || ''}
                     />
                     <InputField
                         label='Middle Name'
@@ -122,6 +185,7 @@ export default function NewResume() {
                         name='middlename'
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
+                        value={data.middlename || ''}
                     />
                     <InputField
                         label='Surname'
@@ -129,6 +193,7 @@ export default function NewResume() {
                         name='surname'
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
+                        value={data.surname || ''}
                     />
                     <InputField
                         label='Role / Title'
@@ -136,6 +201,7 @@ export default function NewResume() {
                         name='role'
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
+                        value={data.role || ''}
                     />
                     <InputField
                         label='Gender'
@@ -144,6 +210,7 @@ export default function NewResume() {
                         name='gender'
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
+                        value={data.gender || ''}
                     />
                     <InputField
                         label='Location'
@@ -151,6 +218,7 @@ export default function NewResume() {
                         name='location'
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
+                        value={data.location || ''}
                     />
                     <ItemDropdown
                         label='Languages'
@@ -171,6 +239,7 @@ export default function NewResume() {
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
                         placeholder="Write a short description about yourself..."
+                        value={data.description || ''}
                     />
                     <Bullet
                         label='Strengths'
@@ -186,6 +255,7 @@ export default function NewResume() {
                         updateData={updateData}
                         placeholder='full.name@sigma.se'
                         style={{ color: 'rgb(71, 71, 71)', width: '55%', marginBottom: '1vw' }}
+                        value={data.email || ''}
                     />
                     {<h4 className='signature-text'>{fullName || ''}</h4>}
                 </div>
@@ -285,6 +355,7 @@ export default function NewResume() {
                         updateData={updateData}
                         placeholder="Describe tools you've been using..."
                         style={{ color: 'rgb(71, 71, 71)' }}
+                        value={data.tools || ''}
                     />
                 </div>
             </div>

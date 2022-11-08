@@ -34,19 +34,19 @@ export default function MyResumes({ showAll }) {
         if (user && user.email) {
             try {
                 setLoading(true)
-                const cvs = await dispatch(getResumes({...user, getAll})).then(data => data.payload)
+                const cvs = await dispatch(getResumes({ ...user, getAll })).then(data => data.payload)
                 if (cvs && cvs.length) {
                     setResumes(cvs)
                 }
                 setLoading(false)
-            } catch (err) { 
-                setLoading(false) 
+            } catch (err) {
+                setLoading(false)
                 console.error(err)
             }
         }
     }
 
-    const removeResume = () => {
+    const handleDeleteResume = () => {
         try {
             setLoading(true)
             const removed = dispatch(removeResume(resumeData)).then(data => data.payload)
@@ -55,6 +55,7 @@ export default function MyResumes({ showAll }) {
                 setLoading(false)
                 setOpenModal(false)
                 setIsPdf(false)
+                setTimeout(() => getAllResumes(showAll), 500)
                 return toast.success('Resume deleted successfully')
             } else {
                 setLoading(false)
@@ -73,7 +74,7 @@ export default function MyResumes({ showAll }) {
     return (
         <div className='my-resumes-container'>
             <h4 className='go-back-btn' onClick={() => history.goBack()}>Go back</h4>
-            <h2 className='page-title' style={{ filter: openModal && 'blur(10px)' }}>MY RESUMES</h2>
+            <h2 className='page-title' style={{ filter: openModal && 'blur(10px)' }}>{showAll ? 'ALL CVs' : 'MY CVs'}</h2>
             <div className='resumes-list' style={{ filter: openModal && 'blur(10px)' }}>
                 {resumes && resumes.length ?
                     resumes.map((resume, i) =>
@@ -88,8 +89,8 @@ export default function MyResumes({ showAll }) {
                                 <h4 className='resume-role'>{resume.email || ''}</h4>
                             </div>
                             <div className='resume-icons'>
-                                <img src={DownloadIcon} className='resume-icon' />
-                                <img src={EditIcon} className='resume-icon' />
+                                {/* <img src={DownloadIcon} className='resume-icon' /> */}
+                                <img src={EditIcon} className='resume-icon' onClick={() => history.push(`/createResume?edit=${resume._id}`)}/>
                                 <img src={TrashCan} onClick={() => {
                                     setResumeData(resume)
                                     setOpenModal(true)
@@ -98,7 +99,7 @@ export default function MyResumes({ showAll }) {
                         </div>
                     )
                     : loading ? <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#6D0E00' /></div>
-                    : <h4 style={{ textAlign: 'center', marginTop: '6vw', color: 'gray' }}> ~ No resumes found ~ </h4>
+                        : <h4 style={{ textAlign: 'center', marginTop: '6vw', color: 'gray' }}> ~ No resumes found ~ </h4>
                 }
             </div>
             {openModal && isPdf ?
@@ -114,7 +115,7 @@ export default function MyResumes({ showAll }) {
                 </div> : ''}
             {openModal && !isPdf ?
                 <div className='remove-modal'>
-                    <h4>Are you sure you want to delete {resumeData.full_name} Resume?</h4>
+                    <h4 style={{ textAlign: 'center' }}>Are you sure you want to delete <br/>{resumeData.username}'s CV?</h4>
                     <div className='remove-modal-btns'>
                         <CTAButton
                             label='Cancel'
@@ -126,12 +127,11 @@ export default function MyResumes({ showAll }) {
                         />
                         <CTAButton
                             label='Confirm'
-                            handleClick={removeResume}
+                            handleClick={handleDeleteResume}
                             color={APP_COLORS.MURREY}
                         />
                     </div>
-                </div> : ''
-            }
+                </div> : ''}
         </div>
     )
 }
