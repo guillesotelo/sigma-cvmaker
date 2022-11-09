@@ -14,7 +14,7 @@ function App() {
   return (
     <Switch>
       <Route path="/login">
-        <Header/>
+        {/* <Header/> */}
         <Login />
       </Route>
       <Route path="/register">

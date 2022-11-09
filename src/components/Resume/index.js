@@ -25,7 +25,7 @@ export default function Resume({ resumeData }) {
     const getResumeData = async () => {
         try {
             const parsedData = JSON.parse(data.data)
-            
+
             const profilePic = await dispatch(getProfileImage(resumeData)).then(data => data.payload)
 
             if (profilePic) setProfileImage(profilePic.data)
@@ -394,7 +394,7 @@ export default function Resume({ resumeData }) {
                                         {res.education.map((ed, i) => (
                                             <View key={i} style={styles.bullet} wrap={false}>
                                                 <Text style={styles.infoItem}>{ed.bullet || ''}</Text>
-                                                <Text key={i} style={{ ...styles.regularText, marginLeft: '3vw' }}>{ed.value || ''}</Text>
+                                                <Text style={{ ...styles.regularText, marginLeft: '3vw' }}>{ed.value || ''}</Text>
                                             </View>
                                         ))}
                                     </View>
@@ -412,7 +412,7 @@ export default function Resume({ resumeData }) {
                                         {res.certifications.map((cert, i) => (
                                             <View key={i} style={styles.bullet} wrap={false}>
                                                 <Text style={styles.infoItem}>{cert.bullet || ''}</Text>
-                                                <Text key={i} style={{ ...styles.regularText, marginLeft: '3vw' }}>{cert.value || ''}</Text>
+                                                <Text style={{ ...styles.regularText, marginLeft: '3vw' }}>{cert.value || ''}</Text>
                                             </View>
                                         ))}
                                     </View>
@@ -430,7 +430,7 @@ export default function Resume({ resumeData }) {
                                         {res.skills.map((skill, i) => (
                                             <View key={i} style={styles.bullet} wrap={false}>
                                                 <Text style={styles.skill}>{skill.name || ''}</Text>
-                                                <Text key={i} style={styles.year}>{skill.option.toLowerCase() || ''}</Text>
+                                                <Text style={styles.year}>{skill.option.toLowerCase() || ''}</Text>
                                             </View>
                                         ))}
                                     </View>
@@ -449,13 +449,13 @@ export default function Resume({ resumeData }) {
                                             exp.company ?
                                                 <View key={i} style={{
                                                     ...styles.experienceRow,
-                                                    borderTop: i !== 0 && '1px solid rgb(227, 227, 227)',
-                                                    paddingTop: i !== 0 && '2vw'
+                                                    borderTop: i !== 0 ? '1px solid rgb(227, 227, 227)' : 'none',
+                                                    paddingTop: i !== 0 ? '2vw' : 0
                                                 }} wrap={false}>
-                                                    <View key={i} style={styles.experienceCol1}>
+                                                    <View style={styles.experienceCol1}>
                                                         <Text style={styles.experiencePeriod}>{exp.period || ''}</Text>
                                                     </View>
-                                                    <View key={i} style={styles.experienceCol2}>
+                                                    <View style={styles.experienceCol2}>
                                                         <Text style={styles.experienceCompany}>{exp.company || ''}</Text>
                                                         <Text style={styles.experienceRole}>{exp.role || ''}</Text>
                                                         <Text style={styles.experienceDescription}>{exp.description || ''}</Text>

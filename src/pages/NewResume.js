@@ -18,7 +18,6 @@ import PostSection from '../components/PostSection'
 
 export default function NewResume() {
     const [data, setData] = useState({})
-    const [openModal, setOpenModal] = useState(false)
     const [loading, setLoading] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [languages, setLanguages] = useState([{ name: '' }])
@@ -30,7 +29,7 @@ export default function NewResume() {
     const [expertise, setExpertise] = useState([''])
     const [profilePic, setProfilePic] = useState({})
     const [user, setUser] = useState({})
-    const localResumes = useSelector(state => state.resume)
+    const localResumes = useSelector(state => state.resume && state.resume.allResumes || [])
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -51,7 +50,7 @@ export default function NewResume() {
                 localResumes.forEach(resume => {
                     if (resume._id === edit) {
                         const resData = JSON.parse(resume.data)
-                        setData(resData)
+                        setData({ ...resData, ...resume })
                         setLanguages(resData.languages)
                         setSkills(resData.skills)
                         setEducation(resData.education)
@@ -85,7 +84,7 @@ export default function NewResume() {
             console.error(err)
         }
     }
-    const onSaveResume = async () => {
+    const onSaveResume = async saveAsNew => {
         try {
             setLoading(true)
 
@@ -106,15 +105,18 @@ export default function NewResume() {
             const strData = JSON.stringify(resumeData)
             resumeData.data = strData
             resumeData.date = new Date()
-            resumeData.username = user.username
+            resumeData.username = data.name || ''
             resumeData.manager = user.email
             resumeData.email = data.email || ''
             if (profilePic && profilePic.profileImage) resumeData.profilePic = profilePic.profileImage
 
             let saved = {}
 
-            if (isEdit) saved = await dispatch(editResume(resumeData)).then(data => data.payload)
-            else saved = await dispatch(saveResume(resumeData)).then(data => data.payload)
+            if (isEdit && !saveAsNew) saved = await dispatch(editResume(resumeData)).then(data => data.payload)
+            else {
+                delete resumeData._id
+                saved = await dispatch(saveResume(resumeData)).then(data => data.payload)
+            }
 
             if (saved) {
                 setLoading(false)
@@ -146,7 +148,7 @@ export default function NewResume() {
             <div className='new-resume-fill'>
                 <div className='resume-fill-col1'>
                     <>
-                        {profilePic.profileImage ? <img src={profilePic.profileImage} className='profile-image'/> : ''}
+                        {profilePic.profileImage ? <img src={profilePic.profileImage} className='profile-image' /> : ''}
                         <InputField
                             label='Profile Image'
                             type='file'
@@ -365,11 +367,19 @@ export default function NewResume() {
                         handleClick={() => history.goBack()}
                     />
                     <CTAButton
-                        label='Save'
+                        label={isEdit ? 'Update' : 'Save'}
                         size='100%'
                         color={APP_COLORS.MURREY}
-                        handleClick={onSaveResume}
+                        handleClick={() => onSaveResume(false)}
                     />
+                    {isEdit ?
+                        <CTAButton
+                            label='Save as new'
+                            size='100%'
+                            color={APP_COLORS.MURREY}
+                            handleClick={() => onSaveResume(true)}
+                        />
+                        : ''}
                 </div>
                 :
                 <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#6D0E00' /></div>

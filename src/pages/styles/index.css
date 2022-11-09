@@ -28,19 +28,19 @@
     height: 50px;
     width: auto;
     margin: 0;
+    filter: invert(18%) sepia(39%) saturate(9%) hue-rotate(326deg) brightness(30%) contrast(92%);
 }
 
 .login-text {
     margin: 1vw 0 0 0;
+    color: #6D0E00;
 }
 
 .login-image {
     margin: 0 0 3vw 0;
 }
 
-.login-fill {
-    
-}
+.login-fill {}
 
 /* --- Create User --- */
 .register-container {
@@ -82,9 +82,7 @@
     margin: 0 0 1vw 0;
 }
 
-.register-fill {
-    
-}
+.register-fill {}
 
 
 
@@ -156,7 +154,7 @@
     font-size: 1vw;
     /* font-style: italic; */
     color: rgb(110, 110, 110);
-    margin: 0;  
+    margin: 0;
 }
 
 .resume-description {
@@ -194,6 +192,7 @@
     align-items: center;
     text-align: center;
     margin: 0 2vw;
+    padding: .5vw 0;
 }
 
 .new-resume-fill {
@@ -214,7 +213,7 @@
 }
 
 .resume-fill-col1 {
-    display: flex;  
+    display: flex;
     flex-direction: column;
     width: 25%;
     align-self: flex-start;
@@ -228,7 +227,7 @@
 }
 
 .resume-fill-col1-dif {
-    display: flex;  
+    display: flex;
     flex-direction: column;
     width: 10%;
     align-self: flex-start;
@@ -246,6 +245,7 @@
     flex-direction: row;
     gap: 3vw;
     margin: 2vw 0 4vw 0;
+    width: 50%;
 }
 
 .remove-modal {
@@ -281,6 +281,14 @@
     border-radius: 0.5vw;
     box-shadow: 5px 5px 20px lightgray;
     position: absolute;
+}
+
+.modal-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 1vw;
+    width: 100%;
 }
 
 .close-modal {

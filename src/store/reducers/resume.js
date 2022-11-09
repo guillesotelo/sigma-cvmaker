@@ -1,15 +1,15 @@
 import { createReducer, createAsyncThunk } from "@reduxjs/toolkit"
-import { 
-    getAllResumes,
-    getResumeByEmail,
-    getImageById,
-    createResume, 
-    updateResume,
-    deleteResume
+import {
+  getAllResumes,
+  getResumeByEmail,
+  getImageById,
+  createResume,
+  updateResume,
+  deleteResume
 } from "../services/reduxServices";
 
 const initialState = {
-    resume: null,
+  resume: null,
 }
 
 export const getResumes = createAsyncThunk('GET_RESUMES', getAllResumes)
@@ -20,12 +20,12 @@ export const editResume = createAsyncThunk('UPDATE_RESUME', updateResume)
 export const removeResume = createAsyncThunk('DELETE_RESUME', deleteResume)
 
 const resumeReducer = createReducer(initialState, {
-  [getResumes.fulfilled]: (state, action) => action.payload,
-  [getMyResume.fulfilled]: (state, action) => action.payload,
-  [getProfileImage.fulfilled]: (state, action) => action.payload,
-  [saveResume.fulfilled]: (state, action) => action.payload,
-  [editResume.fulfilled]: (state, action) => action.payload,
-  [removeResume.fulfilled]: (state, action) => action.payload
+  [getResumes.fulfilled]: (state, action) => { return { ...state, allResumes: action.payload } },
+  [getMyResume.fulfilled]: (state, action) => { return { ...state, myResume: action.payload } },
+  [getProfileImage.fulfilled]: (state, action) => { return { ...state, profileImage: action.payload } },
+  [saveResume.fulfilled]: (state, action) => { return { ...state, saved: action.payload } },
+  [editResume.fulfilled]: (state, action) => { return { ...state, edited: action.payload } },
+  [removeResume.fulfilled]: (state, action) => { return { ...state, removed: action.payload } }
 });
 
 export default resumeReducer;

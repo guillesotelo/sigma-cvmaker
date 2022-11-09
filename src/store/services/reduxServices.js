@@ -50,14 +50,14 @@ const changePass = async data => {
 
 const getAllResumes = async data => {
     try {
-        const resumes = await axios.get(`${API_URL}/api/resume/getAll`, { params: data })
+        const resumes = await axios.get(`${API_URL}/api/resume/getAll`, { params: { email: data.email } })
         return resumes.data
     } catch (err) { console.log(err) }
 }
 
 const getImageById = async data => {
     try {
-        const image = await axios.get(`${API_URL}/api/resume/getProfileImage`, { params: data })
+        const image = await axios.get(`${API_URL}/api/resume/getProfileImage`, { params: { _id: data._id } })
         return image.data
     } catch (err) { console.log(err) }
 }

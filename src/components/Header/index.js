@@ -28,7 +28,7 @@ export default function Header() {
       <ToastContainer autoClose={2000} />
       <div className='header-container'>
         <div className='header-logo-container' onClick={() => history.push('/')}>
-          <img src='https://i.imgur.com/w30IOHG.png' className='header-logo'/>
+          <img src='https://images.squarespace-cdn.com/content/v1/5b07d207b27e39fe2cf2070c/1536149156741-FR68IVVJ8Q362PWO3FSC/Sigma_connectivity_footer-logo.png' className='header-logo'/>
           <h4 className='header-text'>CV Maker</h4>
         </div>
         {user && user.email ?

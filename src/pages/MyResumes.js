@@ -90,7 +90,7 @@ export default function MyResumes({ showAll }) {
                             </div>
                             <div className='resume-icons'>
                                 {/* <img src={DownloadIcon} className='resume-icon' /> */}
-                                <img src={EditIcon} className='resume-icon' onClick={() => history.push(`/createResume?edit=${resume._id}`)}/>
+                                <img src={EditIcon} className='resume-icon' onClick={() => history.push(`/createResume?edit=${resume._id}`)} />
                                 <img src={TrashCan} onClick={() => {
                                     setResumeData(resume)
                                     setOpenModal(true)
@@ -104,18 +104,21 @@ export default function MyResumes({ showAll }) {
             </div>
             {openModal && isPdf ?
                 <div className='pdf-modal'>
-                    <h4 className='close-modal' onClick={() => {
-                        setOpenModal(false)
-                        setIsPdf(false)
-                        setResumeData({})
-                    }}>Close</h4>
+                    <div className='modal-btns'>
+                        <h4 className='close-modal' onClick={() => history.push(`/createResume?edit=${resumeData._id}`)}>Edit</h4>
+                        <h4 className='close-modal' onClick={() => {
+                            setOpenModal(false)
+                            setIsPdf(false)
+                            setResumeData({})
+                        }}>Close</h4>
+                    </div>
                     <Resume
                         resumeData={resumeData}
                     />
                 </div> : ''}
             {openModal && !isPdf ?
                 <div className='remove-modal'>
-                    <h4 style={{ textAlign: 'center' }}>Are you sure you want to delete <br/>{resumeData.username}'s CV?</h4>
+                    <h4 style={{ textAlign: 'center' }}>Are you sure you want to delete <br />{resumeData.username}'s CV?</h4>
                     <div className='remove-modal-btns'>
                         <CTAButton
                             label='Cancel'
