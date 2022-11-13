@@ -27,6 +27,7 @@ export default function NewResume() {
     const [experience, setExperience] = useState([{ bullets: [''] }])
     const [strengths, setStrengths] = useState([''])
     const [expertise, setExpertise] = useState([''])
+    const [tags, setTags] = useState([''])
     const [profilePic, setProfilePic] = useState({})
     const [user, setUser] = useState({})
     const localResumes = useSelector(state => state.resume && state.resume.allResumes || [])
@@ -58,6 +59,7 @@ export default function NewResume() {
                         setExperience(resData.experience)
                         setStrengths(resData.strengths)
                         setExpertise(resData.expertise)
+                        setTags(resData.tags || [])
                         getPreview(resume)
                         setIsEdit(true)
                     }
@@ -97,6 +99,7 @@ export default function NewResume() {
             resumeData.experience = experience
             resumeData.strengths = strengths
             resumeData.expertise = expertise
+            resumeData.tags = tags
             resumeData.footer_contact = data.footer_contact || '-'
             resumeData.footer_email = data.footer_email || '-'
             resumeData.footer_phone = data.footer_phone || '-'
@@ -347,6 +350,25 @@ export default function NewResume() {
                     />
                 </div>
             </div>
+
+            {user.isManager &&
+                <>
+                    <div className='separator'></div>
+                    <div className='new-resume-fill'>
+                        <div className='resume-fill-col1'>
+                            <h2 className='section-title'>Keywords (Internal use)</h2>
+                        </div>
+                        <div className='resume-fill-col2'>
+                            <Bullet
+                                label=''
+                                type='big'
+                                items={tags}
+                                setItems={setTags}
+                                placeholder='Add keyword...'
+                            />
+                        </div>
+                    </div>
+                </>}
 
             {user.isManager &&
                 <>

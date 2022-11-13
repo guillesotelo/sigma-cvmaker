@@ -13,10 +13,13 @@ import EditIcon from '../icons/edit-icon.svg'
 import TrashCan from '../icons/trash-icon.svg'
 import Resume from '../components/Resume'
 import { getResumes, removeResume } from '../store/reducers/resume'
+import SearchBar from '../components/SearchBar'
 
 export default function MyResumes({ showAll }) {
     const [resumes, setResumes] = useState([])
+    const [filteredRes, setFilteredRes] = useState([])
     const [resumeData, setResumeData] = useState({})
+    const [search, setSearch] = useState([])
     const [openModal, setOpenModal] = useState(false)
     const [loading, setLoading] = useState(false)
     const [isPdf, setIsPdf] = useState(false)
@@ -29,6 +32,13 @@ export default function MyResumes({ showAll }) {
         const getAll = showAll || false
         getAllResumes(getAll)
     }, [])
+
+    useEffect(() => {
+        if (!search.length) {
+            getAllResumes(showAll)
+            setFilteredRes([])
+        }
+    }, [search.length])
 
     const getAllResumes = async getAll => {
         if (user && user.email) {
@@ -71,13 +81,44 @@ export default function MyResumes({ showAll }) {
         }
     }
 
+    const handleSearch = e => {
+        if (e.key === 'Enter') {
+            triggerSearch()
+        } else {
+            const words = e.target.value ? e.target.value.split(' ') : []
+            setSearch(words)
+        }
+    }
+
+    const triggerSearch = () => {
+        setLoading(true)
+        if (search.length) {
+            const filtered = resumes.filter(res => {
+                let matches = true
+                search.forEach(word => {
+                    if (!JSON.stringify(res).toLowerCase().includes(word.toLowerCase())) matches = false
+                })
+                if (matches) return res
+            })
+            setFilteredRes(filtered)
+        }
+        setLoading(false)
+    }
+
     return (
         <div className='my-resumes-container'>
             <h4 className='go-back-btn' onClick={() => history.goBack()}>Go back</h4>
             <h2 className='page-title' style={{ filter: openModal && 'blur(10px)' }}>{showAll ? 'ALL CVs' : 'MY CVs'}</h2>
+            <SearchBar
+                handleChange={e => handleSearch(e)}
+                placeholder='Search by keywords or text...'
+                style={{ filter: openModal && 'blur(10px)' }}
+                onKeyPress={handleSearch}
+                triggerSearch={triggerSearch}
+            />
             <div className='resumes-list' style={{ filter: openModal && 'blur(10px)' }}>
-                {resumes && resumes.length ?
-                    resumes.map((resume, i) =>
+                {filteredRes.length ?
+                    filteredRes.map((resume, i) =>
                         <div className='resume-card' key={i}>
                             <div className='resume-text' onClick={() => {
                                 setOpenModal(true)
@@ -98,8 +139,31 @@ export default function MyResumes({ showAll }) {
                             </div>
                         </div>
                     )
-                    : loading ? <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#6D0E00' /></div>
-                        : <h4 style={{ textAlign: 'center', marginTop: '6vw', color: 'gray' }}> ~ No resumes found ~ </h4>
+                    :
+                    resumes.length ?
+                        resumes.map((resume, i) =>
+                            <div className='resume-card' key={i}>
+                                <div className='resume-text' onClick={() => {
+                                    setOpenModal(true)
+                                    setIsPdf(true)
+                                    setResumeData(resume)
+                                }}>
+                                    <h4 className='resume-name'>{resume.username || resume.user || ''}</h4>
+                                    <h4 className='resume-role'>{resume.role || ''}</h4>
+                                    <h4 className='resume-role'>{resume.email || ''}</h4>
+                                </div>
+                                <div className='resume-icons'>
+                                    {/* <img src={DownloadIcon} className='resume-icon' /> */}
+                                    <img src={EditIcon} className='resume-icon' onClick={() => history.push(`/createResume?edit=${resume._id}`)} />
+                                    <img src={TrashCan} onClick={() => {
+                                        setResumeData(resume)
+                                        setOpenModal(true)
+                                    }} className='resume-icon' />
+                                </div>
+                            </div>
+                        )
+                        : loading ? <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#6D0E00' /></div>
+                            : <h4 style={{ textAlign: 'center', marginTop: '6vw', color: 'gray' }}> ~ No resumes found ~ </h4>
                 }
             </div>
             {openModal && isPdf ?
