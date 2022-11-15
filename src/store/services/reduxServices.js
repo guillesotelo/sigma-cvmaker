@@ -50,7 +50,7 @@ const changePass = async data => {
 
 const getAllResumes = async data => {
     try {
-        const resumes = await axios.get(`${API_URL}/api/resume/getAll`, { params: { email: data.email } })
+        const resumes = await axios.get(`${API_URL}/api/resume/getAll`, { params: { email: data.email, getAll: data.getAll } })
         return resumes.data
     } catch (err) { console.log(err) }
 }

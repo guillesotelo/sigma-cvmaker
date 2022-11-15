@@ -109,7 +109,7 @@ export default function NewResume() {
             resumeData.data = strData
             resumeData.date = new Date()
             resumeData.username = data.name || ''
-            resumeData.manager = user.email
+            resumeData.manager = user.manager || user.email
             resumeData.email = data.email || ''
             if (profilePic && profilePic.profileImage) resumeData.profilePic = profilePic.profileImage
 

@@ -29,14 +29,12 @@ export default function MyResumes({ showAll }) {
 
     useEffect(() => {
         if (!user || !user.email) history.push('/login')
-        const getAll = showAll || false
-        getAllResumes(getAll)
+        getAllResumes(showAll)
     }, [])
 
     useEffect(() => {
         if (!search.length) {
-            getAllResumes(showAll)
-            setFilteredRes([])
+            setFilteredRes(resumes)
         }
     }, [search.length])
 
@@ -47,6 +45,7 @@ export default function MyResumes({ showAll }) {
                 const cvs = await dispatch(getResumes({ ...user, getAll })).then(data => data.payload)
                 if (cvs && cvs.length) {
                     setResumes(cvs)
+                    setFilteredRes(cvs)
                 }
                 setLoading(false)
             } catch (err) {
@@ -140,30 +139,8 @@ export default function MyResumes({ showAll }) {
                         </div>
                     )
                     :
-                    resumes.length ?
-                        resumes.map((resume, i) =>
-                            <div className='resume-card' key={i}>
-                                <div className='resume-text' onClick={() => {
-                                    setOpenModal(true)
-                                    setIsPdf(true)
-                                    setResumeData(resume)
-                                }}>
-                                    <h4 className='resume-name'>{resume.username || resume.user || ''}</h4>
-                                    <h4 className='resume-role'>{resume.role || ''}</h4>
-                                    <h4 className='resume-role'>{resume.email || ''}</h4>
-                                </div>
-                                <div className='resume-icons'>
-                                    {/* <img src={DownloadIcon} className='resume-icon' /> */}
-                                    <img src={EditIcon} className='resume-icon' onClick={() => history.push(`/createResume?edit=${resume._id}`)} />
-                                    <img src={TrashCan} onClick={() => {
-                                        setResumeData(resume)
-                                        setOpenModal(true)
-                                    }} className='resume-icon' />
-                                </div>
-                            </div>
-                        )
-                        : loading ? <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#6D0E00' /></div>
-                            : <h4 style={{ textAlign: 'center', marginTop: '6vw', color: 'gray' }}> ~ No resumes found ~ </h4>
+                    loading ? <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#6D0E00' /></div>
+                        : <h4 style={{ textAlign: 'center', marginTop: '6vw', color: 'gray' }}> ~ No resumes found ~ </h4>
                 }
             </div>
             {openModal && isPdf ?
