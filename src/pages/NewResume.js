@@ -36,8 +36,6 @@ export default function NewResume() {
 
     const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
 
-    // console.log('data', data)
-
     useEffect(() => {
         setLoading(true)
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
@@ -61,7 +59,7 @@ export default function NewResume() {
                         setExperience(resData.experience)
                         setStrengths(resData.strengths)
                         setExpertise(resData.expertise)
-                        setTags(resData.tags || [])
+                        setTags(resData.tags && resData.tags.length ? resData.tags : [''])
                         getPreview(resume)
                         setIsEdit(true)
                     }

@@ -1,4 +1,4 @@
-export const VERSION = '1.0.3'
+export const VERSION = '1.0.4'
 
 export const APP_COLORS = {
     GRAY: '#696869',

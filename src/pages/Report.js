@@ -46,17 +46,6 @@ export default function Report() {
         }
     }
 
-    const generatePass = () => {
-        const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        const passwordLength = 8
-        let password = ""
-        for (let i = 0; i < passwordLength; i++) {
-            let randomNumber = Math.floor(Math.random() * chars.length);
-            password += chars.substring(randomNumber, randomNumber + 1);
-        }
-        return updateData('password', password)
-    }
-
     return (
         <div className='report-container'>
             <ToastContainer autoClose={2000} />
