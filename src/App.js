@@ -14,7 +14,6 @@ function App() {
   return (
     <Switch>
       <Route path="/login">
-        {/* <Header/> */}
         <Login />
       </Route>
       <Route path="/register">
@@ -36,6 +35,10 @@ function App() {
       <Route path="/createResume">
         <Header/>
         <NewResume/>
+      </Route>
+      <Route>
+        <Header/>
+        <Home/>
       </Route>
     </Switch>
   )

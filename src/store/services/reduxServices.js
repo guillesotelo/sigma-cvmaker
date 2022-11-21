@@ -29,7 +29,7 @@ const updateUser = async data => {
 const setUserVoid = async data => {
     try {
         const user = await axios.get(`${API_URL}/api/user/logout`, data)
-        localStorage.removeItem('user')
+        localStorage.clear()
         return user.data
     } catch (err) { console.log(err) }
 }

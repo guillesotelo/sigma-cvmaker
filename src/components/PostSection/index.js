@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './styles.css'
 
 export default function PostSection(props) {
+
+    const [editPost, seteditPost] = useState(false)
+    const [selected, setSelected] = useState({})
+    const [selectedIndex, setSelectedIndex] = useState(null)
 
     const {
         label,
@@ -16,10 +20,18 @@ export default function PostSection(props) {
     }
 
     const addNewBullet = (index, subindex) => {
-        if (items[index].bullets[subindex]) {
-            const newItems = [...items]
-            newItems[index].bullets = newItems[index].bullets.concat([''])
-            setItems(newItems)
+        if (editPost) {
+            if (selected.bullets[subindex]) {
+                const newItem = {...selected}
+                newItem.bullets = newItem.bullets.concat([''])
+                setSelected(newItem)
+            }
+        } else {
+            if (items[index].bullets[subindex]) {
+                const newItems = [...items]
+                newItems[index].bullets = newItems[index].bullets.concat([''])
+                setItems(newItems)
+            }
         }
     }
 
@@ -30,22 +42,54 @@ export default function PostSection(props) {
     }
 
     const removeBullet = (index, subindex) => {
-        const newItemsArr = [...items]
-        newItemsArr[index].bullets.splice(subindex, 1)
-        setItems(newItemsArr)
+        if (editPost) {
+            const newItem = {...selected}
+            newItem.bullets.splice(subindex, 1)
+            setSelected(newItem)
+        } else {
+            const newItemsArr = [...items]
+            newItemsArr[index].bullets.splice(subindex, 1)
+            setItems(newItemsArr)
+        }
     }
 
     const handleChange = (type, newValue, index, subindex) => {
         let newItemsArr = items
         if (type === 'bullets') {
-            const newBullets = newItemsArr[index].bullets
-            newBullets[subindex] = newValue
-            newItemsArr[index] = { ...newItemsArr[index], [type]: newBullets }
-            setItems(newItemsArr)
+            if (editPost) {
+                const newBullets = selected.bullets
+                newBullets[subindex] = newValue
+                const newItem = { ...selected, [type]: newBullets }
+                setSelected(newItem)
+            } else {
+                const newBullets = newItemsArr[index].bullets
+                newBullets[subindex] = newValue
+                newItemsArr[index] = { ...newItemsArr[index], [type]: newBullets }
+                setItems(newItemsArr)
+            }
         } else {
             newItemsArr[index] = { ...newItemsArr[index], [type]: newValue }
             setItems(newItemsArr)
         }
+    }
+
+    const handleUpdate = (type, newValue, index, subindex) => {
+        let newItem = selected
+        if (type === 'bullets') {
+            const newBullets = newItem.bullets
+            newBullets[subindex] = newValue
+            newItem = { ...newItem, [type]: newBullets }
+            setSelected(newItem)
+        } else {
+            newItem = { ...newItem, [type]: newValue }
+            setSelected(newItem)
+        }
+    }
+
+    const saveUpdatedItem = () => {
+        const newItemsArr = items
+        newItemsArr[selectedIndex] = selected
+        setItems(newItemsArr)
     }
 
     const bullets = ({ bullets }, index) => (
@@ -53,7 +97,7 @@ export default function PostSection(props) {
             <h4 className='item-label'>Key responsibilities:</h4>
             {bullets && bullets.length ?
                 bullets.map((item, subindex) =>
-                    item ?
+                    item && subindex !== bullets.length -1 ?
                         <div className='bullet-row' key={subindex}>
                             <h4 className='bullet'>●</h4>
                             <h4 className='bullet-text'>{item || ''}</h4>
@@ -67,6 +111,7 @@ export default function PostSection(props) {
                                 onChange={e => handleChange('bullets', e.target.value, index, subindex)}
                                 placeholder='Write responsibilty'
                                 type='text'
+                                // value={editPost ? selected.bullets[subindex] : item}
                             />
                             <h4 onClick={() => addNewBullet(index, subindex)} className='item-dropdown-new'>✓</h4>
                         </div>
@@ -80,7 +125,76 @@ export default function PostSection(props) {
         margin: '1vw 0'
     } : {}
 
-    return (
+    return editPost ?
+        <div className='post-container'>
+            <h4 className='item-label'>{label || ''}</h4>
+            <div className='post-column'>
+                <div className='post-row'>
+                    <input
+                        className='section-item-name'
+                        onChange={e => handleUpdate('period', e.target.value)}
+                        placeholder='Period'
+                        type='text'
+                        value={selected.period || ''}
+                    />
+                    <input
+                        className='section-item-name'
+                        onChange={e => handleUpdate('company', e.target.value)}
+                        placeholder='Company Title'
+                        type='text'
+                        value={selected.company || ''}
+                    />
+                </div>
+                <div className='post-row'>
+                    <input
+                        className='section-item-name'
+                        onChange={e => handleUpdate('role', e.target.value)}
+                        placeholder='Role Title'
+                        type='text'
+                        value={selected.role || ''}
+                    />
+                    <textarea
+                        className='section-item-name'
+                        onChange={e => handleUpdate('description', e.target.value)}
+                        placeholder='Describe job / tasks'
+                        type='textarea'
+                        cols={10}
+                        rows={10}
+                        value={selected.description || ''}
+                    />
+                </div>
+                <div className='post-row'>
+                    {bullets(selected, selectedIndex)}
+                </div>
+                <div className='post-row'>
+                    <textarea
+                        className='section-item-name'
+                        onChange={e => handleUpdate('technologies', e.target.value)}
+                        placeholder='Technologies used'
+                        type='textarea'
+                        cols={10}
+                        rows={3}
+                        value={selected.technologies || ''}
+                    />
+                </div>
+                <div className='section-item-btns'>
+                    <h4 onClick={() => {
+                        setSelected(null)
+                        setSelectedIndex(null)
+                        seteditPost(false)
+                    }}
+                        className='section-item-new'>Discard</h4>
+                    <h4 onClick={() => {
+                        saveUpdatedItem()
+                        setSelected(null)
+                        setSelectedIndex(null)
+                        seteditPost(false)
+                    }}
+                        className='section-item-new'>Save</h4>
+                </div>
+            </div>
+        </div>
+        :
         <div className='post-container'>
             <h4 className='item-label'>{label || ''}</h4>
             {items && items.length ?
@@ -105,11 +219,18 @@ export default function PostSection(props) {
                                     </div>
                                 </div>
                             </div>
-                            <h4 onClick={() => removeItem(i)} className='section-item-remove'>Remove</h4>
+                            <div className='section-item-btns'>
+                                <h4 onClick={() => {
+                                    setSelected(item)
+                                    setSelectedIndex(i)
+                                    seteditPost(true)
+                                }}
+                                    className='section-item-remove'>Edit</h4>
+                                <h4 onClick={() => removeItem(i)} className='section-item-remove'>Remove</h4>
+                            </div>
                         </div>
                         :
                         <div className='post-column' key={i} style={experienceItem(i)}>
-
                             <div className='post-row'>
                                 <input
                                     className='section-item-name'
@@ -140,11 +261,9 @@ export default function PostSection(props) {
                                     rows={10}
                                 />
                             </div>
-
                             <div className='post-row'>
                                 {bullets(item, i)}
                             </div>
-
                             <div className='post-row'>
                                 <textarea
                                     className='section-item-name'
@@ -155,10 +274,9 @@ export default function PostSection(props) {
                                     rows={3}
                                 />
                             </div>
-
                             <h4 onClick={() => addNewItem()} className='section-item-new'>Add</h4>
                         </div>
                 ) : ''}
         </div>
-    )
+
 }

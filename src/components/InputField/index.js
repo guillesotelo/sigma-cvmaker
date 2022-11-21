@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../../constants/app'
+import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import './styles.css'
 
 export default function InputField(props) {
@@ -52,7 +53,7 @@ export default function InputField(props) {
     const uploadFile = async e => {
         try {
             const file = e.target.files[0]
-            if(file) {
+            if (file) {
                 const base64 = await convertToBase64(file)
                 setImage({ ...image, [filename]: base64 })
             }
@@ -65,15 +66,17 @@ export default function InputField(props) {
         <div className='inputfield-container'>
             {label ? <h4 style={{ color: APP_COLORS.GRAY }} className='inputfield-label'>{label || ''}</h4> : ''}
             {type === 'textarea' ?
-                <textarea
-                    className='inputfield-textarea'
-                    onChange={handleChange}
-                    placeholder={placeholder || ''}
-                    cols={cols || 2}
-                    rows={rows || 4}
-                    style={style || null}
-                    value={value}
-                />
+                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                    <textarea
+                        className='inputfield-textarea'
+                        onChange={handleChange}
+                        placeholder={placeholder || ''}
+                        cols={cols || 2}
+                        rows={rows || 4}
+                        style={style || null}
+                        value={value}
+                    />
+                </GrammarlyEditorPlugin>
                 :
                 type === 'file' ?
                     <input

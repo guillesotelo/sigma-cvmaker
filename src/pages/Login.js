@@ -32,9 +32,8 @@ export default function Login() {
             if (logged) {
                 setData({ ...data, password: '', email: '' })
                 setLoading(false)
-                console.log("logged", logged)
                 toast.success(`Welcome back, ${logged.username.split(' ')[0]}!`)
-                return setTimeout(() => history.push('/'), 2500)
+                setTimeout(() => history.push('/'), 2000)
             } else {
                 setData({ ...data, password: '', email: '' })
                 setLoading(false)

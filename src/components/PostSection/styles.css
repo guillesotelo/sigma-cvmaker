@@ -48,7 +48,14 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    outline: none;
+    transition: .3s;
 }
+
+.section-item-name:focus {
+    border: 2px solid #B91601;
+}
+
 .section-item-name::placeholder {
     font-family: sans-serif;
 }
@@ -68,6 +75,13 @@
 
 .section-item-option {
     font-size: 0.8vw;
+}
+
+.section-item-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2vw;
 }
 
 .section-item-new {
@@ -96,6 +110,7 @@
 
 .section-item-remove:hover {
     color: #6D0E00;
+    border-color: #6D0E00;
 }
 
 .section-item-new:hover {
@@ -199,4 +214,14 @@
     font-size: 1vw;
     width: 50%;
     text-align: left;
+}
+
+.post-edit-modal {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    border: 1px solid #6D0E00;
+    border-radius: 1vw;
+    margin: 4vw 0;
+    background-color: white;
 }

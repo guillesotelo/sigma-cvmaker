@@ -36,6 +36,8 @@ export default function NewResume() {
 
     const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
 
+    // console.log('data', data)
+
     useEffect(() => {
         setLoading(true)
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
@@ -123,6 +125,7 @@ export default function NewResume() {
 
             if (saved) {
                 setLoading(false)
+                if (isEdit) return toast.success('Resume updated successfully!')
                 toast.success('Resume saved successfully! Redirecting...')
                 setTimeout(() => history.goBack(), 2500)
             } else {
@@ -141,7 +144,7 @@ export default function NewResume() {
     }
 
     return (
-        <div className='new-resume-container'>
+        <div className='new-resume-container' style={{ paddingBottom: isEdit ? '4vw' : 0 }}>
             <ToastContainer autoClose={2000} />
             <h4 className='go-back-btn' onClick={() => history.goBack()}>Go back</h4>
             <h2 className='page-title'>New Resume</h2>
@@ -224,7 +227,7 @@ export default function NewResume() {
                     <InputField
                         label='Short Description'
                         type='textarea'
-                        cols={10}
+                        cols={80}
                         rows={15}
                         name='description'
                         updateData={updateData}
@@ -340,7 +343,7 @@ export default function NewResume() {
                     <InputField
                         label=''
                         type='textarea'
-                        cols={10}
+                        cols={80}
                         rows={6}
                         name='tools'
                         updateData={updateData}
@@ -381,23 +384,23 @@ export default function NewResume() {
                 </>
             }
             {!loading ?
-                <div className='new-resume-btns'>
+                <div className={isEdit ? 'new-resume-btns-edited' : 'new-resume-btns'}>
                     <CTAButton
                         label='Discard'
-                        size='100%'
+                        size='50%'
                         color={APP_COLORS.GRAY}
                         handleClick={() => history.goBack()}
                     />
                     <CTAButton
                         label={isEdit ? 'Update' : 'Save'}
-                        size='100%'
+                        size='50%'
                         color={APP_COLORS.MURREY}
                         handleClick={() => onSaveResume(false)}
                     />
                     {isEdit ?
                         <CTAButton
                             label='Save as new'
-                            size='100%'
+                            size='50%'
                             color={APP_COLORS.MURREY}
                             handleClick={() => onSaveResume(true)}
                         />

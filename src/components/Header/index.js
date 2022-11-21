@@ -18,14 +18,14 @@ export default function Header() {
       const loggedOut = dispatch(logOut()).then(data => data.payload)
       if (loggedOut) {
         toast.success('See you later!')
-        return setTimeout(() => history.push('/login'), 2000)
+        setTimeout(() => history.push('/login'), 1500)
       }
     } catch (err) { return toast.error('An error has occurred') }
   }
 
   return (
     <>
-      <ToastContainer autoClose={2000} />
+      <ToastContainer autoClose={1500} />
       <div className='header-container'>
         <div className='header-logo-container' onClick={() => history.push('/')}>
           <img src='https://images.squarespace-cdn.com/content/v1/5b07d207b27e39fe2cf2070c/1536149156741-FR68IVVJ8Q362PWO3FSC/Sigma_connectivity_footer-logo.png' className='header-logo'/>

@@ -34,6 +34,10 @@
     text-align: left;
 }
 
+.draggable {
+    cursor: grab;
+}
+
 .item-dropdown-name {
     border: 2px solid #696869;
     background-color: #e5e5e5;
@@ -46,6 +50,12 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    outline: none;
+    transition: .3s;
+}
+
+.item-dropdown-name:focus {
+    border: 2px solid #B91601 !important;
 }
 
 .item-dropdown-select {
@@ -59,6 +69,12 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    outline: none;
+    transition: .3s;
+}
+
+.item-dropdown-select:focus {
+    border: 2px solid #B91601;
 }
 
 .item-dropdown-option {
