@@ -383,32 +383,30 @@ export default function NewResume() {
                     />
                 </>
             }
-            {!loading ?
-                <div className={isEdit ? 'new-resume-btns-edited' : 'new-resume-btns'}>
+            <div className={isEdit ? 'new-resume-btns-edited' : 'new-resume-btns'}>
+                <CTAButton
+                    label='Discard'
+                    size='50%'
+                    color={APP_COLORS.GRAY}
+                    handleClick={() => history.goBack()}
+                />
+                <CTAButton
+                    label={isEdit ? 'Update' : 'Save'}
+                    size='50%'
+                    color={APP_COLORS.MURREY}
+                    handleClick={() => onSaveResume(false)}
+                    loading={loading}
+                />
+                {isEdit ?
                     <CTAButton
-                        label='Discard'
-                        size='50%'
-                        color={APP_COLORS.GRAY}
-                        handleClick={() => history.goBack()}
-                    />
-                    <CTAButton
-                        label={isEdit ? 'Update' : 'Save'}
+                        label='Save as new'
                         size='50%'
                         color={APP_COLORS.MURREY}
-                        handleClick={() => onSaveResume(false)}
+                        handleClick={() => onSaveResume(true)}
+                        loading={loading}
                     />
-                    {isEdit ?
-                        <CTAButton
-                            label='Save as new'
-                            size='50%'
-                            color={APP_COLORS.MURREY}
-                            handleClick={() => onSaveResume(true)}
-                        />
-                        : ''}
-                </div>
-                :
-                <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#6D0E00' /></div>
-            }
+                    : ''}
+            </div>
         </div>
     )
 }

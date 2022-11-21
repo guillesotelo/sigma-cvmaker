@@ -23,7 +23,7 @@
 .header-text {
     font-size: 1vw;
     margin: 0 1vw;
-    color: #6D0E00;
+    color: #3e3e3e;
 }
 
 .header-logo {
@@ -48,6 +48,19 @@
     width: auto;
     cursor: pointer;
     transition: 0.3s;
+}
+
+.error-icon {
+    height: 25px;
+    width: auto;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 0 2vw;
+    filter: invert(25%) sepia(4%) saturate(0%) hue-rotate(151deg) brightness(103%) contrast(78%);
+}
+
+.error-icon:hover {
+    filter: invert(12%) sepia(90%) saturate(2046%) hue-rotate(353deg) brightness(94%) contrast(111%);
 }
 
 .logout-icon:hover {

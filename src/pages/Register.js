@@ -63,51 +63,48 @@ export default function Register() {
           <img src='https://cdn-images-1.medium.com/max/1200/1*nTO69kRH04bgcPD65JcM_A.png' className='register-logo' />
           <h4 className='register-text'>Create new user</h4>
         </div>
-        {loading ?
-          <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#6D0E00' /></div>
-          :
-          <div className='register-fill'>
-            <InputField
-              label='Full Name'
-              type='text'
-              name='username'
-              updateData={updateData}
-            />
-            <InputField
-              label='User Email'
-              type='text'
-              name='email'
-              updateData={updateData}
-            />
-            <InputField
-              label='Password'
-              type='text'
-              name='password'
-              updateData={updateData}
-              value={(data.password || data.password === '') ? data.password : generatePass()}
-            />
-            <InputField
-              label='Manager email'
-              type='text'
-              name='manager'
-              updateData={updateData}
-              style={{ marginBottom: '1vw' }}
-            />
-            <SwitchBTN
-              label='Is Manager?'
-              sw={data.isManager || false}
-              onChangeSw={() => updateData('isManager', !data.isManager)}
-              style={{ transform: 'scale(0.7)' }}
-            />
-            <CTAButton
-              label='Create User'
-              size='100%'
-              color={APP_COLORS.MURREY}
-              handleClick={registerUser}
-              disabled={!data.email || !data.email.includes('.') || !data.email.includes('@') || !data.password || !data.username}
-            />
-          </div>
-        }
+        <div className='register-fill'>
+          <InputField
+            label='Full Name'
+            type='text'
+            name='username'
+            updateData={updateData}
+          />
+          <InputField
+            label='User Email'
+            type='text'
+            name='email'
+            updateData={updateData}
+          />
+          <InputField
+            label='Password'
+            type='text'
+            name='password'
+            updateData={updateData}
+            value={(data.password || data.password === '') ? data.password : generatePass()}
+          />
+          <InputField
+            label='Manager email'
+            type='text'
+            name='manager'
+            updateData={updateData}
+            style={{ marginBottom: '1vw' }}
+          />
+          <SwitchBTN
+            label='Is Manager?'
+            sw={data.isManager || false}
+            onChangeSw={() => updateData('isManager', !data.isManager)}
+            style={{ transform: 'scale(0.7)' }}
+          />
+          <CTAButton
+            label='Create User'
+            size='100%'
+            color={APP_COLORS.MURREY}
+            handleClick={registerUser}
+            disabled={!data.email || !data.email.includes('.') || !data.email.includes('@') || !data.password || !data.username}
+            loading={loading}
+          />
+        </div>
       </div>
     </div>
   )

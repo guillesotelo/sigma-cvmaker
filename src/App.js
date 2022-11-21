@@ -9,6 +9,7 @@ import './pages/styles/index.css'
 import 'react-toastify/dist/ReactToastify.css';
 import MyResumes from "./pages/MyResumes";
 import NewResume from "./pages/NewResume";
+import Report from "./pages/Report.js";
 
 function App() {
   return (
@@ -35,6 +36,10 @@ function App() {
       <Route path="/createResume">
         <Header/>
         <NewResume/>
+      </Route>
+      <Route path="/report">
+        <Header/>
+        <Report/>
       </Route>
       <Route>
         <Header/>

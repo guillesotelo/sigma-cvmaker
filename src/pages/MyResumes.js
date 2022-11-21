@@ -28,7 +28,8 @@ export default function MyResumes({ showAll }) {
     const history = useHistory()
 
     useEffect(() => {
-        if (!user || !user.email) history.push('/login')
+        const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
+        if (!localUser || !localUser.email) history.push('/login')
         getAllResumes(showAll)
     }, [])
 

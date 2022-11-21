@@ -91,6 +91,20 @@ const deleteResume = async data => {
     } catch (err) { console.log(err) }
 }
 
+const createReport = async data => {
+    try {
+        const report = await axios.post(`${API_URL}/api/report/create`, data)
+        return report.data
+    } catch (err) { console.log(err) }
+}
+
+const getReports = async data => {
+    try {
+        const reports = await axios.get(`${API_URL}/api/report/getAll`, { params: data })
+        return reports.data
+    } catch (err) { console.log(err) }
+}
+
 export {
     loginUser,
     registerUser,
@@ -103,5 +117,7 @@ export {
     getResumeByEmail,
     createResume,
     updateResume,
-    deleteResume
+    deleteResume,
+    createReport,
+    getReports
 }

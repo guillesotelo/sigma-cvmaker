@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
 import { logOut } from '../../store/reducers/user'
 import LogoutIcon from '../../icons/logout-icon.svg'
+import ErrorIcon from '../../icons/error-icon.svg'
 import './styles.css'
 
 export default function Header() {
@@ -15,7 +16,7 @@ export default function Header() {
 
   const logOutUser = async () => {
     try {
-      const loggedOut = dispatch(logOut()).then(data => data.payload)
+      const loggedOut = await dispatch(logOut()).then(data => data.payload)
       if (loggedOut) {
         toast.success('See you later!')
         setTimeout(() => history.push('/login'), 1500)
@@ -32,7 +33,10 @@ export default function Header() {
           <h4 className='header-text'>CV Maker</h4>
         </div>
         {user && user.email ?
-          <img src={LogoutIcon} className='logout-icon' onClick={logOutUser}/>
+          <div>
+            <img src={ErrorIcon} className='error-icon' onClick={() => history.push('/report')}/>
+            <img src={LogoutIcon} className='logout-icon' onClick={logOutUser}/>
+          </div>
           :
           <></>
         }
