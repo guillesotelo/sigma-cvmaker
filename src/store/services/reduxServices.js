@@ -4,7 +4,7 @@ const API_URL = process.env.NODE_ENV === 'development' ? '' : process.env.REACT_
 
 const loginUser = async data => {
     try {
-        const res = await axios.post(`${API_URL}/api/user`, data)
+        const res = await axios.post(`${API_URL}/api/user/login`, data)
         const user = res.data
         localStorage.setItem('user', JSON.stringify(user))
         return user
