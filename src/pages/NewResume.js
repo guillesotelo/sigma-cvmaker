@@ -5,9 +5,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import { APP_COLORS } from '../constants/app'
-import { createUser } from '../store/reducers/user'
-import SwitchBTN from '../components/SwitchBTN'
-import MoonLoader from "react-spinners/MoonLoader"
+import GoBackIcon from '../icons/goback-icon.svg'
 import ItemDropdown from '../components/ItemDropdown'
 import Bullet from '../components/Bullet'
 import InputBullet from '../components/InputBullet'
@@ -142,9 +140,9 @@ export default function NewResume() {
     }
 
     return (
-        <div className='new-resume-container' style={{ paddingBottom: isEdit ? '4vw' : 0 }}>
+        <div className='new-resume-container'>
             <ToastContainer autoClose={2000} />
-            <h4 className='go-back-btn' onClick={() => history.goBack()}>Go back</h4>
+            <img src={GoBackIcon} className='goback-icon' onClick={() => history.goBack()}/>
             <h2 className='page-title'>New Resume</h2>
             <CVHeader data={data} />
             <div className='separator'></div>
@@ -381,7 +379,7 @@ export default function NewResume() {
                     />
                 </>
             }
-            <div className={isEdit ? 'new-resume-btns-edited' : 'new-resume-btns'}>
+            <div className='new-resume-btns'>
                 <CTAButton
                     label='Discard'
                     size='50%'

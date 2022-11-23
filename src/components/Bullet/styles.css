@@ -4,11 +4,11 @@
 }
 
 .bullet {
-    font-size: 0.9vw;
+    font-size: 0.8vw;
 }
 
 .bullet-text {
-    font-size: 0.9vw;
+    font-size: 0.8vw;
     color: black;
     white-space: nowrap;
     overflow: hidden;

@@ -7,11 +7,13 @@ export default function ActionCard(props) {
         label,
         details,
         color,
-        onClick
+        onClick,
+        onMouseEnter,
+        onMouseLeave
     } = props
 
     return (
-        <div className='action-card-container' onClick={onClick} style={{ backgroundColor: color || '#696869' }}>
+        <div className='action-card-container' onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} style={{ backgroundColor: color || '#696869' }}>
             <h4 className='action-card-label'>{label || ''}</h4>
             <h5 className='action-card-details'>{details || ''}</h5>
         </div>

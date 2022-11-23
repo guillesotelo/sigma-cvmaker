@@ -7,7 +7,7 @@ import InputField from '../components/InputField'
 import { APP_COLORS } from '../constants/app'
 import { createUser } from '../store/reducers/user'
 import SwitchBTN from '../components/SwitchBTN'
-import MoonLoader from "react-spinners/MoonLoader"
+import GoBackIcon from '../icons/goback-icon.svg'
 
 export default function Register() {
   const [data, setData] = useState({})
@@ -57,10 +57,9 @@ export default function Register() {
   return (
     <div className='register-container'>
       <ToastContainer autoClose={2000} />
-      <h4 className='go-back-btn' onClick={() => history.goBack()}>Go back</h4>
+      <img src={GoBackIcon} className='goback-icon' onClick={() => history.goBack()}/>
       <div className='register-box'>
         <div className='register-image'>
-          <img src='https://cdn-images-1.medium.com/max/1200/1*nTO69kRH04bgcPD65JcM_A.png' className='register-logo' />
           <h4 className='register-text'>Create new user</h4>
         </div>
         <div className='register-fill'>

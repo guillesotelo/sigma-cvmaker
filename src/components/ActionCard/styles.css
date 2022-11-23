@@ -1,25 +1,26 @@
 .action-card-container {
     border-radius: 0.5vw;
-    box-shadow: 2px 2px 7px gray;
-    padding: 0.5vw 1vw;
-    transition: 0.5s;
+    box-shadow: 2px 2px 5px gray;
+    /* padding: 0.5vw 1vw; */
+    transition: .5s;
     cursor: pointer;
     min-width: 12vw;
 }
 
 .action-card-container:hover {
-    box-shadow: 4px 4px 20px gray;
-    transform: scale(1.02);
+    box-shadow: 4px 4px 15px gray;
+    transform: scale(1.03);
     opacity: 0.8;
-    background-color: rgb(214, 196, 196) !important;
+    color: #6D0E00;
+    /* background-color: rgb(214, 196, 196) !important; */
 }
 
 .action-card-label {
-    font-size: 1.2vw;
+    font-size: .9vw;
     margin: 1vw;
 }
 
 .action-card-details {
     margin: 1vw;
-    font-size: 0.9vw;
+    font-size: .7vw;
 }

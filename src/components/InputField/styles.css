@@ -5,8 +5,8 @@
 }
 
 .inputfield-label {
-    font-size: 0.9vw;
-    margin: 0 0 0.5vw 0;
+    font-size: 0.8vw;
+    margin: 0 0 0.3vw 0;
     text-align: left;
 }
 
@@ -15,7 +15,7 @@
     background-color: #e5e5e5;
     font-weight: normal;
     border-radius: 0.5vw;
-    padding: 0.7vw;
+    padding: 0.5vw;
     /* text-align: center; */
     font-size: 0.9vw;
     outline: none;

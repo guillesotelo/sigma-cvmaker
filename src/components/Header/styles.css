@@ -21,13 +21,13 @@
 }
 
 .header-text {
-    font-size: 1vw;
+    font-size: .9vw;
     margin: 0 1vw;
     color: #3e3e3e;
 }
 
 .header-logo {
-    height: 30px;
+    height: 28px;
     width: auto;
     filter: invert(18%) sepia(39%) saturate(9%) hue-rotate(326deg) brightness(30%) contrast(92%);
 }
@@ -44,14 +44,14 @@
 }
 
 .logout-icon {
-    height: 25px;
+    height: 22px;
     width: auto;
     cursor: pointer;
     transition: 0.3s;
 }
 
 .error-icon {
-    height: 25px;
+    height: 22px;
     width: auto;
     cursor: pointer;
     transition: 0.3s;

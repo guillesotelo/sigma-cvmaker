@@ -11,6 +11,7 @@ import ActionCard from '../components/ActionCard'
 import DownloadIcon from '../icons/download-icon.svg'
 import EditIcon from '../icons/edit-icon.svg'
 import TrashCan from '../icons/trash-icon.svg'
+import GoBackIcon from '../icons/goback-icon.svg'
 import Resume from '../components/Resume'
 import { getResumes, removeResume } from '../store/reducers/resume'
 import SearchBar from '../components/SearchBar'
@@ -107,7 +108,7 @@ export default function MyResumes({ showAll }) {
 
     return (
         <div className='my-resumes-container'>
-            <h4 className='go-back-btn' onClick={() => history.goBack()}>Go back</h4>
+            <img src={GoBackIcon} className='goback-icon' onClick={() => history.goBack()}/>
             <h2 className='page-title' style={{ filter: openModal && 'blur(10px)' }}>{showAll ? 'ALL CVs' : 'MY CVs'}</h2>
             <SearchBar
                 handleChange={e => handleSearch(e)}

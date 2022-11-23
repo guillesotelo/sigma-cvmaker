@@ -1,4 +1,4 @@
-.footer-container {
+.cv-footer-container {
     margin: 1vw 0 5vw 0;
     display: flex;
     flex-direction: row;
@@ -7,12 +7,12 @@
     color: rgb(105, 104, 105);
 }
 
-.footer-col {
+.cv-footer-col {
     display: flex;
     flex-direction: column;
 }
 
-.footer-row {
+.cv-footer-row {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -20,7 +20,7 @@
     gap: 1vw;
 }
 
-.footer-row input {
+.cv-footer-row input {
     width: 16vw;
     padding: 0.4vw;
 }

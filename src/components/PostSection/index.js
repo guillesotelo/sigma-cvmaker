@@ -94,7 +94,7 @@ export default function PostSection(props) {
 
     const bullets = ({ bullets }, index) => (
         <div className='bullet-container'>
-            <h4 className='item-label'>Key responsibilities:</h4>
+            <h4 className='post-item-label'>Key responsibilities:</h4>
             {bullets && bullets.length ?
                 bullets.map((item, subindex) =>
                     item && subindex !== bullets.length -1 ?
@@ -127,7 +127,7 @@ export default function PostSection(props) {
 
     return editPost ?
         <div className='post-container'>
-            <h4 className='item-label'>{label || ''}</h4>
+            <h4 className='post-item-label'>{label || ''}</h4>
             <div className='post-column'>
                 <div className='post-row'>
                     <input
@@ -196,7 +196,7 @@ export default function PostSection(props) {
         </div>
         :
         <div className='post-container'>
-            <h4 className='item-label'>{label || ''}</h4>
+            <h4 className='post-item-label'>{label || ''}</h4>
             {items && items.length ?
                 items.map((item, i) =>
                     i < items.length - 1 && items.length > 1 ?

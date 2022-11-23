@@ -6,9 +6,9 @@ export default function CVFooter(props) {
 
   const { updateData, data, user } = props
   return (
-    <div className='footer-container'>
-      <div className='footer-col'>
-        <div className='footer-row'>
+    <div className='cv-footer-container'>
+      <div className='cv-footer-col'>
+        <div className='cv-footer-row'>
           <h4 className='inputfield-label'>Contact:</h4>
           <InputField
             label=''
@@ -19,7 +19,7 @@ export default function CVFooter(props) {
             style={{ color: 'rgb(71, 71, 71)' }}
           />
         </div>
-        <div className='footer-row'>
+        <div className='cv-footer-row'>
           <h4 className='inputfield-label'>Email:</h4>
           <InputField
             label=''
@@ -31,8 +31,8 @@ export default function CVFooter(props) {
           />
         </div>
       </div>
-      <div className='footer-col'>
-        <div className='footer-row'>
+      <div className='cv-footer-col'>
+        <div className='cv-footer-row'>
           <h4 className='inputfield-label'>Phone:</h4>
           <InputField
             label=''
@@ -44,7 +44,7 @@ export default function CVFooter(props) {
             style={{ color: 'rgb(71, 71, 71)' }}
           />
         </div>
-        <div className='footer-row'>
+        <div className='cv-footer-row'>
           <h4 className='inputfield-label'>Location:</h4>
           <InputField
             label=''

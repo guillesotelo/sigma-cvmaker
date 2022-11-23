@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { ToastContainer, toast } from 'react-toastify'
-import CTAButton from '../components/CTAButton'
-import InputField from '../components/InputField'
-import { APP_COLORS } from '../constants/app'
-import { logIn } from '../store/reducers/user'
-import MoonLoader from "react-spinners/MoonLoader"
 import ActionCard from '../components/ActionCard'
-import { getAllResumes } from '../store/services/reduxServices'
+import { TOOLTIPS } from '../constants/tooltips'
 
 export default function Home() {
   const [user, setUser] = useState({})
-  const dispatch = useDispatch()
+  const [tooltip, setTooltip] = useState('')
+  const [tooltipStyle, setTooltipStyle] = useState({ color: 'transparent', transition: '.5s' })
   const history = useHistory()
 
   useEffect(() => {
@@ -23,32 +17,148 @@ export default function Home() {
 
   return (
     <div className='home-container'>
+      <div className='home-welcome'>
+        <h1 className='home-welcome-title'>Welcome to Sigma CV Maker</h1>
+        <h4 className='home-welcome-text'>Here you can create, review and edit CVs, as well as manage user data within the app.</h4>
+        <h4 className='home-welcome-text'>Select an action to start</h4>
+      </div>
+      <div className='home-tooltip-container' style={tooltipStyle}>
+        <h4 className='home-tooltip'>{tooltip || ''}</h4>
+      </div>
       <div className='home-action-cards'>
         <ActionCard
           label='My CVs'
           details="Show consultant's CVs"
-          color={APP_COLORS.SPACE}
+          color='white'
           onClick={() => history.push('/myResumes')}
+          onMouseEnter={() => {
+            setTooltipStyle({
+              color: '#6D0E00',
+              transition: '.5s',
+              borderRight: '1px solid #6D0E00'
+            })
+            setTooltip(TOOLTIPS.my_cvs)
+          }}
+          onMouseLeave={() => {
+            setTooltipStyle({
+              color: 'transparent',
+              border: 'none',
+              transition: '.5'
+            })
+            setTooltip('')
+          }}
         />
         {user.isManager ?
           <ActionCard
             label='All CVs'
             details="Show all submitted CVs"
-            color={APP_COLORS.SPACE}
+            color='white'
             onClick={() => history.push('/allResumes')}
+            onMouseEnter={() => {
+              setTooltipStyle({
+                color: '#6D0E00',
+                transition: '.5s',
+                borderRight: '1px solid #6D0E00'
+              })
+              setTooltip(TOOLTIPS.all_cvs)
+            }}
+            onMouseLeave={() => {
+              setTooltipStyle({
+                color: 'transparent',
+                border: 'none',
+                transition: '.5s'
+              })
+              setTooltip('')
+            }}
           />
           : ''}
         <ActionCard
           label='New CV'
           details="Create a new CV"
-          color={APP_COLORS.SPACE}
+          color='white'
           onClick={() => history.push('/createResume')}
+          onMouseEnter={() => {
+            setTooltipStyle({
+              color: '#6D0E00',
+              transition: '.5s',
+              borderRight: '1px solid #6D0E00'
+            })
+            setTooltip(TOOLTIPS.create_cv)
+          }}
+          onMouseLeave={() => {
+            setTooltipStyle({
+              color: 'transparent',
+              border: 'none',
+              transition: '.5s'
+            })
+            setTooltip('')
+          }}
         />
         <ActionCard
           label='Create User'
           details="Register a new User"
-          color={APP_COLORS.SPACE}
+          color='white'
           onClick={() => history.push('/register')}
+          onMouseEnter={() => {
+            setTooltipStyle({
+              color: '#6D0E00',
+              transition: '.5s',
+              borderRight: '1px solid #6D0E00'
+            })
+            setTooltip(TOOLTIPS.create_user)
+          }}
+          onMouseLeave={() => {
+            setTooltipStyle({
+              color: 'transparent',
+              border: 'none',
+              transition: '.5s'
+            })
+            setTooltip('')
+          }}
+        />
+        <ActionCard
+          label='Account'
+          details="Change user data"
+          color='white'
+          onClick={() => history.push('/account')}
+          onMouseEnter={() => {
+            setTooltipStyle({
+              color: '#6D0E00',
+              transition: '.5s',
+              borderRight: '1px solid #6D0E00'
+            })
+            setTooltip(TOOLTIPS.account)
+          }}
+          onMouseLeave={() => {
+            setTooltipStyle({
+              color: 'transparent',
+              border: 'none',
+              transition: '.5s'
+            })
+            setTooltip('')
+          }}
+        />
+        <ActionCard
+          label='App Settings'
+          details="Adjust App configurations"
+          color='white'
+          onClick={() => history.push('/settings')}
+          onMouseEnter={() => {
+            setTooltipStyle({
+              color: '#6D0E00',
+              transition: '.5s',
+              borderRight: '1px solid #6D0E00'
+            })
+            setTooltip(TOOLTIPS.settings)
+          }}
+          onMouseLeave={() => {
+            setTooltipStyle({
+              color: 'transparent',
+              border: 'none',
+              transition: '.5s'
+            })
+            setTooltip('')
+          }}
         />
       </div>
     </div>

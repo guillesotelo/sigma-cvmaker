@@ -105,6 +105,21 @@ const getReports = async data => {
     } catch (err) { console.log(err) }
 }
 
+const updateReportData = async data => {
+    try {
+        const report = await axios.post(`${API_URL}/api/report/update`, data)
+        return report
+    } catch (err) { console.log(err) }
+}
+
+const getAdminStatus = async data => {
+    try {
+        const user = await axios.get(`${API_URL}/api/user/admin`, { params: data })
+        return user.data
+    } catch (err) { console.log(err) }
+}
+
+
 export {
     loginUser,
     registerUser,
@@ -119,5 +134,7 @@ export {
     updateResume,
     deleteResume,
     createReport,
-    getReports
+    getReports,
+    updateReportData,
+    getAdminStatus
 }

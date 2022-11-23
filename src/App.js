@@ -10,40 +10,48 @@ import 'react-toastify/dist/ReactToastify.css';
 import MyResumes from "./pages/MyResumes";
 import NewResume from "./pages/NewResume";
 import Report from "./pages/Report.js";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <Switch>
       <Route path="/login">
         <Login />
+        <Footer />
       </Route>
       <Route path="/register">
-        <Header/>
+        <Header />
         <Register />
+        <Footer />
       </Route>
       <Route exact path="/">
-        <Header/>
+        <Header />
         <Home />
+        <Footer />
       </Route>
       <Route path="/myResumes">
-        <Header/>
-        <MyResumes/>
+        <Header />
+        <MyResumes />
+        <Footer />
       </Route>
       <Route path="/allResumes">
-        <Header/>
-        <MyResumes showAll={true}/>
+        <Header />
+        <MyResumes showAll={true} />
+        <Footer />
       </Route>
       <Route path="/createResume">
-        <Header/>
-        <NewResume/>
+        <Header />
+        <NewResume />
       </Route>
       <Route path="/report">
-        <Header/>
-        <Report/>
+        <Header />
+        <Report />
+        <Footer />
       </Route>
       <Route>
-        <Header/>
-        <Home/>
+        <Header />
+        <Home />
+        <Footer />
       </Route>
     </Switch>
   )
