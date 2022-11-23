@@ -22,13 +22,13 @@ export const updateUserData = createAsyncThunk('UPDATE_USER', updateUser)
 export const getAdminCredentials = createAsyncThunk('GET_ADMIN_CREDENTIALS', getAdminStatus)
 
 const userReducer = createReducer(initialState, {
-  [logIn.fulfilled]: (state, action) => action.payload,
-  [createUser.fulfilled]: (state, action) => action.payload,
+  [logIn.fulfilled]: (state, action) => { return { ...state, user: action.payload } },
+  [createUser.fulfilled]: (state, action) => { return { ...state, created: action.payload } },
   [logOut.fulfilled]: (state, action) => {},
-  [sendEmailResetPass.fulfilled]: (state, action) => action.payload,
-  [changePassword.fulfilled]: (state, action) => action.payload,
-  [updateUserData.fulfilled]: (state, action) => action.payload,
-  [getAdminCredentials.fulfilled]: (state, action) => action.payload
+  [sendEmailResetPass.fulfilled]: (state, action) => { return { ...state, sentEmailResetPass: action.payload } },
+  [changePassword.fulfilled]: (state, action) => { return { ...state, changedPassword: action.payload } },
+  [updateUserData.fulfilled]: (state, action) => { return { ...state, user: action.payload } },
+  [getAdminCredentials.fulfilled]: (state, action) => { return { ...state, adminCredentials: action.payload } },
 });
 
 export default userReducer;

@@ -5,10 +5,9 @@ const API_URL = process.env.NODE_ENV === 'development' ? '' : process.env.REACT_
 const loginUser = async user => {
     try {
         const res = await axios.post(`${API_URL}/api/user`, user)
-        const finalUser = res.data
-        localStorage.setItem('user', JSON.stringify(finalUser))
-        if(finalUser.defaultLedger !== null) localStorage.setItem('ledger', finalUser.defaultLedger)
-        return finalUser
+        const user = res.data
+        localStorage.setItem('user', JSON.stringify(user))
+        return user
     } catch (error) { console.log(error) }
 }
 
@@ -22,6 +21,7 @@ const registerUser = async data => {
 const updateUser = async data => {
     try {
         const user = await axios.post(`${API_URL}/api/user/update`, data)
+        if(user.data) localStorage.setItem('user', JSON.stringify(user.data))
         return user
     } catch (err) { console.log(err) }
 }

@@ -11,6 +11,8 @@ import MyResumes from "./pages/MyResumes";
 import NewResume from "./pages/NewResume";
 import Report from "./pages/Report.js";
 import Footer from "./components/Footer";
+import Account from "./pages/Account";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -46,6 +48,16 @@ function App() {
       <Route path="/report">
         <Header />
         <Report />
+        <Footer />
+      </Route>
+      <Route path="/account">
+        <Header />
+        <Account />
+        <Footer />
+      </Route>
+      <Route path="/settings">
+        <Header />
+        <Settings />
         <Footer />
       </Route>
       <Route>
