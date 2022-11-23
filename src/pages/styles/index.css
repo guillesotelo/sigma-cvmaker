@@ -124,19 +124,26 @@
 .home-welcome {
     align-self: flex-start;
     color:rgb(80, 80, 80);
-    width: 40vw;
 }
 
 .home-welcome-title {
     margin: 0 0 2vw 0;
-    width: 40vw;
+    width: 35vw;
     font-size: 2vw;
 }
 
 .home-welcome-text {
-    margin: .5vw 0;
+    margin: 1.5vw 0;
     font-size: 1.2vw;
-    width: 40vw;
+    width: 35vw;
+}
+
+.home-welcome-comment {
+    margin-top: 16vw;
+    font-size: 1vw;
+    width: 35vw;
+    text-align: justify;
+    color: rgb(167, 167, 167);
 }
 
 .home-tooltip-container {
