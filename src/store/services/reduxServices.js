@@ -2,9 +2,9 @@ import axios from 'axios';
 
 const API_URL = process.env.NODE_ENV === 'development' ? '' : process.env.REACT_APP_URL
 
-const loginUser = async user => {
+const loginUser = async data => {
     try {
-        const res = await axios.post(`${API_URL}/api/user`, user)
+        const res = await axios.post(`${API_URL}/api/user`, data)
         const user = res.data
         localStorage.setItem('user', JSON.stringify(user))
         return user
