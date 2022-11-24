@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import { APP_COLORS } from '../constants/app'
 import { updateUserData } from '../store/reducers/user'
+import GoBackIcon from '../icons/goback-icon.svg'
 
 export default function Account() {
 
@@ -13,6 +15,7 @@ export default function Account() {
   const [loading, setLoading] = useState(false)
   const [updatePass, setUpdatePass] = useState(false)
   const dispatch = useDispatch()
+  const history = useHistory()
   const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || {}
 
   useEffect(() => {
@@ -47,6 +50,7 @@ export default function Account() {
   const checkData = () => {
     if (updateDetails) {
       if (!data.username || !data.username.includes(' ') || !data.email || !data.email.includes('@') || !data.email.includes('.')) return false
+      if (data.manager && (!data.manager.includes('@') || !data.manager.includes('.'))) return false
     }
     if (updatePass) {
       if (!data.password || !data.password2) return false
@@ -56,6 +60,7 @@ export default function Account() {
 
   return (
     <div className='account-container'>
+      <img src={GoBackIcon} className='goback-icon' onClick={() => history.goBack()} />
       <h1 className='page-title' style={{ filter: updateDetails || updatePass ? 'blur(10px)' : '' }}>My Account</h1>
       <div className='account-details' style={{ filter: updateDetails || updatePass ? 'blur(10px)' : '' }}>
         <div className='account-item'>
@@ -104,6 +109,14 @@ export default function Account() {
             updateData={updateData}
             style={{ color: 'rgb(71, 71, 71)' }}
             value={data.email || ''}
+          />
+          <InputField
+            label='Manager Email'
+            type='text'
+            name='manager'
+            updateData={updateData}
+            style={{ color: 'rgb(71, 71, 71)' }}
+            value={data.manager || ''}
           />
           <div className='account-update-btns'>
             <CTAButton
