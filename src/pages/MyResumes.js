@@ -108,12 +108,10 @@ export default function MyResumes({ showAll }) {
 
     return (
         <div className='my-resumes-container'>
-            <img src={GoBackIcon} className='goback-icon' onClick={() => history.goBack()}/>
-            <h2 className='page-title' style={{ filter: openModal && 'blur(10px)' }}>{showAll ? 'ALL CVs' : 'MY CVs'}</h2>
             <SearchBar
                 handleChange={e => handleSearch(e)}
                 placeholder='Search by keywords or text...'
-                style={{ filter: openModal && 'blur(10px)' }}
+                style={{ filter: openModal && 'blur(10px)', width: '20vw' }}
                 onKeyPress={handleSearch}
                 triggerSearch={triggerSearch}
             />
@@ -132,7 +130,7 @@ export default function MyResumes({ showAll }) {
                             </div>
                             <div className='resume-icons'>
                                 {/* <img src={DownloadIcon} className='resume-icon' /> */}
-                                <img src={EditIcon} className='resume-icon' onClick={() => history.push(`/createResume?edit=${resume._id}`)} />
+                                <img src={EditIcon} className='resume-icon' onClick={() => history.push(`/new-cv?edit=${resume._id}`)} />
                                 <img src={TrashCan} onClick={() => {
                                     setResumeData(resume)
                                     setOpenModal(true)
@@ -141,14 +139,14 @@ export default function MyResumes({ showAll }) {
                         </div>
                     )
                     :
-                    loading ? <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#6D0E00' /></div>
+                    loading ? <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#E59A2F' /></div>
                         : <h4 style={{ textAlign: 'center', marginTop: '6vw', color: 'gray' }}> ~ No resumes found ~ </h4>
                 }
             </div>
             {openModal && isPdf ?
                 <div className='pdf-modal'>
                     <div className='modal-btns'>
-                        <h4 className='close-modal' onClick={() => history.push(`/createResume?edit=${resumeData._id}`)}>Edit</h4>
+                        <h4 className='close-modal' onClick={() => history.push(`/new-cv?edit=${resumeData._id}`)}>Edit</h4>
                         <h4 className='close-modal' onClick={() => {
                             setOpenModal(false)
                             setIsPdf(false)

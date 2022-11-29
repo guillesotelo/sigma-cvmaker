@@ -3,22 +3,28 @@
     flex-direction: row;
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: 82%;
     text-align: center;
+    align-items: center;
     justify-content: space-between;
-    margin: 3vw 0 0 0;
-    box-shadow: 2px 2px 10px lightgray;
-    background-color: white;
+    margin: 1vw;
+    border-radius: 1vw;
+    background-color: #fff;
 }
 
 .footer-text {
-    width: 30%;
-    padding: 1vw 2vw;
     color: gray;
     display: flex;
     flex-direction: column;
     justify-content: center;
     background: white;
+    padding: 1.8vw 2vw;
+    border-radius: 1vw;
+    font-size: .7vw;
+    margin: 1px;
+    text-align: left;
+    transition: .3s;
+    width: fit-content;
 }
 
 .footer-text-row {
@@ -26,6 +32,7 @@
     margin: 1px;
     text-align: left;
     transition: .3s;
+    width: fit-content;
 }
 
 .footer-contact {
@@ -43,9 +50,12 @@
 }
 
 .footer-version {
-    width: 10%;
-    padding: 1vw;
     font-size: .7vw;
     color: rgb(160, 160, 160);
+}
+
+.footer-logo {
+    height: 2vw;
+    padding: 0 2vw;
 }
 

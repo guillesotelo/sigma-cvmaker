@@ -19,7 +19,7 @@
     height: 2.1vw;
     width: 4.2vw;
     padding: 0.1vw;
-    border: 3px solid gray;
+    border: 2px solid gray;
     border-radius: 2vw;
     display: flex;
     flex-direction: row;
@@ -30,19 +30,24 @@
     align-self: center;
 }
 
+.switch-box:hover .switch-on{
+    opacity: .8;
+}
+
 .switch-on {
     height: 2vw;
     width: 2vw;
     align-self: center;
     border: 1px solid gray;
     border-radius: 2vw;
-    background-color: #6D0E00;
+    background-color: #E59A2F;
     transition: 0.4s;
     color: rgb(214, 214, 214);
     line-height: 2vw;
     font-size: .8vw;
     text-align: center;
     font-weight: bold;
+    color: black
 }
 
 .switch-off {
@@ -87,15 +92,16 @@
         height: 8vw;
         width: 7vw;
         align-self: center;
-        border: 1px solid #6D0E00;
+        border: 1px solid gray;
         border-radius: 1.5vw;
-        background-color: #6D0E00;
+        background-color: #E59A2F;
         transition: 0.4s;
         color: rgb(214, 214, 214);
         line-height: 8vw;
         font-size: 2.5vw;
         text-align: center;
         font-weight: bold;
+        color: black
     }
     
     .switch-off {
@@ -107,5 +113,6 @@
         line-height: 8vw;
         font-size: 2.5vw;
         text-align: center;
+        color: black
     }
 }

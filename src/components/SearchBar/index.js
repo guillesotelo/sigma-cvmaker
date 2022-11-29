@@ -15,6 +15,7 @@ export default function SearchBar(props) {
 
     return (
         <div className='search-bar-container'>
+            <img src={SearchIcon} className='search-icon' onClick={triggerSearch}/>
             <input
                 className='search-input'
                 onChange={handleChange}
@@ -24,7 +25,6 @@ export default function SearchBar(props) {
                 style={style || null}
                 value={value}
             />
-            <img src={SearchIcon} className='search-icon' onClick={triggerSearch}/>
         </div>
     )
 }

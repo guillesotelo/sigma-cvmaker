@@ -11,7 +11,8 @@ import Bullet from '../components/Bullet'
 import InputBullet from '../components/InputBullet'
 import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
-import { editResume, getProfileImage, saveResume } from '../store/reducers/resume'
+import { editResume, saveResume } from '../store/reducers/resume'
+import { getProfileImage } from '../store/reducers/user'
 import PostSection from '../components/PostSection'
 
 export default function NewResume() {
@@ -79,11 +80,12 @@ export default function NewResume() {
     const getPreview = async resData => {
         try {
             const image = await dispatch(getProfileImage(resData)).then(data => data.payload)
-            if (image) setProfilePic({ profileImage: image.data })
+            if (image) setProfilePic({ profileImage: image.data, style: image.style && JSON.parse(image.style) || {} })
         } catch (err) {
             console.error(err)
         }
     }
+
     const onSaveResume = async saveAsNew => {
         try {
             setLoading(true)
@@ -142,7 +144,7 @@ export default function NewResume() {
     return (
         <div className='new-resume-container'>
             <ToastContainer autoClose={2000} />
-            <img src={GoBackIcon} className='goback-icon' onClick={() => history.goBack()}/>
+            <img src={GoBackIcon} className='goback-icon' onClick={() => history.goBack()} />
             <h2 className='page-title'>New Resume</h2>
             <CVHeader data={data} />
             <div className='separator'></div>
@@ -150,7 +152,7 @@ export default function NewResume() {
             <div className='new-resume-fill'>
                 <div className='resume-fill-col1'>
                     <>
-                        {profilePic.profileImage ? <img src={profilePic.profileImage} className='profile-image' /> : ''}
+                        {profilePic.profileImage ? <img src={profilePic.profileImage} style={profilePic.style} className='profile-image' /> : ''}
                         <InputField
                             label='Profile Image'
                             type='file'
@@ -389,7 +391,7 @@ export default function NewResume() {
                 <CTAButton
                     label={isEdit ? 'Update' : 'Save'}
                     size='50%'
-                    color={APP_COLORS.MURREY}
+                    color={APP_COLORS.GREEN}
                     handleClick={() => onSaveResume(false)}
                     loading={loading}
                 />
@@ -397,7 +399,7 @@ export default function NewResume() {
                     <CTAButton
                         label='Save as new'
                         size='50%'
-                        color={APP_COLORS.MURREY}
+                        color={APP_COLORS.GREEN}
                         handleClick={() => onSaveResume(true)}
                         loading={loading}
                     />

@@ -19,7 +19,8 @@ export default function InputField(props) {
         rows,
         filename,
         image,
-        setImage
+        setImage,
+        setIsEdit
     } = props
 
     const handleChange = (newValue) => {
@@ -56,6 +57,7 @@ export default function InputField(props) {
             if (file) {
                 const base64 = await convertToBase64(file)
                 setImage({ ...image, [filename]: base64 })
+                if (setIsEdit) setIsEdit(true)
             }
         } catch (err) {
             console.error(err)

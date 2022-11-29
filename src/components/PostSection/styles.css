@@ -35,10 +35,10 @@
 }
 
 .section-item-name {
-    border: 2px solid #696869;
+    border: 1px solid #e5e5e5;
     background-color: #e5e5e5;
     font-weight: normal;
-    font-family: sans-serif;
+    font-family: 'Inter', sans-serif;
     border-radius: .5vw;
     padding: .5vw;
     margin-bottom: 1vw;
@@ -53,15 +53,15 @@
 }
 
 .section-item-name:focus {
-    border: 2px solid #B91601;
+    border: 1px solid #E4C69C;
 }
 
 .section-item-name::placeholder {
-    font-family: sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 .section-item-select {
-    border: 2px solid #696869;
+    border: 1px solid #e5e5e5;
     background-color: #e5e5e5;
     border-radius: .5vw;
     font-size: .8vw;
@@ -88,7 +88,7 @@
     margin: 0.5vw 0 0.5vw 0;
     color: gray;
     padding: .5vw 1vw;
-    border: 2px solid #adadad;
+    border: 1px solid #adadad;
     align-self: center;
     border-radius: 1vw;
     cursor: pointer;
@@ -100,7 +100,7 @@
     margin: 0.5vw 0 0.5vw 0;
     color: gray;
     padding: .5vw 1vw;
-    border: 2px solid #adadad;
+    border: 1px solid #adadad;
     align-self: center;
     border-radius: 1vw;
     cursor: pointer;
@@ -109,13 +109,13 @@
 }
 
 .section-item-remove:hover {
-    color: #6D0E00;
-    border-color: #6D0E00;
+    color: #E4C69C;
+    border-color: #E4C69C;
 }
 
 .section-item-new:hover {
-    color: #6D0E00;
-    border-color: #6D0E00;
+    color: #E4C69C;
+    border-color: #E4C69C;
 }
 
 .post-container {
@@ -220,7 +220,7 @@
     position: absolute;
     width: 80%;
     height: 80%;
-    border: 1px solid #6D0E00;
+    border: 1px solid #E4C69C;
     border-radius: 1vw;
     margin: 4vw 0;
     background-color: white;

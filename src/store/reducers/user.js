@@ -4,9 +4,11 @@ import {
     registerUser, 
     setUserVoid, 
     updateUser,
+    getImageByEmail,
     changePass,
     resetPassordByEmail,
-    getAdminStatus
+    getAdminStatus,
+    getAllUsers
 } from "../services/reduxServices";
 
 const initialState = {
@@ -16,6 +18,8 @@ const initialState = {
 export const logIn = createAsyncThunk('LOGIN_USER', loginUser)
 export const createUser = createAsyncThunk('CREATE_USER', registerUser)
 export const logOut = createAsyncThunk('LOGOUT_USER', setUserVoid)
+export const getUsers = createAsyncThunk('GET_ALL_USERS', getAllUsers)
+export const getProfileImage = createAsyncThunk('GET_PROFILE_IMAGE', getImageByEmail)
 export const sendEmailResetPass = createAsyncThunk('SEND_EMAIL_RESET', resetPassordByEmail)
 export const changePassword = createAsyncThunk('CHANGE_PASSWORD', changePass)
 export const updateUserData = createAsyncThunk('UPDATE_USER', updateUser)
@@ -24,6 +28,8 @@ export const getAdminCredentials = createAsyncThunk('GET_ADMIN_CREDENTIALS', get
 const userReducer = createReducer(initialState, {
   [logIn.fulfilled]: (state, action) => { return { ...state, user: action.payload } },
   [createUser.fulfilled]: (state, action) => { return { ...state, created: action.payload } },
+  [getUsers.fulfilled]: (state, action) => { return { ...state, users: action.payload } },
+  [getProfileImage.fulfilled]: (state, action) => { return { ...state, profileImage: action.payload } },
   [logOut.fulfilled]: (state, action) => {},
   [sendEmailResetPass.fulfilled]: (state, action) => { return { ...state, sentEmailResetPass: action.payload } },
   [changePassword.fulfilled]: (state, action) => { return { ...state, changedPassword: action.payload } },

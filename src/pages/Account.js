@@ -32,7 +32,10 @@ export default function Account() {
       if (checkData()) {
         const updated = await dispatch(updateUserData({ email: user.email, newData: data })).then(data => data.payload)
 
-        if (updated) toast.success('User data saved successfully')
+        if (updated) {
+          setData({ ...data, ...updated.data })
+          toast.success('User data saved successfully')
+        }
         else toast.error('Error saving changes')
       } else {
         setLoading(false)

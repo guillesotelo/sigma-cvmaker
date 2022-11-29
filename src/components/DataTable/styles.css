@@ -1,0 +1,118 @@
+.table-container {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    margin: 0 1vw;
+    width: 100%;
+}
+
+.table-titles {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.table-title {
+    font-size: 1vw;
+    margin: .3vw 0;
+    text-align: center;
+}
+
+.table-subtitle {
+    font-size: .8vw;
+    margin: 0 0 .8vw 0;
+    color: gray;
+    font-weight: normal;
+}
+
+.table-headers {
+    display: flex;
+    flex-direction: row;
+    font-size: .8vw;
+    /* justify-content: space-between; */
+    border-top-left-radius: .5vw;
+    border-top-right-radius: .5vw;
+    border-bottom: 1px solid #E4E7EB;
+    padding: 1vw .4vw;
+    background-color: #F9FAFB;
+}
+
+.table-header {
+    margin: 0;
+    width: 15%;
+    text-align: left;
+    color: #6b7280;
+}
+
+.table-row {
+    display: flex;
+    flex-direction: row;
+    font-size: .9vw;
+    justify-content: space-between;
+    border-radius: .5VW;
+    align-items: center;
+    padding: 1vw .4vw;
+    height: fit-content;
+    cursor: pointer;
+}
+
+.table-row:hover {
+    opacity: .7;
+}
+
+.table-row-item {
+    white-space: nowrap;
+    margin: 0 .4vw 0 0;
+    width: 15%;
+    text-align: left;
+    font-weight: 600;
+    overflow: hidden;
+}
+
+.table-row-date {
+    font-weight: normal;
+    color: gray;
+}
+
+.table-row-createdAt {
+    font-weight: normal;
+    color: gray;
+}
+.table-row-updatedAt {
+    font-weight: normal;
+    color: gray;
+}
+
+.detail {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* .table-row-item:hover {
+    white-space: inherit;
+    word-wrap: break-word;
+} */
+
+.table-checkbox {
+    margin-right: 2vw !important;
+}
+
+.table-lazy-btn {
+    /* border: 1px solid #263d42; */
+    border-top: none;
+    border-bottom-left-radius: .5vw;
+    border-bottom-right-radius: .5vw;
+    background-color: #F9FAFB;
+    padding: 1vw .4vw;
+    color: rgb(79, 79, 79);
+    cursor: pointer;
+    transition: 0.3s;
+}
+.table-lazy-btn:hover {
+    opacity: 0.7;
+}
+
+@media only screen and (max-width: 640px) {
+   
+}

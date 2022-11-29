@@ -30,11 +30,11 @@ export default function Home() {
         <h4 className='home-tooltip'>{tooltip || ''}</h4>
       </div>
       <div className='home-action-cards'>
-        <ActionCard
+        {/* <ActionCard
           label='My CVs'
           details="Show consultant's CVs"
           color='white'
-          onClick={() => history.push('/myResumes')}
+          onClick={() => history.push('/my-cvs')}
           onMouseEnter={() => {
             setTooltipStyle({
               color: '#6D0E00',
@@ -57,7 +57,7 @@ export default function Home() {
             label='All CVs'
             details="Show all submitted CVs"
             color='white'
-            onClick={() => history.push('/allResumes')}
+            onClick={() => history.push('/cvs')}
             onMouseEnter={() => {
               setTooltipStyle({
                 color: '#6D0E00',
@@ -80,7 +80,7 @@ export default function Home() {
           label='New CV'
           details="Create a new CV"
           color='white'
-          onClick={() => history.push('/createResume')}
+          onClick={() => history.push('/new-cv')}
           onMouseEnter={() => {
             setTooltipStyle({
               color: '#6D0E00',
@@ -163,7 +163,7 @@ export default function Home() {
             })
             setTooltip('')
           }}
-        />
+        /> */}
       </div>
     </div>
   )

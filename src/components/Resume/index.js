@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { getProfileImage } from '../../store/reducers/resume'
+import { getProfileImage } from '../../store/reducers/user'
 import ReactPDF, { PDFViewer, Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer'
 import SigmaLogo from '../../assets/logos/sigma.png'
 import RobotoRegular from '../../assets/fonts/Roboto-Regular.ttf'
 import RobotoBold from '../../assets/fonts/Roboto-Bold.ttf'
 import GreatVibes from '../../assets/fonts/GreatVibes-Regular.ttf'
+import { applyFiltersToImage } from '../../helpers/image'
 import './styles.css'
 
 export default function Resume({ resumeData }) {
     const [data, setData] = useState(resumeData)
     const [res, setRes] = useState({})
     const [profileImage, setProfileImage] = useState({})
+    const [imageFilter, setImageFilter] = useState('')
     const [numPages, setNumPages] = useState(null)
     const [pageNumber, setPageNumber] = useState(1)
 
@@ -25,10 +27,13 @@ export default function Resume({ resumeData }) {
     const getResumeData = async () => {
         try {
             const parsedData = JSON.parse(data.data)
-
             const profilePic = await dispatch(getProfileImage(resumeData)).then(data => data.payload)
 
-            if (profilePic) setProfileImage(profilePic.data)
+            if (profilePic) {
+                const { filter } = profilePic.style && JSON.parse(profilePic.style) || {}
+                if (filter) setProfileImage(await applyFiltersToImage(profilePic.data, filter))
+                else setProfileImage(profilePic.data)
+            }
 
             setRes(parsedData)
         } catch (err) {

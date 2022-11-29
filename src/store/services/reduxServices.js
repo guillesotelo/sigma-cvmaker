@@ -21,7 +21,6 @@ const registerUser = async data => {
 const updateUser = async data => {
     try {
         const user = await axios.post(`${API_URL}/api/user/update`, data)
-        if(user.data) localStorage.setItem('user', JSON.stringify(user.data))
         return user
     } catch (err) { console.log(err) }
 }
@@ -31,6 +30,13 @@ const setUserVoid = async data => {
         const user = await axios.get(`${API_URL}/api/user/logout`, data)
         localStorage.clear()
         return user.data
+    } catch (err) { console.log(err) }
+}
+
+const getAllUsers = async data => {
+    try {
+        const users = await axios.get(`${API_URL}/api/user/getAll`, { params: data })
+        return users.data
     } catch (err) { console.log(err) }
 }
 
@@ -55,9 +61,9 @@ const getAllResumes = async data => {
     } catch (err) { console.log(err) }
 }
 
-const getImageById = async data => {
+const getImageByEmail = async data => {
     try {
-        const image = await axios.get(`${API_URL}/api/resume/getProfileImage`, { params: { _id: data._id } })
+        const image = await axios.get(`${API_URL}/api/user/getProfileImage`, { params: { email: data.email } })
         return image.data
     } catch (err) { console.log(err) }
 }
@@ -125,10 +131,11 @@ export {
     registerUser,
     updateUser,
     setUserVoid,
+    getAllUsers,
     resetPassordByEmail,
     changePass,
     getAllResumes,
-    getImageById,
+    getImageByEmail,
     getResumeByEmail,
     createResume,
     updateResume,
