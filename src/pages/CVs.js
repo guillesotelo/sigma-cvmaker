@@ -15,18 +15,47 @@ import GoBackIcon from '../icons/goback-icon.svg'
 import Resume from '../components/Resume'
 import { getResumes, removeResume } from '../store/reducers/resume'
 import SearchBar from '../components/SearchBar'
+import DataTable from '../components/DataTable'
 
-export default function MyResumes({ showAll }) {
+export default function CVs({ showAll }) {
     const [resumes, setResumes] = useState([])
     const [filteredRes, setFilteredRes] = useState([])
     const [resumeData, setResumeData] = useState({})
+    const [selectedCV, setSelectedCV] = useState(-1)
     const [search, setSearch] = useState([])
     const [openModal, setOpenModal] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
     const [loading, setLoading] = useState(false)
     const [isPdf, setIsPdf] = useState(false)
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
     const dispatch = useDispatch()
     const history = useHistory()
+    const cvHeaders = [
+        {
+            name: 'NAME',
+            value: 'username'
+        },
+        {
+            name: 'LAST UPDATED',
+            value: 'updatedAt'
+        },
+        {
+            name: 'JOB DESCRIPTION',
+            value: 'role'
+        },
+        {
+            name: 'MANAGER',
+            value: 'manager'
+        },
+        {
+            name: 'NOTE',
+            value: 'note'
+        },
+        {
+            name: 'ACTIONS',
+            value: 'icons'
+        }
+    ]
 
     useEffect(() => {
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
@@ -114,34 +143,25 @@ export default function MyResumes({ showAll }) {
                 style={{ filter: openModal && 'blur(10px)', width: '20vw' }}
                 onKeyPress={handleSearch}
                 triggerSearch={triggerSearch}
+                setData={setResumeData}
             />
             <div className='resumes-list' style={{ filter: openModal && 'blur(10px)' }}>
-                {filteredRes.length ?
-                    filteredRes.map((resume, i) =>
-                        <div className='resume-card' key={i}>
-                            <div className='resume-text' onClick={() => {
-                                setOpenModal(true)
-                                setIsPdf(true)
-                                setResumeData(resume)
-                            }}>
-                                <h4 className='resume-name'>{resume.username || resume.user || ''}</h4>
-                                <h4 className='resume-role'>{resume.role || ''}</h4>
-                                <h4 className='resume-role'>{resume.email || ''}</h4>
-                            </div>
-                            <div className='resume-icons'>
-                                {/* <img src={DownloadIcon} className='resume-icon' /> */}
-                                <img src={EditIcon} className='resume-icon' onClick={() => history.push(`/new-cv?edit=${resume._id}`)} />
-                                <img src={TrashCan} onClick={() => {
-                                    setResumeData(resume)
-                                    setOpenModal(true)
-                                }} className='resume-icon' />
-                            </div>
-                        </div>
-                    )
-                    :
-                    loading ? <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#E59A2F' /></div>
-                        : <h4 style={{ textAlign: 'center', marginTop: '6vw', color: 'gray' }}> ~ No resumes found ~ </h4>
-                }
+                <DataTable
+                    title={`CV's`}
+                    subtitle={`Here is a list of all CV's in the system`}
+                    tableData={filteredRes}
+                    tableHeaders={cvHeaders}
+                    loading={loading}
+                    item={selectedCV}
+                    setItem={setSelectedCV}
+                    isEdit={isEdit}
+                    setIsEdit={setIsEdit}
+                    setResumeData={setResumeData}
+                    setOpenModal={setOpenModal}
+                    setIsPdf={setIsPdf}
+                    modalView={true}
+                    sizes={['18%', '15%', '17%', '20%', '20%', '10%']}
+                />
             </div>
             {openModal && isPdf ?
                 <div className='pdf-modal'>
@@ -167,7 +187,7 @@ export default function MyResumes({ showAll }) {
                                 setOpenModal(false)
                                 setIsPdf(false)
                             }}
-                            style={{ color: 'black' }}
+                            color={APP_COLORS.GRAY}
                         />
                         <CTAButton
                             label='Confirm'

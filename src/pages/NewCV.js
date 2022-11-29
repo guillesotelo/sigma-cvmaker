@@ -15,7 +15,7 @@ import { editResume, saveResume } from '../store/reducers/resume'
 import { getProfileImage } from '../store/reducers/user'
 import PostSection from '../components/PostSection'
 
-export default function NewResume() {
+export default function NewCV() {
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
@@ -108,7 +108,7 @@ export default function NewResume() {
             const strData = JSON.stringify(resumeData)
             resumeData.data = strData
             resumeData.date = new Date()
-            resumeData.username = data.name || ''
+            resumeData.username = `${data.name} ${data.middlename ? data.middlename : ''} ${data.surname}` || ''
             resumeData.manager = user.manager || user.email
             resumeData.email = data.email || ''
             if (profilePic && profilePic.profileImage) resumeData.profilePic = profilePic.profileImage
@@ -123,9 +123,9 @@ export default function NewResume() {
 
             if (saved) {
                 setLoading(false)
-                if (isEdit) return toast.success('Resume updated successfully!')
-                toast.success('Resume saved successfully! Redirecting...')
-                setTimeout(() => history.goBack(), 2500)
+                if (isEdit) toast.success('Resume updated successfully!')
+                else toast.success('Resume saved successfully!')
+                setTimeout(() => history.goBack(), 2000)
             } else {
                 setLoading(false)
                 return toast.error('Error saving Resume. Please try again later')
@@ -144,8 +144,7 @@ export default function NewResume() {
     return (
         <div className='new-resume-container'>
             <ToastContainer autoClose={2000} />
-            <img src={GoBackIcon} className='goback-icon' onClick={() => history.goBack()} />
-            <h2 className='page-title'>New Resume</h2>
+            {/* <h2 className='page-title'>New Resume</h2> */}
             <CVHeader data={data} />
             <div className='separator'></div>
             <h2 className='section-title-row'>Personal Information</h2>
@@ -225,7 +224,7 @@ export default function NewResume() {
                     <InputField
                         label='Short Description'
                         type='textarea'
-                        cols={80}
+                        cols={70}
                         rows={15}
                         name='description'
                         updateData={updateData}
@@ -341,7 +340,7 @@ export default function NewResume() {
                     <InputField
                         label=''
                         type='textarea'
-                        cols={80}
+                        cols={70}
                         rows={6}
                         name='tools'
                         updateData={updateData}
@@ -386,7 +385,7 @@ export default function NewResume() {
                     label='Discard'
                     size='50%'
                     color={APP_COLORS.GRAY}
-                    handleClick={() => history.goBack()}
+                    handleClick={() => history.push('/cvs')}
                 />
                 <CTAButton
                     label={isEdit ? 'Update' : 'Save'}

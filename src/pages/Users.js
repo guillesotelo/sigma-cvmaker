@@ -97,9 +97,12 @@ export default function Users() {
 
     const getAllUsers = async () => {
         try {
+            setLoading(true)
             const _users = await dispatch(getUsers(user)).then(data => data.payload)
             if (_users) setUsers(_users)
+            setLoading(false)
         } catch (err) {
+            setLoading(false)
             console.error(err)
         }
     }
@@ -121,6 +124,8 @@ export default function Users() {
             setLoading(false)
             setIsEdit(false)
         } catch (err) {
+            setLoading(false)
+            setIsEdit(false)
             toast.error('Error saving changes')
         }
     }
@@ -144,6 +149,7 @@ export default function Users() {
                 subtitle='Here is a list of all users in the system'
                 tableData={users}
                 tableHeaders={userHeaders}
+                loading={loading}
                 item={selectedUser}
                 setItem={setSelectedUser}
                 isEdit={userEdit}

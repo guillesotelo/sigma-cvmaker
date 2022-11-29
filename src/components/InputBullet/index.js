@@ -60,7 +60,7 @@ export default function InputBullet(props) {
 
     const getItemStyle = (isDragging, draggableStyle) => ({
         userSelect: "none",
-        background: isDragging ? "transparent" : "",
+        background: isDragging ? "#F9FAFB" : "",
         ...draggableStyle
     })
 

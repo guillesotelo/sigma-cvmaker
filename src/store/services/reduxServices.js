@@ -125,6 +125,19 @@ const getAdminStatus = async data => {
     } catch (err) { console.log(err) }
 }
 
+const getCVLogo = async data => {
+    try {
+        const image = await axios.get(`${API_URL}/api/resume/getCVLogo`, { params: { type: data.type } })
+        return image.data
+    } catch (err) { console.log(err) }
+}
+
+const saveCVLogo = async data => {
+    try {
+        const image = await axios.post(`${API_URL}/api/resume/saveCVLogo`, data)
+        return image.data
+    } catch (err) { console.log(err) }
+}
 
 export {
     loginUser,
@@ -137,6 +150,8 @@ export {
     getAllResumes,
     getImageByEmail,
     getResumeByEmail,
+    getCVLogo,
+    saveCVLogo,
     createResume,
     updateResume,
     deleteResume,

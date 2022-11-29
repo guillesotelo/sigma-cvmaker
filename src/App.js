@@ -7,8 +7,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Header from "./components/Header";
-import MyResumes from "./pages/MyResumes";
-import NewResume from "./pages/NewResume";
+import CVs from "./pages/CVs";
+import NewCV from "./pages/NewCV";
 import Report from "./pages/Report";
 import Footer from "./components/Footer";
 import Account from "./pages/Account";
@@ -53,7 +53,7 @@ function App() {
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
-            <MyResumes />
+            <CVs />
             <Footer />
           </div>
         </div>
@@ -63,7 +63,7 @@ function App() {
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
-            <MyResumes showAll={true} />
+            <CVs showAll={true} />
             <Footer />
           </div>
         </div>
@@ -73,7 +73,7 @@ function App() {
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
-            <NewResume />
+            <NewCV />
             <Footer />
           </div>
         </div>

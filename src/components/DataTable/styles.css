@@ -1,4 +1,4 @@
-.table-container {
+.data-table-container {
     display: flex;
     flex-direction: column;
     align-self: flex-start;
@@ -6,26 +6,26 @@
     width: 100%;
 }
 
-.table-titles {
+.data-table-titles {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
-.table-title {
+.data-table-title {
     font-size: 1vw;
     margin: .3vw 0;
     text-align: center;
 }
 
-.table-subtitle {
+.data-table-subtitle {
     font-size: .8vw;
     margin: 0 0 .8vw 0;
     color: gray;
     font-weight: normal;
 }
 
-.table-headers {
+.data-table-headers {
     display: flex;
     flex-direction: row;
     font-size: .8vw;
@@ -37,48 +37,46 @@
     background-color: #F9FAFB;
 }
 
-.table-header {
+.data-table-header {
     margin: 0;
-    width: 15%;
     text-align: left;
     color: #6b7280;
 }
 
-.table-row {
+.data-table-row {
     display: flex;
     flex-direction: row;
     font-size: .9vw;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     border-radius: .5VW;
-    align-items: center;
+    /* align-items: center; */
     padding: 1vw .4vw;
+    text-align: left;
     height: fit-content;
     cursor: pointer;
 }
 
-.table-row:hover {
+.data-table-row:hover {
     opacity: .7;
 }
 
-.table-row-item {
+.data-table-row-item {
+    margin: 0;
     white-space: nowrap;
-    margin: 0 .4vw 0 0;
-    width: 15%;
-    text-align: left;
     font-weight: 600;
     overflow: hidden;
 }
 
-.table-row-date {
+.data-table-row-date {
     font-weight: normal;
     color: gray;
 }
 
-.table-row-createdAt {
+.data-table-row-createdAt {
     font-weight: normal;
     color: gray;
 }
-.table-row-updatedAt {
+.data-table-row-updatedAt {
     font-weight: normal;
     color: gray;
 }
@@ -89,16 +87,16 @@
     overflow: hidden;
 }
 
-/* .table-row-item:hover {
+/* .data-table-row-item:hover {
     white-space: inherit;
     word-wrap: break-word;
 } */
 
-.table-checkbox {
+.data-table-checkbox {
     margin-right: 2vw !important;
 }
 
-.table-lazy-btn {
+.data-table-lazy-btn {
     /* border: 1px solid #263d42; */
     border-top: none;
     border-bottom-left-radius: .5vw;
@@ -109,8 +107,22 @@
     cursor: pointer;
     transition: 0.3s;
 }
-.table-lazy-btn:hover {
+.data-table-lazy-btn:hover {
     opacity: 0.7;
+}
+
+.data-table-icons {
+    /* margin-left: 2vw; */
+}
+
+.data-table-icon {
+    height: 15px;
+    margin: 0 .5vw;
+    transition: .3s;
+}
+
+.data-table-icon:hover {
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(70%) contrast(80%);
 }
 
 @media only screen and (max-width: 640px) {

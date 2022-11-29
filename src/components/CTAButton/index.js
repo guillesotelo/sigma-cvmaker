@@ -21,12 +21,15 @@ export default function CTAButton(props) {
         padding: '3vw',
         width: size || 'auto',
         backgroundColor: color || APP_COLORS.YELLOW,
-        opacity: disabled ? 0.25 : 1,
         cursor: disabled ? 'not-allowed' : 'pointer'
     }
 
+    const containerStyle = {
+        opacity: disabled ? 0.25 : 1
+    }
+
     return (
-        <div className={className || 'cta-btn-container'}>
+        <div className={className || 'cta-btn-container'} style={containerStyle}>
             {loading ?
                 <SyncLoader speedMultiplier={0.8} color={color || '#E59A2F'} />
                 :
