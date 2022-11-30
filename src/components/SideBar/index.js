@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { getUsers, updateUserData, getProfileImage } from '../../store/reducers/user'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../../constants/app'
 import ChartPie from '../../icons/chart-pie.svg'

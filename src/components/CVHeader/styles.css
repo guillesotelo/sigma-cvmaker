@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     width: 83%;
-    margin: 2vw 6vw 0 0;
+    margin: 2vw 2.5vw 0 0;
 }
 
 .cv-header-container {
@@ -12,11 +12,16 @@
 }
 
 .cv-header-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
 }
 
 .cv-header-logo {
-    height: 60px;
-    margin: 0 5vw;
+    max-height: 150px;
+    max-width: 300px;
+    margin-left: 2.5vw;
 }
 
 .cv-header-name {

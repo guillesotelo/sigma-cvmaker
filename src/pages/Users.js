@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import GoBackIcon from '../icons/goback-icon.svg'
+import ProfileIcon from '../icons/profile-icon.svg'
 import DataTable from '../components/DataTable'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
@@ -111,7 +111,7 @@ export default function Users() {
         try {
             setLoading(true)
             if (checkData()) {
-                const updated = await dispatch(updateUserData({ email: users[selectedUser].email, profilePic, newData: data })).then(data => data.payload)
+                const updated = await dispatch(updateUserData({ _id: users[selectedUser]._id, profilePic, newData: data })).then(data => data.payload)
 
                 if (updated) toast.success('User data saved successfully')
                 else toast.error('Error saving changes')
@@ -161,7 +161,9 @@ export default function Users() {
                 <div className='users-select-section'>
                     <div className='users-image-section'>
                         <div className='users-image-input'>
-                            {profilePic.profileImage ? <img src={profilePic.profileImage} style={profilePic.style} className='profile-image' /> : ''}
+                            {profilePic.profileImage ?
+                                <img src={profilePic.profileImage} style={profilePic.style} className='profile-image' />
+                                : <img src={ProfileIcon} style={profilePic.style} className='profile-image' />}
                             <InputField
                                 label='Profile Image'
                                 type='file'

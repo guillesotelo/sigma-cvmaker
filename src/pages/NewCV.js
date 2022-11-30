@@ -11,7 +11,7 @@ import Bullet from '../components/Bullet'
 import InputBullet from '../components/InputBullet'
 import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
-import { editResume, saveResume } from '../store/reducers/resume'
+import { editResume, getLogo, saveResume } from '../store/reducers/resume'
 import { getProfileImage } from '../store/reducers/user'
 import PostSection from '../components/PostSection'
 
@@ -28,6 +28,7 @@ export default function NewCV() {
     const [expertise, setExpertise] = useState([''])
     const [tags, setTags] = useState([''])
     const [profilePic, setProfilePic] = useState({})
+    const [cvLogo, setcvLogo] = useState({})
     const [user, setUser] = useState({})
     const localResumes = useSelector(state => state.resume && state.resume.allResumes || [])
     const dispatch = useDispatch()
@@ -70,8 +71,17 @@ export default function NewCV() {
             setData({ ...data, footer_contact: user.username, footer_email: user.email })
         }
 
+        getCVLogo()
         setLoading(false)
     }, [])
+
+    const getCVLogo = async () => {
+        try {
+            const logo = await dispatch(getLogo({ type: 'cv-logo' })).then(data => data.payload)
+            if (logo) setcvLogo(logo.data)
+            else setcvLogo({})
+        } catch (err) { console.error(err) }
+    }
 
     const updateData = (key, value) => {
         setData({ ...data, [key]: value })
@@ -144,8 +154,7 @@ export default function NewCV() {
     return (
         <div className='new-resume-container'>
             <ToastContainer autoClose={2000} />
-            {/* <h2 className='page-title'>New Resume</h2> */}
-            <CVHeader data={data} />
+            <CVHeader data={data} cvLogo={cvLogo} />
             <div className='separator'></div>
             <h2 className='section-title-row'>Personal Information</h2>
             <div className='new-resume-fill'>

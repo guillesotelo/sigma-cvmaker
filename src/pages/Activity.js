@@ -7,7 +7,6 @@ import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import SwitchBTN from '../components/SwitchBTN'
 import Slider from '../components/Slider'
-import { getUsers, updateUserData, getProfileImage } from '../store/reducers/user'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
 

@@ -2,6 +2,8 @@ import { configureStore } from "@reduxjs/toolkit"
 import logger from 'redux-logger'
 import userReducer from "./reducers/user"
 import resumeReducer from "./reducers/resume"
+import reportReducer from "./reducers/report"
+import appDataReducer from "./reducers/appData"
 
 const logs = process.env.NODE_ENV === '!development' ? logger : []
 
@@ -12,7 +14,9 @@ const store = configureStore({
     devTools: process.env.NODE_ENV !== 'production',
     reducer: {
         user: userReducer,
-        resume: resumeReducer
+        resume: resumeReducer,
+        report: reportReducer,
+        appData: appDataReducer
     }
 })
 

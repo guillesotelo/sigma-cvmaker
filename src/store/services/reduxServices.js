@@ -139,6 +139,34 @@ const saveCVLogo = async data => {
     } catch (err) { console.log(err) }
 }
 
+const createAppData = async data => {
+    try {
+        const newAppData = await axios.post(`${API_URL}/api/app/create`, data)
+        return newAppData.data
+    } catch (err) { console.log(err) }
+}
+
+const updateAppDataItem = async data => {
+    try {
+        const newAppData = await axios.post(`${API_URL}/api/app/update`, data)
+        return newAppData.data
+    } catch (err) { console.log(err) }
+}
+
+const getAppDataByType = async data => {
+    try {
+        const appData = await axios.get(`${API_URL}/api/app/getByType`, { params: data })
+        return appData.data
+    } catch (err) { console.log(err) }
+}
+
+const getAllAppData = async data => {
+    try {
+        const appData = await axios.get(`${API_URL}/api/app/getAll`, { params: data })
+        return appData.data
+    } catch (err) { console.log(err) }
+}
+
 export {
     loginUser,
     registerUser,
@@ -158,5 +186,9 @@ export {
     createReport,
     getReports,
     updateReportData,
-    getAdminStatus
+    getAdminStatus,
+    createAppData,
+    updateAppDataItem,
+    getAppDataByType,
+    getAllAppData
 }

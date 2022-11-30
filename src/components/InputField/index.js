@@ -87,7 +87,8 @@ export default function InputField(props) {
                         name={filename || 'file'}
                         accept=".jpeg, .png, .jpg"
                         onChange={(e) => uploadFile(e)}
-                        style={{ color: 'gray' }}
+                        style={{ height: 0 }}
+                        id={filename}
                     />
                     :
                     <input

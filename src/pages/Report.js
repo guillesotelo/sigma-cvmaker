@@ -70,7 +70,6 @@ export default function Report() {
     return (
         <div className='report-container'>
             <ToastContainer autoClose={2000} />
-            <img src={GoBackIcon} className='goback-icon' onClick={() => history.goBack()}/>
             <div className='report-box'>
                 <div className='report-image'>
                     <h4 className='report-title'>Report a problem</h4>
@@ -83,6 +82,7 @@ export default function Report() {
                         type='text'
                         name='title'
                         updateData={updateData}
+                        placeholder='Report title'
                     />
                     <InputField
                         label='Description'
@@ -96,7 +96,7 @@ export default function Report() {
                     <CTAButton
                         label='Create Report'
                         size='100%'
-                        color={APP_COLORS.MURREY}
+                        color={APP_COLORS.GREEN}
                         handleClick={createReport}
                         disabled={!data.title || !data.description}
                         loading={loading}
@@ -118,7 +118,7 @@ export default function Report() {
                                     handleClick={() => markAsFixed(report)}
                                     label={report.isFixed ? 'Mark as not fixed' : 'Mark as fixed'}
                                     size='100%'
-                                    color={report.isFixed ? APP_COLORS.GRAY : APP_COLORS.MURREY}
+                                    color={report.isFixed ? APP_COLORS.GRAY : APP_COLORS.GREEN}
                                     loading={loading}
                                 />
                             </div>

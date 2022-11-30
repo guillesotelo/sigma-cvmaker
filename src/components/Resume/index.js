@@ -9,11 +9,13 @@ import RobotoBold from '../../assets/fonts/Roboto-Bold.ttf'
 import GreatVibes from '../../assets/fonts/GreatVibes-Regular.ttf'
 import { applyFiltersToImage } from '../../helpers/image'
 import './styles.css'
+import { getLogo } from '../../store/reducers/resume'
 
 export default function Resume({ resumeData }) {
     const [data, setData] = useState(resumeData)
     const [res, setRes] = useState({})
     const [profileImage, setProfileImage] = useState({})
+    const [cvLogo, setcvLogo] = useState({})
     const [imageFilter, setImageFilter] = useState('')
     const [numPages, setNumPages] = useState(null)
     const [pageNumber, setPageNumber] = useState(1)
@@ -22,6 +24,7 @@ export default function Resume({ resumeData }) {
         const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
         if (!user || !user.email) history.push('/login')
         getResumeData()
+        getCVLogo()
     }, [])
 
     const getResumeData = async () => {
@@ -40,6 +43,15 @@ export default function Resume({ resumeData }) {
             console.error(err)
         }
     }
+
+    const getCVLogo = async () => {
+        try {
+            const logo = await dispatch(getLogo({ type: 'cv-logo' })).then(data => data.payload)
+            if (logo) setcvLogo(logo.data)
+            else setcvLogo({})
+        } catch (err) { console.error(err) }
+    }
+
 
     const onDocumentLoadSuccess = ({ numPages }) => {
         setNumPages(numPages)
@@ -126,7 +138,9 @@ export default function Resume({ resumeData }) {
             alignSelf: 'center'
         },
         logo: {
-            width: 120
+            // width: 90,
+            maxWidth: 200,
+            maxHeight: 100
         },
         name: {
             fontFamily: 'Roboto',
@@ -326,9 +340,9 @@ export default function Resume({ resumeData }) {
                 <PDFViewer style={styles.PDFContainer}>
                     <Document>
                         <Page size="A4" style={styles.page}>
-                            <View style={{ ...styles.rowContainer, border: 'none' }} wrap={false} fixed>
+                            <View style={{ ...styles.rowContainer, border: 'none', alignItems: 'center' }} wrap={false} fixed>
                                 <View style={styles.column1}>
-                                    <Image style={styles.logo} src={SigmaLogo} />
+                                    <Image style={styles.logo} src={cvLogo} />
                                 </View>
                                 <View style={styles.column2}>
                                     <Text style={styles.name}>{res.name.toUpperCase()}</Text>

@@ -16,7 +16,6 @@
     font-weight: normal;
     border-radius: 0.5vw;
     padding: 0.5vw;
-    /* text-align: center; */
     font-size: 0.9vw;
     outline: none;
     transition: .3s;
@@ -34,7 +33,6 @@
     border-radius: 0.5vw;
     margin: 0 !important;
     padding: 0.7vw;
-    /* text-align: center; */
     font-size: 0.9vw !important;
     font-family: 'Inter', sans-serif;
     font-weight: normal;
@@ -48,7 +46,12 @@
 }
 
 .inputfield-field::placeholder {
-    font-size: 1vw;
+    font-family: 'Inter', sans-serif;
+    font-weight: normal;
+}
+
+.inputfield-textarea::placeholder {
+    font-family: 'Inter', sans-serif;
     font-weight: normal;
 }
 

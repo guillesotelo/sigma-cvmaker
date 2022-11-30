@@ -98,17 +98,20 @@
 
 .data-table-lazy-btn {
     /* border: 1px solid #263d42; */
-    border-top: none;
+    border: none;
     border-bottom-left-radius: .5vw;
     border-bottom-right-radius: .5vw;
-    background-color: #F9FAFB;
+    background-color: #fff;
     padding: 1vw .4vw;
     color: rgb(79, 79, 79);
     cursor: pointer;
     transition: 0.3s;
+    /* height: 2vw; */
+    font-size: 1vw;
 }
 .data-table-lazy-btn:hover {
-    opacity: 0.7;
+    /* opacity: 0.7; */
+    background-color: #F9FAFB;
 }
 
 .data-table-icons {

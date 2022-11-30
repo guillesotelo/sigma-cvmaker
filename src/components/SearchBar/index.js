@@ -14,7 +14,7 @@ export default function SearchBar(props) {
     } = props
 
     return (
-        <div className='search-bar-container'>
+        <div className='search-bar-container' style={style || null}>
             <img src={SearchIcon} className='search-icon' onClick={triggerSearch}/>
             <input
                 className='search-input'
@@ -22,7 +22,6 @@ export default function SearchBar(props) {
                 onKeyPress={onKeyPress}
                 placeholder={placeholder || ''}
                 type='text'
-                style={style || null}
                 value={value}
             />
         </div>

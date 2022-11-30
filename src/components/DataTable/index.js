@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import DownloadIcon from '../../icons/download-icon.svg'
 import EditIcon from '../../icons/edit-icon.svg'
@@ -90,12 +91,12 @@ export default function DataTable(props) {
                             </div>
                         )}
                         {maxItems < tableData.length &&
-                            <button className='data-table-lazy-btn' onClick={() => setMaxItems(maxItems + 10)}>▼</button>
+                            <button className='data-table-lazy-btn' onClick={() => setMaxItems(maxItems + 10)}>{`Show more ${title.toLowerCase()} ▼`}</button>
                         }
                     </>
                     :
-                    <div className='data-table-row' style={{ backgroundColor: 'white', height: '2vw', justifyContent: 'center' }}>
-                        'No data to show.'
+                    <div className='data-table-row' style={{ backgroundColor: 'white', height: '2vw', justifyContent: 'center', cursor: 'default' }}>
+                        No data to display.
                     </div>}
         </div>
     )

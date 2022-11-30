@@ -30,7 +30,7 @@ export default function Account() {
     try {
       setLoading(true)
       if (checkData()) {
-        const updated = await dispatch(updateUserData({ email: user.email, newData: data })).then(data => data.payload)
+        const updated = await dispatch(updateUserData({ _id: user._id, newData: data })).then(data => data.payload)
 
         if (updated) {
           setData({ ...data, ...updated.data })
