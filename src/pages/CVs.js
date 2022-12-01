@@ -52,6 +52,10 @@ export default function CVs({ showAll }) {
             value: 'note'
         },
         {
+            name: 'TYPE',
+            value: 'type'
+        },
+        {
             name: 'ACTIONS',
             value: 'icons'
         }
@@ -149,6 +153,7 @@ export default function CVs({ showAll }) {
                 <DataTable
                     title={`CV's`}
                     subtitle={`Here is a list of all CV's in the system`}
+                    maxRows={9}
                     tableData={filteredRes}
                     tableHeaders={cvHeaders}
                     loading={loading}
@@ -160,7 +165,7 @@ export default function CVs({ showAll }) {
                     setOpenModal={setOpenModal}
                     setIsPdf={setIsPdf}
                     modalView={true}
-                    sizes={['18%', '15%', '17%', '20%', '20%', '10%']}
+                    // sizes={['18%', '15%', '17%', '18%', '18%', '10%', '10%']}
                 />
             </div>
             {openModal && isPdf ?

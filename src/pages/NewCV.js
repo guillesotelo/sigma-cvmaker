@@ -26,7 +26,7 @@ export default function NewCV() {
     const [experience, setExperience] = useState([{ bullets: [''] }])
     const [strengths, setStrengths] = useState([''])
     const [expertise, setExpertise] = useState([''])
-    const [tags, setTags] = useState([''])
+    const [buzzwords, setBuzzwords] = useState([''])
     const [profilePic, setProfilePic] = useState({})
     const [cvLogo, setcvLogo] = useState({})
     const [user, setUser] = useState({})
@@ -59,7 +59,7 @@ export default function NewCV() {
                         setExperience(resData.experience)
                         setStrengths(resData.strengths)
                         setExpertise(resData.expertise)
-                        setTags(resData.tags && resData.tags.length ? resData.tags : [''])
+                        setBuzzwords(resData.buzzwords && resData.buzzwords.length ? resData.buzzwords : [''])
                         getPreview(resume)
                         setIsEdit(true)
                     }
@@ -109,7 +109,7 @@ export default function NewCV() {
             resumeData.experience = experience
             resumeData.strengths = strengths
             resumeData.expertise = expertise
-            resumeData.tags = tags
+            resumeData.buzzwords = buzzwords
             resumeData.footer_contact = data.footer_contact || '-'
             resumeData.footer_email = data.footer_email || '-'
             resumeData.footer_phone = data.footer_phone || '-'
@@ -117,7 +117,7 @@ export default function NewCV() {
 
             const strData = JSON.stringify(resumeData)
             resumeData.data = strData
-            resumeData.date = new Date()
+            resumeData.notes = data.notes || ''
             resumeData.username = `${data.name} ${data.middlename ? data.middlename : ''} ${data.surname}` || ''
             resumeData.manager = user.manager || user.email
             resumeData.email = data.email || ''
@@ -219,6 +219,7 @@ export default function NewCV() {
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.location || ''}
+                        placeholder='Street, city, country'
                     />
                     <ItemDropdown
                         label='Languages'
@@ -231,14 +232,14 @@ export default function NewCV() {
                 </div>
                 <div className='resume-fill-col2'>
                     <InputField
-                        label='Short Description'
+                        label='Presentation'
                         type='textarea'
                         cols={70}
                         rows={15}
                         name='description'
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
-                        placeholder="Write a short description about yourself..."
+                        placeholder="Write a personal presentation..."
                         value={data.description || ''}
                     />
                     <Bullet
@@ -287,8 +288,8 @@ export default function NewCV() {
                         label=''
                         items={education}
                         setItems={setEducation}
-                        bulletPlaceholder='Year...'
-                        valuePlaceholder='Title...'
+                        bulletPlaceholder='Period'
+                        valuePlaceholder='Title'
                     />
                 </div>
             </div>
@@ -303,8 +304,8 @@ export default function NewCV() {
                         label=''
                         items={certifications}
                         setItems={setCertifications}
-                        bulletPlaceholder='Year...'
-                        valuePlaceholder='Title...'
+                        bulletPlaceholder='Period'
+                        valuePlaceholder='Title'
                     />
                 </div>
             </div>
@@ -363,29 +364,37 @@ export default function NewCV() {
             {user.isManager &&
                 <>
                     <div className='separator'></div>
-                    <div className='new-resume-fill'>
-                        <div className='resume-fill-col1'>
-                            <h2 className='section-title'>Keywords (Internal use)</h2>
-                        </div>
-                        <div className='resume-fill-col2'>
-                            <Bullet
-                                label=''
-                                type='big'
-                                items={tags}
-                                setItems={setTags}
-                                placeholder='Add keyword...'
-                            />
-                        </div>
-                    </div>
-                </>}
-
-            {user.isManager &&
-                <>
-                    <div className='separator'></div>
                     <CVFooter
                         updateData={updateData}
                         user={user}
                         data={data}
+                    />
+
+                    <div className='separator'></div>
+                    <div className='new-resume-fill'>
+                        <div className='resume-fill-col1'>
+                            <h2 className='section-title'>Internal use</h2>
+                        </div>
+                        <div className='resume-fill-col2'>
+                            <Bullet
+                                label='Buzzwords'
+                                type='big'
+                                items={buzzwords}
+                                setItems={setBuzzwords}
+                                placeholder='Add buzzword...'
+                            />
+                        </div>
+                    </div>
+                    <InputField
+                        label='CV Notes'
+                        type='textarea'
+                        cols={70}
+                        rows={6}
+                        name='note'
+                        updateData={updateData}
+                        placeholder="Write a note to attach this export"
+                        style={{ color: 'rgb(71, 71, 71)' }}
+                        value={data.note || ''}
                     />
                 </>
             }

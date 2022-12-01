@@ -138,6 +138,7 @@ export default function ToolsTech() {
                     <DataTable
                         title='Tools & Tech'
                         subtitle='Here is a list of all tools & tech in the system'
+                        maxRows={9}
                         tableData={tools}
                         tableHeaders={toolsHeaders}
                         loading={loading}
@@ -145,7 +146,6 @@ export default function ToolsTech() {
                         setItem={setSelectedTool}
                         isEdit={toolsEdit}
                         setIsEdit={setToolsEdit}
-                        sizes={['60%', '40%', '40%']}
                     />
                     {toolsEdit ?
                         <div className='settings-select-section'>

@@ -78,7 +78,7 @@ export default function Activity() {
                 setItem={setSelectedLog}
                 isEdit={isEdit}
                 setIsEdit={setIsEdit}
-                sizes={['20%', '22%', '20%', '20%', '10%', '20%']}
+                maxRows={9}
             />
         </div>
     )

@@ -293,6 +293,7 @@ export default function Settings() {
                   <DataTable
                     title='Skills'
                     subtitle='Here is a list of all skills in the system'
+                    maxRows={9}
                     tableData={skills}
                     tableHeaders={skillHeaders}
                     loading={loading}
@@ -300,7 +301,6 @@ export default function Settings() {
                     setItem={setSelectedSkill}
                     isEdit={skillEdit}
                     setIsEdit={setSkillEdit}
-                    sizes={['50%', '50%']}
                   />
                   {skillEdit ?
                     <div className='settings-select-section'>
@@ -365,6 +365,7 @@ export default function Settings() {
                     <DataTable
                       title='Buzzwords'
                       subtitle='Here is a list of all buzzwords in the system'
+                      maxRows={9}
                       tableData={buzzwords}
                       tableHeaders={buzzwordHeaders}
                       loading={loading}
@@ -372,7 +373,6 @@ export default function Settings() {
                       setItem={setSelectedBuzzword}
                       isEdit={buzzwordEdit}
                       setIsEdit={setBuzzwordEdit}
-                      sizes={['50%', '50%']}
                     />
                     {buzzwordEdit ?
                       <div className='settings-select-section'>

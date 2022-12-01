@@ -429,7 +429,7 @@
 .section-title-row {
     font-size: 1.2vw;
     font-weight: bolder;
-    margin: 1vw 10vw;
+    margin: 1vw 8vw;
     align-self: flex-start;
 }
 
@@ -601,8 +601,8 @@
 .account-btns {
     display: flex;
     flex-direction: row;
-    width: 50%;
     margin-top: 2vw;
+    gap: 2vw;
 }
 
 .account-update-details {
@@ -638,13 +638,15 @@
     flex-direction: row;
     align-items: center;
     align-self: center;
-    margin: 2vw 0 0 0;
+    justify-content: center;
+    margin: 1vw 0 0 0;
+    gap: 2vw;
 }
 
 .account-note {
     font-size: .9vw;
     color: gray;
-    margin: 10vw 0;
+    margin: 5vw 0;
 }
 
 .account-profile-image {

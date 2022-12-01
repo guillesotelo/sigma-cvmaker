@@ -164,6 +164,7 @@ export default function Users() {
                 <DataTable
                     title='Users'
                     subtitle='Here is a list of all users in the system'
+                    maxRows={9}
                     tableData={users}
                     tableHeaders={userHeaders}
                     loading={loading}
@@ -171,7 +172,6 @@ export default function Users() {
                     setItem={setSelectedUser}
                     isEdit={userEdit}
                     setIsEdit={setUserEdit}
-                    sizes={['12%', '20%', '24%', '24%', '10%', '10%']}
                 />
             </div>
             {selectedUser !== -1 ?
@@ -276,7 +276,7 @@ export default function Users() {
                 :
                 isNew ?
                     <div className='users-select-section'>
-                        <RegisterPage setIsNew={setIsNew}/>
+                        <RegisterPage setIsNew={setIsNew} />
                     </div>
                     : ''
             }

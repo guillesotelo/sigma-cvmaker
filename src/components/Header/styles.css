@@ -62,6 +62,7 @@
     margin: 0 2vw;
     filter: invert(25%) sepia(4%) saturate(0%) hue-rotate(151deg) brightness(103%) contrast(78%);
     transition: .3s;
+    opacity: .8;
 }
 
 .error-icon:hover {

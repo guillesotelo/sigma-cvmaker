@@ -8,11 +8,11 @@ import MoonLoader from "react-spinners/MoonLoader"
 import './styles.css'
 
 export default function DataTable(props) {
-    const [maxItems, setMaxItems] = useState(10)
     const {
         tableData,
         title,
         subtitle,
+        maxRows,
         setIsEdit,
         isEdit,
         loading,
@@ -26,6 +26,7 @@ export default function DataTable(props) {
         modalView
     } = props
 
+    const [maxItems, setMaxItems] = useState(maxRows || 10)
     const history = useHistory()
 
     const handleItem = key => {
@@ -50,7 +51,12 @@ export default function DataTable(props) {
             </div>
             <div className='data-table-headers'>
                 {
-                    tableHeaders.map((header, i) => <h4 key={i} className='data-table-header' style={{ width: sizes && sizes[i] }}>{header.name}</h4>)
+                    tableHeaders.map((header, i) =>
+                        <h4
+                            key={i}
+                            className='data-table-header'
+                            style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}>{header.name}</h4
+                        >)
                 }
             </div>
             {loading ? <div style={{ alignSelf: 'center', display: 'flex', marginTop: '5vw' }}><MoonLoader color='#E59A2F' /></div>
@@ -64,7 +70,7 @@ export default function DataTable(props) {
                                 style={{ backgroundColor: item === i ? '#E4C69C' : i % 2 === 0 ? 'white' : '#F9FAFB' }}>
                                 {tableHeaders.map((header, j) =>
                                     header.value === 'icons' ?
-                                        <div key={j} className='data-table-icons'>
+                                        <div key={j} className='data-table-icons' style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}>
                                             {/* <img src={DownloadIcon} className='resume-icon' /> */}
                                             <img src={EditIcon} className='data-table-icon' onClick={() => history.push(`/new-cv?edit=${row._id}`)} />
                                             <img src={TrashCan} onClick={() => {
@@ -75,8 +81,8 @@ export default function DataTable(props) {
                                         :
                                         <h4
                                             key={j}
-                                            className={`data-table-row-item detail data-table-row-${header.value}`}
-                                            style={{ width: sizes && sizes[j] }}
+                                            className={`data-table-row-item data-table-row-${header.value}`}
+                                            style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}
                                             onClick={() => {
                                                 if (modalView) {
                                                     setOpenModal(true)

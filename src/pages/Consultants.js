@@ -148,7 +148,7 @@ export default function Consultants() {
     }
 
     const updateData = (key, value, newItem) => {
-        if(!newItem) setIsEdit(true)
+        if (!newItem) setIsEdit(true)
         setData({ ...data, [key]: value })
     }
 
@@ -233,6 +233,7 @@ export default function Consultants() {
                     <DataTable
                         title='Consultants'
                         subtitle='Here is a list of all consultants in the system'
+                        maxRows={9}
                         tableData={users}
                         tableHeaders={userHeaders}
                         loading={loading}
@@ -240,7 +241,6 @@ export default function Consultants() {
                         setItem={setSelectedUser}
                         isEdit={userEdit}
                         setIsEdit={setUserEdit}
-                        sizes={['15%', '20%', '24%', '24%', '10%', '10%']}
                     />
                     {selectedUser !== -1 ?
                         <div className='users-select-section'>

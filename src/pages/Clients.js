@@ -193,12 +193,12 @@ export default function Clients() {
                         subtitle='Here is a list of all clients in the system'
                         tableData={clients}
                         tableHeaders={clientsHeaders}
+                        maxRows={9}
                         loading={loading}
                         item={selectedClient}
                         setItem={setSelectedClient}
                         isEdit={clientsEdit}
                         setIsEdit={setClientsEdit}
-                        sizes={['20%', '20%', '20%', '20%', '20%']}
                     />
                     {clientsEdit ?
                         <div className='settings-select-section'>
