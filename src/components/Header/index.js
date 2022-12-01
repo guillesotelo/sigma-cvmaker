@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
-import { logOut } from '../../store/reducers/user'
+import { getProfileImage, logOut } from '../../store/reducers/user'
+import ProfileIcon from '../../icons/user-icon.svg'
 import LogoutIcon from '../../icons/logout-icon.svg'
 import ErrorIcon from '../../icons/error-icon.svg'
 import SigmaIso from '../../assets/logos/sigma_connectivity_iso.png'
@@ -11,11 +12,16 @@ import './styles.css'
 
 export default function Header() {
   const [search, setSearch] = useState([])
+  const [profilePic, setProfilePic] = useState({})
 
   const dispatch = useDispatch()
   const history = useHistory()
 
   const user = JSON.parse(localStorage.getItem('user'))
+
+  useEffect(() => {
+    getPreview(user)
+  }, [])
 
   const logOutUser = async () => {
     try {
@@ -51,14 +57,26 @@ export default function Header() {
     // setLoading(false)
   }
 
+  const getPreview = async resData => {
+    try {
+      const image = await dispatch(getProfileImage(resData)).then(data => data.payload)
+      if (image) {
+        setProfilePic({ profileImage: image.data, style: image.style ? JSON.parse(image.style) : {} })
+      }
+      else setProfilePic({})
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   return (
     <>
       <ToastContainer autoClose={1500} />
       <div className='header-container'>
         <div className='header-logo-search'>
-            <img src={SigmaIso} className='header-logo' onClick={() => history.push('/')}/>
+          <img src={SigmaIso} className='header-logo' onClick={() => history.push('/')} />
           {/* <div className='header-logo-container' onClick={() => history.push('/')}> */}
-            {/* <h4 className='header-text'>CV Maker</h4> */}
+          {/* <h4 className='header-text'>CV Maker</h4> */}
           {/* </div> */}
           <SearchBar
             handleChange={e => handleSearch(e)}
@@ -71,7 +89,18 @@ export default function Header() {
         {user && user.email ?
           <div>
             <img src={ErrorIcon} className='error-icon' onClick={() => history.push('/report')} />
-            <img src={LogoutIcon} className='logout-icon' onClick={logOutUser} />
+            {/* <img src={LogoutIcon} className='logout-icon' onClick={logOutUser} /> */}
+            {profilePic.profileImage ?
+              <img
+                src={profilePic.profileImage}
+                className='header-profile-image'
+                onClick={() => history.push('account')}
+              />
+              : <img
+                src={ProfileIcon}
+                className='header-profile-svg'
+                onClick={() => history.push('account')}
+              />}
           </div>
           :
           <></>

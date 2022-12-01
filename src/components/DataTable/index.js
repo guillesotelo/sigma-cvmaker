@@ -84,8 +84,13 @@ export default function DataTable(props) {
                                                     setResumeData(row)
                                                 } else handleItem(i)
                                             }}>
-                                            {header.value === 'date' || header.value === 'updatedAt' ? new Date(row[header.value]).toDateString() :
-                                                row[header.value] ? String(row[header.value]) : '--'}
+                                            {header.value === 'date' || header.value === 'updatedAt' ? `${new Date(row[header.value]).toDateString()} ${new Date(row[header.value]).toLocaleTimeString()}` :
+                                                header.value === 'isManager' || header.value === 'isAdmin' ?
+                                                    row[header.value] ? 'Yes' : 'No'
+                                                    :
+                                                    row[header.value] ? String(row[header.value])
+                                                        :
+                                                        '--'}
                                         </h4>
                                 )}
                             </div>

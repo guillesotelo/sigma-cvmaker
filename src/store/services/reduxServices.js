@@ -25,6 +25,13 @@ const updateUser = async data => {
     } catch (err) { console.log(err) }
 }
 
+const removeUser = async data => {
+    try {
+        const user = await axios.post(`${API_URL}/api/user/remove`, data)
+        return user.data
+    } catch (err) { console.log(err) }
+}
+
 const setUserVoid = async data => {
     try {
         const user = await axios.get(`${API_URL}/api/user/logout`, data)
@@ -167,12 +174,20 @@ const getAllAppData = async data => {
     } catch (err) { console.log(err) }
 }
 
+const getAllLogs = async data => {
+    try {
+        const logs = await axios.get(`${API_URL}/api/log/getAll`, { params: data })
+        return logs.data
+    } catch (err) { console.log(err) }
+}
+
 export {
     loginUser,
     registerUser,
     updateUser,
     setUserVoid,
     getAllUsers,
+    removeUser,
     resetPassordByEmail,
     changePass,
     getAllResumes,
@@ -190,5 +205,6 @@ export {
     createAppData,
     updateAppDataItem,
     getAppDataByType,
-    getAllAppData
+    getAllAppData,
+    getAllLogs
 }

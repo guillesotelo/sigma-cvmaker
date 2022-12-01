@@ -82,11 +82,13 @@ export default function ToolsTech() {
             const exists = await dispatch(getOneAppData({ type: 'tools' })).then(data => data.payload)
             if (exists) {
                 saved = await dispatch(updateAppData({
+                    user,
                     type: 'tools',
                     data: JSON.stringify(updatedTools)
                 })).then(data => data.payload)
             } else {
                 saved = await dispatch(saveAppData({
+                    user,
                     type: 'tools',
                     data: JSON.stringify(updatedTools)
                 })).then(data => data.payload)
@@ -106,9 +108,9 @@ export default function ToolsTech() {
     const saveToolsData = () => {
         const updatedTools = tools
         updatedTools[selectedTool] = {
-            name: data.name,
-            type: data.type,
-            field: data.field
+            name: data.name || '',
+            type: data.type || '',
+            field: data.field || ''
         }
         saveTools(updatedTools)
         setSelectedTool(-1)

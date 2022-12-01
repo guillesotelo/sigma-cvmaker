@@ -392,13 +392,11 @@ export default function NewCV() {
             <div className='new-resume-btns'>
                 <CTAButton
                     label='Discard'
-                    size='50%'
                     color={APP_COLORS.GRAY}
                     handleClick={() => history.push('/cvs')}
                 />
                 <CTAButton
                     label={isEdit ? 'Update' : 'Save'}
-                    size='50%'
                     color={APP_COLORS.GREEN}
                     handleClick={() => onSaveResume(false)}
                     loading={loading}
@@ -406,7 +404,6 @@ export default function NewCV() {
                 {isEdit ?
                     <CTAButton
                         label='Save as new'
-                        size='50%'
                         color={APP_COLORS.GREEN}
                         handleClick={() => onSaveResume(true)}
                         loading={loading}

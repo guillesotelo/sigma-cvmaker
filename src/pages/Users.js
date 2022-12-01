@@ -6,6 +6,7 @@ import DataTable from '../components/DataTable'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import SwitchBTN from '../components/SwitchBTN'
+import RegisterPage from './Register'
 import Slider from '../components/Slider'
 import { getUsers, updateUserData, getProfileImage } from '../store/reducers/user'
 import { toast } from 'react-toastify'
@@ -17,6 +18,7 @@ export default function Users() {
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
+    const [isNew, setIsNew] = useState(false)
     const [selectedUser, setSelectedUser] = useState(-1)
     const [contrast, setContrast] = useState(100)
     const [brightness, setBrightness] = useState(100)
@@ -144,19 +146,34 @@ export default function Users() {
 
     return (
         <div className='users-container'>
-            <DataTable
-                title='Users'
-                subtitle='Here is a list of all users in the system'
-                tableData={users}
-                tableHeaders={userHeaders}
-                loading={loading}
-                item={selectedUser}
-                setItem={setSelectedUser}
-                isEdit={userEdit}
-                setIsEdit={setUserEdit}
-                sizes={['12%', '20%', '24%', '24%', '10%', '10%']}
-            />
-
+            <div className='users-column'>
+                <div className='users-new-user-btn'>
+                    <CTAButton
+                        label='Create User'
+                        handleClick={() => {
+                            setSelectedUser(-1)
+                            setIsEdit(false)
+                            setProfilePic({})
+                            setData({})
+                            setIsNew(true)
+                        }}
+                        color={APP_COLORS.GREEN}
+                        disabled={isNew}
+                    />
+                </div>
+                <DataTable
+                    title='Users'
+                    subtitle='Here is a list of all users in the system'
+                    tableData={users}
+                    tableHeaders={userHeaders}
+                    loading={loading}
+                    item={selectedUser}
+                    setItem={setSelectedUser}
+                    isEdit={userEdit}
+                    setIsEdit={setUserEdit}
+                    sizes={['12%', '20%', '24%', '24%', '10%', '10%']}
+                />
+            </div>
             {selectedUser !== -1 ?
                 <div className='users-select-section'>
                     <div className='users-image-section'>
@@ -257,7 +274,11 @@ export default function Users() {
                     </div>
                 </div>
                 :
-                ''
+                isNew ?
+                    <div className='users-select-section'>
+                        <RegisterPage setIsNew={setIsNew}/>
+                    </div>
+                    : ''
             }
         </div>
     )

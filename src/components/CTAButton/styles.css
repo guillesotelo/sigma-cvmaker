@@ -2,13 +2,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
     transition: 0.3s;
 }
 
 .cta-btn {
     font-size: 1vw !important;
-    padding: 1vw 2vw !important;
+    padding: .7vw 1.2vw !important;
     margin: 0vw !important;
     color: #E5E5E5;
     border: none;

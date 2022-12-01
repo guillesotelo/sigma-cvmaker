@@ -1,24 +1,28 @@
 import { createReducer, createAsyncThunk } from "@reduxjs/toolkit"
-import { 
-    loginUser, 
-    registerUser, 
-    setUserVoid, 
-    updateUser,
-    getImageByEmail,
-    changePass,
-    resetPassordByEmail,
-    getAdminStatus,
-    getAllUsers
+import {
+  loginUser,
+  registerUser,
+  setUserVoid,
+  updateUser,
+  getImageByEmail,
+  changePass,
+  resetPassordByEmail,
+  getAdminStatus,
+  getAllUsers,
+  removeUser,
+  getAllLogs
 } from "../services/reduxServices";
 
 const initialState = {
-    user: null,
+  user: null,
 }
 
 export const logIn = createAsyncThunk('LOGIN_USER', loginUser)
 export const createUser = createAsyncThunk('CREATE_USER', registerUser)
 export const logOut = createAsyncThunk('LOGOUT_USER', setUserVoid)
 export const getUsers = createAsyncThunk('GET_ALL_USERS', getAllUsers)
+export const getLogs = createAsyncThunk('GET_ALL_LOGS', getAllLogs)
+export const deleteUser = createAsyncThunk('DELETE_USER', removeUser)
 export const getProfileImage = createAsyncThunk('GET_PROFILE_IMAGE', getImageByEmail)
 export const sendEmailResetPass = createAsyncThunk('SEND_EMAIL_RESET', resetPassordByEmail)
 export const changePassword = createAsyncThunk('CHANGE_PASSWORD', changePass)
@@ -29,8 +33,10 @@ const userReducer = createReducer(initialState, {
   [logIn.fulfilled]: (state, action) => { return { ...state, user: action.payload } },
   [createUser.fulfilled]: (state, action) => { return { ...state, created: action.payload } },
   [getUsers.fulfilled]: (state, action) => { return { ...state, users: action.payload } },
+  [deleteUser.fulfilled]: (state, action) => { return { ...state, deleted: action.payload } },
+  [getLogs.fulfilled]: (state, action) => { return { ...state, logs: action.payload } },
   [getProfileImage.fulfilled]: (state, action) => { return { ...state, profileImage: action.payload } },
-  [logOut.fulfilled]: (state, action) => {},
+  [logOut.fulfilled]: (state, action) => { },
   [sendEmailResetPass.fulfilled]: (state, action) => { return { ...state, sentEmailResetPass: action.payload } },
   [changePassword.fulfilled]: (state, action) => { return { ...state, changedPassword: action.payload } },
   [updateUserData.fulfilled]: (state, action) => { return { ...state, user: action.payload } },

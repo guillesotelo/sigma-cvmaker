@@ -7,7 +7,7 @@ import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import SwitchBTN from '../components/SwitchBTN'
 import Slider from '../components/Slider'
-import { getUsers, updateUserData, getProfileImage, createUser } from '../store/reducers/user'
+import { getUsers, updateUserData, getProfileImage, createUser, deleteUser } from '../store/reducers/user'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
 
@@ -18,6 +18,7 @@ export default function Consultants() {
     const [loading, setLoading] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [isNew, setIsNew] = useState(false)
+    const [removeModal, setRemoveModal] = useState(false)
     const [selectedUser, setSelectedUser] = useState(-1)
     const [contrast, setContrast] = useState(100)
     const [brightness, setBrightness] = useState(100)
@@ -133,19 +134,21 @@ export default function Consultants() {
             setIsEdit(false)
             setIsNew(false)
             setSelectedUser(-1)
+            setRemoveModal(false)
             setData({})
         } catch (err) {
             setLoading(false)
             setIsNew(false)
             setIsEdit(false)
             setSelectedUser(-1)
+            setRemoveModal(false)
             setData({})
             toast.error('Error saving changes')
         }
     }
 
-    const updateData = (key, value) => {
-        setIsEdit(true)
+    const updateData = (key, value, newItem) => {
+        if(!newItem) setIsEdit(true)
         setData({ ...data, [key]: value })
     }
 
@@ -164,13 +167,49 @@ export default function Consultants() {
             let randomNumber = Math.floor(Math.random() * chars.length);
             password += chars.substring(randomNumber, randomNumber + 1);
         }
-        return updateData('password', password)
+        return updateData('password', password, true)
+    }
+
+    const removeConsultant = async () => {
+        try {
+            setLoading(true)
+            const removed = await dispatch(deleteUser({ ...user, userData: data })).then(data => data.payload)
+            if (removed) return toast.success('Consultant removed successfully')
+            else toast.error('Error removing Consultant')
+
+            setRemoveModal(false)
+            setLoading(false)
+            getAllUsers()
+        } catch (err) {
+            setLoading(false)
+            setRemoveModal(false)
+            console.error(err)
+            toast.error('Error removing Consultant')
+        }
     }
 
     return (
         <div className='consultants-container'>
             <div className='consultants-section'>
-                <div className='settings-new-skill-btn'>
+                {removeModal ?
+                    <div className='remove-modal'>
+                        <h4 style={{ textAlign: 'center' }}>Are you sure you want to delete <br />{data.username}?</h4>
+                        <div className='remove-modal-btns'>
+                            <CTAButton
+                                label='Cancel'
+                                handleClick={() => {
+                                    setRemoveModal(false)
+                                }}
+                                color={APP_COLORS.GRAY}
+                            />
+                            <CTAButton
+                                label='Confirm'
+                                handleClick={removeConsultant}
+                                color={APP_COLORS.RED}
+                            />
+                        </div>
+                    </div> : ''}
+                <div className='settings-new-skill-btn' style={{ filter: removeModal && 'blur(10px)' }}>
                     <CTAButton
                         label='New Consultant'
                         handleClick={() => {
@@ -183,8 +222,14 @@ export default function Consultants() {
                         color={APP_COLORS.GREEN}
                         disabled={isNew}
                     />
+                    {selectedUser !== -1 && !isNew ?
+                        <CTAButton
+                            label='Delete'
+                            handleClick={() => setRemoveModal(true)}
+                            color={APP_COLORS.RED}
+                        /> : ''}
                 </div>
-                <div className='settings-skills-container'>
+                <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
                     <DataTable
                         title='Consultants'
                         subtitle='Here is a list of all consultants in the system'
@@ -398,25 +443,22 @@ export default function Consultants() {
                                     />
                                 </div>
                                 <div className='users-btns'>
-                                    {isEdit ?
-                                        <CTAButton
-                                            label='Discard'
-                                            handleClick={() => {
-                                                setSelectedUser(-1)
-                                                setIsEdit(false)
-                                                setIsNew(false)
-                                                setData({})
-                                            }}
-                                            color={APP_COLORS.GRAY}
-                                            disabled={!isEdit}
-                                        />
-                                        : ''}
+                                    <CTAButton
+                                        label='Discard'
+                                        handleClick={() => {
+                                            setSelectedUser(-1)
+                                            setIsEdit(false)
+                                            setIsNew(false)
+                                            setData({})
+                                        }}
+                                        color={APP_COLORS.GRAY}
+                                    />
                                     <CTAButton
                                         label='Save'
                                         handleClick={saveUserData}
                                         color={APP_COLORS.GREEN}
                                         loading={loading}
-                                        disabled={isEdit}
+                                        disabled={!isEdit}
                                     />
                                 </div>
                             </div>

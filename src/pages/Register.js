@@ -9,7 +9,7 @@ import { createUser } from '../store/reducers/user'
 import SwitchBTN from '../components/SwitchBTN'
 import GoBackIcon from '../icons/goback-icon.svg'
 
-export default function Register() {
+export default function Register({ setIsNew }) {
   const [data, setData] = useState({})
   const [loading, setLoading] = useState(false)
   const user = JSON.parse(localStorage.getItem('user'))
@@ -29,13 +29,16 @@ export default function Register() {
       if (created) {
         setData({ ...data, username: '', email: '', password: '', manager: '', isManager: false })
         setLoading(false)
+        setIsNew(false)
         return toast.success(`User created successfully!`)
       }
       else {
         setData({ ...data, username: '', email: '', password: '', manager: '', isManager: false })
         setLoading(false)
+        setIsNew(false)
         return toast.error('Error registering user')
       }
+
     } catch (err) {
       setData({ ...data, username: '', email: '', password: '', manager: '', isManager: false })
       setLoading(false)
@@ -57,7 +60,6 @@ export default function Register() {
   return (
     <div className='register-container'>
       <ToastContainer autoClose={2000} />
-      <img src={GoBackIcon} className='goback-icon' onClick={() => history.goBack()}/>
       <div className='register-box'>
         <div className='register-image'>
           <h4 className='register-text'>Create new user</h4>
@@ -98,10 +100,17 @@ export default function Register() {
           <CTAButton
             label='Create User'
             size='100%'
-            color={APP_COLORS.MURREY}
+            color={APP_COLORS.GREEN}
             handleClick={registerUser}
             disabled={!data.email || !data.email.includes('.') || !data.email.includes('@') || !data.password || !data.username}
             loading={loading}
+          />
+          <div style={{ margin: '.5vw' }} />
+          <CTAButton
+            label='Discard'
+            size='100%'
+            color={APP_COLORS.GRAY}
+            handleClick={() => setIsNew(false)}
           />
         </div>
       </div>

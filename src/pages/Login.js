@@ -53,10 +53,10 @@ export default function Login() {
             <div className='login-box'>
                 <div className='login-image'>
                     <img src='https://images.squarespace-cdn.com/content/v1/5b07d207b27e39fe2cf2070c/1536149156741-FR68IVVJ8Q362PWO3FSC/Sigma_connectivity_footer-logo.png' className='login-logo' />
-                    <h4 className='login-text'>CV Maker</h4>
+                    {/* <h4 className='login-text'>CV</h4> */}
                 </div>
                 {loading ?
-                    <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#6D0E00' /></div>
+                    <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#E59A2F' /></div>
                     :
                     <div className='login-fill'>
                         <InputField
@@ -75,7 +75,7 @@ export default function Login() {
                         <CTAButton
                             label='Login'
                             size='100%'
-                            color={APP_COLORS.MURREY}
+                            color={APP_COLORS.GREEN}
                             handleClick={loginUser}
                             disabled={!data.email || !data.email.includes('.') || !data.email.includes('@') || !data.password}
                         />
