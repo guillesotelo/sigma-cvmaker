@@ -14,6 +14,7 @@ import CVHeader from '../components/CVHeader'
 import { editResume, getLogo, saveResume } from '../store/reducers/resume'
 import { getProfileImage } from '../store/reducers/user'
 import PostSection from '../components/PostSection'
+import Dropdown from '../components/Dropdown'
 
 export default function NewCV() {
     const [data, setData] = useState({})
@@ -33,6 +34,7 @@ export default function NewCV() {
     const localResumes = useSelector(state => state.resume && state.resume.allResumes || [])
     const dispatch = useDispatch()
     const history = useHistory()
+    const typeOptions = ['Master', 'Variant', 'Other']
 
     const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
 
@@ -373,9 +375,16 @@ export default function NewCV() {
                     <div className='separator'></div>
                     <div className='new-resume-fill'>
                         <div className='resume-fill-col1'>
-                            <h2 className='section-title'>Internal use</h2>
+                            <h2 className='section-title'>CV Data (internal use)</h2>
                         </div>
                         <div className='resume-fill-col2'>
+                            <Dropdown
+                                label='Type'
+                                name='type'
+                                options={typeOptions}
+                                value={data.type}
+                                updateData={updateData}
+                            />
                             <Bullet
                                 label='Buzzwords'
                                 type='big'
@@ -386,7 +395,7 @@ export default function NewCV() {
                         </div>
                     </div>
                     <InputField
-                        label='CV Notes'
+                        label='Note'
                         type='textarea'
                         cols={70}
                         rows={6}

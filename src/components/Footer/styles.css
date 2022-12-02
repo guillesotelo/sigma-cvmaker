@@ -24,7 +24,7 @@
     margin: 1px;
     text-align: left;
     transition: .3s;
-    width: fit-content;
+    width: 30%;
 }
 
 .footer-text-row {
@@ -51,11 +51,21 @@
 
 .footer-version {
     font-size: .7vw;
+    width: 30%;
     color: rgb(160, 160, 160);
 }
 
-.footer-logo {
-    height: 2vw;
-    padding: 0 2vw;
+.footer-logo-container {
+    width: 30%;
+    text-align: right;
 }
 
+.footer-logo {
+    height: 1.8vw;
+    padding: 0 2vw;
+    cursor: pointer;
+}
+
+.footer-logo:hover {
+    opacity: .8;
+}

@@ -6,9 +6,9 @@ import './styles.css'
 export default function Footer() {
     return (
         <div className='footer-container'>
-                <h4 className='footer-text'>© 2022 Sigma. All rights reserved.</h4>
+            <h4 className='footer-text'>© 2022 Sigma. All rights reserved.</h4>
             {/* <div className='footer-text'> */}
-                {/* <h4 className='footer-text-row footer-hover' onClick={(e) => {
+            {/* <h4 className='footer-text-row footer-hover' onClick={(e) => {
                     e.preventDefault()
                     window.open('https://www.sigmaconnectivity.com/', '_blank', 'noopener,noreferrer');
                 }}>Sigma Connectivity Engineering</h4>
@@ -21,7 +21,9 @@ export default function Footer() {
                     window.location.href = 'mailto:guillermo.sotelo@sigma.se'
                 }}>Contact: guillermo.sotelo@sigma.se</h4>
             </div> */}
-            <img src={EngineeringLogo} className='footer-logo'/>
+            <div className='footer-logo-container'>
+                <img src={EngineeringLogo} className='footer-logo' onClick={() => window.open('https://www.sigma.se/sv/contact/sigma-connectivity-engineering/', '_blank')} />
+            </div>
         </div>
     )
 }

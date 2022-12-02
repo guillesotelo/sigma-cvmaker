@@ -352,8 +352,9 @@
     flex-direction: row;
     justify-content: space-evenly;
     position: fixed;
-    background-color: lightgray;
+    background-color: WHITE;
     border-top-left-radius: 2vw;
+    border: 1px solid lightgray;
     border-top-right-radius: 2vw;
     bottom: 0;
     padding: 1vw 0;
