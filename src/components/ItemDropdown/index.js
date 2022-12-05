@@ -114,13 +114,6 @@ export default function ItemDropdown(props) {
                                                     index={i}
                                                     style={{ margin: '0 .5vw' }}
                                                 />
-
-                                                {/* <select className='item-dropdown-select' defaultValue='Select one' onChange={e => handleChange('option', e.target.value, i)}>
-                                                    <option value="" hidden>Select one</option>
-                                                    {options && options.length ? options.map((op, j) =>
-                                                        <option key={j} defaultValue='Select one' className='item-dropdown-option'>{op}</option>)
-                                                        : ''}
-                                                </select> */}
                                                 <h4 onClick={() => addNewItem()} className='item-dropdown-new'>✓</h4>
                                             </>
                                             :

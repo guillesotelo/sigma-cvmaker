@@ -68,6 +68,13 @@ const getAllResumes = async data => {
     } catch (err) { console.log(err) }
 }
 
+const getResumeById = async _id => {
+    try {
+        const resume = await axios.get(`${API_URL}/api/resume/getById`, { params: { _id } })
+        return resume.data
+    } catch (err) { console.log(err) }
+}
+
 const getImageByEmail = async data => {
     try {
         const image = await axios.get(`${API_URL}/api/user/getProfileImage`, { params: { email: data.email } })
@@ -191,6 +198,7 @@ export {
     resetPassordByEmail,
     changePass,
     getAllResumes,
+    getResumeById,
     getImageByEmail,
     getResumeByEmail,
     getCVLogo,

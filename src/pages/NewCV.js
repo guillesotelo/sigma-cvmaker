@@ -11,7 +11,7 @@ import Bullet from '../components/Bullet'
 import InputBullet from '../components/InputBullet'
 import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
-import { editResume, getLogo, saveResume } from '../store/reducers/resume'
+import { editResume, getLogo, getResume, saveResume } from '../store/reducers/resume'
 import { getProfileImage } from '../store/reducers/user'
 import PostSection from '../components/PostSection'
 import Dropdown from '../components/Dropdown'
@@ -48,11 +48,22 @@ export default function NewCV() {
             get: (searchParams, prop) => searchParams.get(prop),
         })
 
-        if (edit) {
+        if (edit) setEditData(edit)
+        else if (user.username && user.email && user.isManager) {
+            setData({ ...data, footer_contact: user.username, footer_email: user.email })
+        }
+
+        getCVLogo()
+        setLoading(false)
+    }, [])
+
+    const setEditData = async edit => {
+        try {
+            const cv = await getCVById(edit)
             if (localResumes && localResumes.length) {
                 localResumes.forEach(resume => {
                     if (resume._id === edit) {
-                        const resData = JSON.parse(resume.data)
+                        const resData = JSON.parse(cv && cv.data || {})
                         setData({ ...resData, ...resume })
                         setLanguages(resData.languages)
                         setSkills(resData.skills)
@@ -67,15 +78,17 @@ export default function NewCV() {
                     }
                 })
             }
+        } catch (err) {
+            console.error(err)
         }
+    }
 
-        else if (user.username && user.email && user.isManager) {
-            setData({ ...data, footer_contact: user.username, footer_email: user.email })
-        }
-
-        getCVLogo()
-        setLoading(false)
-    }, [])
+    const getCVById = async id => {
+        try {
+            const cv = await dispatch(getResume(id)).then(data => data.payload)
+            return cv
+        } catch (err) { console.error(err) }
+    }
 
     const getCVLogo = async () => {
         try {
@@ -120,6 +133,7 @@ export default function NewCV() {
             const strData = JSON.stringify(resumeData)
             resumeData.data = strData
             resumeData.notes = data.notes || ''
+            resumeData.type = data.type || 'Master'
             resumeData.username = `${data.name} ${data.middlename ? data.middlename : ''} ${data.surname}` || ''
             resumeData.manager = user.manager || user.email
             resumeData.email = data.email || ''

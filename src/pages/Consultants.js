@@ -101,7 +101,7 @@ export default function Consultants() {
         try {
             setLoading(true)
             const _users = await dispatch(getUsers(user)).then(data => data.payload)
-            if (_users) setUsers(_users.filter(user => !user.isManager))
+            if (_users && Array.isArray(_users)) setUsers(_users.filter(user => !user.isManager))
             setLoading(false)
         } catch (err) {
             setLoading(false)

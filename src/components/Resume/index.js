@@ -9,7 +9,7 @@ import RobotoBold from '../../assets/fonts/Roboto-Bold.ttf'
 import GreatVibes from '../../assets/fonts/GreatVibes-Regular.ttf'
 import { applyFiltersToImage } from '../../helpers/image'
 import './styles.css'
-import { getLogo } from '../../store/reducers/resume'
+import { getLogo, getResume } from '../../store/reducers/resume'
 
 export default function Resume({ resumeData }) {
     const [data, setData] = useState(resumeData)
@@ -27,9 +27,17 @@ export default function Resume({ resumeData }) {
         getCVLogo()
     }, [])
 
+    const getCVById = async id => {
+        try {
+            const cv = await dispatch(getResume(id)).then(data => data.payload)
+            return cv
+        } catch (err) { console.error(err) }
+    }
+
     const getResumeData = async () => {
         try {
-            const parsedData = JSON.parse(data.data)
+            const cv = await getCVById(resumeData._id)
+            const parsedData = JSON.parse(cv && cv.data || {})
             const profilePic = await dispatch(getProfileImage(resumeData)).then(data => data.payload)
 
             if (profilePic) {
