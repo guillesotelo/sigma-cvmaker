@@ -57,6 +57,9 @@
     width: inherit;
     width: 11vw;
     padding: 0;
+    z-index: 2;
+    max-height: 20vw;
+    overflow-y: scroll;
 }
 
 .dropdown-option {
@@ -67,7 +70,7 @@
     line-height: 1.5vw;
     cursor: pointer;
     padding: .4vw 0;
-    border-top: 1px solid lightgray;
+    border-top: 1px solid rgb(231, 231, 231);
     transition: .3s;
 }
 

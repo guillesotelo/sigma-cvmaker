@@ -39,8 +39,7 @@ export default function NewCV() {
     const typeOptions = ['Master', 'Variant', 'Other']
 
     const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
-
-    console.log("Data", data)
+    const skillYears = Array.from({ length: 40 }, (_, i) => `${i + 1} ${i > 0 ? 'Years' : 'Year'}`)
 
     useEffect(() => {
         setLoading(true)
@@ -97,7 +96,7 @@ export default function NewCV() {
                         const resData = JSON.parse(cv && cv.data || {})
                         setData({ ...resData, ...resume })
                         setLanguages(resData.languages)
-                        setSkills(resData.skills)
+                        setSkills(refreshTime(resData.skills, resume.date))
                         setEducation(resData.education)
                         setCertifications(resData.certifications)
                         setExperience(resData.experience)
@@ -140,6 +139,26 @@ export default function NewCV() {
         } catch (err) {
             console.error(err)
         }
+    }
+    
+    const calculateTime = (currentTime, date) => {
+        if (currentTime && date) {
+            const years = Number(currentTime.split(' ')[0])
+            const now = new Date()
+            const cvDate = new Date(date)
+            const diff = now.getFullYear() - cvDate.getFullYear()
+            return diff ? `${years + diff} Years` : currentTime
+        }
+        return '-'
+    }
+
+    const refreshTime = (skillArr, date) => {
+        return skillArr.map(skill => {
+            return {
+                name: skill.name,
+                option: calculateTime(skill.option, date)
+            }
+        })
     }
 
     const onSaveResume = async saveAsNew => {
@@ -366,7 +385,7 @@ export default function NewCV() {
                     <ItemDropdown
                         label=''
                         name='skills'
-                        options={Array.from({ length: 10 }, (_, i) => `${i + 1} ${i > 0 ? 'Years' : 'Year'}`).concat('>10 Years')}
+                        options={skillYears}
                         items={skills}
                         setItems={setSkills}
                         placeholder='Add new skill...'

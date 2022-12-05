@@ -19,6 +19,8 @@ export default function Resume({ resumeData }) {
     const [imageFilter, setImageFilter] = useState('')
     const [numPages, setNumPages] = useState(null)
     const [pageNumber, setPageNumber] = useState(1)
+    const dispatch = useDispatch()
+    const history = useHistory()
 
     useEffect(() => {
         const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
@@ -60,14 +62,22 @@ export default function Resume({ resumeData }) {
         } catch (err) { console.error(err) }
     }
 
+    const calculateTime = currentTime => {
+        if (currentTime && data.date) {
+            const years = Number(currentTime.split(' ')[0])
+            const now = new Date()
+            const cvDate = new Date(data.date)
+            const diff = now.getFullYear() - cvDate.getFullYear()
+            return diff ? `${years + diff} Years` : currentTime
+        }
+        return '-'
+    }
 
     const onDocumentLoadSuccess = ({ numPages }) => {
         setNumPages(numPages)
         setPageNumber(1)
     }
 
-    const dispatch = useDispatch()
-    const history = useHistory()
 
     const updateData = (key, value) => {
         setData({ ...data, [key]: value })
@@ -457,7 +467,7 @@ export default function Resume({ resumeData }) {
                                         {res.skills.map((skill, i) => (
                                             <View key={i} style={styles.bullet} wrap={false}>
                                                 <Text style={styles.skill}>{skill.name || ''}</Text>
-                                                <Text style={styles.year}>{skill.option.toLowerCase() || ''}</Text>
+                                                <Text style={styles.year}>{calculateTime(skill.option)}</Text>
                                             </View>
                                         ))}
                                     </View>
