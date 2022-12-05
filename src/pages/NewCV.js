@@ -12,7 +12,7 @@ import InputBullet from '../components/InputBullet'
 import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
 import { editResume, getLogo, getResume, saveResume } from '../store/reducers/resume'
-import { getProfileImage } from '../store/reducers/user'
+import { getAllManagers, getProfileImage } from '../store/reducers/user'
 import PostSection from '../components/PostSection'
 import Dropdown from '../components/Dropdown'
 
@@ -20,6 +20,8 @@ export default function NewCV() {
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
+    const [allManagers, setAllManagerrs] = useState([])
+    const [managers, setManagers] = useState([])
     const [languages, setLanguages] = useState([{ name: '' }])
     const [skills, setSkills] = useState([{ name: '' }])
     const [education, setEducation] = useState([{ bullet: '', value: '' }])
@@ -38,6 +40,8 @@ export default function NewCV() {
 
     const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
 
+    console.log("Data", data)
+
     useEffect(() => {
         setLoading(true)
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
@@ -54,8 +58,35 @@ export default function NewCV() {
         }
 
         getCVLogo()
+        getManagers()
         setLoading(false)
     }, [])
+
+    useEffect(() => {
+        if (data.manager) {
+            let manager = {}
+            allManagers.forEach(_manager => {
+                if (_manager.username === data.manager) manager = _manager
+            })
+            setData({
+                ...data,
+                footer_contact: manager.username || '',
+                footer_email: manager.email || '',
+                footer_location: manager.location || '',
+                footer_phone: manager.phone || '',
+            })
+        }
+    }, [data.manager])
+
+    const getManagers = async () => {
+        try {
+            const _managers = await dispatch(getAllManagers(user)).then(data => data.payload)
+            if (_managers && Array.isArray(_managers)) {
+                setAllManagerrs(_managers)
+                setManagers(_managers.map(manager => manager.username))
+            }
+        } catch (err) { console.error(err) }
+    }
 
     const setEditData = async edit => {
         try {
@@ -135,7 +166,7 @@ export default function NewCV() {
             resumeData.notes = data.notes || ''
             resumeData.type = data.type || 'Master'
             resumeData.username = `${data.name} ${data.middlename ? data.middlename : ''} ${data.surname}` || ''
-            resumeData.manager = user.manager || user.email
+            resumeData.manager = data.manager || ''
             resumeData.email = data.email || ''
             if (profilePic && profilePic.profileImage) resumeData.profilePic = profilePic.profileImage
 
@@ -380,6 +411,13 @@ export default function NewCV() {
             {user.isManager &&
                 <>
                     <div className='separator'></div>
+                    <Dropdown
+                        label='Consultant Manager'
+                        name='manager'
+                        options={managers}
+                        value={data.manager}
+                        updateData={updateData}
+                    />
                     <CVFooter
                         updateData={updateData}
                         user={user}

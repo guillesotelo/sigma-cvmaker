@@ -47,6 +47,13 @@ const getAllUsers = async data => {
     } catch (err) { console.log(err) }
 }
 
+const getManagers = async data => {
+    try {
+        const managers = await axios.get(`${API_URL}/api/user/getManagers`, { params: data })
+        return managers.data
+    } catch (err) { console.log(err) }
+}
+
 const resetPassordByEmail = async data => {
     try {
         const user = await axios.post(`${API_URL}/api/user/resetByEmail`, data)
@@ -194,6 +201,7 @@ export {
     updateUser,
     setUserVoid,
     getAllUsers,
+    getManagers,
     removeUser,
     resetPassordByEmail,
     changePass,

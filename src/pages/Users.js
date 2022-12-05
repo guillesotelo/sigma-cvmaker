@@ -225,6 +225,7 @@ export default function Users() {
                             label='Full Name'
                             type='text'
                             name='username'
+                            placeholder='Name Surname'
                             updateData={updateData}
                             style={{ color: 'rgb(71, 71, 71)' }}
                             value={data.username || ''}
@@ -233,6 +234,7 @@ export default function Users() {
                             label='Email'
                             type='text'
                             name='email'
+                            placeholder='user.email@sigma.se'
                             updateData={updateData}
                             style={{ color: 'rgb(71, 71, 71)' }}
                             value={data.email || ''}
@@ -241,9 +243,27 @@ export default function Users() {
                             label='Manager Email'
                             type='text'
                             name='manager'
+                            placeholder='manager.name@sigma.se'
                             updateData={updateData}
                             style={{ color: 'rgb(71, 71, 71)' }}
                             value={data.manager || ''}
+                        />
+                        <InputField
+                            label='Phone'
+                            type='text'
+                            name='phone'
+                            placeholder='+12 3456 78901'
+                            updateData={updateData}
+                            value={data.phone || ''}
+                        />
+                        <InputField
+                            label='Location'
+                            type='text'
+                            name='location'
+                            updateData={updateData}
+                            placeholder='Street, City, Country'
+                            value={data.location || ''}
+                            style={{ marginBottom: '1vw' }}
                         />
                         <SwitchBTN
                             label='Is Manager?'

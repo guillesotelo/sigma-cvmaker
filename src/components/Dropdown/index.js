@@ -24,17 +24,17 @@ export default function Dropdown(props) {
                 </div>
                 {openDrop ?
                     <div className='dropdown-options' style={{ border: openDrop && '1px solid #E4C69C' }}>
-                        {options.map((op, i) =>
+                        {options.map((option, i) =>
                             <h4
                                 key={i}
                                 className='dropdown-option'
                                 style={{ borderTop: i === 0 && 'none' }}
                                 onClick={() => {
-                                    updateData(name, op, index)
-                                    setSelected(op)
+                                    updateData(name, option, index)
+                                    setSelected(option)
                                     setOpenDrop(false)
-                                }}>{op}</h4>)
-                        }
+                                }}>{option}</h4>
+                        )}
                     </div>
                     : ''}
             </div>

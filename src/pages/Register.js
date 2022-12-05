@@ -69,12 +69,14 @@ export default function Register({ setIsNew }) {
             label='Full Name'
             type='text'
             name='username'
+            placeholder='Name Surname'
             updateData={updateData}
           />
           <InputField
             label='User Email'
             type='text'
             name='email'
+            placeholder='user.email@sigma.se'
             updateData={updateData}
           />
           <InputField
@@ -88,7 +90,22 @@ export default function Register({ setIsNew }) {
             label='Manager email'
             type='text'
             name='manager'
+            placeholder='manager.name@sigma.se'
             updateData={updateData}
+          />
+          <InputField
+            label='Phone'
+            type='text'
+            name='phone'
+            placeholder='+12 3456 78901'
+            updateData={updateData}
+          />
+          <InputField
+            label='Location'
+            type='text'
+            name='location'
+            updateData={updateData}
+            placeholder='Street, City, Country'
             style={{ marginBottom: '1vw' }}
           />
           <SwitchBTN
