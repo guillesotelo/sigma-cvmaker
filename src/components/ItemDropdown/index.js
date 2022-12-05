@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import Dropdown from '../Dropdown';
 import './styles.css'
 
 export default function ItemDropdown(props) {
@@ -17,7 +18,7 @@ export default function ItemDropdown(props) {
 
     useEffect(() => {
         renderItems(items)
-        if(items.length) {
+        if (items.length) {
             const lastItem = items[items.length - 1]
             if (lastItem.name || lastItem.name !== '') addNewItem()
         }
@@ -105,12 +106,21 @@ export default function ItemDropdown(props) {
                                                     type={type || 'text'}
                                                     style={style || null}
                                                 />
-                                                <select className='item-dropdown-select' defaultValue='Select one' onChange={e => handleChange('option', e.target.value, i)}>
+                                                <Dropdown
+                                                    label=''
+                                                    name='option'
+                                                    options={options}
+                                                    updateData={handleChange}
+                                                    index={i}
+                                                    style={{ margin: '0 .5vw' }}
+                                                />
+
+                                                {/* <select className='item-dropdown-select' defaultValue='Select one' onChange={e => handleChange('option', e.target.value, i)}>
                                                     <option value="" hidden>Select one</option>
                                                     {options && options.length ? options.map((op, j) =>
                                                         <option key={j} defaultValue='Select one' className='item-dropdown-option'>{op}</option>)
                                                         : ''}
-                                                </select>
+                                                </select> */}
                                                 <h4 onClick={() => addNewItem()} className='item-dropdown-new'>✓</h4>
                                             </>
                                             :

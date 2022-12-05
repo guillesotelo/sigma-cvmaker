@@ -75,7 +75,7 @@ export default function Bullet(props) {
 
     return (
         <div className='bullet-container'>
-            <h4 className='item-label'>{label || ''}</h4>
+            <h4 className='bullet-label'>{label || ''}</h4>
             <DragDropContext onDragEnd={onDragEnd} onDragStart={() => setDragging(true)}>
                 <Droppable droppableId="droppable">
                     {(provided, _) =>
@@ -94,7 +94,7 @@ export default function Bullet(props) {
                                                 className='bullet-row' key={i}>
                                                 <h4 className='bullet'>{bullets[type] || '•'}</h4>
                                                 <h4 className='bullet-text'>{item || ''}</h4>
-                                                <h4 onClick={() => removeItem(i)} className='item-dropdown-remove'>X</h4>
+                                                <h4 onClick={() => removeItem(i)} className='bullet-remove'>X</h4>
                                             </div>
                                         )}
                                     </Draggable>
@@ -103,12 +103,12 @@ export default function Bullet(props) {
                                         <div className='bullet-row' key={i}>
                                             <h4 className='bullet'>{bullets[type]}</h4>
                                             <input
-                                                className='item-dropdown-name'
+                                                className='bullet-name'
                                                 onChange={e => handleChange(e.target.value, i)}
                                                 placeholder={placeholder || ''}
                                                 type='text'
                                             />
-                                            <h4 onClick={() => addNewItem()} className='item-dropdown-new'>✓</h4>
+                                            <h4 onClick={() => addNewItem()} className='bullet-new'>✓</h4>
                                         </div>
                                         : ''
                             )}

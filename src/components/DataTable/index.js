@@ -61,7 +61,7 @@ export default function DataTable(props) {
             </div>
             {loading ? <div style={{ alignSelf: 'center', display: 'flex', marginTop: '5vw' }}><MoonLoader color='#E59A2F' /></div>
                 :
-                tableData.length ?
+                tableData && tableData.length ?
                     <>
                         {tableData.map((row, i) => i < maxItems &&
                             <div

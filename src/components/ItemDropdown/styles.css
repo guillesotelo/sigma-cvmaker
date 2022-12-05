@@ -4,7 +4,6 @@
     align-items: flex-start;
     color: rgb(105, 104, 105);
     margin: 0.5vw 0;
-    width: 100%;
 }
 
 .item-label {
@@ -17,8 +16,6 @@
 .item-dropdown-row {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
     margin-bottom: 1vw;
     align-items: center;
 }
@@ -26,7 +23,6 @@
 .item-dropdown-blocked {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     width: 100%;
     height: 3vw;
     align-items: center;
@@ -45,7 +41,7 @@
     border-radius: 0.5vw;
     padding: 0.5vw;
     font-size: 0.9vw;
-    width: 40%;
+    width: 6.2vw;
     color: black;
     white-space: nowrap;
     overflow: hidden;

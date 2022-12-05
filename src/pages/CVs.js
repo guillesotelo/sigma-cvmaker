@@ -78,7 +78,7 @@ export default function CVs({ showAll }) {
             try {
                 setLoading(true)
                 const cvs = await dispatch(getResumes({ ...user, getAll })).then(data => data.payload)
-                if (cvs && cvs.length) {
+                if (cvs && Array.isArray(cvs)) {
                     setResumes(cvs)
                     setFilteredRes(cvs)
                 }
@@ -165,7 +165,7 @@ export default function CVs({ showAll }) {
                     setOpenModal={setOpenModal}
                     setIsPdf={setIsPdf}
                     modalView={true}
-                    // sizes={['18%', '15%', '17%', '18%', '18%', '10%', '10%']}
+                // sizes={['18%', '15%', '17%', '18%', '18%', '10%', '10%']}
                 />
             </div>
             {openModal && isPdf ?
