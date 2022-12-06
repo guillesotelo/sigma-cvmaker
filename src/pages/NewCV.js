@@ -103,7 +103,7 @@ export default function NewCV() {
                         setSkills(resData.skills.length ? refreshTime(resData.skills, resume.date) : [{ name: '' }])
                         setEducation(resData.education.length ? resData.education : [{ bullet: '', value: '' }])
                         setCertifications(resData.certifications.length ? resData.certifications : [{ bullet: '', value: '' }])
-                        setExperience(resData.experience)
+                        setExperience(resData.experience.length ? resData.experience : [{ bullets: [''] }])
                         setStrengths(resData.strengths)
                         setExpertise(resData.expertise)
                         setBuzzwords(resData.buzzwords && resData.buzzwords.length ? resData.buzzwords : [''])
