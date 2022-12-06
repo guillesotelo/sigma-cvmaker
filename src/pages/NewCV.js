@@ -13,7 +13,6 @@ import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
 import { editResume, getLogo, getResume, saveResume } from '../store/reducers/resume'
 import { getAllManagers, getProfileImage } from '../store/reducers/user'
-import { getAppData } from '../store/reducers/appData'
 import PostSection from '../components/PostSection'
 import Dropdown from '../components/Dropdown'
 import ProfileIcon from '../icons/profile-icon.svg'
@@ -34,11 +33,6 @@ export default function NewCV() {
     const [buzzwords, setBuzzwords] = useState([''])
     const [profilePic, setProfilePic] = useState({})
     const [cvLogo, setcvLogo] = useState({})
-    const [appData, setAppData] = useState([])
-    const [allTools, setAllTools] = useState([])
-    const [filteredTools, setFilteredTools] = useState([])
-    const [tools, setTools] = useState([])
-    const [fields, setFields] = useState([])
     const [user, setUser] = useState({})
     const localResumes = useSelector(state => state.resume && state.resume.allResumes || [])
     const dispatch = useDispatch()
@@ -46,6 +40,8 @@ export default function NewCV() {
     const typeOptions = ['Master', 'Variant', 'Other']
     const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
     const skillYears = Array.from({ length: 40 }, (_, i) => `${i + 1} ${i > 0 ? 'Years' : 'Year'}`)
+
+    console.log("data", data)
 
     useEffect(() => {
         setLoading(true)
@@ -64,7 +60,6 @@ export default function NewCV() {
 
         getCVLogo()
         getManagers()
-        pullAppData(localUser.email)
         setLoading(false)
     }, [])
 
@@ -74,43 +69,17 @@ export default function NewCV() {
             allManagers.forEach(_manager => {
                 if (_manager.username === data.manager) manager = _manager
             })
-            setData({
-                ...data,
-                footer_contact: manager.username || '',
-                footer_email: manager.email || '',
-                footer_location: manager.location || '',
-                footer_phone: manager.phone || '',
-            })
+            if (manager.username) {
+                setData({
+                    ...data,
+                    footer_contact: manager.username || '',
+                    footer_email: manager.email || '',
+                    footer_location: manager.location || '',
+                    footer_phone: manager.phone || '',
+                })
+            }
         }
     }, [data.manager])
-
-    useEffect(() => {
-        if (data.field && allTools.length) {
-            const _filtered = allTools.map(tool => {
-                if (tool.field === data.field || tool.type === data.field) return tool.name
-            })
-            setFilteredTools([...new Set(_filtered)])
-        }
-    }, [data.field])
-
-    useEffect(() => {
-        if (appData.length) {
-            let _tools = []
-            appData.forEach(data => {
-                if (data.type === 'tools') _tools = JSON.parse(data.data) || []
-            })
-            setAllTools(_tools)
-            const _fields = _tools.map(t => t.field).concat(_tools.map(t => t.type))
-            setFields([...new Set(_fields)])
-        }
-    }, [appData])
-
-    const pullAppData = async email => {
-        try {
-            const _appData = await dispatch(getAppData({ email })).then(data => data.payload)
-            if (_appData) setAppData(_appData)
-        } catch (err) { console.error(err) }
-    }
 
     const getManagers = async () => {
         try {
@@ -131,9 +100,9 @@ export default function NewCV() {
                         const resData = JSON.parse(cv && cv.data || {})
                         setData({ ...resData, ...resume })
                         setLanguages(resData.languages)
-                        setSkills(refreshTime(resData.skills, resume.date))
-                        setEducation(resData.education)
-                        setCertifications(resData.certifications)
+                        setSkills(resData.skills.length ? refreshTime(resData.skills, resume.date) : [{ name: '' }])
+                        setEducation(resData.education.length ? resData.education : [{ bullet: '', value: '' }])
+                        setCertifications(resData.certifications.length ? resData.certifications : [{ bullet: '', value: '' }])
                         setExperience(resData.experience)
                         setStrengths(resData.strengths)
                         setExpertise(resData.expertise)
@@ -219,8 +188,9 @@ export default function NewCV() {
             resumeData.data = strData
             resumeData.notes = data.notes || ''
             resumeData.type = data.type || 'Master'
-            resumeData.username = `${data.name} ${data.middlename ? data.middlename : ''} ${data.surname}` || ''
+            resumeData.username = `${data.name}${data.middlename ? ' ' + data.middlename : ''} ${data.surname}` || ''
             resumeData.manager = data.manager || ''
+            resumeData.managerEmail = data.footer_email || '-'
             resumeData.email = data.email || ''
             if (profilePic && profilePic.profileImage) resumeData.profilePic = profilePic.profileImage
 
@@ -250,12 +220,6 @@ export default function NewCV() {
 
     const removeVoids = arr => {
         return arr.filter(item => item.name || item.value || item.bullet)
-    }
-
-    const removeTool = index => {
-        let newTools = [...tools]
-        newTools.splice(index, 1)
-        setTools(newTools)
     }
 
     return (
@@ -479,35 +443,6 @@ export default function NewCV() {
                         placeholder="Describe what other tools you have used..."
                         value={data.tools || ''}
                     />
-                    {/* <div className='new-resume-tools'>
-                        <div className='new-resume-tools-row'>
-                            <Dropdown
-                                label='Select Field'
-                                name='field'
-                                options={fields}
-                                value={data.field}
-                                updateData={updateData}
-                            />
-                            <Dropdown
-                                label='Add Tool'
-                                name='tools'
-                                options={filteredTools}
-                                items={tools}
-                                setItems={setTools}
-                                value='Select'
-                                updateData={updateData}
-                            />
-                        </div>
-                        {tools.length ?
-                            <div className='new-resume-tools-list'>
-                                {tools.map((tool, i) =>
-                                    <div key={i} className='new-resume-tool-div'>
-                                        <h4 className='new-resume-tool'>{tool}</h4>
-                                        <h4 className='new-resume-remove-tool' onClick={() => removeTool(i)}>X</h4>
-                                    </div>
-                                )}
-                            </div> : ''}
-                    </div> */}
                 </div>
             </div>
 

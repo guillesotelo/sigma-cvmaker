@@ -506,8 +506,14 @@ export default function Resume({ resumeData }) {
                                                                 <Text key={j} style={styles.experienceResponsibility}>• {resp}</Text>
                                                                 : null)}
                                                         </View>
-                                                        <Text style={styles.experienceResponsibilities}>Technologies:</Text>
-                                                        <Text style={styles.experienceTech}>{exp.technologies || ''}</Text>
+                                                        {exp.technologies && Array.isArray(exp.technologies) ?
+                                                            <View>
+                                                                <Text style={styles.experienceResponsibilities}>Technologies:</Text>
+                                                                <Text style={styles.experienceTech}>
+                                                                    {exp.technologies.join(', ')}
+                                                                </Text>
+                                                            </View>
+                                                            : null}
                                                     </View>
                                                 </View>
                                                 : null
@@ -562,7 +568,7 @@ export default function Resume({ resumeData }) {
     return (
         <div className='view-resume-container'>
             <div className='view-resume-page'>
-                {loading ? 
+                {loading ?
                     <div style={{ alignSelf: 'center', display: 'flex', marginTop: '5vw' }}><MoonLoader color='#E59A2F' /></div>
                     : res && res.name ?
                         <ResumePDF />

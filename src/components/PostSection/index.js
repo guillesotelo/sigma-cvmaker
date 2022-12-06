@@ -13,7 +13,7 @@ export default function PostSection(props) {
     const [appData, setAppData] = useState([])
     const [allTools, setAllTools] = useState([])
     const [filteredTools, setFilteredTools] = useState([])
-    const [tools, setTools] = useState([])
+    const [tech, setTech] = useState([])
     const [fields, setFields] = useState([])
     const dispatch = useDispatch()
 
@@ -59,10 +59,10 @@ export default function PostSection(props) {
 
     const addNewItem = () => {
         if (items[items.length - 1].role) {
-            const newTools = [...tools]
-            handleChange('tools', newTools, items.length - 1)
+            const newTech = [...tech]
+            handleChange('technologies', newTech, items.length - 1)
             setItems(items.concat({ bullets: [''] }))
-            setTools([])
+            setTech([])
         }
     }
 
@@ -135,11 +135,11 @@ export default function PostSection(props) {
 
     const saveUpdatedItem = () => {
         const newItemsArr = items
-        const newTools = [...tools]
+        const newTech = [...tech]
         newItemsArr[selectedIndex] = selected
-        newItemsArr[selectedIndex].tools = newTools
+        newItemsArr[selectedIndex].technologies = newTech
         setItems(newItemsArr)
-        setTools([])
+        setTech([])
     }
 
     const bullets = ({ bullets }, index) => (
@@ -175,10 +175,10 @@ export default function PostSection(props) {
         margin: '1vw 0'
     } : {}
 
-    const removeTool = index => {
-        let newTools = [...tools]
-        newTools.splice(index, 1)
-        setTools(newTools)
+    const removeTech = index => {
+        let newTech = [...tech]
+        newTech.splice(index, 1)
+        setTech(newTech)
     }
 
     const updateData = (key, value) => {
@@ -241,26 +241,26 @@ export default function PostSection(props) {
                                 label='Add Tool'
                                 name='tools'
                                 options={filteredTools}
-                                items={tools}
-                                setItems={setTools}
+                                items={tech}
+                                setItems={setTech}
                                 value='Select'
                                 updateData={updateData}
                             />
                             <input
                                 className='post-manual-input'
                                 onKeyDown={e => {
-                                    if (e.key === 'Enter') setTools([...new Set(tools.concat(e.target.value))])
+                                    if (e.key === 'Enter') setTech([...new Set(tech.concat(e.target.value))])
                                 }}
                                 placeholder='Add manually...'
                                 type='text'
                             />
                         </div>
-                        {tools.length ?
+                        {tech.length ?
                             <div className='post-tools-list'>
-                                {tools.map((tool, i) =>
+                                {tech.map((tool, i) =>
                                     <div key={i} className='post-tool-div'>
                                         <h4 className='post-tool'>{tool}</h4>
-                                        <h4 className='post-remove-tool' onClick={() => removeTool(i)}>X</h4>
+                                        <h4 className='post-remove-tool' onClick={() => removeTech(i)}>X</h4>
                                     </div>
                                 )}
                             </div> : ''}
@@ -271,7 +271,7 @@ export default function PostSection(props) {
                         setSelected(null)
                         setSelectedIndex(null)
                         seteditPost(false)
-                        setTools([])
+                        setTech([])
                     }}
                         className='section-item-new'>Discard</h4>
                     <h4 onClick={() => {
@@ -305,9 +305,9 @@ export default function PostSection(props) {
                                     </div>
                                     <div className='post-tools-and-tech'>
                                         <h4 className='post-technologies-text'>Tools & Tech:</h4>
-                                        {item.tools && item.tools.length ?
+                                        {item.technologies && item.technologies.length ?
                                             <div className='post-tools-and-tech-list'>
-                                                {item.tools.map((tool, t) => <h4 key={t} className='post-tools-and-tech-div'>{tool}</h4>)}
+                                                {item.technologies.map((tec, t) => <h4 key={t} className='post-tools-and-tech-div'>{tec}</h4>)}
                                             </div>
                                             : ''
                                         }
@@ -319,7 +319,7 @@ export default function PostSection(props) {
                                     setSelected(item)
                                     setSelectedIndex(i)
                                     seteditPost(true)
-                                    setTools(item.tools && item.tools.length ? item.tools : [])
+                                    setTech(item.technologies && item.technologies.length ? item.technologies : [])
                                 }}
                                     className='section-item-remove'>Edit</h4>
                                 <h4 onClick={() => removeItem(i)} className='section-item-remove'>Remove</h4>
@@ -375,26 +375,26 @@ export default function PostSection(props) {
                                             label='Add Tool'
                                             name='tools'
                                             options={filteredTools}
-                                            items={tools}
-                                            setItems={setTools}
+                                            items={tech}
+                                            setItems={setTech}
                                             value='Select'
                                             updateData={updateData}
                                         />
                                         <input
                                             className='post-manual-input'
                                             onKeyDown={e => {
-                                                if (e.key === 'Enter') setTools([...new Set(tools.concat(e.target.value))])
+                                                if (e.key === 'Enter') setTech([...new Set(tech.concat(e.target.value))])
                                             }}
                                             placeholder='Add manually...'
                                             type='text'
                                         />
                                     </div>
-                                    {tools.length ?
+                                    {tech.length ?
                                         <div className='post-tools-list'>
-                                            {tools.map((tool, i) =>
+                                            {tech.map((tec, i) =>
                                                 <div key={i} className='post-tool-div'>
-                                                    <h4 className='post-tool'>{tool}</h4>
-                                                    <h4 className='post-remove-tool' onClick={() => removeTool(i)}>X</h4>
+                                                    <h4 className='post-tool'>{tec}</h4>
+                                                    <h4 className='post-remove-tool' onClick={() => removeTech(i)}>X</h4>
                                                 </div>
                                             )}
                                         </div> : ''}
