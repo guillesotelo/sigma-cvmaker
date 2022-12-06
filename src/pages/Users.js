@@ -179,8 +179,18 @@ export default function Users() {
                     <div className='users-image-section'>
                         <div className='users-image-input'>
                             {profilePic.profileImage ?
-                                <img src={profilePic.profileImage} style={profilePic.style} className='profile-image' />
-                                : <img src={ProfileIcon} style={profilePic.style} className='profile-image' />}
+                                <img
+                                    src={profilePic.profileImage}
+                                    style={profilePic.style}
+                                    className='account-profile-image'
+                                    onClick={() => document.getElementById('profileImage').click()}
+                                />
+                                : <img
+                                    src={ProfileIcon}
+                                    style={profilePic.style}
+                                    className='account-profile-image-svg'
+                                    onClick={() => document.getElementById('profileImage').click()}
+                                />}
                             <InputField
                                 label='Profile Image'
                                 type='file'

@@ -14,6 +14,8 @@ export default function ToolsTech() {
     const [data, setData] = useState({})
     const [appData, setAppData] = useState([])
     const [tools, setTools] = useState([])
+    const [fieldOptions, setFieldOptions] = useState([])
+    const [typeOptions, setTypeOptions] = useState([])
     const [isEdit, setIsEdit] = useState(false)
     const [selectedTool, setSelectedTool] = useState(-1)
     const [toolsEdit, setToolsEdit] = useState(false)
@@ -48,6 +50,8 @@ export default function ToolsTech() {
                 if (data.type === 'tools') _tools = JSON.parse(data.data) || []
             })
             setTools(_tools)
+            setFieldOptions(_tools.map(t => t.field))
+            setTypeOptions(_tools.map(t => t.type))
         }
     }, [appData])
 
@@ -82,13 +86,13 @@ export default function ToolsTech() {
             const exists = await dispatch(getOneAppData({ type: 'tools' })).then(data => data.payload)
             if (exists) {
                 saved = await dispatch(updateAppData({
-                    user,
+                    ...user,
                     type: 'tools',
                     data: JSON.stringify(updatedTools)
                 })).then(data => data.payload)
             } else {
                 saved = await dispatch(saveAppData({
-                    user,
+                    ...user,
                     type: 'tools',
                     data: JSON.stringify(updatedTools)
                 })).then(data => data.payload)
@@ -165,6 +169,7 @@ export default function ToolsTech() {
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.field || ''}
+                                    options={fieldOptions}
                                 />
                                 <InputField
                                     label='Type'
@@ -173,6 +178,7 @@ export default function ToolsTech() {
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.type || ''}
+                                    options={typeOptions}
                                 />
                             </div>
                             <div className='settings-skill-btns'>

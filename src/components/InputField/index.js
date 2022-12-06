@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../../constants/app'
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import './styles.css'
 
 export default function InputField(props) {
+    const [showDropDown, setShowDropDown] = useState(false)
+    const [suggestions, setSuggestions] = useState([])
+    const [dropValue, setDropValue] = useState(null)
 
     const {
         name,
@@ -20,8 +23,20 @@ export default function InputField(props) {
         filename,
         image,
         setImage,
-        setIsEdit
+        setIsEdit,
+        options
     } = props
+
+    useEffect(() => {
+        if (value && options && options.length) {
+            const matches = options.filter(op => op.toLowerCase().includes(value.toLowerCase()) && op)
+            if (matches) {
+                setShowDropDown(true)
+                setSuggestions([...new Set(matches)])
+            } else setShowDropDown(false)
+        } else setShowDropDown(false)
+        if (dropValue === value) setShowDropDown(false)
+    }, [value])
 
     const handleChange = (newValue) => {
         const { valueAsNumber, value } = newValue.target
@@ -91,15 +106,31 @@ export default function InputField(props) {
                         id={filename}
                     />
                     :
-                    <input
-                        className='inputfield-field'
-                        autoComplete={autoComplete}
-                        onChange={handleChange}
-                        placeholder={placeholder || ''}
-                        type={type || 'text'}
-                        style={style || null}
-                        value={value}
-                    />
+                    <div className='inputfield-dropdown'>
+                        <input
+                            className='inputfield-field'
+                            autoComplete={autoComplete}
+                            onChange={handleChange}
+                            placeholder={placeholder || ''}
+                            type={type || 'text'}
+                            style={style || null}
+                            value={value}
+                        />
+                        {showDropDown ?
+                            <div className='input-dropdown-options'>
+                                {suggestions.map((suggestion, i) =>
+                                    <h4
+                                        key={i}
+                                        className='dropdown-option'
+                                        style={{ borderTop: i === 0 && 'none' }}
+                                        onClick={() => {
+                                            updateData(name, suggestion)
+                                            setDropValue(suggestion)
+                                            setShowDropDown(false)
+                                        }}>{suggestion}</h4>
+                                )}
+                            </div> : ''}
+                    </div>
 
             }
         </div>

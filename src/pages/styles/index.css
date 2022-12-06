@@ -72,8 +72,6 @@
     margin: 0 0 3vw 0;
 }
 
-.login-fill {}
-
 /* --- Create User --- */
 .register-container {
     display: flex;
@@ -98,7 +96,6 @@
     display: flex;
     flex-direction: column;
     text-align: center;
-    /* width: 100%; */
     margin: 0;
 }
 
@@ -115,10 +112,6 @@
 .register-image {
     margin: 0 0 1vw 0;
 }
-
-.register-fill {}
-
-
 
 /* --- Home --- */
 .home-container {
@@ -173,12 +166,10 @@
     transition: .4s;
 }
 
-
 /* --- My Resumes ---  */
 .my-resumes-container {
     display: flex;
     flex-direction: column;
-    /* align-items: flex-start; */
     padding: 1vw .5vw;
     margin: 1vw 1vw 2vw 1vw;
     border-radius: 1vw;
@@ -195,7 +186,6 @@
 
 .resumes-list {
     display: flex;
-    /* flex-wrap: wrap; */
     margin: 0;
     padding: 1vw;
     align-self: center;
@@ -222,8 +212,6 @@
     box-shadow: 4px 4px 15px lightgray;
 }
 
-.resume-text {}
-
 .resume-name {
     font-size: 1.3vw;
     margin: 0;
@@ -231,7 +219,6 @@
 
 .resume-role {
     font-size: 1vw;
-    /* font-style: italic; */
     color: rgb(110, 110, 110);
     margin: 0;
 }
@@ -352,7 +339,7 @@
     flex-direction: row;
     justify-content: space-evenly;
     position: fixed;
-    background-color: WHITE;
+    background-color: white;
     border-top-left-radius: 2vw;
     border: 1px solid lightgray;
     border-top-right-radius: 2vw;
@@ -368,7 +355,6 @@
     padding: 1vw 3vw 2vw 3vw;
     position: absolute;
     Background-color: white;
-    /* border: 1px solid lightgray; */
     border-radius: 0.5vw;
     box-shadow: 2px 2px 10px lightgray;
     margin-top: 4vw;
@@ -393,7 +379,6 @@
     width: 80vw;
     height: 95%;
     background-color: #323639;
-    /* border: 2px solid gray; */
     border-radius: 0.5vw;
     box-shadow: 5px 5px 20px lightgray;
     position: absolute;
@@ -468,8 +453,6 @@
     text-align: center;
     margin: 0 2vw;
     padding: .5vw 0 8vw 0;
-
-    /* align-items: flex-start; */
     padding: 1vw .5vw;
     margin: 1vw 1vw 2vw 1vw;
     border-radius: 1vw;
@@ -736,10 +719,6 @@
     margin: 1vw 0;
 }
 
-.settings-logo-input {
-    /* margin: 1vw; */
-}
-
 .settings-cv-logo {
     width: 18vw;
     cursor: pointer;
@@ -797,7 +776,6 @@
     margin-top: 1vw;
     gap: 1vw;
 }
-
 
 /* --- Users ---  */
 .users-container {
@@ -889,10 +867,6 @@
     padding: 0 1vw 2vw 1.5vw;
     border-left: 1px solid #E4E7EB;
     border-radius: .5vw;
-}
-
-.users-details {
-
 }
 
 .users-btns {

@@ -13,8 +13,10 @@ import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
 import { editResume, getLogo, getResume, saveResume } from '../store/reducers/resume'
 import { getAllManagers, getProfileImage } from '../store/reducers/user'
+import { getAppData } from '../store/reducers/appData'
 import PostSection from '../components/PostSection'
 import Dropdown from '../components/Dropdown'
+import ProfileIcon from '../icons/profile-icon.svg'
 
 export default function NewCV() {
     const [data, setData] = useState({})
@@ -32,12 +34,16 @@ export default function NewCV() {
     const [buzzwords, setBuzzwords] = useState([''])
     const [profilePic, setProfilePic] = useState({})
     const [cvLogo, setcvLogo] = useState({})
+    const [appData, setAppData] = useState([])
+    const [allTools, setAllTools] = useState([])
+    const [filteredTools, setFilteredTools] = useState([])
+    const [tools, setTools] = useState([])
+    const [fields, setFields] = useState([])
     const [user, setUser] = useState({})
     const localResumes = useSelector(state => state.resume && state.resume.allResumes || [])
     const dispatch = useDispatch()
     const history = useHistory()
     const typeOptions = ['Master', 'Variant', 'Other']
-
     const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
     const skillYears = Array.from({ length: 40 }, (_, i) => `${i + 1} ${i > 0 ? 'Years' : 'Year'}`)
 
@@ -58,6 +64,7 @@ export default function NewCV() {
 
         getCVLogo()
         getManagers()
+        pullAppData(localUser.email)
         setLoading(false)
     }, [])
 
@@ -76,6 +83,34 @@ export default function NewCV() {
             })
         }
     }, [data.manager])
+
+    useEffect(() => {
+        if (data.field && allTools.length) {
+            const _filtered = allTools.map(tool => {
+                if (tool.field === data.field || tool.type === data.field) return tool.name
+            })
+            setFilteredTools([...new Set(_filtered)])
+        }
+    }, [data.field])
+
+    useEffect(() => {
+        if (appData.length) {
+            let _tools = []
+            appData.forEach(data => {
+                if (data.type === 'tools') _tools = JSON.parse(data.data) || []
+            })
+            setAllTools(_tools)
+            const _fields = _tools.map(t => t.field).concat(_tools.map(t => t.type))
+            setFields([...new Set(_fields)])
+        }
+    }, [appData])
+
+    const pullAppData = async email => {
+        try {
+            const _appData = await dispatch(getAppData({ email })).then(data => data.payload)
+            if (_appData) setAppData(_appData)
+        } catch (err) { console.error(err) }
+    }
 
     const getManagers = async () => {
         try {
@@ -140,7 +175,7 @@ export default function NewCV() {
             console.error(err)
         }
     }
-    
+
     const calculateTime = (currentTime, date) => {
         if (currentTime && date) {
             const years = Number(currentTime.split(' ')[0])
@@ -217,6 +252,12 @@ export default function NewCV() {
         return arr.filter(item => item.name || item.value || item.bullet)
     }
 
+    const removeTool = index => {
+        let newTools = [...tools]
+        newTools.splice(index, 1)
+        setTools(newTools)
+    }
+
     return (
         <div className='new-resume-container'>
             <ToastContainer autoClose={2000} />
@@ -226,7 +267,20 @@ export default function NewCV() {
             <div className='new-resume-fill'>
                 <div className='resume-fill-col1'>
                     <>
-                        {profilePic.profileImage ? <img src={profilePic.profileImage} style={profilePic.style} className='profile-image' /> : ''}
+                        {profilePic.profileImage ?
+                            <img
+                                src={profilePic.profileImage}
+                                style={profilePic.style}
+                                className='profile-image'
+                                onClick={() => document.getElementById('profileImage').click()}
+                            />
+                            :
+                            <img
+                                src={ProfileIcon}
+                                style={profilePic.style}
+                                className='account-profile-image-svg'
+                                onClick={() => document.getElementById('profileImage').click()}
+                            />}
                         <InputField
                             label='Profile Image'
                             type='file'
@@ -294,6 +348,7 @@ export default function NewCV() {
                         items={languages}
                         setItems={setLanguages}
                         placeholder='Add new language...'
+                        style={{ width: '6.5vw' }}
                     />
                 </div>
                 <div className='resume-fill-col2'>
@@ -410,20 +465,49 @@ export default function NewCV() {
             <div className='separator'></div>
             <div className='new-resume-fill'>
                 <div className='resume-fill-col1'>
-                    <h2 className='section-title'>Tools</h2>
+                    <h2 className='section-title'>Other Tools & Software</h2>
                 </div>
                 <div className='resume-fill-col2'>
                     <InputField
                         label=''
                         type='textarea'
-                        cols={70}
+                        cols={65}
                         rows={6}
                         name='tools'
                         updateData={updateData}
-                        placeholder="Describe tools you've been using..."
                         style={{ color: 'rgb(71, 71, 71)' }}
+                        placeholder="Describe what other tools you have used..."
                         value={data.tools || ''}
                     />
+                    {/* <div className='new-resume-tools'>
+                        <div className='new-resume-tools-row'>
+                            <Dropdown
+                                label='Select Field'
+                                name='field'
+                                options={fields}
+                                value={data.field}
+                                updateData={updateData}
+                            />
+                            <Dropdown
+                                label='Add Tool'
+                                name='tools'
+                                options={filteredTools}
+                                items={tools}
+                                setItems={setTools}
+                                value='Select'
+                                updateData={updateData}
+                            />
+                        </div>
+                        {tools.length ?
+                            <div className='new-resume-tools-list'>
+                                {tools.map((tool, i) =>
+                                    <div key={i} className='new-resume-tool-div'>
+                                        <h4 className='new-resume-tool'>{tool}</h4>
+                                        <h4 className='new-resume-remove-tool' onClick={() => removeTool(i)}>X</h4>
+                                    </div>
+                                )}
+                            </div> : ''}
+                    </div> */}
                 </div>
             </div>
 
@@ -472,7 +556,7 @@ export default function NewCV() {
                         rows={6}
                         name='note'
                         updateData={updateData}
-                        placeholder="Write a note to attach this export"
+                        placeholder="e.g: Exported January 28th for [Client Name] by [Manager Name]"
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.note || ''}
                     />

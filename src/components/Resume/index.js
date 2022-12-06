@@ -10,12 +10,14 @@ import GreatVibes from '../../assets/fonts/GreatVibes-Regular.ttf'
 import { applyFiltersToImage } from '../../helpers/image'
 import './styles.css'
 import { getLogo, getResume } from '../../store/reducers/resume'
+import { MoonLoader } from 'react-spinners'
 
 export default function Resume({ resumeData }) {
     const [data, setData] = useState(resumeData)
     const [res, setRes] = useState({})
     const [profileImage, setProfileImage] = useState({})
     const [cvLogo, setcvLogo] = useState({})
+    const [loading, setLoading] = useState(false)
     const [imageFilter, setImageFilter] = useState('')
     const [numPages, setNumPages] = useState(null)
     const [pageNumber, setPageNumber] = useState(1)
@@ -23,10 +25,12 @@ export default function Resume({ resumeData }) {
     const history = useHistory()
 
     useEffect(() => {
+        setLoading(true)
         const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
         if (!user || !user.email) history.push('/login')
         getResumeData()
         getCVLogo()
+        setLoading(false)
     }, [])
 
     const getCVById = async id => {
@@ -558,7 +562,11 @@ export default function Resume({ resumeData }) {
     return (
         <div className='view-resume-container'>
             <div className='view-resume-page'>
-                {res && res.name ? <ResumePDF /> : ''}
+                {loading ? 
+                    <div style={{ alignSelf: 'center', display: 'flex', marginTop: '5vw' }}><MoonLoader color='#E59A2F' /></div>
+                    : res && res.name ?
+                        <ResumePDF />
+                        : ''}
             </div>
         </div>
     )

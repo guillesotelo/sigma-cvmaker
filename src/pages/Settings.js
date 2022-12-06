@@ -118,13 +118,13 @@ export default function Settings() {
       const exists = await dispatch(getOneAppData({ type: 'skills' })).then(data => data.payload)
       if (exists) {
         saved = await dispatch(updateAppData({
-          user,
+          ...user,
           type: 'skills',
           data: JSON.stringify(updatedSkills)
         })).then(data => data.payload)
       } else {
         saved = await dispatch(saveAppData({
-          user,
+          ...user,
           type: 'skills',
           data: JSON.stringify(updatedSkills)
         })).then(data => data.payload)
@@ -148,11 +148,13 @@ export default function Settings() {
       const exists = await dispatch(getOneAppData({ type: 'skills' })).then(data => data.payload)
       if (exists) {
         saved = await dispatch(updateAppData({
+          ...user,
           type: 'buzzwords',
           data: JSON.stringify(updatedBuzzwords)
         })).then(data => data.payload)
       } else {
         saved = await dispatch(saveAppData({
+          ...user,
           type: 'buzzwords',
           data: JSON.stringify(updatedBuzzwords)
         })).then(data => data.payload)

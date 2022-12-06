@@ -8,6 +8,8 @@ export default function Dropdown(props) {
         label,
         name,
         updateData,
+        items,
+        setItems,
         options,
         value,
         index,
@@ -25,6 +27,7 @@ export default function Dropdown(props) {
                 {openDrop ?
                     <div className='dropdown-options' style={{ border: openDrop && '1px solid #E4C69C' }}>
                         {options.map((option, i) =>
+                            option && option !== '' &&
                             <h4
                                 key={i}
                                 className='dropdown-option'
@@ -32,6 +35,11 @@ export default function Dropdown(props) {
                                 onClick={() => {
                                     updateData(name, option, index)
                                     setSelected(option)
+                                    if (items && setItems) {
+                                        let newItems = items
+                                        newItems.push(option)
+                                        setItems([...new Set(newItems)])
+                                    }
                                     setOpenDrop(false)
                                 }}>{option}</h4>
                         )}

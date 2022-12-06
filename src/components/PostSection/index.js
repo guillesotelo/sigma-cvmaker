@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { getAppData } from '../../store/reducers/appData'
+import Dropdown from '../Dropdown'
 import './styles.css'
 
 export default function PostSection(props) {
 
+    const [data, setData] = useState({})
     const [editPost, seteditPost] = useState(false)
     const [selected, setSelected] = useState({})
     const [selectedIndex, setSelectedIndex] = useState(null)
+    const [appData, setAppData] = useState([])
+    const [allTools, setAllTools] = useState([])
+    const [filteredTools, setFilteredTools] = useState([])
+    const [tools, setTools] = useState([])
+    const [fields, setFields] = useState([])
+    const dispatch = useDispatch()
 
     const {
         label,
@@ -13,16 +23,53 @@ export default function PostSection(props) {
         setItems
     } = props
 
+    useEffect(() => {
+        const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
+        pullAppData(localUser.email)
+    }, [])
+
+    useEffect(() => {
+        if (data.field && allTools.length) {
+            const _filtered = allTools.map(tool => {
+                if (tool.field === data.field || tool.type === data.field) return tool.name
+            })
+            setFilteredTools([...new Set(_filtered)])
+        }
+    }, [data.field])
+
+    useEffect(() => {
+        if (appData.length) {
+            let _tools = []
+            appData.forEach(data => {
+                if (data.type === 'tools') _tools = JSON.parse(data.data) || []
+            })
+            setAllTools(_tools)
+            const _fields = _tools.map(t => t.field).concat(_tools.map(t => t.type))
+            setFields([...new Set(_fields)])
+            setFilteredTools(_tools.map(t => t.name))
+        }
+    }, [appData])
+
+    const pullAppData = async email => {
+        try {
+            const _appData = await dispatch(getAppData({ email })).then(data => data.payload)
+            if (_appData) setAppData(_appData)
+        } catch (err) { console.error(err) }
+    }
+
     const addNewItem = () => {
         if (items[items.length - 1].role) {
+            const newTools = [...tools]
+            handleChange('tools', newTools, items.length - 1)
             setItems(items.concat({ bullets: [''] }))
+            setTools([])
         }
     }
 
     const addNewBullet = (index, subindex) => {
         if (editPost) {
             if (selected.bullets[subindex]) {
-                const newItem = {...selected}
+                const newItem = { ...selected }
                 newItem.bullets = newItem.bullets.concat([''])
                 setSelected(newItem)
             }
@@ -43,7 +90,7 @@ export default function PostSection(props) {
 
     const removeBullet = (index, subindex) => {
         if (editPost) {
-            const newItem = {...selected}
+            const newItem = { ...selected }
             newItem.bullets.splice(subindex, 1)
             setSelected(newItem)
         } else {
@@ -88,8 +135,11 @@ export default function PostSection(props) {
 
     const saveUpdatedItem = () => {
         const newItemsArr = items
+        const newTools = [...tools]
         newItemsArr[selectedIndex] = selected
+        newItemsArr[selectedIndex].tools = newTools
         setItems(newItemsArr)
+        setTools([])
     }
 
     const bullets = ({ bullets }, index) => (
@@ -97,7 +147,7 @@ export default function PostSection(props) {
             <h4 className='post-item-label'>Key responsibilities:</h4>
             {bullets && bullets.length ?
                 bullets.map((item, subindex) =>
-                    item && subindex !== bullets.length -1 ?
+                    item && subindex !== bullets.length - 1 ?
                         <div className='bullet-row' key={subindex}>
                             <h4 className='bullet'>●</h4>
                             <h4 className='bullet-text'>{item || ''}</h4>
@@ -111,7 +161,7 @@ export default function PostSection(props) {
                                 onChange={e => handleChange('bullets', e.target.value, index, subindex)}
                                 placeholder='Write responsibilty'
                                 type='text'
-                                // value={editPost ? selected.bullets[subindex] : item}
+                            // value={editPost ? selected.bullets[subindex] : item}
                             />
                             <h4 onClick={() => addNewBullet(index, subindex)} className='item-dropdown-new'>✓</h4>
                         </div>
@@ -124,6 +174,16 @@ export default function PostSection(props) {
         paddingTop: '2vw',
         margin: '1vw 0'
     } : {}
+
+    const removeTool = index => {
+        let newTools = [...tools]
+        newTools.splice(index, 1)
+        setTools(newTools)
+    }
+
+    const updateData = (key, value) => {
+        setData({ ...data, [key]: value })
+    }
 
     return editPost ?
         <div className='post-container'>
@@ -167,21 +227,51 @@ export default function PostSection(props) {
                     {bullets(selected, selectedIndex)}
                 </div>
                 <div className='post-row'>
-                    <textarea
-                        className='section-item-name'
-                        onChange={e => handleUpdate('technologies', e.target.value)}
-                        placeholder='Technologies used'
-                        type='textarea'
-                        cols={10}
-                        rows={3}
-                        value={selected.technologies || ''}
-                    />
+                    <div className='post-tools'>
+                        <h4 className='post-tools-title'>Tools & Tech</h4>
+                        <div className='post-tools-row'>
+                            <Dropdown
+                                label='Select Field'
+                                name='field'
+                                options={fields}
+                                value={data.field}
+                                updateData={updateData}
+                            />
+                            <Dropdown
+                                label='Add Tool'
+                                name='tools'
+                                options={filteredTools}
+                                items={tools}
+                                setItems={setTools}
+                                value='Select'
+                                updateData={updateData}
+                            />
+                            <input
+                                className='post-manual-input'
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter') setTools([...new Set(tools.concat(e.target.value))])
+                                }}
+                                placeholder='Add manually...'
+                                type='text'
+                            />
+                        </div>
+                        {tools.length ?
+                            <div className='post-tools-list'>
+                                {tools.map((tool, i) =>
+                                    <div key={i} className='post-tool-div'>
+                                        <h4 className='post-tool'>{tool}</h4>
+                                        <h4 className='post-remove-tool' onClick={() => removeTool(i)}>X</h4>
+                                    </div>
+                                )}
+                            </div> : ''}
+                    </div>
                 </div>
                 <div className='section-item-btns'>
                     <h4 onClick={() => {
                         setSelected(null)
                         setSelectedIndex(null)
                         seteditPost(false)
+                        setTools([])
                     }}
                         className='section-item-new'>Discard</h4>
                     <h4 onClick={() => {
@@ -213,9 +303,14 @@ export default function PostSection(props) {
                                             bullet && <h4 className='post-responsability' key={j} >● {bullet}</h4>
                                         )}
                                     </div>
-                                    <div className='post-row'>
-                                        <h4 className='post-technologies-text'>Technologies:</h4>
-                                        <h4 className='post-technologies'>{item.technologies}</h4>
+                                    <div className='post-tools-and-tech'>
+                                        <h4 className='post-technologies-text'>Tools & Tech:</h4>
+                                        {item.tools && item.tools.length ?
+                                            <div className='post-tools-and-tech-list'>
+                                                {item.tools.map((tool, t) => <h4 key={t} className='post-tools-and-tech-div'>{tool}</h4>)}
+                                            </div>
+                                            : ''
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -224,6 +319,7 @@ export default function PostSection(props) {
                                     setSelected(item)
                                     setSelectedIndex(i)
                                     seteditPost(true)
+                                    setTools(item.tools && item.tools.length ? item.tools : [])
                                 }}
                                     className='section-item-remove'>Edit</h4>
                                 <h4 onClick={() => removeItem(i)} className='section-item-remove'>Remove</h4>
@@ -265,14 +361,44 @@ export default function PostSection(props) {
                                 {bullets(item, i)}
                             </div>
                             <div className='post-row'>
-                                <textarea
-                                    className='section-item-name'
-                                    onChange={e => handleChange('technologies', e.target.value, i)}
-                                    placeholder='Technologies used'
-                                    type='textarea'
-                                    cols={10}
-                                    rows={3}
-                                />
+                                <div className='post-tools'>
+                                    <h4 className='post-tools-title'>Tools & Tech</h4>
+                                    <div className='post-tools-row'>
+                                        <Dropdown
+                                            label='Select Field'
+                                            name='field'
+                                            options={fields}
+                                            value={data.field}
+                                            updateData={updateData}
+                                        />
+                                        <Dropdown
+                                            label='Add Tool'
+                                            name='tools'
+                                            options={filteredTools}
+                                            items={tools}
+                                            setItems={setTools}
+                                            value='Select'
+                                            updateData={updateData}
+                                        />
+                                        <input
+                                            className='post-manual-input'
+                                            onKeyDown={e => {
+                                                if (e.key === 'Enter') setTools([...new Set(tools.concat(e.target.value))])
+                                            }}
+                                            placeholder='Add manually...'
+                                            type='text'
+                                        />
+                                    </div>
+                                    {tools.length ?
+                                        <div className='post-tools-list'>
+                                            {tools.map((tool, i) =>
+                                                <div key={i} className='post-tool-div'>
+                                                    <h4 className='post-tool'>{tool}</h4>
+                                                    <h4 className='post-remove-tool' onClick={() => removeTool(i)}>X</h4>
+                                                </div>
+                                            )}
+                                        </div> : ''}
+                                </div>
                             </div>
                             <h4 onClick={() => addNewItem()} className='section-item-new'>Add</h4>
                         </div>

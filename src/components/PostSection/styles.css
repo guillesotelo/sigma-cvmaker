@@ -41,7 +41,7 @@
     font-family: 'Inter', sans-serif;
     border-radius: .5vw;
     padding: .5vw;
-    margin-bottom: 1vw;
+    margin: .5vw 0;
     font-size: .8vw;
     width: 50%;
     color: black;
@@ -146,14 +146,17 @@
 .post-column {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    text-align: left;
 }
 
 .post-period {
     font-size: 1vw;
     font-weight: 800;
     color: black;
-    width: 50%;
+    width: 25%;
     margin: .5vw 1vw;
+    text-align: left;
 }
 
 .post-company {
@@ -177,13 +180,13 @@
     text-align: justify;
 }
 
-.post-responsabilities-text {
+/* .post-responsabilities {
     display: flex;
     flex-direction: row;
     justify-content: left;
     align-items: flex-start;
     gap: 1vw;
-}
+} */
 
 .post-responsabilities-text {
     font-size: 1vw;
@@ -224,4 +227,101 @@
     border-radius: 1vw;
     margin: 4vw 0;
     background-color: white;
+}
+
+.post-tools-title {
+    font-size: .9vw;
+    text-align: left;
+    margin: 0;
+}
+
+.post-tools {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+    margin: 1.5vw 0 2vw 0vw;
+    justify-self: center;
+}
+
+.post-tools-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2vw;
+}
+
+.post-tools-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 1vw;
+    border-top: 1px solid rgb(232, 232, 232);
+}
+
+.post-tool-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: .3vw .5vw;
+    gap: .5vw;
+    background-color: lightgray;
+    padding: .2vw .5vw;
+    border-radius: .5vw;
+}
+
+.post-tool {
+    font-size: .9vw;
+    font-weight: normal;
+    margin: .3vw 0;
+}
+
+.post-remove-tool {
+    font-size: 1vw;
+    margin: 0;
+    font-weight: normal;
+    cursor: pointer;
+    transition: .3s;
+}
+.post-remove-tool:hover {
+    color: #E59A2F;
+}
+
+.post-manual-input {
+    border: 1px solid #e5e5e5;
+    background-color: #e5e5e5;
+    font-weight: normal;
+    font-family: 'Inter', sans-serif;
+    border-radius: .5vw;
+    padding: .5vw;
+    font-size: .9vw;
+    width: 20%;
+    color: gray;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    outline: none;
+    transition: .3s;
+}
+
+.post-manual-input:focus {
+    border: 1px solid #E4C69C;
+}
+
+.post-tools-and-tech {
+    margin: 1vw 0 1vw 0;
+    font-size: 1vw;
+    text-align: justify;
+}
+
+.post-tools-and-tech-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: .3vw;
+    background-color: lightgray;
+    padding: .3vw .6vw;
+    border-radius: .5vw;
+}
+
+.post-tools-and-tech-list {
+    display: flex;
+    flex-wrap: wrap;
 }

@@ -19,6 +19,30 @@
     font-size: 0.9vw;
     outline: none;
     transition: .3s;
+    width: 100%;
+}
+
+.inputfield-dropdown {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+
+}
+
+.input-dropdown-options {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 0.5vw;
+    margin: 0;
+    width: inherit;
+    width: 9.5vw;
+    padding: 0 .5vw;
+    z-index: 2;
+    max-height: 20vw;
+    overflow-y: scroll;
 }
 
 .inputfield-field:focus {
