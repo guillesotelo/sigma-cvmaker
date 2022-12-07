@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import Dropdown from '../Dropdown';
 import './styles.css'
 
@@ -98,14 +99,16 @@ export default function ItemDropdown(props) {
                                         :
                                         !dragging ?
                                             <>
-                                                <input
-                                                    className='item-dropdown-name'
-                                                    autoComplete={item.autoComplete || null}
-                                                    onChange={e => handleChange('name', e.target.value, i)}
-                                                    placeholder={placeholder || ''}
-                                                    type={type || 'text'}
-                                                    style={style || null}
-                                                />
+                                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
+                                                    <input
+                                                        className='item-dropdown-name'
+                                                        autoComplete={item.autoComplete || null}
+                                                        onChange={e => handleChange('name', e.target.value, i)}
+                                                        placeholder={placeholder || ''}
+                                                        type={type || 'text'}
+                                                        style={style || null}
+                                                    />
+                                                </GrammarlyEditorPlugin>
                                                 <Dropdown
                                                     label=''
                                                     name='option'
@@ -113,6 +116,7 @@ export default function ItemDropdown(props) {
                                                     updateData={handleChange}
                                                     index={i}
                                                     style={{ margin: '0 .5vw' }}
+                                                    size='10vw'
                                                 />
                                                 <h4 onClick={() => addNewItem()} className='item-dropdown-new'>✓</h4>
                                             </>

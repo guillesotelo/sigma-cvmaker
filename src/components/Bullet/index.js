@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import './styles.css'
 
 export default function Bullet(props) {
@@ -24,7 +25,7 @@ export default function Bullet(props) {
     } = props
 
     useEffect(() => {
-        if(items.length) {
+        if (items.length) {
             const lastItem = items[items.length - 1]
             if (lastItem || lastItem !== '') addNewItem()
         }
@@ -102,12 +103,14 @@ export default function Bullet(props) {
                                     !dragging ?
                                         <div className='bullet-row' key={i}>
                                             <h4 className='bullet'>{bullets[type]}</h4>
-                                            <input
-                                                className='bullet-name'
-                                                onChange={e => handleChange(e.target.value, i)}
-                                                placeholder={placeholder || ''}
-                                                type='text'
-                                            />
+                                            <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
+                                                <input
+                                                    className='bullet-name'
+                                                    onChange={e => handleChange(e.target.value, i)}
+                                                    placeholder={placeholder || ''}
+                                                    type='text'
+                                                />
+                                            </GrammarlyEditorPlugin>
                                             <h4 onClick={() => addNewItem()} className='bullet-new'>✓</h4>
                                         </div>
                                         : ''

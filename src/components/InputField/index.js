@@ -106,7 +106,35 @@ export default function InputField(props) {
                         id={filename}
                     />
                     :
-                    <div className='inputfield-dropdown'>
+                    type === 'text' ?
+                        <div className='inputfield-dropdown'>
+                            <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%", textAlign: 'left' }}>
+                                <input
+                                    className='inputfield-field'
+                                    autoComplete={autoComplete}
+                                    onChange={handleChange}
+                                    placeholder={placeholder || ''}
+                                    type={type || 'text'}
+                                    style={style || null}
+                                    value={value}
+                                />
+                            </GrammarlyEditorPlugin>
+                            {showDropDown ?
+                                <div className='input-dropdown-options'>
+                                    {suggestions.map((suggestion, i) =>
+                                        <h4
+                                            key={i}
+                                            className='dropdown-option'
+                                            style={{ borderTop: i === 0 && 'none' }}
+                                            onClick={() => {
+                                                updateData(name, suggestion)
+                                                setDropValue(suggestion)
+                                                setShowDropDown(false)
+                                            }}>{suggestion}</h4>
+                                    )}
+                                </div> : ''}
+                        </div>
+                        :
                         <input
                             className='inputfield-field'
                             autoComplete={autoComplete}
@@ -116,21 +144,6 @@ export default function InputField(props) {
                             style={style || null}
                             value={value}
                         />
-                        {showDropDown ?
-                            <div className='input-dropdown-options'>
-                                {suggestions.map((suggestion, i) =>
-                                    <h4
-                                        key={i}
-                                        className='dropdown-option'
-                                        style={{ borderTop: i === 0 && 'none' }}
-                                        onClick={() => {
-                                            updateData(name, suggestion)
-                                            setDropValue(suggestion)
-                                            setShowDropDown(false)
-                                        }}>{suggestion}</h4>
-                                )}
-                            </div> : ''}
-                    </div>
 
             }
         </div>

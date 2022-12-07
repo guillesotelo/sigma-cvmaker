@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import './styles.css'
 
 export default function InputBullet(props) {
@@ -14,7 +15,7 @@ export default function InputBullet(props) {
     } = props
 
     useEffect(() => {
-        if(items.length) {
+        if (items.length) {
             const lastItem = items[items.length - 1]
             if (lastItem.bullet || lastItem.bullet !== '') addNewItem()
         }
@@ -93,17 +94,22 @@ export default function InputBullet(props) {
                                     :
                                     !dragging ?
                                         <div className='bullet-row' key={i}>
-                                            <input
-                                                className='item-dropdown-name'
-                                                onChange={e => handleChange('bullet', e.target.value, i)}
-                                                placeholder={bulletPlaceholder || ''}
-                                                type='text'
-                                            />                            <input
-                                                className='item-dropdown-name'
-                                                onChange={e => handleChange('value', e.target.value, i)}
-                                                placeholder={valuePlaceholder || ''}
-                                                type='text'
-                                            />
+                                            <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
+                                                <input
+                                                    className='item-dropdown-name'
+                                                    onChange={e => handleChange('bullet', e.target.value, i)}
+                                                    placeholder={bulletPlaceholder || ''}
+                                                    type='text'
+                                                />
+                                            </GrammarlyEditorPlugin>
+                                            <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
+                                                <input
+                                                    className='item-dropdown-name'
+                                                    onChange={e => handleChange('value', e.target.value, i)}
+                                                    placeholder={valuePlaceholder || ''}
+                                                    type='text'
+                                                />
+                                            </GrammarlyEditorPlugin>
                                             <h4 onClick={() => addNewItem()} className='item-dropdown-new'>✓</h4>
                                         </div>
                                         : ''

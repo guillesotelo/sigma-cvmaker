@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { getAppData } from '../../store/reducers/appData'
 import Dropdown from '../Dropdown'
+import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import './styles.css'
 
 export default function PostSection(props) {
@@ -186,47 +187,58 @@ export default function PostSection(props) {
     }
 
     return editPost ?
+
         <div className='post-container'>
+
             <h4 className='post-item-label'>{label || ''}</h4>
             <div className='post-column'>
-                <div className='post-row'>
-                    <input
-                        className='section-item-name'
-                        onChange={e => handleUpdate('period', e.target.value)}
-                        placeholder='Period'
-                        type='text'
-                        value={selected.period || ''}
-                    />
-                    <input
-                        className='section-item-name'
-                        onChange={e => handleUpdate('company', e.target.value)}
-                        placeholder='Company Title'
-                        type='text'
-                        value={selected.company || ''}
-                    />
+                <div className='post-col-dif'>
+                    <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                        <input
+                            className='section-item-name'
+                            onChange={e => handleUpdate('period', e.target.value)}
+                            placeholder='Period'
+                            type='text'
+                            value={selected.period || ''}
+                        />
+                    </GrammarlyEditorPlugin>
+                    <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                        <input
+                            className='section-item-name'
+                            onChange={e => handleUpdate('company', e.target.value)}
+                            placeholder='Company Title'
+                            type='text'
+                            value={selected.company || ''}
+                        />
+                    </GrammarlyEditorPlugin>
                 </div>
-                <div className='post-row'>
-                    <input
-                        className='section-item-name'
-                        onChange={e => handleUpdate('role', e.target.value)}
-                        placeholder='Role Title'
-                        type='text'
-                        value={selected.role || ''}
-                    />
-                    <textarea
-                        className='section-item-name'
-                        onChange={e => handleUpdate('description', e.target.value)}
-                        placeholder='Describe job / tasks'
-                        type='textarea'
-                        cols={10}
-                        rows={10}
-                        value={selected.description || ''}
-                    />
+                <div className='post-col-dif'>
+                    <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                        <input
+                            className='section-item-name'
+                            onChange={e => handleUpdate('role', e.target.value)}
+                            placeholder='Role Title'
+                            type='text'
+                            value={selected.role || ''}
+                        />
+
+                    </GrammarlyEditorPlugin>
+                    <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                        <textarea
+                            className='section-item-name'
+                            onChange={e => handleUpdate('description', e.target.value)}
+                            placeholder='Describe job / tasks'
+                            type='textarea'
+                            cols={10}
+                            rows={10}
+                            value={selected.description || ''}
+                        />
+                    </GrammarlyEditorPlugin>
                 </div>
-                <div className='post-row'>
+                <div className='post-col-dif'>
                     {bullets(selected, selectedIndex)}
                 </div>
-                <div className='post-row'>
+                <div className='post-col-dif'>
                     <div className='post-tools'>
                         <h4 className='post-tools-title'>Tools & Tech</h4>
                         <div className='post-tools-row'>
@@ -246,14 +258,16 @@ export default function PostSection(props) {
                                 value='Select'
                                 updateData={updateData}
                             />
-                            <input
-                                className='post-manual-input'
-                                onKeyDown={e => {
-                                    if (e.key === 'Enter') setTech([...new Set(tech.concat(e.target.value))])
-                                }}
-                                placeholder='Add manually...'
-                                type='text'
-                            />
+                            <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                <input
+                                    className='post-manual-input'
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter') setTech([...new Set(tech.concat(e.target.value))])
+                                    }}
+                                    placeholder='Add manually...'
+                                    type='text'
+                                />
+                            </GrammarlyEditorPlugin>
                         </div>
                         {tech.length ?
                             <div className='post-tools-list'>
@@ -327,40 +341,48 @@ export default function PostSection(props) {
                         </div>
                         :
                         <div className='post-column' key={i} style={experienceItem(i)}>
-                            <div className='post-row'>
-                                <input
-                                    className='section-item-name'
-                                    onChange={e => handleChange('period', e.target.value, i)}
-                                    placeholder='Period'
-                                    type='text'
-                                />
-                                <input
-                                    className='section-item-name'
-                                    onChange={e => handleChange('company', e.target.value, i)}
-                                    placeholder='Company Title'
-                                    type='text'
-                                />
+                            <div className='post-col-dif'>
+                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                    <input
+                                        className='section-item-name'
+                                        onChange={e => handleChange('period', e.target.value, i)}
+                                        placeholder='Period'
+                                        type='text'
+                                    />
+                                </GrammarlyEditorPlugin>
+                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                    <input
+                                        className='section-item-name'
+                                        onChange={e => handleChange('company', e.target.value, i)}
+                                        placeholder='Company Title'
+                                        type='text'
+                                    />
+                                </GrammarlyEditorPlugin>
                             </div>
-                            <div className='post-row'>
-                                <input
-                                    className='section-item-name'
-                                    onChange={e => handleChange('role', e.target.value, i)}
-                                    placeholder='Role Title'
-                                    type='text'
-                                />
-                                <textarea
-                                    className='section-item-name'
-                                    onChange={e => handleChange('description', e.target.value, i)}
-                                    placeholder='Describe job / tasks'
-                                    type='textarea'
-                                    cols={10}
-                                    rows={10}
-                                />
+                            <div className='post-col-dif'>
+                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                    <input
+                                        className='section-item-name'
+                                        onChange={e => handleChange('role', e.target.value, i)}
+                                        placeholder='Role Title'
+                                        type='text'
+                                    />
+                                </GrammarlyEditorPlugin>
+                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                    <textarea
+                                        className='section-item-name'
+                                        onChange={e => handleChange('description', e.target.value, i)}
+                                        placeholder='Describe job / tasks'
+                                        type='textarea'
+                                        cols={10}
+                                        rows={10}
+                                    />
+                                </GrammarlyEditorPlugin>
                             </div>
-                            <div className='post-row'>
+                            <div className='post-col-dif'>
                                 {bullets(item, i)}
                             </div>
-                            <div className='post-row'>
+                            <div className='post-col-dif'>
                                 <div className='post-tools'>
                                     <h4 className='post-tools-title'>Tools & Tech</h4>
                                     <div className='post-tools-row'>
@@ -370,6 +392,7 @@ export default function PostSection(props) {
                                             options={fields}
                                             value={data.field}
                                             updateData={updateData}
+                                            size='10vw'
                                         />
                                         <Dropdown
                                             label='Add Tool'
@@ -379,15 +402,21 @@ export default function PostSection(props) {
                                             setItems={setTech}
                                             value='Select'
                                             updateData={updateData}
+                                            size='10vw'
                                         />
-                                        <input
-                                            className='post-manual-input'
-                                            onKeyDown={e => {
-                                                if (e.key === 'Enter') setTech([...new Set(tech.concat(e.target.value))])
-                                            }}
-                                            placeholder='Add manually...'
-                                            type='text'
-                                        />
+                                        <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "20%" }}>
+                                            <input
+                                                className='post-manual-input'
+                                                onKeyDown={e => {
+                                                    if (e.key === 'Enter') {
+                                                        setTech([...new Set(tech.concat(e.target.value))])
+                                                        e.target.value = ''
+                                                    }
+                                                }}
+                                                placeholder='Add manually...'
+                                                type='text'
+                                            />
+                                        </GrammarlyEditorPlugin>
                                     </div>
                                     {tech.length ?
                                         <div className='post-tools-list'>

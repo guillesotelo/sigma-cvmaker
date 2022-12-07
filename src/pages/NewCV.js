@@ -38,6 +38,7 @@ export default function NewCV() {
     const dispatch = useDispatch()
     const history = useHistory()
     const typeOptions = ['Master', 'Variant', 'Other']
+    const genderOptions = ['Female', 'Male']
     const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
     const skillYears = Array.from({ length: 40 }, (_, i) => `${i + 1} ${i > 0 ? 'Years' : 'Year'}`)
 
@@ -262,6 +263,7 @@ export default function NewCV() {
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.name || ''}
+                        placeholder='Anna'
                     />
                     <InputField
                         label='Middle Name'
@@ -270,6 +272,7 @@ export default function NewCV() {
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.middlename || ''}
+                        placeholder='Grabielle'
                     />
                     <InputField
                         label='Surname'
@@ -278,6 +281,7 @@ export default function NewCV() {
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.surname || ''}
+                        placeholder='Kessler'
                     />
                     <InputField
                         label='Role / Title'
@@ -286,15 +290,14 @@ export default function NewCV() {
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.role || ''}
+                        placeholder='Android Developer'
                     />
-                    <InputField
+                    <Dropdown
                         label='Gender'
-                        placeholder='Male, Female...'
-                        type='text'
                         name='gender'
+                        options={genderOptions}
+                        value={data.gender}
                         updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)' }}
-                        value={data.gender || ''}
                     />
                     <InputField
                         label='Location'
@@ -455,7 +458,8 @@ export default function NewCV() {
                         options={managers}
                         value={data.manager}
                         updateData={updateData}
-                    />
+                        size='15vw'
+                        />
                     <CVFooter
                         updateData={updateData}
                         user={user}
@@ -474,6 +478,7 @@ export default function NewCV() {
                                 options={typeOptions}
                                 value={data.type}
                                 updateData={updateData}
+                                size='10vw'
                             />
                             <Bullet
                                 label='Buzzwords'
@@ -482,8 +487,6 @@ export default function NewCV() {
                                 setItems={setBuzzwords}
                                 placeholder='Add buzzword...'
                             />
-                        </div>
-                    </div>
                     <InputField
                         label='Note'
                         type='textarea'
@@ -495,6 +498,8 @@ export default function NewCV() {
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.note || ''}
                     />
+                        </div>
+                    </div>
                 </>
             }
             <div className='new-resume-btns'>

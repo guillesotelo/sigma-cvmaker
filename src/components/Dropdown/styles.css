@@ -1,14 +1,15 @@
 .dropdown-container {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1vw;
+    flex-direction: column;
+    margin: .5vw 0;
+    /* align-items: center; */
+    /* gap: 1vw; */
     /* grid-gap: 0; */
 }
 
 .dropdown-label {
     font-size: .8vw;
-    margin: 0;
+    margin: 0 0 .3vw 0;
     text-align: left;
     color: rgb(105, 104, 105);
 }
@@ -16,6 +17,7 @@
 .dropdown-select-section {
     display: flex;
     flex-direction: column;
+    /* width: 100%; */
 }
 
 .dropdown-select {
@@ -24,7 +26,7 @@
     border-radius: 0.5vw;
     font-size: 0.9vw;
     padding: 0.5vw;
-    width: 10vw;
+    width: 100%;
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -59,7 +61,7 @@
     padding: 0 .5vw;
     z-index: 2;
     max-height: 20vw;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .dropdown-option {
