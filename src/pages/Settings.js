@@ -311,6 +311,7 @@ export default function Settings() {
                           label='Skill Name'
                           type='text'
                           name='name'
+                          placeholder='Java'
                           updateData={updateData}
                           style={{ color: 'rgb(71, 71, 71)' }}
                           value={data.name || ''}
@@ -319,6 +320,7 @@ export default function Settings() {
                           label='Field'
                           type='text'
                           name='field'
+                          placeholder='Back End'
                           updateData={updateData}
                           style={{ color: 'rgb(71, 71, 71)' }}
                           value={data.field || ''}
@@ -383,6 +385,7 @@ export default function Settings() {
                             label='Buzzword Name'
                             type='text'
                             name='name'
+                            placeholder='Team Work'
                             updateData={updateData}
                             style={{ color: 'rgb(71, 71, 71)' }}
                             value={data.name || ''}
@@ -391,6 +394,7 @@ export default function Settings() {
                             label='Type'
                             type='text'
                             name='type'
+                            placeholder='Soft Skill'
                             updateData={updateData}
                             style={{ color: 'rgb(71, 71, 71)' }}
                             value={data.type || ''}

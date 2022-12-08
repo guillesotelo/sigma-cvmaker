@@ -11,7 +11,7 @@ import Slider from '../components/Slider'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
 import { getAppData, getOneAppData, saveAppData, updateAppData } from '../store/reducers/appData'
-import { getlogoImage, getProfileImage } from '../store/reducers/user'
+import { getProfileImage } from '../store/reducers/user'
 
 export default function Clients() {
     const [data, setData] = useState({})
@@ -285,6 +285,7 @@ export default function Clients() {
                                     label='Client name'
                                     type='text'
                                     name='name'
+                                    placeholder='Sigma Connectivity'
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.name || ''}
@@ -293,6 +294,7 @@ export default function Clients() {
                                     label='Location'
                                     type='text'
                                     name='location'
+                                    placeholder='Mobilvägen 10, Lund, Sweden'
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.location || ''}
@@ -301,6 +303,7 @@ export default function Clients() {
                                     label='Contact name'
                                     type='text'
                                     name='contact'
+                                    placeholder='Mathew Jackson'
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.contact || ''}
@@ -309,6 +312,7 @@ export default function Clients() {
                                     label='Contact email'
                                     type='text'
                                     name='email'
+                                    placeholder='contact@sigma.se'
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.email || ''}
@@ -317,6 +321,7 @@ export default function Clients() {
                                     label='Type of client'
                                     type='text'
                                     name='type'
+                                    placeholder='Partner'
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.type || ''}
@@ -325,6 +330,7 @@ export default function Clients() {
                                     label='Field of business'
                                     type='text'
                                     name='business'
+                                    placeholder='Engineering'
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.business || ''}

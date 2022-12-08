@@ -7,40 +7,39 @@ import InputField from '../components/InputField'
 import { APP_COLORS } from '../constants/app'
 import { createUser } from '../store/reducers/user'
 import SwitchBTN from '../components/SwitchBTN'
-import GoBackIcon from '../icons/goback-icon.svg'
+import Dropdown from '../components/Dropdown'
 
-export default function Register({ setIsNew }) {
-  const [data, setData] = useState({})
+export default function Register(props) {
   const [loading, setLoading] = useState(false)
   const user = JSON.parse(localStorage.getItem('user'))
-
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const updateData = (key, value) => {
-    setData({ ...data, [key]: value })
-  }
+  const {
+    data,
+    updateData,
+    setIsNew,
+    profilePic,
+    managers
+  } = props
 
   const registerUser = async () => {
     try {
       setLoading(true)
-      const created = await dispatch(createUser(data)).then(data => data.payload)
+      const created = await dispatch(createUser({ ...data, profilePic })).then(data => data.payload)
 
       if (created) {
-        setData({ ...data, username: '', email: '', password: '', manager: '', isManager: false })
         setLoading(false)
         setIsNew(false)
         return toast.success(`User created successfully!`)
       }
       else {
-        setData({ ...data, username: '', email: '', password: '', manager: '', isManager: false })
         setLoading(false)
         setIsNew(false)
         return toast.error('Error registering user')
       }
 
     } catch (err) {
-      setData({ ...data, username: '', email: '', password: '', manager: '', isManager: false })
       setLoading(false)
       return toast.error('Error registering user')
     }
@@ -69,14 +68,14 @@ export default function Register({ setIsNew }) {
             label='Full Name'
             type='text'
             name='username'
-            placeholder='Name Surname'
+            placeholder='Emily Beckham'
             updateData={updateData}
           />
           <InputField
             label='User Email'
             type='text'
             name='email'
-            placeholder='user.email@sigma.se'
+            placeholder='emily.beckham@sigma.se'
             updateData={updateData}
           />
           <InputField
@@ -86,12 +85,13 @@ export default function Register({ setIsNew }) {
             updateData={updateData}
             value={(data.password || data.password === '') ? data.password : generatePass()}
           />
-          <InputField
-            label='Manager email'
-            type='text'
-            name='manager'
-            placeholder='manager.name@sigma.se'
+          <Dropdown
+            label='Consultant Manager'
+            name='managerName'
+            options={managers}
+            value={data.managerName}
             updateData={updateData}
+            size='100%'
           />
           <InputField
             label='Phone'
@@ -105,7 +105,7 @@ export default function Register({ setIsNew }) {
             type='text'
             name='location'
             updateData={updateData}
-            placeholder='Street, City, Country'
+            placeholder='Mobilvägen 10, Lund, Sweden'
             style={{ marginBottom: '1vw' }}
           />
           <SwitchBTN

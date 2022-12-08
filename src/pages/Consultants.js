@@ -7,9 +7,17 @@ import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import SwitchBTN from '../components/SwitchBTN'
 import Slider from '../components/Slider'
-import { getUsers, updateUserData, getProfileImage, createUser, deleteUser } from '../store/reducers/user'
+import {
+    getUsers,
+    updateUserData,
+    getProfileImage,
+    createUser,
+    deleteUser,
+    getAllManagers
+} from '../store/reducers/user'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
+import Dropdown from '../components/Dropdown'
 
 export default function Consultants() {
     const [tab, setTab] = useState('user')
@@ -25,10 +33,11 @@ export default function Consultants() {
     const [grayscale, setGrayscale] = useState(0)
     const [userEdit, setUserEdit] = useState(false)
     const [profilePic, setProfilePic] = useState({})
+    const [managers, setManagers] = useState([])
+    const [allManagers, setAllManagerrs] = useState([])
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
     const history = useHistory()
     const dispatch = useDispatch()
-    const tabs = [`Users`, `CV's`, `Skills`, `Buzzwords`]
     const userHeaders = [
         {
             name: 'UPDATED',
@@ -43,8 +52,8 @@ export default function Consultants() {
             value: 'email'
         },
         {
-            name: 'MANAGER EMAIL',
-            value: 'manager'
+            name: 'MANAGER',
+            value: 'managerName'
         },
         {
             name: 'MANAGER',
@@ -58,7 +67,18 @@ export default function Consultants() {
 
     useEffect(() => {
         getAllUsers()
+        getManagers()
     }, [])
+
+    useEffect(() => {
+        if (data.managerName) {
+            let managerEmail = ''
+            allManagers.forEach(manager => {
+                if (manager.username === data.managerName) managerEmail = manager.email
+            })
+            updateData('managerEmail', managerEmail)
+        }
+    }, [data.managerName])
 
     useEffect(() => {
         setProfilePic({
@@ -78,6 +98,16 @@ export default function Consultants() {
             getPreview(users[selectedUser])
         }
     }, [selectedUser])
+
+    const getManagers = async () => {
+        try {
+            const _managers = await dispatch(getAllManagers(user)).then(data => data.payload)
+            if (_managers && Array.isArray(_managers)) {
+                setAllManagerrs(_managers)
+                setManagers(_managers.map(manager => manager.username))
+            }
+        } catch (err) { console.error(err) }
+    }
 
     const getPreview = async resData => {
         try {
@@ -114,7 +144,7 @@ export default function Consultants() {
             setLoading(true)
             if (checkData()) {
                 if (isNew) {
-                    const saved = await dispatch(createUser(data)).then(data => data.payload)
+                    const saved = await dispatch(createUser({ ...data, profilePic })).then(data => data.payload)
                     if (saved) toast.success('User data saved successfully')
                     else toast.error('Error saving changes')
                     getAllUsers()
@@ -154,7 +184,7 @@ export default function Consultants() {
 
     const checkData = () => {
         if (!data.username || !data.username.includes(' ') || !data.email || !data.email.includes('@') || !data.email.includes('.')) return false
-        if (data.manager && (!data.manager.includes('@') || !data.manager.includes('.'))) return false
+        if (!data.managerName) return false
         // if (!data.password || !data.password2) return false
         return true
     }
@@ -174,7 +204,7 @@ export default function Consultants() {
         try {
             setLoading(true)
             const removed = await dispatch(deleteUser({ ...user, userData: data })).then(data => data.payload)
-            if (removed) return toast.success('Consultant removed successfully')
+            if (removed) toast.success('Consultant removed successfully')
             else toast.error('Error removing Consultant')
 
             setRemoveModal(false)
@@ -222,7 +252,7 @@ export default function Consultants() {
                         color={APP_COLORS.GREEN}
                         disabled={isNew}
                     />
-                    {selectedUser !== -1 && !isEdit ?
+                    {selectedUser !== -1 ?
                         <CTAButton
                             label='Delete'
                             handleClick={() => setRemoveModal(true)}
@@ -256,7 +286,7 @@ export default function Consultants() {
                                         : <img
                                             src={ProfileIcon}
                                             style={profilePic.style}
-                                            className='profile-image-sgv'
+                                            className='profile-image-svg'
                                             onClick={() => document.getElementById('profileImage').click()}
                                         />}
                                     <InputField
@@ -302,7 +332,7 @@ export default function Consultants() {
                                     label='Full Name'
                                     type='text'
                                     name='username'
-                                    placeholder='Name Surname'
+                                    placeholder='Richard Newton'
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.username || ''}
@@ -316,14 +346,13 @@ export default function Consultants() {
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.email || ''}
                                 />
-                                <InputField
-                                    label='Manager Email'
-                                    type='text'
-                                    name='manager'
-                                    placeholder='manager.name@sigma.se'
+                                <Dropdown
+                                    label='Consultant Manager'
+                                    name='managerName'
+                                    options={managers}
+                                    value={data.managerName}
                                     updateData={updateData}
-                                    style={{ color: 'rgb(71, 71, 71)' }}
-                                    value={data.manager || ''}
+                                    size='100%'
                                 />
                                 <InputField
                                     label='Phone'
@@ -338,7 +367,7 @@ export default function Consultants() {
                                     type='text'
                                     name='location'
                                     updateData={updateData}
-                                    placeholder='Street, City, Country'
+                                    placeholder='Mobilvägen 10, Lund, Sweden'
                                     style={{ marginBottom: '1vw' }}
                                     value={data.location || ''}
                                 />
@@ -433,7 +462,7 @@ export default function Consultants() {
                                         label='Full Name'
                                         type='text'
                                         name='username'
-                                        placeholder='Name Surname'
+                                        placeholder='Richard Newton'
                                         updateData={updateData}
                                         style={{ color: 'rgb(71, 71, 71)' }}
                                         value={data.username || ''}
@@ -447,14 +476,13 @@ export default function Consultants() {
                                         style={{ color: 'rgb(71, 71, 71)' }}
                                         value={data.email || ''}
                                     />
-                                    <InputField
-                                        label='Manager Email'
-                                        type='text'
-                                        name='manager'
-                                        placeholder='manager.name@sigma.se'
+                                    <Dropdown
+                                        label='Consultant Manager'
+                                        name='managerName'
+                                        options={managers}
+                                        value={data.managerName}
                                         updateData={updateData}
-                                        style={{ color: 'rgb(71, 71, 71)' }}
-                                        value={data.manager || ''}
+                                        size='100%'
                                     />
                                     <InputField
                                         label='Phone'
@@ -469,7 +497,7 @@ export default function Consultants() {
                                         type='text'
                                         name='location'
                                         updateData={updateData}
-                                        placeholder='Street, City, Country'
+                                        placeholder='Mobilvägen 10, Lund, Sweden'
                                         value={data.location || ''}
                                     />
                                     <InputField
@@ -479,6 +507,12 @@ export default function Consultants() {
                                         updateData={updateData}
                                         style={{ color: 'rgb(71, 71, 71)' }}
                                         value={data.password || data.password === '' ? data.password : generatePass()}
+                                    />
+                                    <SwitchBTN
+                                        label='Is Manager?'
+                                        sw={data.isManager || false}
+                                        onChangeSw={() => updateData('isManager', !data.isManager)}
+                                        style={{ transform: 'scale(0.75)', width: '100%', margin: '1.5vw 0' }}
                                     />
                                 </div>
                                 <div className='users-btns'>

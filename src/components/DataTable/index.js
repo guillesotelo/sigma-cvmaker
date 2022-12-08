@@ -23,7 +23,8 @@ export default function DataTable(props) {
         setResumeData,
         setOpenModal,
         setIsPdf,
-        modalView
+        modalView,
+        style
     } = props
 
     const [maxItems, setMaxItems] = useState(maxRows || 10)
@@ -44,7 +45,7 @@ export default function DataTable(props) {
     }
 
     return (
-        <div className='data-table-container'>
+        <div className='data-table-container' style={style}>
             <div className='data-table-titles'>
                 <h4 className='data-table-title'>{title || ''}</h4>
                 <h4 className='data-table-subtitle'>{subtitle || ''}</h4>
