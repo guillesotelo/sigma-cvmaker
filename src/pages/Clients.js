@@ -6,9 +6,12 @@ import DataTable from '../components/DataTable'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import SwitchBTN from '../components/SwitchBTN'
+import ImagePlaceholder from '../icons/image-placeholder.svg'
+import Slider from '../components/Slider'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
 import { getAppData, getOneAppData, saveAppData, updateAppData } from '../store/reducers/appData'
+import { getlogoImage, getProfileImage } from '../store/reducers/user'
 
 export default function Clients() {
     const [data, setData] = useState({})
@@ -18,6 +21,8 @@ export default function Clients() {
     const [selectedClient, setSelectedClient] = useState(-1)
     const [removeModal, setRemoveModal] = useState(false)
     const [clientsEdit, setClientsEdit] = useState(false)
+    const [clientLogo, setClientLogo] = useState({})
+    const [grayscale, setGrayscale] = useState(0)
     const [isNew, setIsNew] = useState(false)
     const [loading, setLoading] = useState(false)
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
@@ -37,8 +42,12 @@ export default function Clients() {
             value: 'type'
         },
         {
-            name: 'CONTACT',
+            name: 'CONTACT NAME',
             value: 'contact'
+        },
+        {
+            name: 'EMAIL',
+            value: 'email'
         },
         {
             name: 'BUSINESS',
@@ -47,7 +56,10 @@ export default function Clients() {
     ]
 
     useEffect(() => {
-        if (selectedClient > -1) setData({ ...data, ...clients[selectedClient] })
+        if (selectedClient > -1) {
+            setData({ ...data, ...clients[selectedClient] })
+            getPreview(clients[selectedClient])
+        }
     }, [selectedClient])
 
     useEffect(() => {
@@ -61,8 +73,34 @@ export default function Clients() {
     }, [appData])
 
     useEffect(() => {
+        setClientLogo({
+            ...clientLogo,
+            style: {
+                filter: `grayscale(${grayscale}%)`,
+                grayscale
+            }
+        })
+    }, [grayscale])
+
+    useEffect(() => {
         pullAppData()
     }, [])
+
+    const getPreview = async clientData => {
+        try {
+            const image = await dispatch(getProfileImage(clientData)).then(data => data.payload)
+            if (image) {
+                setClientLogo({ logoImage: image.data, style: image.style ? JSON.parse(image.style) : {} })
+                if (image.style) {
+                    const imageStyles = JSON.parse(image.style)
+                    setGrayscale(imageStyles.grayscale || 0)
+                }
+            }
+            else setClientLogo({})
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     const updateData = (key, value) => {
         setIsEdit(true)
@@ -88,18 +126,24 @@ export default function Clients() {
         try {
             setLoading(true)
             let saved = null
+
             const exists = await dispatch(getOneAppData({ type: 'clients' })).then(data => data.payload)
+
             if (exists) {
                 saved = await dispatch(updateAppData({
                     ...user,
                     type: 'clients',
-                    data: JSON.stringify(updatedclients)
+                    data: JSON.stringify(updatedclients),
+                    clientEmail: data.email,
+                    clientLogo
                 })).then(data => data.payload)
             } else {
                 saved = await dispatch(saveAppData({
                     ...user,
                     type: 'clients',
-                    data: JSON.stringify(updatedclients)
+                    data: JSON.stringify(updatedclients),
+                    clientEmail: data.email,
+                    clientLogo
                 })).then(data => data.payload)
             }
 
@@ -125,6 +169,7 @@ export default function Clients() {
             location: data.location || '',
             type: data.type || '',
             contact: data.contact || '',
+            email: data.email || '',
             business: data.business || ''
         }
         saveclients(updatedclients)
@@ -202,7 +247,40 @@ export default function Clients() {
                     />
                     {clientsEdit ?
                         <div className='settings-select-section'>
-                            <div className='users-details'>
+                            <div className='client-details'>
+                                {clientLogo.logoImage ?
+                                    <img
+                                        src={clientLogo.logoImage}
+                                        style={clientLogo.style}
+                                        className='client-logo-image'
+                                        onClick={() => document.getElementById('logoImage').click()}
+                                    />
+                                    : <img
+                                        src={ImagePlaceholder}
+                                        style={clientLogo.style}
+                                        className='client-logo-svg'
+                                        onClick={() => document.getElementById('logoImage').click()}
+                                    />}
+                                <InputField
+                                    label=''
+                                    type='file'
+                                    name='logoImage'
+                                    filename='logoImage'
+                                    image={clientLogo}
+                                    setImage={setClientLogo}
+                                    setIsEdit={setIsEdit}
+                                    style={{ color: 'rgb(71, 71, 71)' }}
+                                />
+                                {clientLogo.logoImage ? <div className='color-users'>
+                                    <Slider
+                                        value={grayscale}
+                                        setValue={setGrayscale}
+                                        setIsEdit={setIsEdit}
+                                        label='Gray Scale'
+                                        max={100}
+                                        sign='%'
+                                    />
+                                </div> : ''}
                                 <InputField
                                     label='Client name'
                                     type='text'
@@ -220,12 +298,20 @@ export default function Clients() {
                                     value={data.location || ''}
                                 />
                                 <InputField
-                                    label='Contact'
+                                    label='Contact name'
                                     type='text'
                                     name='contact'
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.contact || ''}
+                                />
+                                <InputField
+                                    label='Contact email'
+                                    type='text'
+                                    name='email'
+                                    updateData={updateData}
+                                    style={{ color: 'rgb(71, 71, 71)' }}
+                                    value={data.email || ''}
                                 />
                                 <InputField
                                     label='Type of client'

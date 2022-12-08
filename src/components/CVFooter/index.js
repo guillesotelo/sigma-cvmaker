@@ -15,6 +15,7 @@ export default function CVFooter(props) {
             value={data.footer_contact}
             type='text'
             name='footer_contact'
+            placeholder='Manager Full Name'
             updateData={updateData}
             style={{ color: 'rgb(71, 71, 71)' }}
           />
@@ -26,6 +27,7 @@ export default function CVFooter(props) {
             value={data.footer_email}
             type='text'
             name='footer_email'
+            placeholder='manager.email@sigma.se'
             updateData={updateData}
             style={{ color: 'rgb(71, 71, 71)' }}
           />
@@ -39,7 +41,7 @@ export default function CVFooter(props) {
             value={data.footer_phone || ''}
             type='text'
             name='footer_phone'
-            placeholder='+XX XXX XX XX XX'
+            placeholder='+12 345 67 89 01'
             updateData={updateData}
             style={{ color: 'rgb(71, 71, 71)' }}
           />
@@ -48,9 +50,10 @@ export default function CVFooter(props) {
           <h4 className='inputfield-label'>Location:</h4>
           <InputField
             label=''
-            value={data.footer_location || 'Mobilvägen 10, Lund, Sweden'}
+            value={data.footer_location || ''}
             type='text'
             name='footer_location'
+            placeholder='Mobilvägen 10, Lund, Sweden'
             updateData={updateData}
             style={{ color: 'rgb(71, 71, 71)' }}
           />

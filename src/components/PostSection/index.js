@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { getAppData } from '../../store/reducers/appData'
 import Dropdown from '../Dropdown'
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
+import { APP_COLORS } from '../../constants/app'
 import './styles.css'
 
 export default function PostSection(props) {
@@ -187,26 +188,26 @@ export default function PostSection(props) {
     }
 
     return editPost ?
-
         <div className='post-container'>
-
             <h4 className='post-item-label'>{label || ''}</h4>
             <div className='post-column'>
                 <div className='post-col-dif'>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                        <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Period</h4>
                         <input
                             className='section-item-name'
                             onChange={e => handleUpdate('period', e.target.value)}
-                            placeholder='Period'
+                            placeholder='2020 - 2022'
                             type='text'
                             value={selected.period || ''}
                         />
                     </GrammarlyEditorPlugin>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                        <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Company name</h4>
                         <input
                             className='section-item-name'
                             onChange={e => handleUpdate('company', e.target.value)}
-                            placeholder='Company Title'
+                            placeholder='Sigma Connectivity Engineering'
                             type='text'
                             value={selected.company || ''}
                         />
@@ -214,20 +215,22 @@ export default function PostSection(props) {
                 </div>
                 <div className='post-col-dif'>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                        <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Role title</h4>
                         <input
                             className='section-item-name'
                             onChange={e => handleUpdate('role', e.target.value)}
-                            placeholder='Role Title'
+                            placeholder='Android Developer'
                             type='text'
                             value={selected.role || ''}
                         />
 
                     </GrammarlyEditorPlugin>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                        <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Job / Tasks description</h4>
                         <textarea
                             className='section-item-name'
                             onChange={e => handleUpdate('description', e.target.value)}
-                            placeholder='Describe job / tasks'
+                            placeholder='As a Android Developer, Anna was a part of a great team of.. and made...'
                             type='textarea'
                             cols={10}
                             rows={10}
@@ -250,7 +253,7 @@ export default function PostSection(props) {
                                 updateData={updateData}
                             />
                             <Dropdown
-                                label='Add Tool'
+                                label='Select Tool'
                                 name='tools'
                                 options={filteredTools}
                                 items={tech}
@@ -259,12 +262,13 @@ export default function PostSection(props) {
                                 updateData={updateData}
                             />
                             <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Add manually</h4>
                                 <input
                                     className='post-manual-input'
                                     onKeyDown={e => {
                                         if (e.key === 'Enter') setTech([...new Set(tech.concat(e.target.value))])
                                     }}
-                                    placeholder='Add manually...'
+                                    placeholder='e.g: C++'
                                     type='text'
                                 />
                             </GrammarlyEditorPlugin>
@@ -343,36 +347,40 @@ export default function PostSection(props) {
                         <div className='post-column' key={i} style={experienceItem(i)}>
                             <div className='post-col-dif'>
                                 <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                    <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Period</h4>
                                     <input
                                         className='section-item-name'
                                         onChange={e => handleChange('period', e.target.value, i)}
-                                        placeholder='Period'
+                                        placeholder='2020 - 2022'
                                         type='text'
                                     />
                                 </GrammarlyEditorPlugin>
                                 <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                    <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Company name</h4>
                                     <input
                                         className='section-item-name'
                                         onChange={e => handleChange('company', e.target.value, i)}
-                                        placeholder='Company Title'
+                                        placeholder='Sigma Connectivity Engineering'
                                         type='text'
                                     />
                                 </GrammarlyEditorPlugin>
                             </div>
                             <div className='post-col-dif'>
                                 <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                    <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Role title</h4>
                                     <input
                                         className='section-item-name'
                                         onChange={e => handleChange('role', e.target.value, i)}
-                                        placeholder='Role Title'
+                                        placeholder='Android Developer'
                                         type='text'
                                     />
                                 </GrammarlyEditorPlugin>
                                 <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                    <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Job / Tasks description</h4>
                                     <textarea
                                         className='section-item-name'
                                         onChange={e => handleChange('description', e.target.value, i)}
-                                        placeholder='Describe job / tasks'
+                                        placeholder='As a Android Developer, Anna was a part of a great team of.. and made...'
                                         type='textarea'
                                         cols={10}
                                         rows={10}
@@ -429,7 +437,7 @@ export default function PostSection(props) {
                                         </div> : ''}
                                 </div>
                             </div>
-                            <h4 onClick={() => addNewItem()} className='section-item-new'>Add</h4>
+                            <h4 onClick={() => addNewItem()} className='section-item-new'>Add experience</h4>
                         </div>
                 ) : ''}
         </div>

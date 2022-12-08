@@ -38,7 +38,7 @@ export default function NewCV() {
     const dispatch = useDispatch()
     const history = useHistory()
     const typeOptions = ['Master', 'Variant', 'Other']
-    const genderOptions = ['Female', 'Male']
+    const genderOptions = ['Female', 'Male', 'Other', 'Prefer not to say']
     const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
     const skillYears = Array.from({ length: 40 }, (_, i) => `${i + 1} ${i > 0 ? 'Years' : 'Year'}`)
 
@@ -187,7 +187,7 @@ export default function NewCV() {
 
             const strData = JSON.stringify(resumeData)
             resumeData.data = strData
-            resumeData.notes = data.notes || ''
+            resumeData.note = data.note || `${user.username ? `Created by ${user.username }` : ''}`
             resumeData.type = data.type || 'Master'
             resumeData.username = `${data.name}${data.middlename ? ' ' + data.middlename : ''} ${data.surname}` || ''
             resumeData.manager = data.manager || ''
@@ -306,7 +306,7 @@ export default function NewCV() {
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.location || ''}
-                        placeholder='Street, city, country'
+                        placeholder='Mobilvägen 10, Lund, Sweden'
                     />
                     <ItemDropdown
                         label='Languages'
@@ -327,7 +327,10 @@ export default function NewCV() {
                         name='description'
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
-                        placeholder="Write a personal presentation..."
+                        placeholder="Anna is a nice fun and friendly person. 
+                        She work well in a team but also on her own as she like to
+                        set herself goals which she will achieve. She has good listening and 
+                        communication skills plus a creative mind that makes her being always up for new challenges..."
                         value={data.description || ''}
                     />
                     <Bullet
@@ -376,8 +379,8 @@ export default function NewCV() {
                         label=''
                         items={education}
                         setItems={setEducation}
-                        bulletPlaceholder='Period'
-                        valuePlaceholder='Title'
+                        bulletPlaceholder='2018'
+                        valuePlaceholder='Bachelor of Computer Science, MIT'
                     />
                 </div>
             </div>
@@ -392,8 +395,8 @@ export default function NewCV() {
                         label=''
                         items={certifications}
                         setItems={setCertifications}
-                        bulletPlaceholder='Period'
-                        valuePlaceholder='Title'
+                        bulletPlaceholder='2019'
+                        valuePlaceholder='Android Development Certification'
                     />
                 </div>
             </div>
@@ -405,7 +408,7 @@ export default function NewCV() {
                 </div>
                 <div className='resume-fill-col2'>
                     <ItemDropdown
-                        label=''
+                        label=' '
                         name='skills'
                         options={skillYears}
                         items={skills}
@@ -434,16 +437,16 @@ export default function NewCV() {
                 <div className='resume-fill-col1'>
                     <h2 className='section-title'>Other Tools & Software</h2>
                 </div>
-                <div className='resume-fill-col2'>
+                <div className='resume-fill-col2-diff'>
                     <InputField
-                        label=''
+                        label='Describe what other tools you have used'
                         type='textarea'
-                        cols={65}
+                        cols={60}
                         rows={6}
                         name='tools'
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)' }}
-                        placeholder="Describe what other tools you have used..."
+                        placeholder="Altium Designer, Winscope, Adobe Photoshop, Microsoft Azure..."
                         value={data.tools || ''}
                     />
                 </div>
@@ -459,7 +462,7 @@ export default function NewCV() {
                         value={data.manager}
                         updateData={updateData}
                         size='15vw'
-                        />
+                    />
                     <CVFooter
                         updateData={updateData}
                         user={user}
@@ -487,17 +490,17 @@ export default function NewCV() {
                                 setItems={setBuzzwords}
                                 placeholder='Add buzzword...'
                             />
-                    <InputField
-                        label='Note'
-                        type='textarea'
-                        cols={70}
-                        rows={6}
-                        name='note'
-                        updateData={updateData}
-                        placeholder="e.g: Exported January 28th for [Client Name] by [Manager Name]"
-                        style={{ color: 'rgb(71, 71, 71)' }}
-                        value={data.note || ''}
-                    />
+                            <InputField
+                                label='Note'
+                                type='textarea'
+                                cols={70}
+                                rows={6}
+                                name='note'
+                                updateData={updateData}
+                                placeholder="e.g: Exported January 28th for [Client Name] by [Manager Name]"
+                                style={{ color: 'rgb(71, 71, 71)' }}
+                                value={data.note || ''}
+                            />
                         </div>
                     </div>
                 </>

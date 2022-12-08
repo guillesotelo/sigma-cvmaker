@@ -16,7 +16,7 @@
 .item-dropdown-row {
     display: flex;
     flex-direction: row;
-    margin-bottom: 1vw;
+    /* margin-bottom: 0vw; */
     align-items: center;
 }
 

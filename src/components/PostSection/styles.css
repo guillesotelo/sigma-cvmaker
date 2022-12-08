@@ -7,6 +7,12 @@
     width: 100%;
 }
 
+.post-label {
+    font-size: 0.8vw;
+    margin: 0 0 .3vw 0;
+    text-align: left;
+}
+
 .post-item-label {
     font-size: 0.9vw;
     margin: 0 0 0.5vw 0;
@@ -41,7 +47,7 @@
     font-family: 'Inter', sans-serif;
     border-radius: .5vw;
     padding: .5vw;
-    margin: .5vw 0;
+    margin: 0 0 1vw 0;
     font-size: .8vw;
     width: 95%;
     color: black;
