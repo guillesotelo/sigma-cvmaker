@@ -45,7 +45,7 @@ export default function CVs({ showAll }) {
         },
         {
             name: 'MANAGER',
-            value: 'manager'
+            value: 'managerName'
         },
         {
             name: 'NOTE',

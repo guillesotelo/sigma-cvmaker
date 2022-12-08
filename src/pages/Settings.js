@@ -311,7 +311,7 @@ export default function Settings() {
                           label='Skill Name'
                           type='text'
                           name='name'
-                          placeholder='Java'
+                          placeholder='DevOps'
                           updateData={updateData}
                           style={{ color: 'rgb(71, 71, 71)' }}
                           value={data.name || ''}

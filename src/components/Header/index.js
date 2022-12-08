@@ -20,7 +20,7 @@ export default function Header() {
   const user = JSON.parse(localStorage.getItem('user'))
 
   useEffect(() => {
-    getPreview(user)
+    getPreview(user.email)
   }, [])
 
   const logOutUser = async () => {
@@ -57,9 +57,9 @@ export default function Header() {
     // setLoading(false)
   }
 
-  const getPreview = async resData => {
+  const getPreview = async email => {
     try {
-      const image = await dispatch(getProfileImage(resData)).then(data => data.payload)
+      const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
       if (image) {
         setProfilePic({ profileImage: image.data, style: image.style ? JSON.parse(image.style) : {} })
       }

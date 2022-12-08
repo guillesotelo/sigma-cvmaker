@@ -88,7 +88,7 @@ export default function Clients() {
 
     const getPreview = async clientData => {
         try {
-            const image = await dispatch(getProfileImage(clientData)).then(data => data.payload)
+            const image = await dispatch(getProfileImage({ email: clientData && clientData.email || '' })).then(data => data.payload)
             if (image) {
                 setClientLogo({ logoImage: image.data, style: image.style ? JSON.parse(image.style) : {} })
                 if (image.style) {

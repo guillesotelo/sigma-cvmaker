@@ -6,6 +6,7 @@ import './styles.css'
 
 export default function InputField(props) {
     const [showDropDown, setShowDropDown] = useState(false)
+    const [focus, setFocus] = useState(false)
     const [suggestions, setSuggestions] = useState([])
     const [dropValue, setDropValue] = useState(null)
 
@@ -30,7 +31,7 @@ export default function InputField(props) {
     useEffect(() => {
         if (value && options && options.length) {
             const matches = options.filter(op => op.toLowerCase().includes(value.toLowerCase()) && op)
-            if (matches) {
+            if (matches && focus) {
                 setShowDropDown(true)
                 setSuggestions([...new Set(matches)])
             } else setShowDropDown(false)
@@ -117,6 +118,7 @@ export default function InputField(props) {
                                     type={type || 'text'}
                                     style={style || null}
                                     value={value}
+                                    onFocus={() => setFocus(true)}
                                 />
                             </GrammarlyEditorPlugin>
                             {showDropDown ?

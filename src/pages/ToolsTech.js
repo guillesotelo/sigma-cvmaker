@@ -158,6 +158,7 @@ export default function ToolsTech() {
                                     label='Tool / Tech Name'
                                     type='text'
                                     name='name'
+                                    placeholder='Java'
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.name || ''}
@@ -166,6 +167,7 @@ export default function ToolsTech() {
                                     label='Field'
                                     type='text'
                                     name='field'
+                                    placeholder='Back End'
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.field || ''}
@@ -175,6 +177,7 @@ export default function ToolsTech() {
                                     label='Type'
                                     type='text'
                                     name='type'
+                                    placeholder='Software Development'
                                     updateData={updateData}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                     value={data.type || ''}

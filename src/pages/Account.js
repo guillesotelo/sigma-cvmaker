@@ -22,7 +22,7 @@ export default function Account() {
 
   useEffect(() => {
     setData({ ...data, ...user })
-    getPreview(user)
+    getPreview(user.email)
   }, [])
 
   const updateData = (key, value) => {
@@ -68,9 +68,9 @@ export default function Account() {
     return true
   }
 
-  const getPreview = async resData => {
+  const getPreview = async email => {
     try {
-      const image = await dispatch(getProfileImage(resData)).then(data => data.payload)
+      const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
       if (image) {
         setProfilePic({ profileImage: image.data, style: image.style ? JSON.parse(image.style) : {} })
       }

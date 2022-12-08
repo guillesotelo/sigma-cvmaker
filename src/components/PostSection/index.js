@@ -273,7 +273,7 @@ export default function PostSection(props) {
                                 />
                             </GrammarlyEditorPlugin>
                         </div>
-                        {tech.length ?
+                        {Array.isArray(tech) ?
                             <div className='post-tools-list'>
                                 {tech.map((tool, i) =>
                                     <div key={i} className='post-tool-div'>
@@ -323,7 +323,7 @@ export default function PostSection(props) {
                                     </div>
                                     <div className='post-tools-and-tech'>
                                         <h4 className='post-technologies-text'>Tools & Tech:</h4>
-                                        {item.technologies && item.technologies.length ?
+                                        {item.technologies && Array.isArray(item.technologies) ?
                                             <div className='post-tools-and-tech-list'>
                                                 {item.technologies.map((tec, t) => <h4 key={t} className='post-tools-and-tech-div'>{tec}</h4>)}
                                             </div>

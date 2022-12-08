@@ -42,23 +42,15 @@ export default function NewCV() {
     const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
     const skillYears = Array.from({ length: 40 }, (_, i) => `${i + 1} ${i > 0 ? 'Years' : 'Year'}`)
 
-    console.log("data", data)
-
     useEffect(() => {
         setLoading(true)
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
         if (!localUser || !localUser.email) history.push('/login')
         setUser(localUser)
 
-        const { edit } = new Proxy(new URLSearchParams(window.location.search), {
-            get: (searchParams, prop) => searchParams.get(prop),
-        })
+        const edit = new URLSearchParams(document.location.search).get('edit')
 
         if (edit) setEditData(edit)
-        else if (user.username && user.email && user.isManager) {
-            setData({ ...data, footer_contact: user.username, footer_email: user.email })
-        }
-
         getCVLogo()
         getManagers()
         setLoading(false)
@@ -99,17 +91,18 @@ export default function NewCV() {
                 localResumes.forEach(resume => {
                     if (resume._id === edit) {
                         const resData = JSON.parse(cv && cv.data || {})
+
+                        setIsEdit(true)
                         setData({ ...resData, ...resume })
                         setLanguages(resData.languages)
                         setSkills(resData.skills.length ? refreshTime(resData.skills, resume.date) : [{ name: '' }])
                         setEducation(resData.education.length ? resData.education : [{ bullet: '', value: '' }])
                         setCertifications(resData.certifications.length ? resData.certifications : [{ bullet: '', value: '' }])
-                        setExperience(resData.experience.length ? resData.experience : [{ bullets: [''] }])
+                        setExperience(resData.experience && resData.experience.length ? resData.experience : [{ bullets: [''] }])
                         setStrengths(resData.strengths)
                         setExpertise(resData.expertise)
                         setBuzzwords(resData.buzzwords && resData.buzzwords.length ? resData.buzzwords : [''])
-                        getPreview(resume)
-                        setIsEdit(true)
+                        getPreview(resume.email)
                     }
                 })
             }
@@ -137,9 +130,9 @@ export default function NewCV() {
         setData({ ...data, [key]: value })
     }
 
-    const getPreview = async resData => {
+    const getPreview = async email => {
         try {
-            const image = await dispatch(getProfileImage(resData)).then(data => data.payload)
+            const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
             if (image) setProfilePic({ profileImage: image.data, style: image.style && JSON.parse(image.style) || {} })
         } catch (err) {
             console.error(err)
@@ -187,10 +180,10 @@ export default function NewCV() {
 
             const strData = JSON.stringify(resumeData)
             resumeData.data = strData
-            resumeData.note = data.note || `${user.username ? `Created by ${user.username }` : ''}`
+            resumeData.note = data.note || `${user.username ? `Created by ${user.username}` : ''}`
             resumeData.type = data.type || 'Master'
             resumeData.username = `${data.name}${data.middlename ? ' ' + data.middlename : ''} ${data.surname}` || ''
-            resumeData.manager = data.manager || ''
+            resumeData.managerName = data.footer_contact || ''
             resumeData.managerEmail = data.footer_email || '-'
             resumeData.email = data.email || ''
             if (profilePic && profilePic.profileImage) resumeData.profilePic = profilePic.profileImage
@@ -298,6 +291,7 @@ export default function NewCV() {
                         options={genderOptions}
                         value={data.gender}
                         updateData={updateData}
+                        size='20vw'
                     />
                     <InputField
                         label='Location'

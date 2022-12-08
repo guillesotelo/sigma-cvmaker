@@ -95,7 +95,7 @@ export default function Consultants() {
     useEffect(() => {
         if (selectedUser > -1) {
             setData({ ...data, ...users[selectedUser] })
-            getPreview(users[selectedUser])
+            getPreview(users[selectedUser].email)
         }
     }, [selectedUser])
 
@@ -109,9 +109,9 @@ export default function Consultants() {
         } catch (err) { console.error(err) }
     }
 
-    const getPreview = async resData => {
+    const getPreview = async email => {
         try {
-            const image = await dispatch(getProfileImage(resData)).then(data => data.payload)
+            const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
             if (image) {
                 setProfilePic({ profileImage: image.data, style: image.style ? JSON.parse(image.style) : {} })
                 if (image.style) {

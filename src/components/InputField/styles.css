@@ -26,7 +26,6 @@
     position: relative;
     display: flex;
     align-items: flex-start;
-
 }
 
 .input-dropdown-options {
@@ -35,14 +34,13 @@
     flex-direction: column;
     background-color: white;
     border: 1px solid lightgray;
-    border-radius: 0.5vw;
-    margin: 0;
-    width: inherit;
-    width: 9.5vw;
+    border-radius: .5vw;
+    margin: 2vw 0 0 0;
+    width: 100%;
     padding: 0 .5vw;
     z-index: 2;
     max-height: 20vw;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .inputfield-field:focus {

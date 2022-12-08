@@ -44,7 +44,7 @@ export default function Resume({ resumeData }) {
         try {
             const cv = await getCVById(resumeData._id)
             const parsedData = JSON.parse(cv && cv.data || {})
-            const profilePic = await dispatch(getProfileImage(resumeData)).then(data => data.payload)
+            const profilePic = await dispatch(getProfileImage({ email: resumeData.email })).then(data => data.payload)
 
             if (profilePic) {
                 const { filter } = profilePic.style && JSON.parse(profilePic.style) || {}
