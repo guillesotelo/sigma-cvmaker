@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
+import HideIcon from '../../icons/hide-icon.svg'
+import ShwoIcon from '../../icons/show-icon.svg'
 import './styles.css'
 
 export default function InputBullet(props) {
@@ -11,7 +13,8 @@ export default function InputBullet(props) {
         items,
         setItems,
         bulletPlaceholder,
-        valuePlaceholder
+        valuePlaceholder,
+        id
     } = props
 
     useEffect(() => {
@@ -61,10 +64,21 @@ export default function InputBullet(props) {
 
     const getItemStyle = (isDragging, draggableStyle) => ({
         userSelect: "none",
-        background: isDragging ? "#F9FAFB" : "",
+        background: isDragging ? "transparent" : "",
         ...draggableStyle
     })
 
+    const hideItem = index => {
+        let newItemsArr = [...items]
+        newItemsArr[index] = { ...newItemsArr[index], hidden: 'true' }
+        setItems(newItemsArr)
+    }
+
+    const showItem = index => {
+        let newItemsArr = [...items]
+        newItemsArr[index] = { ...newItemsArr[index], hidden: '' }
+        setItems(newItemsArr)
+    }
 
     return (
         <div className='bullet-container'>
@@ -85,9 +99,22 @@ export default function InputBullet(props) {
                                                     provided.draggableProps.style
                                                 )}
                                                 className='bullet-row draggable' key={i}>
-                                                <h4 className='bullet'>{item.bullet}</h4>
-                                                <h4 className='bullet-text'>{item.value}</h4>
+                                                <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>{item.bullet}</h4>
+                                                <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value}</h4>
                                                 <h4 onClick={() => removeItem(i)} className='item-dropdown-remove'>X</h4>
+                                                {item.hidden ?
+                                                    <img
+                                                        src={ShwoIcon}
+                                                        className='hide-icon-item'
+                                                        onClick={() => showItem(i)}
+                                                    />
+                                                    :
+                                                    <img
+                                                        src={HideIcon}
+                                                        className='hide-icon-item'
+                                                        onClick={() => hideItem(i)}
+                                                    />
+                                                }
                                             </div>
                                         )}
                                     </Draggable>
@@ -100,12 +127,19 @@ export default function InputBullet(props) {
                                                     onChange={e => handleChange('bullet', e.target.value, i)}
                                                     placeholder={bulletPlaceholder || ''}
                                                     type='text'
+                                                    id={id}
                                                 />
                                             </GrammarlyEditorPlugin>
                                             <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
                                                 <input
                                                     className='item-dropdown-name'
                                                     onChange={e => handleChange('value', e.target.value, i)}
+                                                    onKeyDown={e => {
+                                                        if (e.key === 'Enter') {
+                                                            addNewItem()
+                                                            setTimeout(() => document.getElementById(id).focus(), 250)
+                                                        }
+                                                    }}
                                                     placeholder={valuePlaceholder || ''}
                                                     type='text'
                                                 />

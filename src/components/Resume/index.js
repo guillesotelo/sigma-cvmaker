@@ -355,7 +355,7 @@ export default function Resume({ resumeData }) {
     })
 
     const ResumePDF = () => {
-        const fullName = `${res.name || ''} ${res.middlename || ''} ${res.surname || ''}`
+        const fullName = `${res.name || ''}${res.middlename ? ` ${res.middlename} ` : ' '}${res.surname || ''}`
 
         return (
             Object.keys(res).length ?

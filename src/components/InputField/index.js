@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../../constants/app'
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
+import HideIcon from '../../icons/hide-icon.svg'
+import ShwoIcon from '../../icons/show-icon.svg'
 import './styles.css'
 
 export default function InputField(props) {
@@ -25,7 +27,9 @@ export default function InputField(props) {
         image,
         setImage,
         setIsEdit,
-        options
+        options,
+        hidden,
+        setHidden
     } = props
 
     useEffect(() => {
@@ -80,20 +84,51 @@ export default function InputField(props) {
         }
     }
 
+    const hideItem = item => {
+        if (item) {
+            const _hidden = [...hidden]
+            _hidden.push(item)
+            setHidden(_hidden)
+        }
+    }
+
+    const showItem = item => {
+        if (label) setHidden(hidden.filter(value => value !== item))
+    }
+
     return (
         <div className='inputfield-container'>
-            {label ? <h4 style={{ color: APP_COLORS.GRAY }} className='inputfield-label'>{label || ''}</h4> : ''}
+            {label ?
+                <h4
+                    style={{ color: APP_COLORS.GRAY, opacity: hidden && hidden.includes(label) && '.2' }}
+                    className='inputfield-label'>
+                    {label || ''}
+                </h4> : ''}
             {type === 'textarea' ?
-                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: style && style.width || "100%", position: 'relative' }}>
                     <textarea
                         className='inputfield-textarea'
                         onChange={handleChange}
                         placeholder={placeholder || ''}
                         cols={cols || 2}
                         rows={rows || 4}
-                        style={style || null}
+                        style={{ ...style, opacity: hidden && hidden.includes(label) && '.2' }}
                         value={value}
                     />
+                    {hidden && hidden.includes(label) ?
+                        <img
+                            src={ShwoIcon}
+                            className='hide-icon-textarea'
+                            onClick={() => showItem(label)}
+                        />
+                        : hidden ?
+                            <img
+                                src={HideIcon}
+                                className='hide-icon-textarea'
+                                onClick={() => hideItem(label)}
+                            />
+                            : ''
+                    }
                 </GrammarlyEditorPlugin>
                 :
                 type === 'file' ?
@@ -108,7 +143,7 @@ export default function InputField(props) {
                     />
                     :
                     type === 'text' ?
-                        <div className='inputfield-dropdown'>
+                        <div className='inputfield-dropdown' style={style}>
                             <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%", textAlign: 'left' }}>
                                 <input
                                     className='inputfield-field'
@@ -116,11 +151,25 @@ export default function InputField(props) {
                                     onChange={handleChange}
                                     placeholder={placeholder || ''}
                                     type={type || 'text'}
-                                    style={style || null}
+                                    style={{ opacity: hidden && hidden.includes(label) && '.2' }}
                                     value={value}
                                     onFocus={() => setFocus(true)}
                                 />
                             </GrammarlyEditorPlugin>
+                            {hidden && hidden.includes(label) ?
+                                <img
+                                    src={ShwoIcon}
+                                    className='hide-icon'
+                                    onClick={() => showItem(label)}
+                                />
+                                : hidden ?
+                                    <img
+                                        src={HideIcon}
+                                        className='hide-icon'
+                                        onClick={() => hideItem(label)}
+                                    />
+                                    : ''
+                            }
                             {showDropDown ?
                                 <div className='input-dropdown-options'>
                                     {suggestions.map((suggestion, i) =>

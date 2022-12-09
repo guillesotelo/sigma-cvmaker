@@ -55,6 +55,7 @@
     border: 1px solid lightgray;
     border-bottom-right-radius: 0.5vw;
     border-bottom-left-radius: 0.5vw;
+    border-top: none;
     margin-top: 2vw;
     width: inherit;
     width: 10vw;
@@ -113,4 +114,25 @@
 .dropdown-new:hover {
     color: #E4C69C;
     border-color: #E4C69C;
+}
+
+.hide-icon-dropdown {
+    display: none;
+    height: 1.5vw;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: .3vw 2vw 0 0;
+    cursor: pointer;
+    line-height: 1.5vw;
+    filter: brightness(0%) contrast(0%);
+    transition: .3s;
+}
+
+.hide-icon-dropdown:hover {
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+}
+
+.dropdown-container:hover .hide-icon-dropdown {
+    display: block;
 }

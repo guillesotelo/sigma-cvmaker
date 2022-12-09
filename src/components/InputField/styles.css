@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     margin: 0.5vw 0;
+    transition: .3s;
 }
 
 .inputfield-label {
@@ -47,14 +48,13 @@
     border: 1px solid #E4C69C;
 }
 
-
 .inputfield-textarea {
     border: 1px solid #e5e5e5;
     background-color: #e5e5e5;
     font-weight: normal;
     border-radius: 0.5vw;
     margin: 0 !important;
-    padding: 0.7vw;
+    padding: .7vw 0 .7vw .7vw;
     font-size: 0.9vw !important;
     font-family: 'Inter', sans-serif;
     font-weight: normal;
@@ -76,6 +76,51 @@
     font-family: 'Inter', sans-serif;
     font-weight: normal;
 }
+
+.hide-icon {
+    display: none;
+    height: 1.5vw;
+    position: absolute;
+    right: 0;
+    margin-top: .3vw;
+    cursor: pointer;
+    line-height: 1.5vw;
+    filter: brightness(0%) contrast(0%);
+    transition: .3s;
+}
+
+.hide-icon:hover {
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+}
+
+.inputfield-container:hover .hide-icon {
+    display: block;
+}
+
+.inputfield-container:hover .hide-icon-textarea {
+    display: block;
+}
+
+.hide-icon-textarea {
+    display: none;
+    height: 1.5vw;
+    position: absolute;
+    right: 0;
+    bottom:0;
+    margin-bottom: .7vw;
+    cursor: pointer;
+    line-height: 1.5vw;
+    filter: brightness(0%) contrast(0%);
+    transition: .3s;
+}
+
+.hide-icon-textarea:hover {
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+}
+
+/* .inputfield-textarea:hover .hide-icon-textarea {
+    display: block;
+} */
 
 @media only screen and (max-width: 640px) {
     

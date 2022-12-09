@@ -4,10 +4,11 @@ import { getAppData } from '../../store/reducers/appData'
 import Dropdown from '../Dropdown'
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import { APP_COLORS } from '../../constants/app'
+import HideIcon from '../../icons/hide-icon.svg'
+import ShwoIcon from '../../icons/show-icon.svg'
 import './styles.css'
 
 export default function PostSection(props) {
-
     const [data, setData] = useState({})
     const [editPost, seteditPost] = useState(false)
     const [selected, setSelected] = useState({})
@@ -22,8 +23,13 @@ export default function PostSection(props) {
     const {
         label,
         items,
-        setItems
+        setItems,
+        hidden,
+        setHidden,
+        id
     } = props
+
+    console.log("hidden", hidden)
 
     useEffect(() => {
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
@@ -72,13 +78,13 @@ export default function PostSection(props) {
         if (editPost) {
             if (selected.bullets[subindex]) {
                 const newItem = { ...selected }
-                newItem.bullets = newItem.bullets.concat([''])
+                newItem.bullets = newItem.bullets.concat([{ value: '' }])
                 setSelected(newItem)
             }
         } else {
             if (items[index].bullets[subindex]) {
                 const newItems = [...items]
-                newItems[index].bullets = newItems[index].bullets.concat([''])
+                newItems[index].bullets = newItems[index].bullets.concat([{ value: '' }])
                 setItems(newItems)
             }
         }
@@ -107,12 +113,12 @@ export default function PostSection(props) {
         if (type === 'bullets') {
             if (editPost) {
                 const newBullets = selected.bullets
-                newBullets[subindex] = newValue
+                newBullets[subindex] = { ...newBullets[subindex], value: newValue }
                 const newItem = { ...selected, [type]: newBullets }
                 setSelected(newItem)
             } else {
                 const newBullets = newItemsArr[index].bullets
-                newBullets[subindex] = newValue
+                newBullets[subindex] = { ...newBullets[subindex], value: newValue }
                 newItemsArr[index] = { ...newItemsArr[index], [type]: newBullets }
                 setItems(newItemsArr)
             }
@@ -126,7 +132,7 @@ export default function PostSection(props) {
         let newItem = selected
         if (type === 'bullets') {
             const newBullets = newItem.bullets
-            newBullets[subindex] = newValue
+            newBullets[subindex] = { ...newBullets[subindex], value: newValue }
             newItem = { ...newItem, [type]: newBullets }
             setSelected(newItem)
         } else {
@@ -144,16 +150,61 @@ export default function PostSection(props) {
         setTech([])
     }
 
+    const hideItem = (index, item) => {
+        if (item) {
+            const _hidden = { ...hidden }
+            _hidden.postSection[index] = Array.isArray(_hidden.postSection[index]) ? _hidden.postSection[index].concat(item) : [item]
+            setHidden(_hidden)
+        }
+    }
+
+    const showItem = (index, item) => {
+        if (item) {
+            const _hidden = { ...hidden }
+            _hidden.postSection[index] = _hidden.postSection[index].filter(value => value !== item)
+            setHidden(_hidden)
+        }
+    }
+
+    const hideBullet = (index, subindex) => {
+        let newItemsArr = [...items]
+        const newBullets = newItemsArr[index].bullets
+        newBullets[subindex] = { ...newBullets[subindex], hidden: 'true' }
+        newItemsArr[index] = { ...newItemsArr[index], bullets: newBullets }
+        setItems(newItemsArr)
+    }
+
+    const showBullet = (index, subindex) => {
+        let newItemsArr = [...items]
+        const newBullets = newItemsArr[index].bullets
+        newBullets[subindex] = { ...newBullets[subindex], hidden: '' }
+        newItemsArr[index] = { ...newItemsArr[index], bullets: newBullets }
+        setItems(newItemsArr)
+    }
+
     const bullets = ({ bullets }, index) => (
         <div className='bullet-container'>
             <h4 className='post-item-label'>Key responsibilities:</h4>
             {bullets && bullets.length ?
                 bullets.map((item, subindex) =>
-                    item && subindex !== bullets.length - 1 ?
+                    item.value && subindex !== bullets.length - 1 ?
                         <div className='bullet-row' key={subindex}>
-                            <h4 className='bullet'>●</h4>
-                            <h4 className='bullet-text'>{item || ''}</h4>
+                            <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>●</h4>
+                            <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value || ''}</h4>
                             <h4 onClick={() => removeBullet(index, subindex)} className='item-dropdown-remove'>X</h4>
+                            {item.hidden ?
+                                <img
+                                    src={ShwoIcon}
+                                    className='hide-icon-item'
+                                    onClick={() => showBullet(index, subindex)}
+                                />
+                                :
+                                <img
+                                    src={HideIcon}
+                                    className='hide-icon-item'
+                                    onClick={() => hideBullet(index, subindex)}
+                                />
+                            }
                         </div>
                         :
                         <div className='bullet-row' key={subindex} style={{ marginTop: '1vw' }}>
@@ -161,8 +212,14 @@ export default function PostSection(props) {
                             <input
                                 className='item-dropdown-name'
                                 onChange={e => handleChange('bullets', e.target.value, index, subindex)}
-                                placeholder='Write responsibilty'
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter') {
+                                        addNewBullet(index, subindex)
+                                        setTimeout(() => document.getElementById(id).focus(), 250)
+                                    }
+                                }} placeholder='Write responsibilty'
                                 type='text'
+                                id={id}
                             // value={editPost ? selected.bullets[subindex] : item}
                             />
                             <h4 onClick={() => addNewBullet(index, subindex)} className='item-dropdown-new'>✓</h4>
@@ -193,49 +250,112 @@ export default function PostSection(props) {
             <div className='post-column'>
                 <div className='post-col-dif'>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                        <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Period</h4>
-                        <input
-                            className='section-item-name'
-                            onChange={e => handleUpdate('period', e.target.value)}
-                            placeholder='2020 - 2022'
-                            type='text'
-                            value={selected.period || ''}
-                        />
+                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') && '.2' }} className='post-label'>Period</h4>
+                        <div className='input-hide-row'>
+                            <input
+                                className='section-item-name'
+                                onChange={e => handleUpdate('period', e.target.value)}
+                                placeholder='2020 - 2022'
+                                type='text'
+                                value={selected.period || ''}
+                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') && '.2' }}
+                            />
+                            {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') ?
+                                <img
+                                    src={ShwoIcon}
+                                    className='hide-icon-post'
+                                    onClick={() => showItem(selectedIndex, 'Period')}
+                                />
+                                :
+                                <img
+                                    src={HideIcon}
+                                    className='hide-icon-post'
+                                    onClick={() => hideItem(selectedIndex, 'Period')}
+                                />
+                            }
+                        </div>
                     </GrammarlyEditorPlugin>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                        <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Company name</h4>
-                        <input
-                            className='section-item-name'
-                            onChange={e => handleUpdate('company', e.target.value)}
-                            placeholder='Sigma Connectivity Engineering'
-                            type='text'
-                            value={selected.company || ''}
-                        />
+                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') && '.2' }} className='post-label'>Company name</h4>
+                        <div className='input-hide-row'>
+                            <input
+                                className='section-item-name'
+                                onChange={e => handleUpdate('company', e.target.value)}
+                                placeholder='Sigma Connectivity Engineering'
+                                type='text'
+                                value={selected.company || ''}
+                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') && '.2' }}
+                            />
+                            {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') ?
+                                <img
+                                    src={ShwoIcon}
+                                    className='hide-icon-post'
+                                    onClick={() => showItem(selectedIndex, 'Company name')}
+                                />
+                                :
+                                <img
+                                    src={HideIcon}
+                                    className='hide-icon-post'
+                                    onClick={() => hideItem(selectedIndex, 'Company name')}
+                                />
+                            }
+                        </div>
                     </GrammarlyEditorPlugin>
                 </div>
                 <div className='post-col-dif'>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                        <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Role title</h4>
-                        <input
-                            className='section-item-name'
-                            onChange={e => handleUpdate('role', e.target.value)}
-                            placeholder='Android Developer'
-                            type='text'
-                            value={selected.role || ''}
-                        />
-
+                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') && '.2' }} className='post-label'>Role title</h4>
+                        <div className='input-hide-row'>
+                            <input
+                                className='section-item-name'
+                                onChange={e => handleUpdate('role', e.target.value)}
+                                placeholder='Android Developer'
+                                type='text'
+                                value={selected.role || ''}
+                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') && '.2' }}
+                            />
+                            {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') ?
+                                <img
+                                    src={ShwoIcon}
+                                    className='hide-icon-post'
+                                    onClick={() => showItem(selectedIndex, 'Role title')}
+                                />
+                                :
+                                <img
+                                    src={HideIcon}
+                                    className='hide-icon-post'
+                                    onClick={() => hideItem(selectedIndex, 'Role title')}
+                                />
+                            }
+                        </div>
                     </GrammarlyEditorPlugin>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                        <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Job / Tasks description</h4>
-                        <textarea
-                            className='section-item-name'
-                            onChange={e => handleUpdate('description', e.target.value)}
-                            placeholder='As a Android Developer, Anna was a part of a great team of.. and made...'
-                            type='textarea'
-                            cols={10}
-                            rows={10}
-                            value={selected.description || ''}
-                        />
+                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Job / Tasks description') && '.2' }} className='post-label'>Job / Tasks description</h4>
+                        <div className='input-hide-row'>
+                            <textarea
+                                className='section-item-name'
+                                onChange={e => handleUpdate('description', e.target.value)}
+                                placeholder='As a Android Developer, Anna was a part of a great team of.. and made...'
+                                type='textarea'
+                                cols={10}
+                                rows={10}
+                                value={selected.description || ''}
+                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Job / Tasks description') && '.2' }}
+                            />
+                            {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Job / Tasks description') ?
+                                <img
+                                    src={ShwoIcon}
+                                    className='hide-icon-post-textarea'
+                                    onClick={() => showItem(selectedIndex, 'Job / Tasks description')}
+                                />
+                                :
+                                <img
+                                    src={HideIcon}
+                                    className='hide-icon-post-textarea'
+                                    onClick={() => hideItem(selectedIndex, 'Job / Tasks description')}
+                                />
+                            }
+                        </div>
                     </GrammarlyEditorPlugin>
                 </div>
                 <div className='post-col-dif'>
@@ -276,9 +396,22 @@ export default function PostSection(props) {
                         {Array.isArray(tech) ?
                             <div className='post-tools-list'>
                                 {tech.map((tool, i) =>
-                                    <div key={i} className='post-tool-div'>
-                                        <h4 className='post-tool'>{tool}</h4>
-                                        <h4 className='post-remove-tool' onClick={() => removeTech(i)}>X</h4>
+                                    <div key={i} className='post-tool-div' style={{ backgroundColor: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '#fafafa' }}>
+                                        <h4 className='post-tool' style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '.2' }}>{tool}</h4>
+                                        <h4 className='post-remove-tool' style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '.2' }} onClick={() => removeTech(i)}>X</h4>
+                                        {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) ?
+                                            <img
+                                                src={ShwoIcon}
+                                                className='hide-icon-tool'
+                                                onClick={() => showItem(selectedIndex, tool)}
+                                            />
+                                            :
+                                            <img
+                                                src={HideIcon}
+                                                className='hide-icon-tool'
+                                                onClick={() => hideItem(selectedIndex, tool)}
+                                            />
+                                        }
                                     </div>
                                 )}
                             </div> : ''}
@@ -310,22 +443,24 @@ export default function PostSection(props) {
                     i < items.length - 1 && items.length > 1 ?
                         <div className='post-column' key={i} style={experienceItem(i)}>
                             <div className='post-row'>
-                                <h4 className='post-period'>{item.period}</h4>
+                                {hidden.postSection[i] && hidden.postSection[i].includes('Period') ? <h4 className='post-period'> </h4> : <h4 className='post-period'>{item.period}</h4>}
                                 <div className='post-column'>
-                                    <h4 className='post-company'>{item.company}</h4>
-                                    <h4 className='post-role'>{item.role}</h4>
-                                    <h4 className='post-description'>{item.description}</h4>
+                                    {hidden.postSection[i] && hidden.postSection[i].includes('Company name') ? '' : <h4 className='post-company'>{item.company}</h4>}
+                                    {hidden.postSection[i] && hidden.postSection[i].includes('Role title') ? '' : <h4 className='post-role'>{item.role}</h4>}
+                                    {hidden.postSection[i] && hidden.postSection[i].includes('Job / Tasks description') ? '' : <h4 className='post-description'>{item.description}</h4>}
                                     <div className='post-responsabilities'>
                                         <h4 className='post-responsabilities-text'>Key Responsibilities:</h4>
                                         {item.bullets.map((bullet, j) =>
-                                            bullet && <h4 className='post-responsability' key={j} >● {bullet}</h4>
+                                            bullet.value && <h4 className='post-responsability' key={j} style={{ display: bullet.hidden && 'none' }}>● {bullet.value}</h4>
                                         )}
                                     </div>
                                     <div className='post-tools-and-tech'>
                                         <h4 className='post-technologies-text'>Tools & Tech:</h4>
                                         {item.technologies && Array.isArray(item.technologies) ?
                                             <div className='post-tools-and-tech-list'>
-                                                {item.technologies.map((tec, t) => <h4 key={t} className='post-tools-and-tech-div'>{tec}</h4>)}
+                                                {item.technologies.map((tec, t) =>
+                                                    hidden.postSection[i] && hidden.postSection[i].includes(tec) ? ''
+                                                        : <h4 key={t} className='post-tools-and-tech-div'>{tec}</h4>)}
                                             </div>
                                             : ''
                                         }
@@ -421,7 +556,7 @@ export default function PostSection(props) {
                                                         e.target.value = ''
                                                     }
                                                 }}
-                                                placeholder='Add manually...'
+                                                placeholder='e.g: C++'
                                                 type='text'
                                             />
                                         </GrammarlyEditorPlugin>
@@ -429,9 +564,22 @@ export default function PostSection(props) {
                                     {tech.length ?
                                         <div className='post-tools-list'>
                                             {tech.map((tec, i) =>
-                                                <div key={i} className='post-tool-div'>
-                                                    <h4 className='post-tool'>{tec}</h4>
-                                                    <h4 className='post-remove-tool' onClick={() => removeTech(i)}>X</h4>
+                                                <div key={i} className='post-tool-div' style={{ backgroundColor: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '#e5e5e5' }}>
+                                                    <h4 className='post-tool' style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.2' }}>{tec}</h4>
+                                                    <h4 className='post-remove-tool' style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.2' }} onClick={() => removeTech(i)}>X</h4>
+                                                    {hidden.postSection[i] && hidden.postSection[i].includes(tec) ?
+                                                        <img
+                                                            src={ShwoIcon}
+                                                            className='hide-icon-tool'
+                                                            onClick={() => showItem(i, tec)}
+                                                        />
+                                                        :
+                                                        <img
+                                                            src={HideIcon}
+                                                            className='hide-icon-tool'
+                                                            onClick={() => hideItem(i, tec)}
+                                                        />
+                                                    }
                                                 </div>
                                             )}
                                         </div> : ''}

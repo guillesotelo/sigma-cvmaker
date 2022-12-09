@@ -16,11 +16,12 @@
 }
 
 .bullet-row {
+    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: left;
     height: 2vw;
-    gap: 1vw;
+    gap: .5vw;
     width: 100%;
     margin: 0 0 .5vw 2vw;
     align-items: center;
@@ -55,7 +56,7 @@
     border-radius: 0.5vw;
     padding: 0.5vw;
     font-size: 0.9vw;
-    /* width: 6.2vw; */
+    width: 15vw;
     color: black;
     white-space: nowrap;
     overflow: hidden;
@@ -106,7 +107,7 @@
 }
 
 .bullet-remove {
-    margin: 0.5vw 0 0.5vw 0;
+    margin: 0.5vw 0;
     color: gray;
     height: 1.5vw;
     width: 1.5vw;

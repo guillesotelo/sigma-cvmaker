@@ -78,6 +78,16 @@ function App() {
           </div>
         </div>
       </Route>
+      <Route path="/new-cv:edit">
+        <Header />
+        <div className="root-container">
+          <SdideBar />
+          <div className="root-column">
+            <NewCV />
+            <Footer />
+          </div>
+        </div>
+      </Route>
       <Route path="/report">
         <Header />
         <div className="root-container">

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import Dropdown from '../Dropdown';
+import HideIcon from '../../icons/hide-icon.svg'
+import ShwoIcon from '../../icons/show-icon.svg'
 import './styles.css'
 
 export default function ItemDropdown(props) {
@@ -70,6 +72,18 @@ export default function ItemDropdown(props) {
         ...draggableStyle
     })
 
+    const hideItem = index => {
+        let newItemsArr = [...items]
+        newItemsArr[index] = { ...newItemsArr[index], hidden: 'true' }
+        setItems(newItemsArr)
+    }
+
+    const showItem = index => {
+        let newItemsArr = [...items]
+        newItemsArr[index] = { ...newItemsArr[index], hidden: '' }
+        setItems(newItemsArr)
+    }
+
     const renderItems = itemsArr => {
         return (
             <DragDropContext onDragEnd={onDragEnd} onDragStart={() => setDragging(true)}>
@@ -89,9 +103,22 @@ export default function ItemDropdown(props) {
                                                         provided.draggableProps.style
                                                     )}
                                                     className='item-dropdown-blocked draggable'>
-                                                    <h4 className='item-dropdown-name'>{item.name}</h4>
-                                                    <h4 className='item-dropdown-select'>{item.option || '-'}</h4>
+                                                    <h4 className='item-dropdown-name' style={{ opacity: item.hidden && '.2' }}>{item.name}</h4>
+                                                    <h4 className='item-dropdown-select' style={{ opacity: item.hidden && '.2' }}>{item.option || '-'}</h4>
                                                     <h4 onClick={() => removeItem(i)} className='item-dropdown-remove'>X</h4>
+                                                    {item.hidden ?
+                                                        <img
+                                                            src={ShwoIcon}
+                                                            className='hide-icon-item'
+                                                            onClick={() => showItem(i)}
+                                                        />
+                                                        :
+                                                        <img
+                                                            src={HideIcon}
+                                                            className='hide-icon-item'
+                                                            onClick={() => hideItem(i)}
+                                                        />
+                                                    }
                                                 </div>
                                             )}
                                         </Draggable>

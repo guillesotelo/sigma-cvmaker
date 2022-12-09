@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
@@ -11,11 +11,12 @@ import Bullet from '../components/Bullet'
 import InputBullet from '../components/InputBullet'
 import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
-import { editResume, getLogo, getResume, saveResume } from '../store/reducers/resume'
+import { editResume, getLogo, getResume, getResumes, saveResume } from '../store/reducers/resume'
 import { getAllManagers, getProfileImage } from '../store/reducers/user'
 import PostSection from '../components/PostSection'
 import Dropdown from '../components/Dropdown'
 import ProfileIcon from '../icons/profile-icon.svg'
+import HideIcon from '../icons/hide-icon.svg'
 
 export default function NewCV() {
     const [data, setData] = useState({})
@@ -27,34 +28,42 @@ export default function NewCV() {
     const [skills, setSkills] = useState([{ name: '' }])
     const [education, setEducation] = useState([{ bullet: '', value: '' }])
     const [certifications, setCertifications] = useState([{ bullet: '', value: '' }])
-    const [experience, setExperience] = useState([{ bullets: [''] }])
-    const [strengths, setStrengths] = useState([''])
-    const [expertise, setExpertise] = useState([''])
+    const [experience, setExperience] = useState([{ bullets: [{ value: '' }] }])
+    const [hiddenSections, setHiddenSections] = useState({ postSection: {} })
+    const [strengths, setStrengths] = useState([{ value: '' }])
+    const [expertise, setExpertise] = useState([{ value: '' }])
     const [buzzwords, setBuzzwords] = useState([''])
     const [profilePic, setProfilePic] = useState({})
     const [cvLogo, setcvLogo] = useState({})
-    const [user, setUser] = useState({})
-    const localResumes = useSelector(state => state.resume && state.resume.allResumes || [])
+    const [hiddenItems, setHiddenItems] = useState([])
+    const [allResumes, setAllResumes] = useState([])
     const dispatch = useDispatch()
     const history = useHistory()
+    const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || {}
     const typeOptions = ['Master', 'Variant', 'Other']
     const genderOptions = ['Female', 'Male', 'Other', 'Prefer not to say']
-    const fullName = `${data.name || ''} ${data.middlename || ''} ${data.surname || ''}`
+    const fullName = `${data.name || ''}${data.middlename ? ` ${data.middlename} ` : ' '}${data.surname || ''}`
     const skillYears = Array.from({ length: 40 }, (_, i) => `${i + 1} ${i > 0 ? 'Years' : 'Year'}`)
+
+    // console.log("data", data)
+    // console.log("hiddenItems", hiddenItems)
 
     useEffect(() => {
         setLoading(true)
-        const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
-        if (!localUser || !localUser.email) history.push('/login')
-        setUser(localUser)
+        if (!user || !user.email) history.push('/login')
 
-        const edit = new URLSearchParams(document.location.search).get('edit')
-
-        if (edit) setEditData(edit)
+        getAllResumes(true)
         getCVLogo()
         getManagers()
         setLoading(false)
     }, [])
+
+    useEffect(() => {
+        if (allResumes.length) {
+            const edit = new URLSearchParams(document.location.search).get('edit')
+            if (edit) setEditData(edit)
+        }
+    }, [allResumes])
 
     useEffect(() => {
         if (data.manager) {
@@ -74,6 +83,17 @@ export default function NewCV() {
         }
     }, [data.manager])
 
+    const getAllResumes = async getAll => {
+        if (user && user.email) {
+            try {
+                const cvs = await dispatch(getResumes({ ...user, getAll })).then(data => data.payload)
+                if (cvs && Array.isArray(cvs)) setAllResumes(cvs)
+            } catch (err) {
+                console.error(err)
+            }
+        }
+    }
+
     const getManagers = async () => {
         try {
             const _managers = await dispatch(getAllManagers(user)).then(data => data.payload)
@@ -87,8 +107,8 @@ export default function NewCV() {
     const setEditData = async edit => {
         try {
             const cv = await getCVById(edit)
-            if (localResumes && localResumes.length) {
-                localResumes.forEach(resume => {
+            if (allResumes && allResumes.length) {
+                allResumes.forEach(resume => {
                     if (resume._id === edit) {
                         const resData = JSON.parse(cv && cv.data || {})
 
@@ -98,9 +118,10 @@ export default function NewCV() {
                         setSkills(resData.skills.length ? refreshTime(resData.skills, resume.date) : [{ name: '' }])
                         setEducation(resData.education.length ? resData.education : [{ bullet: '', value: '' }])
                         setCertifications(resData.certifications.length ? resData.certifications : [{ bullet: '', value: '' }])
-                        setExperience(resData.experience && resData.experience.length ? resData.experience : [{ bullets: [''] }])
-                        setStrengths(resData.strengths)
-                        setExpertise(resData.expertise)
+                        setExperience(resData.experience && resData.experience.length ? resData.experience : [{ bullets: [{ value: '' }] }])
+                        setHiddenSections(resData.hiddenSections ? resData.hiddenSections : { postSection: {} })
+                        setStrengths(resData.strengths && resData.strengths.length ? resData.strengths : [{ value: '' }])
+                        setExpertise(resData.expertise && resData.expertise.length ? resData.expertise : [{ value: '' }])
                         setBuzzwords(resData.buzzwords && resData.buzzwords.length ? resData.buzzwords : [''])
                         getPreview(resume.email)
                     }
@@ -173,6 +194,7 @@ export default function NewCV() {
             resumeData.strengths = strengths
             resumeData.expertise = expertise
             resumeData.buzzwords = buzzwords
+            resumeData.hiddenSections = hiddenSections
             resumeData.footer_contact = data.footer_contact || '-'
             resumeData.footer_email = data.footer_email || '-'
             resumeData.footer_phone = data.footer_phone || '-'
@@ -257,6 +279,8 @@ export default function NewCV() {
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.name || ''}
                         placeholder='Anna'
+                        setHidden={setHiddenItems}
+                        hidden={hiddenItems}
                     />
                     <InputField
                         label='Middle Name'
@@ -266,6 +290,8 @@ export default function NewCV() {
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.middlename || ''}
                         placeholder='Grabielle'
+                        setHidden={setHiddenItems}
+                        hidden={hiddenItems}
                     />
                     <InputField
                         label='Surname'
@@ -275,6 +301,8 @@ export default function NewCV() {
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.surname || ''}
                         placeholder='Kessler'
+                        setHidden={setHiddenItems}
+                        hidden={hiddenItems}
                     />
                     <InputField
                         label='Role / Title'
@@ -284,6 +312,8 @@ export default function NewCV() {
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.role || ''}
                         placeholder='Android Developer'
+                        setHidden={setHiddenItems}
+                        hidden={hiddenItems}
                     />
                     <Dropdown
                         label='Gender'
@@ -292,6 +322,8 @@ export default function NewCV() {
                         value={data.gender}
                         updateData={updateData}
                         size='20vw'
+                        setHidden={setHiddenItems}
+                        hidden={hiddenItems}
                     />
                     <InputField
                         label='Location'
@@ -301,6 +333,8 @@ export default function NewCV() {
                         style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.location || ''}
                         placeholder='Mobilvägen 10, Lund, Sweden'
+                        setHidden={setHiddenItems}
+                        hidden={hiddenItems}
                     />
                     <ItemDropdown
                         label='Languages'
@@ -316,16 +350,18 @@ export default function NewCV() {
                     <InputField
                         label='Presentation'
                         type='textarea'
-                        cols={70}
+                        // cols={68}
                         rows={15}
                         name='description'
                         updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)' }}
+                        style={{ color: 'rgb(71, 71, 71)', width: '35vw' }}
                         placeholder="Anna is a nice fun and friendly person. 
                         She work well in a team but also on her own as she like to
                         set herself goals which she will achieve. She has good listening and 
                         communication skills plus a creative mind that makes her being always up for new challenges..."
                         value={data.description || ''}
+                        setHidden={setHiddenItems}
+                        hidden={hiddenItems}
                     />
                     <Bullet
                         label='Strengths'
@@ -333,6 +369,7 @@ export default function NewCV() {
                         items={strengths}
                         setItems={setStrengths}
                         placeholder='Add new strength...'
+                        id='strengths'
                     />
                     <InputField
                         label='Email'
@@ -342,6 +379,8 @@ export default function NewCV() {
                         placeholder='full.name@sigma.se'
                         style={{ color: 'rgb(71, 71, 71)', width: '55%', marginBottom: '1vw' }}
                         value={data.email || ''}
+                        setHidden={setHiddenItems}
+                        hidden={hiddenItems}
                     />
                     {<h4 className='signature-text'>{fullName || ''}</h4>}
                 </div>
@@ -359,6 +398,7 @@ export default function NewCV() {
                         items={expertise}
                         setItems={setExpertise}
                         placeholder='Add new expertise...'
+                        id='expertise'
                     />
                 </div>
             </div>
@@ -375,6 +415,7 @@ export default function NewCV() {
                         setItems={setEducation}
                         bulletPlaceholder='2018'
                         valuePlaceholder='Bachelor of Computer Science, MIT'
+                        id='education'
                     />
                 </div>
             </div>
@@ -391,6 +432,7 @@ export default function NewCV() {
                         setItems={setCertifications}
                         bulletPlaceholder='2019'
                         valuePlaceholder='Android Development Certification'
+                        id='certifications'
                     />
                 </div>
             </div>
@@ -422,6 +464,9 @@ export default function NewCV() {
                         label=''
                         items={experience}
                         setItems={setExperience}
+                        hidden={hiddenSections}
+                        setHidden={setHiddenSections}
+                        id='post-section'
                     />
                 </div>
             </div>
@@ -435,13 +480,15 @@ export default function NewCV() {
                     <InputField
                         label='Describe what other tools you have used'
                         type='textarea'
-                        cols={60}
+                        // cols={60}
                         rows={6}
                         name='tools'
                         updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)' }}
+                        style={{ color: 'rgb(71, 71, 71)', width: '35vw' }}
                         placeholder="Altium Designer, Winscope, Adobe Photoshop, Microsoft Azure..."
                         value={data.tools || ''}
+                        setHidden={setHiddenItems}
+                        hidden={hiddenItems}
                     />
                 </div>
             </div>
@@ -475,7 +522,7 @@ export default function NewCV() {
                                 options={typeOptions}
                                 value={data.type}
                                 updateData={updateData}
-                                size='10vw'
+                                size='15vw'
                             />
                             <Bullet
                                 label='Buzzwords'
@@ -483,16 +530,17 @@ export default function NewCV() {
                                 items={buzzwords}
                                 setItems={setBuzzwords}
                                 placeholder='Add buzzword...'
+                                id='buzzwords'
                             />
                             <InputField
                                 label='Note'
                                 type='textarea'
-                                cols={70}
+                                // cols={70}
                                 rows={6}
                                 name='note'
                                 updateData={updateData}
                                 placeholder="e.g: Exported January 28th for [Client Name] by [Manager Name]"
-                                style={{ color: 'rgb(71, 71, 71)' }}
+                                style={{ color: 'rgb(71, 71, 71)', width: '35vw' }}
                                 value={data.note || ''}
                             />
                         </div>
