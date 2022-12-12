@@ -122,6 +122,7 @@ export default function NewCV() {
                         setCertifications(resData.certifications.length ? resData.certifications : [{ bullet: '', value: '' }])
                         setExperience(resData.experience && resData.experience.length ? resData.experience : [{ bullets: [{ value: '' }] }])
                         setHiddenSections(resData.hiddenSections ? resData.hiddenSections : { postSection: {} })
+                        setHiddenItems(resData.hiddenSections.hiddenItems ? resData.hiddenSections.hiddenItems : [])
                         setStrengths(resData.strengths && resData.strengths.length ? resData.strengths : [{ value: '' }])
                         setExpertise(resData.expertise && resData.expertise.length ? resData.expertise : [{ value: '' }])
                         setOtherTools(resData.otherTools && resData.otherTools.length ? resData.otherTools : [{ value: '' }])
@@ -178,7 +179,8 @@ export default function NewCV() {
         return skillArr.map(skill => {
             return {
                 name: skill.name,
-                option: calculateTime(skill.option, date)
+                option: calculateTime(skill.option, date),
+                hidden: skill.hidden || ''
             }
         })
     }
@@ -198,7 +200,7 @@ export default function NewCV() {
             resumeData.expertise = expertise
             resumeData.otherTools = otherTools
             resumeData.buzzwords = buzzwords
-            resumeData.hiddenSections = hiddenSections
+            resumeData.hiddenSections = { ...hiddenSections, hiddenItems }
             resumeData.footer_contact = data.footer_contact || '-'
             resumeData.footer_email = data.footer_email || '-'
             resumeData.footer_phone = data.footer_phone || '-'
@@ -356,14 +358,14 @@ export default function NewCV() {
                         type='textarea'
                         // cols={68}
                         rows={15}
-                        name='description'
+                        name='presentation'
                         updateData={updateData}
                         style={{ color: 'rgb(71, 71, 71)', width: '35vw' }}
                         placeholder="Anna is a nice fun and friendly person. 
                         She work well in a team but also on her own as she like to
                         set herself goals which she will achieve. She has good listening and 
                         communication skills plus a creative mind that makes her being always up for new challenges..."
-                        value={data.description || ''}
+                        value={data.presentation || ''}
                         setHidden={setHiddenItems}
                         hidden={hiddenItems}
                     />
@@ -408,7 +410,7 @@ export default function NewCV() {
                     {hiddenSections.expertise ?
                         <img
                             src={PlusIcon}
-                            className='hide-section-icon'
+                            className='hide-section-icon no-top'
                             onClick={() => setHiddenSections({ ...hiddenSections, expertise: '' })}
                             style={{ display: 'block' }}
                         />
@@ -439,7 +441,7 @@ export default function NewCV() {
                     {hiddenSections.education ?
                         <img
                             src={PlusIcon}
-                            className='hide-section-icon'
+                            className='hide-section-icon no-top'
                             onClick={() => setHiddenSections({ ...hiddenSections, education: '' })}
                             style={{ display: 'block' }}
                         />
@@ -470,7 +472,7 @@ export default function NewCV() {
                     {hiddenSections.certifications ?
                         <img
                             src={PlusIcon}
-                            className='hide-section-icon'
+                            className='hide-section-icon no-top'
                             onClick={() => setHiddenSections({ ...hiddenSections, certifications: '' })}
                             style={{ display: 'block' }}
                         />
@@ -501,7 +503,7 @@ export default function NewCV() {
                     {hiddenSections.skills ?
                         <img
                             src={PlusIcon}
-                            className='hide-section-icon'
+                            className='hide-section-icon no-top'
                             onClick={() => setHiddenSections({ ...hiddenSections, skills: '' })}
                             style={{ display: 'block' }}
                         />
@@ -532,7 +534,7 @@ export default function NewCV() {
                     {hiddenSections.experience ?
                         <img
                             src={PlusIcon}
-                            className='hide-section-icon'
+                            className='hide-section-icon no-top'
                             onClick={() => setHiddenSections({ ...hiddenSections, experience: '' })}
                             style={{ display: 'block' }}
                         />
@@ -566,18 +568,18 @@ export default function NewCV() {
                         //     hidden={hiddenItems}
                         // />
                         <Bullet
-                        label=''
-                        type='big'
-                        items={otherTools}
-                        setItems={setOtherTools}
-                        placeholder='Altium Designer'
-                        id='otherTools'
-                    />
+                            label=''
+                            type='big'
+                            items={otherTools}
+                            setItems={setOtherTools}
+                            placeholder='Altium Designer'
+                            id='otherTools'
+                        />
                     }
                     {hiddenSections.tools ?
                         <img
                             src={PlusIcon}
-                            className='hide-section-icon'
+                            className='hide-section-icon no-top'
                             onClick={() => setHiddenSections({ ...hiddenSections, tools: '' })}
                             style={{ display: 'block' }}
                         />

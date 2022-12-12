@@ -385,11 +385,16 @@
     height: 1.5vw;
     position: absolute;
     right: 0;
+    top: 0;
     margin: .3vw .5vw;
     cursor: pointer;
     line-height: 1.5vw;
     filter: brightness(0%) contrast(0%);
     transition: .3s;
+}
+
+.no-top {
+    top: unset;
 }
 
 .resume-fill-col2:hover .hide-section-icon {
