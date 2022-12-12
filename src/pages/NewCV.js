@@ -16,7 +16,8 @@ import { getAllManagers, getProfileImage } from '../store/reducers/user'
 import PostSection from '../components/PostSection'
 import Dropdown from '../components/Dropdown'
 import ProfileIcon from '../icons/profile-icon.svg'
-import HideIcon from '../icons/hide-icon.svg'
+import PlusIcon from '../icons/plus-icon.svg'
+import MinusIcon from '../icons/minus-icon.svg'
 
 export default function NewCV() {
     const [data, setData] = useState({})
@@ -32,6 +33,7 @@ export default function NewCV() {
     const [hiddenSections, setHiddenSections] = useState({ postSection: {} })
     const [strengths, setStrengths] = useState([{ value: '' }])
     const [expertise, setExpertise] = useState([{ value: '' }])
+    const [otherTools, setOtherTools] = useState([{ value: '' }])
     const [buzzwords, setBuzzwords] = useState([''])
     const [profilePic, setProfilePic] = useState({})
     const [cvLogo, setcvLogo] = useState({})
@@ -122,6 +124,7 @@ export default function NewCV() {
                         setHiddenSections(resData.hiddenSections ? resData.hiddenSections : { postSection: {} })
                         setStrengths(resData.strengths && resData.strengths.length ? resData.strengths : [{ value: '' }])
                         setExpertise(resData.expertise && resData.expertise.length ? resData.expertise : [{ value: '' }])
+                        setOtherTools(resData.otherTools && resData.otherTools.length ? resData.otherTools : [{ value: '' }])
                         setBuzzwords(resData.buzzwords && resData.buzzwords.length ? resData.buzzwords : [''])
                         getPreview(resume.email)
                     }
@@ -193,12 +196,13 @@ export default function NewCV() {
             resumeData.experience = experience
             resumeData.strengths = strengths
             resumeData.expertise = expertise
+            resumeData.otherTools = otherTools
             resumeData.buzzwords = buzzwords
             resumeData.hiddenSections = hiddenSections
             resumeData.footer_contact = data.footer_contact || '-'
             resumeData.footer_email = data.footer_email || '-'
             resumeData.footer_phone = data.footer_phone || '-'
-            resumeData.footer_location = data.footer_location || 'Mobilvägen 10, Lund, Sweden'
+            resumeData.footer_location = data.footer_location || '-'
 
             const strData = JSON.stringify(resumeData)
             resumeData.data = strData
@@ -387,109 +391,202 @@ export default function NewCV() {
             </div>
 
             <div className='separator'></div>
-            <div className='new-resume-fill'>
+            {<div className='new-resume-fill'>
                 <div className='resume-fill-col1'>
-                    <h2 className='section-title'>Expertise</h2>
+                    {hiddenSections.expertise ? '' : <h2 className='section-title'>Expertise</h2>}
                 </div>
                 <div className='resume-fill-col2'>
-                    <Bullet
-                        label=''
-                        type='big'
-                        items={expertise}
-                        setItems={setExpertise}
-                        placeholder='Add new expertise...'
-                        id='expertise'
-                    />
+                    {hiddenSections.expertise ? '' :
+                        <Bullet
+                            label=''
+                            type='big'
+                            items={expertise}
+                            setItems={setExpertise}
+                            placeholder='Add new expertise...'
+                            id='expertise'
+                        />}
+                    {hiddenSections.expertise ?
+                        <img
+                            src={PlusIcon}
+                            className='hide-section-icon'
+                            onClick={() => setHiddenSections({ ...hiddenSections, expertise: '' })}
+                            style={{ display: 'block' }}
+                        />
+                        :
+                        <img
+                            src={MinusIcon}
+                            className='hide-section-icon'
+                            onClick={() => setHiddenSections({ ...hiddenSections, expertise: 'true' })}
+                        />}
+                </div>
+            </div>}
+
+            <div className='separator'></div>
+            <div className='new-resume-fill'>
+                <div className='resume-fill-col1'>
+                    {hiddenSections.education ? '' : <h2 className='section-title'>Education</h2>}
+                </div>
+                <div className='resume-fill-col2'>
+                    {hiddenSections.education ? '' :
+                        <InputBullet
+                            label=''
+                            items={education}
+                            setItems={setEducation}
+                            bulletPlaceholder='2018'
+                            valuePlaceholder='Bachelor of Computer Science, MIT'
+                            id='education'
+                        />}
+                    {hiddenSections.education ?
+                        <img
+                            src={PlusIcon}
+                            className='hide-section-icon'
+                            onClick={() => setHiddenSections({ ...hiddenSections, education: '' })}
+                            style={{ display: 'block' }}
+                        />
+                        :
+                        <img
+                            src={MinusIcon}
+                            className='hide-section-icon'
+                            onClick={() => setHiddenSections({ ...hiddenSections, education: 'true' })}
+                        />}
                 </div>
             </div>
 
             <div className='separator'></div>
             <div className='new-resume-fill'>
                 <div className='resume-fill-col1'>
-                    <h2 className='section-title'>Education</h2>
+                    {hiddenSections.certifications ? '' : <h2 className='section-title'>Certifications / Courses</h2>}
                 </div>
                 <div className='resume-fill-col2'>
-                    <InputBullet
-                        label=''
-                        items={education}
-                        setItems={setEducation}
-                        bulletPlaceholder='2018'
-                        valuePlaceholder='Bachelor of Computer Science, MIT'
-                        id='education'
-                    />
+                    {hiddenSections.certifications ? '' :
+                        <InputBullet
+                            label=''
+                            items={certifications}
+                            setItems={setCertifications}
+                            bulletPlaceholder='2019'
+                            valuePlaceholder='Android Development Certification'
+                            id='certifications'
+                        />}
+                    {hiddenSections.certifications ?
+                        <img
+                            src={PlusIcon}
+                            className='hide-section-icon'
+                            onClick={() => setHiddenSections({ ...hiddenSections, certifications: '' })}
+                            style={{ display: 'block' }}
+                        />
+                        :
+                        <img
+                            src={MinusIcon}
+                            className='hide-section-icon'
+                            onClick={() => setHiddenSections({ ...hiddenSections, certifications: 'true' })}
+                        />}
                 </div>
             </div>
 
             <div className='separator'></div>
             <div className='new-resume-fill'>
                 <div className='resume-fill-col1'>
-                    <h2 className='section-title'>Certifications / Courses</h2>
+                    {hiddenSections.skills ? '' : <h2 className='section-title'>Main Skills</h2>}
                 </div>
                 <div className='resume-fill-col2'>
-                    <InputBullet
-                        label=''
-                        items={certifications}
-                        setItems={setCertifications}
-                        bulletPlaceholder='2019'
-                        valuePlaceholder='Android Development Certification'
-                        id='certifications'
-                    />
-                </div>
-            </div>
-
-            <div className='separator'></div>
-            <div className='new-resume-fill'>
-                <div className='resume-fill-col1'>
-                    <h2 className='section-title'>Main Skills</h2>
-                </div>
-                <div className='resume-fill-col2'>
-                    <ItemDropdown
-                        label=' '
-                        name='skills'
-                        options={skillYears}
-                        items={skills}
-                        setItems={setSkills}
-                        placeholder='Add new skill...'
-                    />
+                    {hiddenSections.skills ? '' :
+                        <ItemDropdown
+                            label=' '
+                            name='skills'
+                            options={skillYears}
+                            items={skills}
+                            setItems={setSkills}
+                            placeholder='Add new skill...'
+                        />}
+                    {hiddenSections.skills ?
+                        <img
+                            src={PlusIcon}
+                            className='hide-section-icon'
+                            onClick={() => setHiddenSections({ ...hiddenSections, skills: '' })}
+                            style={{ display: 'block' }}
+                        />
+                        :
+                        <img
+                            src={MinusIcon}
+                            className='hide-section-icon'
+                            onClick={() => setHiddenSections({ ...hiddenSections, skills: 'true' })}
+                        />}
                 </div>
             </div>
 
             <div className='separator'></div>
             <div className='new-resume-fill'>
                 <div className='resume-fill-col1-dif'>
-                    <h2 className='section-title'>Experience</h2>
+                    {hiddenSections.experience ? '' : <h2 className='section-title'>Experience</h2>}
                 </div>
                 <div className='resume-fill-col2-dif'>
-                    <PostSection
-                        label=''
-                        items={experience}
-                        setItems={setExperience}
-                        hidden={hiddenSections}
-                        setHidden={setHiddenSections}
-                        id='post-section'
-                    />
+                    {hiddenSections.experience ? '' :
+                        <PostSection
+                            label=''
+                            items={experience}
+                            setItems={setExperience}
+                            hidden={hiddenSections}
+                            setHidden={setHiddenSections}
+                            id='post-section'
+                        />}
+                    {hiddenSections.experience ?
+                        <img
+                            src={PlusIcon}
+                            className='hide-section-icon'
+                            onClick={() => setHiddenSections({ ...hiddenSections, experience: '' })}
+                            style={{ display: 'block' }}
+                        />
+                        :
+                        <img
+                            src={MinusIcon}
+                            className='hide-section-icon'
+                            onClick={() => setHiddenSections({ ...hiddenSections, experience: 'true' })}
+                        />}
                 </div>
             </div>
 
             <div className='separator'></div>
             <div className='new-resume-fill'>
                 <div className='resume-fill-col1'>
-                    <h2 className='section-title'>Other Tools & Software</h2>
+                    {hiddenSections.tools ? '' : <h2 className='section-title'>Other Tools & Software</h2>}
                 </div>
-                <div className='resume-fill-col2-diff'>
-                    <InputField
-                        label='Describe what other tools you have used'
-                        type='textarea'
-                        // cols={60}
-                        rows={6}
-                        name='tools'
-                        updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)', width: '35vw' }}
-                        placeholder="Altium Designer, Winscope, Adobe Photoshop, Microsoft Azure..."
-                        value={data.tools || ''}
-                        setHidden={setHiddenItems}
-                        hidden={hiddenItems}
+                <div className='resume-fill-col2'>
+                    {hiddenSections.tools ? '' :
+                        // <InputField
+                        //     label='Describe what other tools you have used'
+                        //     type='textarea'
+                        //     // cols={60}
+                        //     rows={6}
+                        //     name='tools'
+                        //     updateData={updateData}
+                        //     style={{ color: 'rgb(71, 71, 71)', width: '35vw' }}
+                        //     placeholder="Altium Designer, Winscope, Adobe Photoshop, Microsoft Azure..."
+                        //     value={data.tools || ''}
+                        //     setHidden={setHiddenItems}
+                        //     hidden={hiddenItems}
+                        // />
+                        <Bullet
+                        label=''
+                        type='big'
+                        items={otherTools}
+                        setItems={setOtherTools}
+                        placeholder='Altium Designer'
+                        id='otherTools'
                     />
+                    }
+                    {hiddenSections.tools ?
+                        <img
+                            src={PlusIcon}
+                            className='hide-section-icon'
+                            onClick={() => setHiddenSections({ ...hiddenSections, tools: '' })}
+                            style={{ display: 'block' }}
+                        />
+                        :
+                        <img
+                            src={MinusIcon}
+                            className='hide-section-icon'
+                            onClick={() => setHiddenSections({ ...hiddenSections, tools: 'true' })}
+                        />}
                 </div>
             </div>
 

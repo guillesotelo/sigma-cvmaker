@@ -148,7 +148,7 @@
 .post-row {
     display: flex;
     flex-direction: row;
-    justify-content: left;
+    justify-content: flex-end;
     align-items: flex-start;
     gap: 1vw;
 }
@@ -168,6 +168,7 @@
     flex-direction: column;
     width: 100%;
     text-align: left;
+    transition: .4s;
 }
 
 .post-period {
@@ -417,5 +418,27 @@
 }
 
 .hide-icon-post-textarea:hover {
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+}
+
+.post-control-btns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: flex-end;
+    width: 2vw;
+}
+
+.post-control-icon {
+    height: 1.5vw;
+    right: 0;
+    margin: .3vw .5vw;
+    cursor: pointer;
+    line-height: 1.5vw;
+    filter: brightness(0%) contrast(0%);
+    transition: .3s;
+}
+
+.post-control-icon:hover {
     filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
 }

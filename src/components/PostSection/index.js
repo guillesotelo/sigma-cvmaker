@@ -6,6 +6,8 @@ import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import { APP_COLORS } from '../../constants/app'
 import HideIcon from '../../icons/hide-icon.svg'
 import ShwoIcon from '../../icons/show-icon.svg'
+import UpIcon from '../../icons/up-icon.svg'
+import DownIcon from '../../icons/down-icon.svg'
 import './styles.css'
 
 export default function PostSection(props) {
@@ -29,7 +31,7 @@ export default function PostSection(props) {
         id
     } = props
 
-    console.log("hidden", hidden)
+    // console.log("hidden", hidden)
 
     useEffect(() => {
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
@@ -213,7 +215,7 @@ export default function PostSection(props) {
                                 className='item-dropdown-name'
                                 onChange={e => handleChange('bullets', e.target.value, index, subindex)}
                                 onKeyDown={e => {
-                                    if (e.key === 'Enter') {
+                                    if (e.key === 'Enter' && e.target.value) {
                                         addNewBullet(index, subindex)
                                         setTimeout(() => document.getElementById(id).focus(), 250)
                                     }
@@ -242,6 +244,48 @@ export default function PostSection(props) {
 
     const updateData = (key, value) => {
         setData({ ...data, [key]: value })
+    }
+
+    const moveSection = (fromIndex, toIndex) => {
+        let newArr = [...items]
+
+        if (toIndex >= 0 && toIndex < newArr.length - 1) {
+            if (checkHiddenPost(toIndex)) {
+                if (toIndex > fromIndex && toIndex + 1 < newArr.length - 1) {
+                    let count = 1
+                    while (checkHiddenPost(toIndex + count) && toIndex + count < newArr.length - 1) count++
+                    if (count !== 0 && Object.keys(newArr[toIndex + count]).length > 1) {
+                        [newArr[fromIndex], newArr[toIndex + count]] = [newArr[toIndex + count], newArr[fromIndex]]
+                    }
+                } else if (toIndex < fromIndex && toIndex - 1 >= 0) {
+                    let count = -1
+                    while (checkHiddenPost(toIndex + count) && toIndex + count >= 0) count--
+                    if (count !== 0 && newArr[toIndex + count]) {
+                        [newArr[fromIndex], newArr[toIndex + count]] = [newArr[toIndex + count], newArr[fromIndex]]
+                    }
+                }
+            } else {
+                [newArr[fromIndex], newArr[toIndex]] = [newArr[toIndex], newArr[fromIndex]]
+            }
+            setItems(newArr)
+        }
+    }
+
+    const hidePostSection = index => {
+        const { postSection } = hidden
+        postSection.sections = { ...postSection.sections, [index]: 'true' }
+        setHidden({ ...hidden, postSection })
+    }
+
+    const showPostSection = index => {
+        const { postSection } = hidden
+        postSection.sections = { ...postSection.sections, [index]: '' }
+        setHidden({ ...hidden, postSection })
+    }
+
+    const checkHiddenPost = index => {
+        const { postSection } = hidden
+        return postSection && postSection.sections && postSection.sections[index]
     }
 
     return editPost ?
@@ -386,7 +430,7 @@ export default function PostSection(props) {
                                 <input
                                     className='post-manual-input'
                                     onKeyDown={e => {
-                                        if (e.key === 'Enter') setTech([...new Set(tech.concat(e.target.value))])
+                                        if (e.key === 'Enter' && e.target.value) setTech([...new Set(tech.concat(e.target.value))])
                                     }}
                                     placeholder='e.g: C++'
                                     type='text'
@@ -443,8 +487,8 @@ export default function PostSection(props) {
                     i < items.length - 1 && items.length > 1 ?
                         <div className='post-column' key={i} style={experienceItem(i)}>
                             <div className='post-row'>
-                                {hidden.postSection[i] && hidden.postSection[i].includes('Period') ? <h4 className='post-period'> </h4> : <h4 className='post-period'>{item.period}</h4>}
-                                <div className='post-column'>
+                                {hidden.postSection[i] && hidden.postSection[i].includes('Period') ? <h4 className='post-period'> </h4> : <h4 className='post-period' style={{ display: checkHiddenPost(i) && 'none' }}>{item.period}</h4>}
+                                <div className='post-column' style={{ display: checkHiddenPost(i) && 'none' }}>
                                     {hidden.postSection[i] && hidden.postSection[i].includes('Company name') ? '' : <h4 className='post-company'>{item.company}</h4>}
                                     {hidden.postSection[i] && hidden.postSection[i].includes('Role title') ? '' : <h4 className='post-role'>{item.role}</h4>}
                                     {hidden.postSection[i] && hidden.postSection[i].includes('Job / Tasks description') ? '' : <h4 className='post-description'>{item.description}</h4>}
@@ -466,8 +510,36 @@ export default function PostSection(props) {
                                         }
                                     </div>
                                 </div>
+                                <div className='post-control-btns'>
+                                    {!checkHiddenPost(i) ?
+                                        <img
+                                            src={UpIcon}
+                                            className='post-control-icon'
+                                            onClick={() => moveSection(i, i - 1)}
+                                        />
+                                        : ''}
+                                    {checkHiddenPost(i) ?
+                                        <img
+                                            src={ShwoIcon}
+                                            className='post-control-icon'
+                                            onClick={() => showPostSection(i)}
+                                        />
+                                        :
+                                        <img
+                                            src={HideIcon}
+                                            className='post-control-icon'
+                                            onClick={() => hidePostSection(i)}
+                                        />}
+                                    {!checkHiddenPost(i) ?
+                                        <img
+                                            src={DownIcon}
+                                            className='post-control-icon'
+                                            onClick={() => moveSection(i, i + 1)}
+                                        />
+                                        : ''}
+                                </div>
                             </div>
-                            <div className='section-item-btns'>
+                            <div className='section-item-btns' style={{ display: checkHiddenPost(i) && 'none' }}>
                                 <h4 onClick={() => {
                                     setSelected(item)
                                     setSelectedIndex(i)
@@ -551,7 +623,7 @@ export default function PostSection(props) {
                                             <input
                                                 className='post-manual-input'
                                                 onKeyDown={e => {
-                                                    if (e.key === 'Enter') {
+                                                    if (e.key === 'Enter' && e.target.value) {
                                                         setTech([...new Set(tech.concat(e.target.value))])
                                                         e.target.value = ''
                                                     }
