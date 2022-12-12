@@ -20,6 +20,7 @@ export default function Header() {
   const user = JSON.parse(localStorage.getItem('user'))
 
   useEffect(() => {
+    if (!user || !user.email) return history.push('/login')
     getPreview(user.email)
   }, [])
 

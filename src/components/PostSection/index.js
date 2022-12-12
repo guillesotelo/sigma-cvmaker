@@ -31,8 +31,6 @@ export default function PostSection(props) {
         id
     } = props
 
-    // console.log("hidden", hidden)
-
     useEffect(() => {
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
         pullAppData(localUser.email)

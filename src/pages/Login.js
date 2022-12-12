@@ -64,14 +64,18 @@ export default function Login() {
                             type='text'
                             name='email'
                             updateData={updateData}
+                            style={{ width: '92%' }}
                         />
                         <InputField
                             label='Password'
                             type='password'
                             name='password'
                             updateData={updateData}
-                            style={{ marginBottom: '2vw' }}
+                            style={{ width: '92%' }}
                         />
+                        <h4 className='forgot-pass-link' onClick={() => history.push('/forgotPassword')}>
+                            {/* I forgot my password */}
+                            </h4>
                         <CTAButton
                             label='Login'
                             size='100%'

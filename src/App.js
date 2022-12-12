@@ -26,10 +26,8 @@ function App() {
     <Switch>
       <Route path="/login">
         <Login />
-        <Footer />
       </Route>
       <Route path="/register">
-        <Header />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
