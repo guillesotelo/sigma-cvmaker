@@ -154,12 +154,9 @@
 }
 
 .post-col-dif {
-    /* display: flex; */
     width: 80%;
     flex-direction: row;
-    justify-content: left;
-    align-items: flex-start;
-    gap: 1vw;
+    align-self: center;
     position: relative;
 }
 

@@ -143,7 +143,7 @@ export default function CVs({ showAll }) {
         <div className='my-resumes-container'>
             <SearchBar
                 handleChange={e => handleSearch(e)}
-                placeholder='Search by keywords or text...'
+                placeholder='Search by words or text...'
                 style={{ filter: openModal && 'blur(10px)', width: '20vw' }}
                 onKeyPress={handleSearch}
                 triggerSearch={triggerSearch}

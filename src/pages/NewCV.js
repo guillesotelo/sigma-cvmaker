@@ -5,7 +5,6 @@ import { ToastContainer, toast } from 'react-toastify'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import { APP_COLORS } from '../constants/app'
-import GoBackIcon from '../icons/goback-icon.svg'
 import ItemDropdown from '../components/ItemDropdown'
 import Bullet from '../components/Bullet'
 import InputBullet from '../components/InputBullet'
@@ -47,7 +46,7 @@ export default function NewCV() {
     const fullName = `${data.name || ''}${data.middlename ? ` ${data.middlename} ` : ' '}${data.surname || ''}`
     const skillYears = Array.from({ length: 40 }, (_, i) => `${i + 1} ${i > 0 ? 'Years' : 'Year'}`)
 
-    // console.log("data", data)
+    console.log("data", data)
     // console.log("hiddenItems", hiddenItems)
 
     useEffect(() => {
@@ -191,10 +190,10 @@ export default function NewCV() {
 
             const resumeData = { ...data }
 
-            resumeData.languages = removeVoids(languages)
-            resumeData.skills = removeVoids(skills)
-            resumeData.education = removeVoids(education)
-            resumeData.certifications = removeVoids(certifications)
+            resumeData.languages = languages
+            resumeData.skills = skills
+            resumeData.education = education
+            resumeData.certifications = certifications
             resumeData.experience = experience
             resumeData.strengths = strengths
             resumeData.expertise = expertise
@@ -352,7 +351,7 @@ export default function NewCV() {
                         style={{ width: '6.5vw' }}
                     />
                 </div>
-                <div className='resume-fill-col2'>
+                <div className='resume-fill-col2-personal'>
                     <InputField
                         label='Presentation'
                         type='textarea'
@@ -554,19 +553,6 @@ export default function NewCV() {
                 </div>
                 <div className='resume-fill-col2'>
                     {hiddenSections.tools ? '' :
-                        // <InputField
-                        //     label='Describe what other tools you have used'
-                        //     type='textarea'
-                        //     // cols={60}
-                        //     rows={6}
-                        //     name='tools'
-                        //     updateData={updateData}
-                        //     style={{ color: 'rgb(71, 71, 71)', width: '35vw' }}
-                        //     placeholder="Altium Designer, Winscope, Adobe Photoshop, Microsoft Azure..."
-                        //     value={data.tools || ''}
-                        //     setHidden={setHiddenItems}
-                        //     hidden={hiddenItems}
-                        // />
                         <Bullet
                             label=''
                             type='big'

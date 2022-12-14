@@ -7,6 +7,7 @@ import './styles.css'
 
 export default function Bullet(props) {
     const [dragging, setDragging] = useState(false)
+    const [editTools, setEditTools] = useState(false)
 
     const bullets = {
         normal: '•',
@@ -89,72 +90,157 @@ export default function Bullet(props) {
         setItems(newItemsArr)
     }
 
+    const renderBullets = () => {
+        return <DragDropContext onDragEnd={onDragEnd} onDragStart={() => setDragging(true)}>
+            <Droppable droppableId="droppable">
+                {(provided, _) =>
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                        {items.map((item, i) =>
+                            item.value && item.value !== '' ?
+                                <Draggable key={i} draggableId={String(i)} index={i} disabled={items.length === 2}>
+                                    {(provided, snapshot) => (
+                                        <div ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={getItemStyle(
+                                                snapshot.isDragging,
+                                                provided.draggableProps.style
+                                            )}
+                                            className='bullet-row' key={i}>
+                                            <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>{bullets[type] || '•'}</h4>
+                                            <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value || ''}</h4>
+                                            <h4 onClick={() => removeItem(i)} className='bullet-remove'>X</h4>
+                                            {item.hidden ?
+                                                <img
+                                                    src={ShwoIcon}
+                                                    className='hide-icon-item'
+                                                    onClick={() => showItem(i)}
+                                                />
+                                                :
+                                                <img
+                                                    src={HideIcon}
+                                                    className='hide-icon-item'
+                                                    onClick={() => hideItem(i)}
+                                                />
+                                            }
+                                        </div>
+                                    )}
+                                </Draggable>
+                                :
+                                !dragging ?
+                                    <div className='bullet-row' key={i}>
+                                        <h4 className='bullet'>{bullets[type]}</h4>
+                                        <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
+                                            <input
+                                                className='bullet-name'
+                                                onChange={e => handleChange(e.target.value, i)}
+                                                onKeyDown={e => {
+                                                    if (e.key === 'Enter') {
+                                                        addNewItem()
+                                                        setTimeout(() => document.getElementById(id).focus(), 250)
+                                                    }
+                                                }}
+                                                placeholder={placeholder || ''}
+                                                type='text'
+                                                id={id}
+                                            />
+                                        </GrammarlyEditorPlugin>
+                                        <h4 onClick={() => addNewItem()} className='bullet-new'>✓</h4>
+                                    </div>
+                                    : ''
+                        )}
+                        {provided.placeholder}
+                    </div>
+                }
+            </Droppable>
+        </DragDropContext>
+    }
+
+    const renderTools = () => {
+        return editTools ?
+            <div className='skills-section-blocked'>
+                <DragDropContext onDragEnd={onDragEnd} onDragStart={() => setDragging(true)}>
+                    <Droppable droppableId="droppable">
+                        {(provided, _) =>
+                            <div {...provided.droppableProps} ref={provided.innerRef}>
+                                {items.map((item, i) =>
+                                    item.value && item.value !== '' ?
+                                        <Draggable key={i} draggableId={String(i)} index={i} disabled={items.length === 2}>
+                                            {(provided, snapshot) => (
+                                                <div ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    style={getItemStyle(
+                                                        snapshot.isDragging,
+                                                        provided.draggableProps.style
+                                                    )}
+                                                    className='bullet-row' key={i}>
+                                                    <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>{bullets[type] || '•'}</h4>
+                                                    <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value || ''}</h4>
+                                                    <h4 onClick={() => removeItem(i)} className='bullet-remove'>X</h4>
+                                                    {item.hidden ?
+                                                        <img
+                                                            src={ShwoIcon}
+                                                            className='hide-icon-item'
+                                                            onClick={() => showItem(i)}
+                                                        />
+                                                        :
+                                                        <img
+                                                            src={HideIcon}
+                                                            className='hide-icon-item'
+                                                            onClick={() => hideItem(i)}
+                                                        />
+                                                    }
+                                                </div>
+                                            )}
+                                        </Draggable>
+                                        :
+                                        !dragging ?
+                                            <div className='bullet-row' key={i}>
+                                                <h4 className='bullet'>{bullets[type]}</h4>
+                                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
+                                                    <input
+                                                        className='bullet-name'
+                                                        onChange={e => handleChange(e.target.value, i)}
+                                                        onKeyDown={e => {
+                                                            if (e.key === 'Enter') {
+                                                                addNewItem()
+                                                                setTimeout(() => document.getElementById(id).focus(), 250)
+                                                            }
+                                                        }}
+                                                        placeholder={placeholder || ''}
+                                                        type='text'
+                                                        id={id}
+                                                    />
+                                                </GrammarlyEditorPlugin>
+                                                <h4 onClick={() => addNewItem()} className='bullet-new'>✓</h4>
+                                            </div>
+                                            : ''
+                                )}
+                                {provided.placeholder}
+                            </div>
+                        }
+                    </Droppable>
+                </DragDropContext>
+                <h4 onClick={() => setEditTools(false)} className='section-item-remove'>Done</h4>
+            </div>
+            :
+            <div className='tools-section-blocked'>
+                <div className='tools-wrapper'>
+                    {items.map((item, i) => item.value && !item.hidden ?
+                        <h4 className='tool-wrap-name' key={i}>{item.value}</h4>
+                        : null
+                    )}
+                </div>
+                <h4 onClick={() => setEditTools(true)} className='section-item-remove'>Edit</h4>
+            </div>
+    }
+
     return (
         <div className='bullet-container'>
             <h4 className='bullet-label'>{label || ''}</h4>
-            <DragDropContext onDragEnd={onDragEnd} onDragStart={() => setDragging(true)}>
-                <Droppable droppableId="droppable">
-                    {(provided, _) =>
-                        <div {...provided.droppableProps} ref={provided.innerRef}>
-                            {items.map((item, i) =>
-                                item.value && item.value !== '' ?
-                                    <Draggable key={i} draggableId={String(i)} index={i} disabled={items.length === 2}>
-                                        {(provided, snapshot) => (
-                                            <div ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
-                                                style={getItemStyle(
-                                                    snapshot.isDragging,
-                                                    provided.draggableProps.style
-                                                )}
-                                                className='bullet-row' key={i}>
-                                                <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>{bullets[type] || '•'}</h4>
-                                                <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value || ''}</h4>
-                                                <h4 onClick={() => removeItem(i)} className='bullet-remove'>X</h4>
-                                                {item.hidden ?
-                                                    <img
-                                                        src={ShwoIcon}
-                                                        className='hide-icon-item'
-                                                        onClick={() => showItem(i)}
-                                                    />
-                                                    :
-                                                    <img
-                                                        src={HideIcon}
-                                                        className='hide-icon-item'
-                                                        onClick={() => hideItem(i)}
-                                                    />
-                                                }
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                    :
-                                    !dragging ?
-                                        <div className='bullet-row' key={i}>
-                                            <h4 className='bullet'>{bullets[type]}</h4>
-                                            <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
-                                                <input
-                                                    className='bullet-name'
-                                                    onChange={e => handleChange(e.target.value, i)}
-                                                    onKeyDown={e => {
-                                                        if (e.key === 'Enter') {
-                                                            addNewItem()
-                                                            setTimeout(() => document.getElementById(id).focus(), 250)
-                                                        }
-                                                    }}
-                                                    placeholder={placeholder || ''}
-                                                    type='text'
-                                                    id={id}
-                                                />
-                                            </GrammarlyEditorPlugin>
-                                            <h4 onClick={() => addNewItem()} className='bullet-new'>✓</h4>
-                                        </div>
-                                        : ''
-                            )}
-                            {provided.placeholder}
-                        </div>
-                    }
-                </Droppable>
-            </DragDropContext>
+            {id === 'otherTools' ? renderTools() : renderBullets()}
         </div>
     )
 }
+

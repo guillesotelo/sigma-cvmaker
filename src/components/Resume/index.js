@@ -324,7 +324,7 @@ export default function Resume({ resumeData }) {
             fontFamily: 'Roboto',
             fontSize: '1.7vw',
             backgroundColor: 'lightgray',
-            padding: '.3vw .6vw',
+            padding: '.3vw .7vw',
             borderRadius: '1vw',
             margin: '.4vw'
         },

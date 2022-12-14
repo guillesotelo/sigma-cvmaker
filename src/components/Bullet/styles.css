@@ -125,3 +125,27 @@
     color: #E4C69C;
     border-color: #E4C69C;
 }
+
+.tools-section-blocked {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+    margin-right: 1vw;
+}
+
+.tools-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+}
+
+.tool-wrap-name {
+    font-size: 1vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: .3vw;
+    background-color: lightgray;
+    padding: .3vw .6vw;
+    border-radius: .5vw;
+}

@@ -230,7 +230,7 @@ export default function PostSection(props) {
 
     const experienceItem = (index) => index !== 0 ? {
         borderTop: '1px solid gray',
-        paddingTop: '2vw',
+        paddingTop: '1vw',
         margin: '1vw 0'
     } : {}
 
