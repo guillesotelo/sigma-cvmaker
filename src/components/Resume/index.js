@@ -233,6 +233,35 @@ export default function Resume({ resumeData }) {
             flexDirection: 'row',
             margin: '0.5vw 2vw'
         },
+        skillsWrapper: {
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            width: '100%',
+            justifyContent: 'center'
+        },
+        skillItem: {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            borderBottom: '1px solid gray',
+            textAlign: 'left',
+            padding: '1vw 0',
+            margin: '0 2vw .4vw 0',
+            width: '40%'
+        },
+        skillName: {
+            fontSize: '1.6vw',
+            margin: 0,
+            color: 'black'
+        },
+        skillOption: {
+            fontWeight: 'normal',
+            fontSize: '1.6vw',
+            color: 'gray',
+            textAlign: 'right',
+            fontStyle: 'italic'
+        },
         skill: {
             width: '45%',
             fontSize: '1.7vw',
@@ -486,11 +515,13 @@ export default function Resume({ resumeData }) {
                                 </View>
                                 <View style={styles.sectionColumn2}>
                                     <View style={styles.infoView2} wrap={false}>
-                                        {res.skills.map((skill, i) => skill && !skill.hidden ?
-                                            <View key={i} style={styles.bullet} wrap={false}>
-                                                <Text style={styles.skill}>{skill.name || ''}</Text>
-                                                <Text style={styles.year}>{calculateTime(skill.option)}</Text>
-                                            </View> : null)}
+                                        <View style={styles.skillsWrapper}>
+                                            {res.skills.map((skill, i) => skill.name && !skill.hidden ?
+                                                <View key={i} style={styles.skillItem}>
+                                                    <Text style={styles.skillName}>{skill.name || ''}</Text>
+                                                    <Text style={styles.skillOption}>{calculateTime(skill.option)}</Text>
+                                                </View> : null)}
+                                        </View>
                                     </View>
                                 </View>
                             </View>}
@@ -523,7 +554,7 @@ export default function Resume({ resumeData }) {
                                                                 <Text key={j} style={styles.experienceResponsibility}>• {resp.value}</Text>
                                                                 : null)}
                                                         </View>
-                                                        {exp.technologies && Array.isArray(exp.technologies) ?
+                                                        {exp.technologies && Array.isArray(exp.technologies) && exp.technologies[0] ?
                                                             <View>
                                                                 <Text style={styles.experienceResponsibilities}>Technologies:</Text>
                                                                 <View style={styles.experienceTechList}>
