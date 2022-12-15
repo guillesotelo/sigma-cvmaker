@@ -46,7 +46,7 @@ export default function NewCV() {
     const fullName = `${data.name || ''}${data.middlename ? ` ${data.middlename} ` : ' '}${data.surname || ''}`
     const skillYears = Array.from({ length: 40 }, (_, i) => `${i + 1} ${i > 0 ? 'Years' : 'Year'}`)
 
-    console.log("data", data)
+    // console.log("data", data)
     // console.log("hiddenItems", hiddenItems)
 
     useEffect(() => {

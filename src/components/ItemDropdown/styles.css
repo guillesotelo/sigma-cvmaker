@@ -114,9 +114,19 @@
     border-color: #E4C69C;
 }
 
+.edit-icon-item {
+    display: none;
+    height: 1vw !important;
+    cursor: pointer;
+    line-height: 1.5vw;
+    filter: brightness(0%) contrast(0%);
+    transition: .3s;
+}
+
 .hide-icon-item {
     display: none;
-    height: 1.5vw;
+    height: 1.3vw;
+    font-size: 1.3vw;
     cursor: pointer;
     line-height: 1.5vw;
     filter: brightness(0%) contrast(0%);
@@ -184,4 +194,10 @@
     outline: none;
     transition: .3s;
     font-style: italic;
+}
+
+.skill-edit-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }

@@ -3,10 +3,14 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import HideIcon from '../../icons/hide-icon.svg'
 import ShwoIcon from '../../icons/show-icon.svg'
+import EditIcon from '../../icons/edit-icon.svg'
+import TrashCan from '../../icons/trash-icon.svg'
 import './styles.css'
 
 export default function InputBullet(props) {
     const [dragging, setDragging] = useState(false)
+    const [editItem, setEditItem] = useState({})
+    const [selected, setSelected] = useState(-1)
 
     const {
         label,
@@ -88,65 +92,128 @@ export default function InputBullet(props) {
                     {(provided, _) =>
                         <div {...provided.droppableProps} ref={provided.innerRef}>
                             {items.map((item, i) =>
-                                item.bullet ?
-                                    <Draggable key={i} draggableId={String(i)} index={i}>
-                                        {(provided, snapshot) => (
-                                            <div ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
-                                                style={getItemStyle(
-                                                    snapshot.isDragging,
-                                                    provided.draggableProps.style
-                                                )}
-                                                className='bullet-row draggable' key={i}>
-                                                <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>{item.bullet}</h4>
-                                                <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value}</h4>
-                                                <h4 onClick={() => removeItem(i)} className='item-dropdown-remove'>X</h4>
-                                                {item.hidden ?
-                                                    <img
-                                                        src={ShwoIcon}
-                                                        className='hide-icon-item'
-                                                        onClick={() => showItem(i)}
-                                                    />
-                                                    :
-                                                    <img
-                                                        src={HideIcon}
-                                                        className='hide-icon-item'
-                                                        onClick={() => hideItem(i)}
-                                                    />
-                                                }
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                    :
-                                    !dragging ?
-                                        <div className='bullet-row' key={i}>
-                                            <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
-                                                <input
-                                                    className='item-dropdown-name'
-                                                    onChange={e => handleChange('bullet', e.target.value, i)}
-                                                    placeholder={bulletPlaceholder || ''}
-                                                    type='text'
-                                                    id={id}
-                                                />
-                                            </GrammarlyEditorPlugin>
-                                            <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
-                                                <input
-                                                    className='item-dropdown-name'
-                                                    onChange={e => handleChange('value', e.target.value, i)}
-                                                    onKeyDown={e => {
-                                                        if (e.key === 'Enter') {
-                                                            addNewItem()
-                                                            setTimeout(() => document.getElementById(id).focus(), 250)
+                                selected === i ?
+                                    <div className='bullet-edit-row'>
+                                        <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
+                                            <input
+                                                className='item-dropdown-name'
+                                                onChange={e => setEditItem({ ...editItem, bullet: e.target.value })}
+                                                placeholder={bulletPlaceholder || ''}
+                                                type='text'
+                                                id={id}
+                                                value={editItem.bullet || ''}
+                                            />
+                                        </GrammarlyEditorPlugin>
+                                        <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
+                                            <input
+                                                className='item-dropdown-name'
+                                                onChange={e => setEditItem({ ...editItem, value: e.target.value })}
+                                                onKeyDown={e => {
+                                                    if (e.key === 'Enter') {
+                                                        if (editItem.value) {
+                                                            let newItemsArr = items
+                                                            newItemsArr[i] = {
+                                                                ...newItemsArr[i],
+                                                                value: editItem.value || '',
+                                                                bullet: editItem.bullet || ''
+                                                            }
+                                                            setItems(newItemsArr)
                                                         }
-                                                    }}
-                                                    placeholder={valuePlaceholder || ''}
-                                                    type='text'
-                                                />
-                                            </GrammarlyEditorPlugin>
-                                            <h4 onClick={() => addNewItem()} className='item-dropdown-new'>✓</h4>
-                                        </div>
-                                        : ''
+                                                        setEditItem({})
+                                                        setSelected(-1)
+                                                    }
+                                                }}
+                                                placeholder={valuePlaceholder || ''}
+                                                type='text'
+                                                value={editItem.value || ''}
+                                            />
+                                        </GrammarlyEditorPlugin>
+                                        <h4 onClick={() => {
+                                            if (editItem.value) {
+                                                let newItemsArr = items
+                                                newItemsArr[i] = {
+                                                    ...newItemsArr[i],
+                                                    value: editItem.value || '',
+                                                    bullet: editItem.bullet || ''
+                                                }
+                                                setItems(newItemsArr)
+                                            }
+                                            setEditItem({})
+                                            setSelected(-1)
+                                        }} className='bullet-new'>✓</h4>
+                                    </div>
+                                    :
+                                    item.bullet ?
+                                        <Draggable key={i} draggableId={String(i)} index={i}>
+                                            {(provided, snapshot) => (
+                                                <div ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    style={getItemStyle(
+                                                        snapshot.isDragging,
+                                                        provided.draggableProps.style
+                                                    )}
+                                                    className='bullet-row draggable' key={i}>
+                                                    <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>{item.bullet}</h4>
+                                                    <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value}</h4>
+                                                    <img
+                                                        src={EditIcon}
+                                                        className='hide-icon-item edit-icon-item'
+                                                        onClick={() => {
+                                                            setSelected(i)
+                                                            setEditItem(item)
+                                                        }}
+                                                    />
+                                                    {item.hidden ?
+                                                        <img
+                                                            src={ShwoIcon}
+                                                            className='hide-icon-item'
+                                                            onClick={() => showItem(i)}
+                                                        />
+                                                        :
+                                                        <img
+                                                            src={HideIcon}
+                                                            className='hide-icon-item'
+                                                            onClick={() => hideItem(i)}
+                                                        />
+                                                    }
+                                                    <img
+                                                        src={TrashCan}
+                                                        className='hide-icon-item'
+                                                        onClick={() => removeItem(i)}
+                                                    />
+                                                </div>
+                                            )}
+                                        </Draggable>
+                                        :
+                                        !dragging && selected === -1 ?
+                                            <div className='bullet-row' key={i}>
+                                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
+                                                    <input
+                                                        className='input-bullet-period'
+                                                        onChange={e => handleChange('bullet', e.target.value, i)}
+                                                        placeholder={bulletPlaceholder || ''}
+                                                        type='text'
+                                                        id={id}
+                                                    />
+                                                </GrammarlyEditorPlugin>
+                                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
+                                                    <input
+                                                        className='input-bullet-name'
+                                                        onChange={e => handleChange('value', e.target.value, i)}
+                                                        onKeyDown={e => {
+                                                            if (e.key === 'Enter') {
+                                                                addNewItem()
+                                                                setTimeout(() => document.getElementById(id).focus(), 250)
+                                                            }
+                                                        }}
+                                                        placeholder={valuePlaceholder || ''}
+                                                        type='text'
+                                                    />
+                                                </GrammarlyEditorPlugin>
+                                                <h4 onClick={() => addNewItem()} className='item-dropdown-new'>✓</h4>
+                                            </div>
+                                            : ''
                             )}
                             {provided.placeholder}
                         </div>

@@ -8,6 +8,8 @@ import HideIcon from '../../icons/hide-icon.svg'
 import ShwoIcon from '../../icons/show-icon.svg'
 import UpIcon from '../../icons/up-icon.svg'
 import DownIcon from '../../icons/down-icon.svg'
+import EditIcon from '../../icons/edit-icon.svg'
+import TrashCan from '../../icons/trash-icon.svg'
 import './styles.css'
 
 export default function PostSection(props) {
@@ -20,6 +22,10 @@ export default function PostSection(props) {
     const [filteredTools, setFilteredTools] = useState([])
     const [tech, setTech] = useState([])
     const [fields, setFields] = useState([])
+    const [editItem, setEditItem] = useState({})
+    const [selectedItem, setSelectedItem] = useState(-1)
+    const [editTool, setEditTool] = useState(null)
+    const [selectedTool, setSelectedTool] = useState(-1)
     const dispatch = useDispatch()
 
     const {
@@ -187,43 +193,82 @@ export default function PostSection(props) {
             <h4 className='post-item-label'>Key responsibilities:</h4>
             {bullets && bullets.length ?
                 bullets.map((item, subindex) =>
-                    item.value && subindex !== bullets.length - 1 ?
-                        <div className='bullet-row' key={subindex}>
-                            <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>●</h4>
-                            <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value || ''}</h4>
-                            <h4 onClick={() => removeBullet(index, subindex)} className='item-dropdown-remove'>X</h4>
-                            {item.hidden ?
-                                <img
-                                    src={ShwoIcon}
-                                    className='hide-icon-item'
-                                    onClick={() => showBullet(index, subindex)}
-                                />
-                                :
-                                <img
-                                    src={HideIcon}
-                                    className='hide-icon-item'
-                                    onClick={() => hideBullet(index, subindex)}
-                                />
-                            }
-                        </div>
-                        :
+                    selectedItem === subindex ?
                         <div className='bullet-row' key={subindex} style={{ marginTop: '1vw' }}>
                             <h4 className='bullet'>●</h4>
                             <input
-                                className='item-dropdown-name'
-                                onChange={e => handleChange('bullets', e.target.value, index, subindex)}
+                                className='input-post-bullet'
+                                onChange={e => setEditItem({ ...editItem, value: e.target.value })}
                                 onKeyDown={e => {
                                     if (e.key === 'Enter' && e.target.value) {
-                                        addNewBullet(index, subindex)
-                                        setTimeout(() => document.getElementById(id).focus(), 250)
+                                        if (editItem.value) handleChange('bullets', editItem.value, index, selectedItem)
+                                        else removeBullet(index, subindex)
+                                        setEditItem({})
+                                        setSelectedItem(-1)
                                     }
                                 }} placeholder='Write responsibilty'
                                 type='text'
                                 id={id}
-                            // value={editPost ? selected.bullets[subindex] : item}
+                                value={editItem.value}
                             />
-                            <h4 onClick={() => addNewBullet(index, subindex)} className='item-dropdown-new'>✓</h4>
+                            <h4 onClick={() => {
+                                if (editItem.value) handleChange('bullets', editItem.value, index, selectedItem)
+                                else removeBullet(index, subindex)
+                                setEditItem({})
+                                setSelectedItem(-1)
+                            }} className='item-dropdown-new'>✓</h4>
                         </div>
+                        :
+                        item.value && subindex !== bullets.length - 1 ?
+                            <div className='bullet-row' key={subindex}>
+                                <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>●</h4>
+                                <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value || ''}</h4>
+                                <img
+                                    src={EditIcon}
+                                    className='hide-icon-item edit-icon-item'
+                                    onClick={() => {
+                                        setSelectedItem(subindex)
+                                        setEditItem(item)
+                                    }}
+                                />
+                                {item.hidden ?
+                                    <img
+                                        src={ShwoIcon}
+                                        className='hide-icon-item'
+                                        onClick={() => showBullet(index, subindex)}
+                                    />
+                                    :
+                                    <img
+                                        src={HideIcon}
+                                        className='hide-icon-item'
+                                        onClick={() => hideBullet(index, subindex)}
+                                    />
+                                }
+                                <img
+                                    src={TrashCan}
+                                    className='hide-icon-item'
+                                    onClick={() => removeBullet(index, subindex)}
+                                />
+                            </div>
+                            :
+                            selectedItem === -1 ?
+                                <div className='bullet-row' key={subindex} style={{ marginTop: '1vw' }}>
+                                    <h4 className='bullet'>●</h4>
+                                    <input
+                                        className='input-post-bullet'
+                                        onChange={e => handleChange('bullets', e.target.value, index, subindex)}
+                                        onKeyDown={e => {
+                                            if (e.key === 'Enter' && e.target.value) {
+                                                addNewBullet(index, subindex)
+                                                setTimeout(() => document.getElementById(id).focus(), 250)
+                                            }
+                                        }} placeholder='Write responsibilty'
+                                        type='text'
+                                        id={id}
+                                    />
+                                    <h4 onClick={() => addNewBullet(index, subindex)} className='item-dropdown-new'>✓</h4>
+                                </div>
+                                : ''
                 ) : ''}
         </div>
     )
@@ -438,23 +483,54 @@ export default function PostSection(props) {
                         {Array.isArray(tech) ?
                             <div className='post-tools-list'>
                                 {tech.map((tool, i) =>
-                                    <div key={i} className='post-tool-div' style={{ backgroundColor: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '#fafafa' }}>
-                                        <h4 className='post-tool' style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '.2' }}>{tool}</h4>
-                                        <h4 className='post-remove-tool' style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '.2' }} onClick={() => removeTech(i)}>X</h4>
-                                        {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) ?
+                                    selectedTool === i ?
+                                        <input
+                                            className='edit-manual-input'
+                                            onChange={e => setEditTool(e.target.value)}
+                                            onKeyDown={e => {
+                                                if (e.key === 'Enter') {
+                                                    if (editTool) {
+                                                        let newItemsArr = tech
+                                                        newItemsArr[i] = editTool || ''
+                                                        setTech(newItemsArr)
+                                                    } else removeTech(i)
+                                                    setEditTool(null)
+                                                    setSelectedTool(-1)
+                                                }
+                                            }}
+                                            type='text'
+                                            value={editTool}
+                                        />
+                                        :
+                                        <div key={i} className='post-tool-div' style={{ backgroundColor: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '#fafafa' }}>
+                                            <h4 className='post-tool' style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '.2' }}>{tool}</h4>
                                             <img
-                                                src={ShwoIcon}
+                                                src={EditIcon}
                                                 className='hide-icon-tool'
-                                                onClick={() => showItem(selectedIndex, tool)}
+                                                onClick={() => {
+                                                    setSelectedTool(i)
+                                                    setEditTool(tool)
+                                                }}
                                             />
-                                            :
+                                            {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) ?
+                                                <img
+                                                    src={ShwoIcon}
+                                                    className='hide-icon-tool'
+                                                    onClick={() => showItem(selectedIndex, tool)}
+                                                />
+                                                :
+                                                <img
+                                                    src={HideIcon}
+                                                    className='hide-icon-tool'
+                                                    onClick={() => hideItem(selectedIndex, tool)}
+                                                />
+                                            }
                                             <img
-                                                src={HideIcon}
+                                                src={TrashCan}
                                                 className='hide-icon-tool'
-                                                onClick={() => hideItem(selectedIndex, tool)}
+                                                onClick={() => removeTech(i)}
                                             />
-                                        }
-                                    </div>
+                                        </div>
                                 )}
                             </div> : ''}
                     </div>

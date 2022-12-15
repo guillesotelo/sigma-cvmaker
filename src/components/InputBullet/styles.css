@@ -1,0 +1,39 @@
+.input-bullet-period {
+    border: 1px solid #e5e5e5;
+    background-color: #e5e5e5;
+    font-weight: normal;
+    border-radius: 0.5vw;
+    padding: 0.5vw;
+    font-size: 0.9vw;
+    width: 7vw;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    outline: none;
+    transition: .3s;
+}
+
+.input-bullet-period:focus {
+    border: 1px solid #E4C69C;
+}
+
+.input-bullet-name {
+    border: 1px solid #e5e5e5;
+    background-color: #e5e5e5;
+    font-weight: normal;
+    border-radius: 0.5vw;
+    padding: 0.5vw;
+    font-size: 0.9vw;
+    width: 20vw;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    outline: none;
+    transition: .3s;
+}
+
+.input-bullet-name:focus {
+    border: 1px solid #E4C69C;
+}

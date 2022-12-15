@@ -319,13 +319,29 @@
     padding: .5vw;
     font-size: .9vw;
     width: 100%;
-    color: gray;
+    color: rgb(78, 78, 78);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     outline: none;
     transition: .3s;
     margin-bottom: .5vw;
+}
+
+.edit-manual-input {
+    border: 1px solid #E4C69C;
+    position: relative;
+    display: flex;
+    color: rgb(78, 78, 78);
+    font-size: .9vw;
+    flex-direction: row;
+    align-items: center;
+    margin: .3vw .5vw;
+    gap: .5vw;
+    outline: none;
+    background-color: lightgray;
+    padding: .2vw .5vw;
+    border-radius: .5vw;
 }
 
 .post-manual-input:focus {
@@ -371,11 +387,10 @@
 
 .hide-icon-tool {
     display: none;
-    height: 1.5vw;
-    /* position: absolute; */
+    height: 1.2vw;
     right: 0;
     cursor: pointer;
-    line-height: 1.5vw;
+    line-height: 1.2vw;
     filter: brightness(0%) contrast(0%);
     transition: .3s;
     color: #f1f1f1
@@ -438,4 +453,20 @@
 
 .post-control-icon:hover {
     filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+}
+
+.input-post-bullet {
+    border: 1px solid #e5e5e5;
+    background-color: #e5e5e5;
+    font-weight: normal;
+    border-radius: 0.5vw;
+    padding: 0.5vw;
+    font-size: 0.9vw;
+    width: 25vw;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    outline: none;
+    transition: .3s;
 }

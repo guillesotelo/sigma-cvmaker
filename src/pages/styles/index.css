@@ -479,8 +479,9 @@
 
 .signature-text {
     font-family: 'Great Vibes', cursive;
-    font-size: 1.5vw;
-    margin: 0.2vw 0 0.5vw 0;
+    font-weight: normal;
+    font-size: 2vw;
+    margin: 3vw 0 0.5vw 1vw;
     text-align: left;
 }
 
