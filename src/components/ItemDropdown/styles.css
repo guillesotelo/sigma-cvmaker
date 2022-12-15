@@ -148,20 +148,23 @@
 .skills-section-blocked {
     display: flex;
     flex-direction: column;
+    width: 100%;
     gap: 1vw;
-    margin-right: 1vw;
+    /* margin-right: 1vw; */
+    margin: 0 1vw 0 -6vw;
 }
 
 .skills-wrapper {
     display: flex;
     flex-wrap: wrap;
     column-gap: 1.5vw;
+    width: 48vw;
 }
 
 .skill-wrap-item {
     display: flex;
     flex-direction: row;
-    width: 45%;
+    /* width: 45%; */
     justify-content: space-between;
     text-align: left;
     padding: .5vw 0 1vw 0;
@@ -174,9 +177,6 @@
     width: 12vw;
     margin: 0;
     color: black;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     outline: none;
     transition: .3s;
 }
