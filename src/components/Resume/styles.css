@@ -2,9 +2,61 @@
     width: 100%;
     height: 100%;
     background-color: #525659;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5vw;
 }
 .view-resume-page {
     width: 100%;
     height: 100%;
     background-color: #525659;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5vw;
+}
+
+.pdf-download-svg {
+    height: 20px;
+    margin-right: .5vw;
+    cursor: pointer;
+    transition: .3s;
+    filter: invert(97%) sepia(2%) saturate(17%) hue-rotate(314deg) brightness(90%) contrast(87%);
+}
+
+.pdf-edit-svg {
+    height: 18px;
+    margin-right: .5vw;
+    cursor: pointer;
+    transition: .3s;
+    filter: invert(97%) sepia(2%) saturate(17%) hue-rotate(314deg) brightness(90%) contrast(87%);
+}
+
+.pdf-close-svg {
+    height: 27px;
+    margin-right: .5vw;
+    cursor: pointer;
+    transition: .3s;
+    filter: invert(97%) sepia(2%) saturate(17%) hue-rotate(314deg) brightness(90%) contrast(87%);
+}
+
+.pdf-download-svg:hover {
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+}
+
+.pdf-edit-svg:hover {
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+}
+
+.pdf-close-svg:hover {
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+}
+
+.pdf-header-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: .8vw;
+    padding: .5vw 0 .3vw 0;
+    color: #d3d3d3;
 }

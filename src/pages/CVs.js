@@ -13,7 +13,7 @@ import EditIcon from '../icons/edit-icon.svg'
 import TrashCan from '../icons/trash-icon.svg'
 import GoBackIcon from '../icons/goback-icon.svg'
 import Resume from '../components/Resume'
-import { getResumes, removeResume } from '../store/reducers/resume'
+import { getResumes, removeResume, saveLog } from '../store/reducers/resume'
 import SearchBar from '../components/SearchBar'
 import DataTable from '../components/DataTable'
 
@@ -139,6 +139,28 @@ export default function CVs({ showAll }) {
         setLoading(false)
     }
 
+    const onEditPdf = () => history.push(`/new-cv?edit=${resumeData._id}`)
+
+    const onCloseModal = () => {
+        setOpenModal(false)
+        setIsPdf(false)
+        setResumeData({})
+    }
+
+    const onDownloadPDF = async () => {
+        try {
+            await dispatch(saveLog({
+                email: user.email,
+                username: user.username,
+                details: `CV exported: ${resumeData.username}-${resumeData.type}`,
+                module: 'CV',
+                itemId: resumeData._id || null
+            })).then(data => data.payload)
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
     return (
         <div className='my-resumes-container'>
             <SearchBar
@@ -170,16 +192,11 @@ export default function CVs({ showAll }) {
             </div>
             {openModal && isPdf ?
                 <div className='pdf-modal'>
-                    <div className='modal-btns'>
-                        <h4 className='close-modal' onClick={() => history.push(`/new-cv?edit=${resumeData._id}`)}>Edit</h4>
-                        <h4 className='close-modal' onClick={() => {
-                            setOpenModal(false)
-                            setIsPdf(false)
-                            setResumeData({})
-                        }}>Close</h4>
-                    </div>
                     <Resume
                         resumeData={resumeData}
+                        onClose={onCloseModal}
+                        onEdit={onEditPdf}
+                        onDownloadPDF={onDownloadPDF}
                     />
                 </div> : ''}
             {openModal && !isPdf ?

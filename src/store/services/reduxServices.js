@@ -96,7 +96,6 @@ const getResumeByEmail = async data => {
     } catch (err) { console.log(err) }
 }
 
-
 const createResume = async data => {
     try {
         const resume = await axios.post(`${API_URL}/api/resume/create`, data)
@@ -195,6 +194,13 @@ const getAllLogs = async data => {
     } catch (err) { console.log(err) }
 }
 
+const createLog = async data => {
+    try {
+        const log = await axios.post(`${API_URL}/api/log/create`, data)
+        return log.data
+    } catch (err) { console.log(err) }
+}
+
 export {
     loginUser,
     registerUser,
@@ -222,5 +228,6 @@ export {
     updateAppDataItem,
     getAppDataByType,
     getAllAppData,
-    getAllLogs
+    getAllLogs,
+    createLog
 }

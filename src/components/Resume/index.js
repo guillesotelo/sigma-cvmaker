@@ -2,7 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { getProfileImage } from '../../store/reducers/user'
-import ReactPDF, { PDFViewer, Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer'
+import ReactPDF, {
+    PDFViewer,
+    Page,
+    Text,
+    View,
+    Document,
+    StyleSheet,
+    Image,
+    Font,
+    PDFDownloadLink
+} from '@react-pdf/renderer'
 import SigmaLogo from '../../assets/logos/sigma.png'
 import RobotoRegular from '../../assets/fonts/Roboto-Regular.ttf'
 import RobotoBold from '../../assets/fonts/Roboto-Bold.ttf'
@@ -11,8 +21,19 @@ import { applyFiltersToImage } from '../../helpers/image'
 import './styles.css'
 import { getLogo, getResume } from '../../store/reducers/resume'
 import { MoonLoader } from 'react-spinners'
+import { saveAs } from 'file-saver'
+import DownloadIcon from '../../icons/download-icon.svg'
+import EditIcon from '../../icons/edit-icon.svg'
+import CloseIcon from '../../icons/close-icon.svg'
 
-export default function Resume({ resumeData }) {
+export default function Resume(props) {
+    const {
+        resumeData,
+        onClose,
+        onEdit,
+        onDownloadPDF
+    } = props
+
     const [data, setData] = useState(resumeData)
     const [res, setRes] = useState({})
     const [profileImage, setProfileImage] = useState({})
@@ -23,6 +44,7 @@ export default function Resume({ resumeData }) {
     const [pageNumber, setPageNumber] = useState(1)
     const dispatch = useDispatch()
     const history = useHistory()
+    const fullName = `${res.name || ''}${res.middlename ? ` ${res.middlename} ` : ' '}${res.surname || ''}`
 
     useEffect(() => {
         setLoading(true)
@@ -386,6 +408,9 @@ export default function Resume({ resumeData }) {
             bottom: 0,
             left: 0,
             right: 0
+        },
+        pdfDownload: {
+            textDecoration: 'none'
         }
     })
 
@@ -400,222 +425,223 @@ export default function Resume({ resumeData }) {
         else if (index) return postSection && postSection.sections && postSection.sections[index]
     }
 
-    const ResumePDF = () => {
-        const fullName = `${res.name || ''}${res.middlename ? ` ${res.middlename} ` : ' '}${res.surname || ''}`
-
+    const pdfView = () => {
         return (
-            Object.keys(res).length ?
-                <PDFViewer style={styles.PDFContainer}>
-                    <Document>
-                        <Page size="A4" style={styles.page}>
-                            <View style={{ ...styles.rowContainer, border: 'none', alignItems: 'center' }} wrap={false} fixed>
-                                <View style={styles.column1}>
-                                    <Image style={styles.logo} src={cvLogo} />
+            <PDFViewer style={styles.PDFContainer} showToolbar={false}>
+                {ResumePDF()}
+            </PDFViewer >
+        )
+    }
+
+    const ResumePDF = () => {
+        return (
+            <Document>
+                <Page size="A4" style={styles.page}>
+                    <View style={{ ...styles.rowContainer, border: 'none', alignItems: 'center' }} wrap={false} fixed>
+                        <View style={styles.column1}>
+                            <Image style={styles.logo} src={cvLogo} />
+                        </View>
+                        <View style={styles.column2}>
+                            {checkHidden('Name') ? null : <Text style={styles.name}>{res.name.toUpperCase()}</Text>}
+                            {!checkHidden('Middle Name') && res.middlename ? <Text style={styles.name}>{res.middlename.toUpperCase()}</Text> : null}
+                            {checkHidden('Surname') ? null : <Text style={styles.name}>{res.surname.toUpperCase() || 'Full Name'}</Text>}
+                            {checkHidden('Role / Title') ? null : <Text style={styles.role}>{res.role.toUpperCase() || 'Role'}</Text>}
+                        </View>
+                    </View>
+
+                    <View style={styles.rowContainer} wrap={false}>
+                        <View style={styles.column1}>
+                            <Image style={styles.profilePic} src={profileImage} />
+                            <View style={styles.infoView1}>
+                                {checkHidden('Name') ? null : <Text style={styles.infoItem}>Name</Text>}
+                                {checkHidden('Name') ? null : <Text style={styles.regularText}>{fullName || ''}</Text>}
+                            </View>
+                            <View style={styles.infoView1}>
+                                {checkHidden('Gender') ? null : <Text style={styles.infoItem}>Gender</Text>}
+                                {checkHidden('Gender') ? null : <Text style={styles.regularText}>{res.gender || ''}</Text>}
+                            </View>
+                            <View style={styles.infoView1}>
+                                {checkHidden('Location') ? null : <Text style={styles.infoItem}>Location</Text>}
+                                {checkHidden('Location') ? null : <Text style={styles.regularText}>{res.location || ''}</Text>}
+                            </View>
+                            <View style={styles.infoView1}>
+                                {checkHidden(res.language) ? null : <Text style={styles.infoItem}>Language</Text>}
+                                {res.languages.map((lan, i) => lan && !lan.hidden ?
+                                    <Text key={i} style={styles.regularText}>{`${lan.name} - ${lan.option}`}</Text> : null)
+                                }
+                            </View>
+                        </View>
+                        <View style={styles.column2}>
+                            <View style={styles.infoView2}>
+                                {checkHidden('Presentation') ? null : <Text style={styles.presentation}>{res.presentation || ''}</Text>}
+                            </View>
+                            {res.strengths.length ?
+                                <View style={styles.infoView2}>
+                                    <Text style={styles.title}>Strengths</Text>
+                                    {res.strengths.map((str, i) => str.value && !str.hidden ? <Text key={i} style={styles.dropItems}>• {str.value}</Text> : null)}
                                 </View>
-                                <View style={styles.column2}>
-                                    {checkHidden('Name') ? null : <Text style={styles.name}>{res.name.toUpperCase()}</Text>}
-                                    {!checkHidden('Middle Name') && res.middlename ? <Text style={styles.name}>{res.middlename.toUpperCase()}</Text> : null}
-                                    {checkHidden('Surname') ? null : <Text style={styles.name}>{res.surname.toUpperCase() || 'Full Name'}</Text>}
-                                    {checkHidden('Role / Title') ? null : <Text style={styles.role}>{res.role.toUpperCase() || 'Role'}</Text>}
+                                :
+                                null}
+                            <View style={styles.infoView2}>
+                                {checkHidden('Name') ? null : <Text style={styles.signature}>{fullName || ''}</Text>}
+                            </View>
+                        </View>
+                    </View>
+
+                    {checkHidden('expertise') ? null : <View style={styles.rowContainer} wrap={false}>
+                        <View style={styles.sectionColumn1}>
+                            <View style={styles.infoView1}>
+                                <Text style={styles.sectionTitle}>EXPERTISE</Text>
+                            </View>
+                        </View>
+                        <View style={styles.sectionColumn2}>
+                            <View style={styles.infoView2}>
+                                {res.expertise.map((exp, i) => exp.value && !exp.hidden ?
+                                    <Text key={i} style={styles.dropItems}>• {exp.value}</Text> : null)}
+                            </View>
+                        </View>
+                    </View>}
+
+                    {checkHidden('education') ? null : <View style={styles.rowContainer} wrap={false}>
+                        <View style={styles.sectionColumn1}>
+                            <View style={styles.infoView1}>
+                                <Text style={styles.sectionTitle}>EDUCATION</Text>
+                            </View>
+                        </View>
+                        <View style={styles.sectionColumn2}>
+                            <View style={styles.infoView2} wrap={false}>
+                                {res.education.map((ed, i) => ed && !ed.hidden ?
+                                    <View key={i} style={styles.bullet} wrap={false}>
+                                        <Text style={styles.infoItem}>{ed.bullet || ''}</Text>
+                                        <Text style={{ ...styles.regularText, marginLeft: '3vw' }}>{ed.value || ''}</Text>
+                                    </View> : null)}
+                            </View>
+                        </View>
+                    </View>}
+
+                    {checkHidden('certifications') ? null : <View style={styles.rowContainer} wrap={false}>
+                        <View style={styles.sectionColumn1}>
+                            <View style={styles.infoView1}>
+                                <Text style={styles.sectionTitle}>CERTIFICATIONS</Text>
+                            </View>
+                        </View>
+                        <View style={styles.sectionColumn2}>
+                            <View style={styles.infoView2} wrap={false}>
+                                {res.certifications.map((cert, i) => cert && !cert.hidden ?
+                                    <View key={i} style={styles.bullet} wrap={false}>
+                                        <Text style={styles.infoItem}>{cert.bullet || ''}</Text>
+                                        <Text style={{ ...styles.regularText, marginLeft: '3vw' }}>{cert.value || ''}</Text>
+                                    </View> : null)}
+                            </View>
+                        </View>
+                    </View>}
+
+                    {checkHidden('skills') ? null : <View style={styles.rowContainer} wrap={false}>
+                        <View style={styles.sectionColumn1}>
+                            <View style={styles.infoView1}>
+                                <Text style={styles.sectionTitle}>MAIN SKILLS</Text>
+                            </View>
+                        </View>
+                        <View style={styles.sectionColumn2}>
+                            <View style={styles.infoView2} wrap={false}>
+                                <View style={styles.skillsWrapper}>
+                                    {res.skills.map((skill, i) => skill.name && !skill.hidden ?
+                                        <View key={i} style={styles.skillItem}>
+                                            <Text style={styles.skillName}>{skill.name || ''}</Text>
+                                            <Text style={styles.skillOption}>{calculateTime(skill.option)}</Text>
+                                        </View> : null)}
                                 </View>
                             </View>
+                        </View>
+                    </View>}
 
-                            <View style={styles.rowContainer} wrap={false}>
-                                <View style={styles.column1}>
-                                    <Image style={styles.profilePic} src={profileImage} />
-                                    <View style={styles.infoView1}>
-                                        {checkHidden('Name') ? null : <Text style={styles.infoItem}>Name</Text>}
-                                        {checkHidden('Name') ? null : <Text style={styles.regularText}>{fullName || ''}</Text>}
-                                    </View>
-                                    <View style={styles.infoView1}>
-                                        {checkHidden('Gender') ? null : <Text style={styles.infoItem}>Gender</Text>}
-                                        {checkHidden('Gender') ? null : <Text style={styles.regularText}>{res.gender || ''}</Text>}
-                                    </View>
-                                    <View style={styles.infoView1}>
-                                        {checkHidden('Location') ? null : <Text style={styles.infoItem}>Location</Text>}
-                                        {checkHidden('Location') ? null : <Text style={styles.regularText}>{res.location || ''}</Text>}
-                                    </View>
-                                    <View style={styles.infoView1}>
-                                        {checkHidden(res.language) ? null : <Text style={styles.infoItem}>Language</Text>}
-                                        {res.languages.map((lan, i) => lan && !lan.hidden ?
-                                            <Text key={i} style={styles.regularText}>{`${lan.name} - ${lan.option}`}</Text> : null)
-                                        }
-                                    </View>
-                                </View>
-                                <View style={styles.column2}>
-                                    <View style={styles.infoView2}>
-                                        {checkHidden('Presentation') ? null : <Text style={styles.presentation}>{res.presentation || ''}</Text>}
-                                    </View>
-                                    {res.strengths.length ?
-                                        <View style={styles.infoView2}>
-                                            <Text style={styles.title}>Strengths</Text>
-                                            {res.strengths.map((str, i) => str.value && !str.hidden ? <Text key={i} style={styles.dropItems}>• {str.value}</Text> : null)}
-                                        </View>
-                                        :
-                                        null}
-                                    <View style={styles.infoView2}>
-                                        {checkHidden('Name') ? null : <Text style={styles.signature}>{fullName || ''}</Text>}
-                                    </View>
-                                </View>
+                    {checkHidden('experience') ? null : <View style={styles.experienceContainer}>
+                        <View style={styles.sectionColumn1}>
+                            <View style={styles.infoView1}>
+                                <Text style={styles.sectionTitle}>EXPERIENCE</Text>
                             </View>
-
-                            {checkHidden('expertise') ? null : <View style={styles.rowContainer} wrap={false}>
-                                <View style={styles.sectionColumn1}>
-                                    <View style={styles.infoView1}>
-                                        <Text style={styles.sectionTitle}>EXPERTISE</Text>
-                                    </View>
-                                </View>
-                                <View style={styles.sectionColumn2}>
-                                    <View style={styles.infoView2}>
-                                        {res.expertise.map((exp, i) => exp.value && !exp.hidden ?
-                                            <Text key={i} style={styles.dropItems}>• {exp.value}</Text> : null)}
-                                    </View>
-                                </View>
-                            </View>}
-
-                            {checkHidden('education') ? null : <View style={styles.rowContainer} wrap={false}>
-                                <View style={styles.sectionColumn1}>
-                                    <View style={styles.infoView1}>
-                                        <Text style={styles.sectionTitle}>EDUCATION</Text>
-                                    </View>
-                                </View>
-                                <View style={styles.sectionColumn2}>
-                                    <View style={styles.infoView2} wrap={false}>
-                                        {res.education.map((ed, i) => ed && !ed.hidden ?
-                                            <View key={i} style={styles.bullet} wrap={false}>
-                                                <Text style={styles.infoItem}>{ed.bullet || ''}</Text>
-                                                <Text style={{ ...styles.regularText, marginLeft: '3vw' }}>{ed.value || ''}</Text>
-                                            </View> : null)}
-                                    </View>
-                                </View>
-                            </View>}
-
-                            {checkHidden('certifications') ? null : <View style={styles.rowContainer} wrap={false}>
-                                <View style={styles.sectionColumn1}>
-                                    <View style={styles.infoView1}>
-                                        <Text style={styles.sectionTitle}>CERTIFICATIONS</Text>
-                                    </View>
-                                </View>
-                                <View style={styles.sectionColumn2}>
-                                    <View style={styles.infoView2} wrap={false}>
-                                        {res.certifications.map((cert, i) => cert && !cert.hidden ?
-                                            <View key={i} style={styles.bullet} wrap={false}>
-                                                <Text style={styles.infoItem}>{cert.bullet || ''}</Text>
-                                                <Text style={{ ...styles.regularText, marginLeft: '3vw' }}>{cert.value || ''}</Text>
-                                            </View> : null)}
-                                    </View>
-                                </View>
-                            </View>}
-
-                            {checkHidden('skills') ? null : <View style={styles.rowContainer} wrap={false}>
-                                <View style={styles.sectionColumn1}>
-                                    <View style={styles.infoView1}>
-                                        <Text style={styles.sectionTitle}>MAIN SKILLS</Text>
-                                    </View>
-                                </View>
-                                <View style={styles.sectionColumn2}>
-                                    <View style={styles.infoView2} wrap={false}>
-                                        <View style={styles.skillsWrapper}>
-                                            {res.skills.map((skill, i) => skill.name && !skill.hidden ?
-                                                <View key={i} style={styles.skillItem}>
-                                                    <Text style={styles.skillName}>{skill.name || ''}</Text>
-                                                    <Text style={styles.skillOption}>{calculateTime(skill.option)}</Text>
-                                                </View> : null)}
-                                        </View>
-                                    </View>
-                                </View>
-                            </View>}
-
-                            {checkHidden('experience') ? null : <View style={styles.experienceContainer}>
-                                <View style={styles.sectionColumn1}>
-                                    <View style={styles.infoView1}>
-                                        <Text style={styles.sectionTitle}>EXPERIENCE</Text>
-                                    </View>
-                                </View>
-                                <View style={styles.sectionColumn1} wrap>
-                                    <View style={styles.infoView1}>
-                                        {res.experience ? res.experience.map((exp, i) =>
-                                            Object.keys(exp).length > 1 && !checkHiddenPost(i, false) ?
-                                                <View key={i} style={{
-                                                    ...styles.experienceRow,
-                                                    borderTop: i !== 0 ? '1px solid rgb(227, 227, 227)' : 'none',
-                                                    paddingTop: i !== 0 ? '2vw' : 0
-                                                }} wrap={false}>
-                                                    <View style={styles.experienceCol1}>
-                                                        {checkHiddenPost(i, exp.period) ? null : <Text style={styles.experiencePeriod}>{exp.period || ''}</Text>}
-                                                    </View>
-                                                    <View style={styles.experienceCol2}>
-                                                        {checkHiddenPost(i, exp.company) ? null : <Text style={styles.experienceCompany}>{exp.company || ''}</Text>}
-                                                        {checkHiddenPost(i, exp.role) ? null : <Text style={styles.experienceRole}>{exp.role || ''}</Text>}
-                                                        {checkHiddenPost(i, exp.description) ? null : <Text style={styles.experienceDescription}>{exp.description || ''}</Text>}
-                                                        <View>
-                                                            <Text style={styles.experienceResponsibilities}>Key responsibilities:</Text>
-                                                            {exp.bullets.map((resp, j) => resp.value && !res.hidden ?
-                                                                <Text key={j} style={styles.experienceResponsibility}>• {resp.value}</Text>
+                        </View>
+                        <View style={styles.sectionColumn1} wrap>
+                            <View style={styles.infoView1}>
+                                {res.experience ? res.experience.map((exp, i) =>
+                                    Object.keys(exp).length > 1 && !checkHiddenPost(i, false) ?
+                                        <View key={i} style={{
+                                            ...styles.experienceRow,
+                                            borderTop: i !== 0 ? '1px solid rgb(227, 227, 227)' : 'none',
+                                            paddingTop: i !== 0 ? '2vw' : 0
+                                        }} wrap={false}>
+                                            <View style={styles.experienceCol1}>
+                                                {checkHiddenPost(i, exp.period) ? null : <Text style={styles.experiencePeriod}>{exp.period || ''}</Text>}
+                                            </View>
+                                            <View style={styles.experienceCol2}>
+                                                {checkHiddenPost(i, exp.company) ? null : <Text style={styles.experienceCompany}>{exp.company || ''}</Text>}
+                                                {checkHiddenPost(i, exp.role) ? null : <Text style={styles.experienceRole}>{exp.role || ''}</Text>}
+                                                {checkHiddenPost(i, exp.description) ? null : <Text style={styles.experienceDescription}>{exp.description || ''}</Text>}
+                                                <View>
+                                                    <Text style={styles.experienceResponsibilities}>Key responsibilities:</Text>
+                                                    {exp.bullets.map((resp, j) => resp.value && !res.hidden ?
+                                                        <Text key={j} style={styles.experienceResponsibility}>• {resp.value}</Text>
+                                                        : null)}
+                                                </View>
+                                                {exp.technologies && Array.isArray(exp.technologies) && exp.technologies[0] ?
+                                                    <View>
+                                                        <Text style={styles.experienceResponsibilities}>Technologies:</Text>
+                                                        <View style={styles.experienceTechList}>
+                                                            {exp.technologies.map((tech, j) => tech && !checkHiddenPost(i, tech) ?
+                                                                <Text key={j} style={styles.experienceTech}>{tech}</Text>
                                                                 : null)}
                                                         </View>
-                                                        {exp.technologies && Array.isArray(exp.technologies) && exp.technologies[0] ?
-                                                            <View>
-                                                                <Text style={styles.experienceResponsibilities}>Technologies:</Text>
-                                                                <View style={styles.experienceTechList}>
-                                                                    {exp.technologies.map((tech, j) => tech && !checkHiddenPost(i, tech) ?
-                                                                        <Text key={j} style={styles.experienceTech}>{tech}</Text>
-                                                                        : null)}
-                                                                </View>
-                                                            </View>
-                                                            : null}
                                                     </View>
-                                                </View>
-                                                : null
-                                        ) : null}
-                                    </View>
-                                </View>
-                            </View>}
-
-                            {checkHidden('tools') ? null : <View style={styles.rowContainer} wrap={false}>
-                                <View style={styles.sectionColumn1}>
-                                    <View style={styles.infoView1}>
-                                        <Text style={styles.sectionTitle}>OTHER TOOLS & SOFTWARE</Text>
-                                    </View>
-                                </View>
-                                <View style={styles.sectionColumn2}>
-                                    <View style={styles.infoView2}>
-                                        <View style={styles.experienceTechList}>
-                                            {res.otherTools.map((str, j) => str.value && !str.hidden ?
-                                                <Text key={j} style={styles.experienceTech}>{str.value}</Text>
-                                                : null)}
+                                                    : null}
+                                            </View>
                                         </View>
-                                    </View>
-                                </View>
-                            </View>}
+                                        : null
+                                ) : null}
+                            </View>
+                        </View>
+                    </View>}
 
-                            <View style={styles.footer} wrap={false} fixed>
-                                <View style={styles.footerCol}>
-                                    <View style={styles.footerRow}>
-                                        <Text style={styles.footerItem}>Concact:</Text>
-                                        <Text style={styles.footerValue}>{res.footer_contact || '-'}</Text>
-                                    </View>
-                                    <View style={styles.footerRow}>
-                                        <Text style={styles.footerItem}>E-mail:</Text>
-                                        <Text style={styles.footerValue}>{res.footer_email || '-'}</Text>
-                                    </View>
-                                </View>
-                                <View style={styles.footerCol}>
-                                    <View style={styles.footerRow}>
-                                        <Text style={styles.footerItem}>Phone:</Text>
-                                        <Text style={styles.footerValue}>{res.footer_phone || '-'}</Text>
-                                    </View>
-                                    <View style={styles.footerRow}>
-                                        <Text style={styles.footerItem}>Location:</Text>
-                                        <Text style={styles.footerValue}>{res.footer_location || '-'}</Text>
-                                    </View>
+                    {checkHidden('tools') ? null : <View style={styles.rowContainer} wrap={false}>
+                        <View style={styles.sectionColumn1}>
+                            <View style={styles.infoView1}>
+                                <Text style={styles.sectionTitle}>OTHER TOOLS & SOFTWARE</Text>
+                            </View>
+                        </View>
+                        <View style={styles.sectionColumn2}>
+                            <View style={styles.infoView2}>
+                                <View style={styles.experienceTechList}>
+                                    {res.otherTools.map((str, j) => str.value && !str.hidden ?
+                                        <Text key={j} style={styles.experienceTech}>{str.value}</Text>
+                                        : null)}
                                 </View>
                             </View>
+                        </View>
+                    </View>}
 
-                        </Page>
-                    </Document>
-                </PDFViewer >
-                : ''
+                    <View style={styles.footer} wrap={false} fixed>
+                        <View style={styles.footerCol}>
+                            <View style={styles.footerRow}>
+                                <Text style={styles.footerItem}>Concact:</Text>
+                                <Text style={styles.footerValue}>{res.footer_contact || '-'}</Text>
+                            </View>
+                            <View style={styles.footerRow}>
+                                <Text style={styles.footerItem}>E-mail:</Text>
+                                <Text style={styles.footerValue}>{res.footer_email || '-'}</Text>
+                            </View>
+                        </View>
+                        <View style={styles.footerCol}>
+                            <View style={styles.footerRow}>
+                                <Text style={styles.footerItem}>Phone:</Text>
+                                <Text style={styles.footerValue}>{res.footer_phone || '-'}</Text>
+                            </View>
+                            <View style={styles.footerRow}>
+                                <Text style={styles.footerItem}>Location:</Text>
+                                <Text style={styles.footerValue}>{res.footer_location || '-'}</Text>
+                            </View>
+                        </View>
+                    </View>
+                </Page>
+            </Document>
         )
     }
 
@@ -625,7 +651,16 @@ export default function Resume({ resumeData }) {
                 {loading ?
                     <div style={{ alignSelf: 'center', display: 'flex', marginTop: '5vw' }}><MoonLoader color='#E59A2F' /></div>
                     : res && res.name ?
-                        <ResumePDF />
+                        <>
+                            <div className='pdf-header-btns'>
+                                <PDFDownloadLink document={<ResumePDF />} fileName={`${fullName}-${res.type}.pdf`} style={styles.pdfDownload}>
+                                    <img src={DownloadIcon} className='pdf-download-svg' onClick={onDownloadPDF} />
+                                </PDFDownloadLink>
+                                <img src={EditIcon} className='pdf-edit-svg' onClick={onEdit} />
+                                <img src={CloseIcon} className='pdf-close-svg' onClick={onClose} />
+                            </div>
+                            {Object.keys(res).length ? pdfView() : ''}
+                        </>
                         : ''}
             </div>
         </div>

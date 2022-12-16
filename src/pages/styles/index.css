@@ -437,14 +437,6 @@
     margin: 1vw;
 }
 
-.modal-btns {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    gap: 1vw;
-    width: 100%;
-}
-
 .close-modal {
     align-self: flex-end;
     margin: 1vw 1vw 0 0;
