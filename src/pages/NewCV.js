@@ -209,10 +209,12 @@ export default function NewCV() {
             resumeData.data = strData
             resumeData.note = data.note || `${user.username ? `Created by ${user.username}` : ''}`
             resumeData.type = data.type || 'Master'
-            resumeData.username = `${data.name}${data.middlename ? ' ' + data.middlename : ''} ${data.surname}` || ''
+            resumeData.username = `${data.name}${data.middlename ? ' ' + data.middlename : ''} ${data.surname || ''}`
             resumeData.managerName = data.footer_contact || ''
             resumeData.managerEmail = data.footer_email || '-'
             resumeData.email = data.email || ''
+            resumeData.user = user
+
             if (profilePic && profilePic.profileImage) resumeData.profilePic = profilePic.profileImage
 
             let saved = {}
