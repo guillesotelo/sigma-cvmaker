@@ -313,7 +313,7 @@ export default function Settings() {
                           name='name'
                           placeholder='DevOps'
                           updateData={updateData}
-                          style={{ color: 'rgb(71, 71, 71)' }}
+                          style={{ color: 'rgb(71, 71, 71)', width: '93%' }}
                           value={data.name || ''}
                         />
                         <InputField
@@ -322,7 +322,7 @@ export default function Settings() {
                           name='field'
                           placeholder='Back End'
                           updateData={updateData}
-                          style={{ color: 'rgb(71, 71, 71)' }}
+                          style={{ color: 'rgb(71, 71, 71)', width: '93%' }}
                           value={data.field || ''}
                         />
                       </div>
@@ -387,7 +387,7 @@ export default function Settings() {
                             name='name'
                             placeholder='Team Work'
                             updateData={updateData}
-                            style={{ color: 'rgb(71, 71, 71)' }}
+                            style={{ color: 'rgb(71, 71, 71)', width: '93%' }}
                             value={data.name || ''}
                           />
                           <InputField
@@ -396,7 +396,7 @@ export default function Settings() {
                             name='type'
                             placeholder='Soft Skill'
                             updateData={updateData}
-                            style={{ color: 'rgb(71, 71, 71)' }}
+                            style={{ color: 'rgb(71, 71, 71)', width: '93%' }}
                             value={data.type || ''}
                           />
                         </div>

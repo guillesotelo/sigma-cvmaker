@@ -327,7 +327,7 @@ export default function Users() {
                             options={managers}
                             value={data.managerName}
                             updateData={updateData}
-                            size='100%'
+                            size='95%'
                         />
                         <InputField
                             label='Phone'
@@ -456,7 +456,7 @@ export default function Users() {
                                 options={managers}
                                 value={data.managerName}
                                 updateData={updateData}
-                                size='16vw'
+                                size='95%'
                             />
                             <InputField
                                 label='Phone'

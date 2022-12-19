@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import DownloadIcon from '../../icons/download-icon.svg'
 import EditIcon from '../../icons/edit-icon.svg'
 import TrashCan from '../../icons/trash-icon.svg'
+import DownloadIcon from '../../icons/download-icon.svg'
 import MoonLoader from "react-spinners/MoonLoader"
 import './styles.css'
+import ResumePDF from '../Resume'
+import { pdf } from '@react-pdf/renderer'
+import { saveAs } from 'file-saver'
 
 export default function DataTable(props) {
     const {
@@ -22,6 +25,7 @@ export default function DataTable(props) {
         sizes,
         setResumeData,
         setOpenModal,
+        setDownload,
         setIsPdf,
         modalView,
         style
@@ -78,6 +82,12 @@ export default function DataTable(props) {
                                                 setResumeData(row)
                                                 setOpenModal(true)
                                             }} className='data-table-icon' />
+                                            <img src={DownloadIcon} className='data-table-icon' onClick={() => {
+                                                setOpenModal(true)
+                                                setIsPdf(true)
+                                                setResumeData(row)
+                                                setDownload(true)
+                                            }} />
                                         </div>
                                         :
                                         <h4

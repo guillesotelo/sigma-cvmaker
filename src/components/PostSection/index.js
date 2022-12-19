@@ -473,7 +473,10 @@ export default function PostSection(props) {
                                 <input
                                     className='post-manual-input'
                                     onKeyDown={e => {
-                                        if (e.key === 'Enter' && e.target.value) setTech([...new Set(tech.concat(e.target.value))])
+                                        if (e.key === 'Enter' && e.target.value) {
+                                            setTech([...new Set(tech.concat(e.target.value))])
+                                            e.target.value = ''
+                                        }
                                     }}
                                     placeholder='e.g: C++'
                                     type='text'

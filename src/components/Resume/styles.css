@@ -40,14 +40,17 @@
 }
 
 .pdf-download-svg:hover {
+    transition: .3s;
     filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
 }
 
 .pdf-edit-svg:hover {
+    transition: .3s;
     filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
 }
 
 .pdf-close-svg:hover {
+    transition: .3s;
     filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
 }
 

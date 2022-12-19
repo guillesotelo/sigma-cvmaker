@@ -178,7 +178,7 @@
 }
 
 .post-company {
-    margin: .5vw 0;
+    margin: .5vw 0 .3vw 0;
     font-weight: 800;
     color: black;
     font-size: 1.2vw;
@@ -187,8 +187,8 @@
 
 .post-role {
     margin: 0;
-    font-size: 1vw;
-    font-style: italic;
+    font-size: 1.1vw;
+    /* font-style: italic; */
     text-align: left;
 }
 

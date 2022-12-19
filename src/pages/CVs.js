@@ -27,6 +27,7 @@ export default function CVs({ showAll }) {
     const [isEdit, setIsEdit] = useState(false)
     const [loading, setLoading] = useState(false)
     const [isPdf, setIsPdf] = useState(false)
+    const [download, setDownload] = useState(false)
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
     const dispatch = useDispatch()
     const history = useHistory()
@@ -64,6 +65,11 @@ export default function CVs({ showAll }) {
     useEffect(() => {
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
         if (!localUser || !localUser.email) history.push('/login')
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' || e.key === 'Esc') onCloseModal()
+        })
+
         getAllResumes(showAll)
     }, [])
 
@@ -186,6 +192,7 @@ export default function CVs({ showAll }) {
                     setResumeData={setResumeData}
                     setOpenModal={setOpenModal}
                     setIsPdf={setIsPdf}
+                    setDownload={setDownload}
                     modalView={true}
                 // sizes={['18%', '15%', '17%', '18%', '18%', '10%', '10%']}
                 />
@@ -197,6 +204,8 @@ export default function CVs({ showAll }) {
                         onClose={onCloseModal}
                         onEdit={onEditPdf}
                         onDownloadPDF={onDownloadPDF}
+                        download={download}
+                        setDownload={setDownload}
                     />
                 </div> : ''}
             {openModal && !isPdf ?

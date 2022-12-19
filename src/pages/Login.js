@@ -64,7 +64,7 @@ export default function Login() {
                             type='text'
                             name='email'
                             updateData={updateData}
-                            style={{ width: '92%' }}
+                            style={{ width: '95%' }}
                         />
                         <InputField
                             label='Password'

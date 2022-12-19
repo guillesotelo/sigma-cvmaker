@@ -213,7 +213,7 @@ export default function Clients() {
                             />
                         </div>
                     </div> : ''}
-                <div className='settings-new-skill-btn'>
+                <div className='settings-new-skill-btn' style={{ filter: removeModal && 'blur(10px)' }}>
                     <CTAButton
                         label='New Client'
                         handleClick={() => {
@@ -232,7 +232,7 @@ export default function Clients() {
                             disabled={!clientsEdit}
                         /> : ''}
                 </div>
-                <div className='settings-skills-container'>
+                <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
                     <DataTable
                         title='Clients'
                         subtitle='Here is a list of all clients in the system'

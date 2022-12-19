@@ -11,7 +11,8 @@ import ReactPDF, {
     StyleSheet,
     Image,
     Font,
-    PDFDownloadLink
+    PDFDownloadLink,
+    pdf
 } from '@react-pdf/renderer'
 import SigmaLogo from '../../assets/logos/sigma.png'
 import RobotoRegular from '../../assets/fonts/Roboto-Regular.ttf'
@@ -31,7 +32,9 @@ export default function Resume(props) {
         resumeData,
         onClose,
         onEdit,
-        onDownloadPDF
+        onDownloadPDF,
+        download,
+        setDownload
     } = props
 
     const [data, setData] = useState(resumeData)
@@ -50,10 +53,21 @@ export default function Resume(props) {
         setLoading(true)
         const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
         if (!user || !user.email) history.push('/login')
+        getFonts()
         getResumeData()
         getCVLogo()
         setLoading(false)
     }, [])
+
+    useEffect(() => {
+        if (Object.keys(res).length && download) {
+            setLoading(true)
+            setDownload(false)
+            setTimeout(() => {
+                onDownload()
+            }, 1000)
+        }
+    }, [res])
 
     const getCVById = async id => {
         try {
@@ -99,37 +113,67 @@ export default function Resume(props) {
         return '-'
     }
 
-    const onDocumentLoadSuccess = ({ numPages }) => {
-        setNumPages(numPages)
-        setPageNumber(1)
+    const onDownload = async () => {
+        await downloadPDF()
+        setLoading(false)
+        onClose()
     }
-
 
     const updateData = (key, value) => {
         setData({ ...data, [key]: value })
     }
 
-    Font.register({
-        family: 'Roboto',
-        fonts: [
-            {
-                src: RobotoRegular,
-            },
-            {
-                src: RobotoBold,
-                fontWeight: 'bold',
-            }
-        ]
-    })
+    const getFonts = () => {
+        Font.register({
+            family: 'Roboto',
+            fonts: [
+                {
+                    src: RobotoRegular,
+                    fontWeight: 'normal'
+                },
+                {
+                    src: RobotoBold,
+                    fontWeight: 'bold',
+                },
+                {
+                    src: 'http://fonts.gstatic.com/s/roboto/v30/KFOkCnqEu92Fr1Mu52xPKTM1K9nz.ttf',
+                    fontStyle: 'italic'
+                }
+            ]
+        })
 
-    Font.register({
-        family: 'GreatVibes-Regular',
-        fonts: [
-            {
-                src: GreatVibes
-            }
-        ]
-    })
+        Font.register({
+            family: 'GreatVibes-Regular',
+            src: GreatVibes
+        })
+    }
+
+    const checkHidden = item => {
+        const { hiddenItems } = res.hiddenSections
+        return (hiddenItems && hiddenItems.includes(item)) || res.hiddenSections[item]
+    }
+
+    const checkHiddenPost = (index, item) => {
+        const { postSection } = res.hiddenSections
+        if (index && item) return postSection[index] && postSection[index].includes(item)
+        else if (index) return postSection && postSection.sections && postSection.sections[index]
+    }
+
+    const downloadPDF = async () => {
+        const asPdf = pdf()
+        asPdf.updateContainer(<ResumePDF />)
+        const blob = await asPdf.toBlob()
+        saveAs(blob, `${fullName}-${res.type}.pdf`)
+        onDownloadPDF()
+    }
+
+    const PDFView = () => {
+        return (
+            <PDFViewer style={styles.PDFContainer} showToolbar={false}>
+                <ResumePDF />
+            </PDFViewer >
+        )
+    }
 
     const styles = StyleSheet.create({
         PDFContainer: {
@@ -239,7 +283,8 @@ export default function Resume(props) {
         },
         signature: {
             fontFamily: 'GreatVibes-Regular',
-            fontSize: '2.5vw',
+            fontWeight: 'normal',
+            fontSize: '3vw',
             alignSelf: 'flex-start',
             margin: '2.5vw 0 0.3vw 0'
         },
@@ -278,10 +323,10 @@ export default function Resume(props) {
             color: 'black'
         },
         skillOption: {
-            fontWeight: 'normal',
             fontSize: '1.6vw',
             color: 'gray',
             textAlign: 'right',
+            fontFamily: 'Roboto',
             fontStyle: 'italic'
         },
         skill: {
@@ -339,13 +384,14 @@ export default function Resume(props) {
             fontSize: '1.8vw',
             fontFamily: 'Roboto',
             fontWeight: 'bold',
-            alignSelf: 'flex-start'
+            alignSelf: 'flex-start',
+            color: '#3d3d3d'
         },
         experienceRole: {
-            fontSize: '1.6vw',
+            fontSize: '1.7vw',
             fontFamily: 'Roboto',
-            alignSelf: 'flex-start',
-            color: 'rgb(99, 99, 99)'
+            fontWeight: 'bold',
+            alignSelf: 'flex-start'
         },
         experienceDescription: {
             fontSize: '1.6vw',
@@ -414,25 +460,6 @@ export default function Resume(props) {
         }
     })
 
-    const checkHidden = item => {
-        const { hiddenItems } = res.hiddenSections
-        return (hiddenItems && hiddenItems.includes(item)) || res.hiddenSections[item]
-    }
-
-    const checkHiddenPost = (index, item) => {
-        const { postSection } = res.hiddenSections
-        if (index && item) return postSection[index] && postSection[index].includes(item)
-        else if (index) return postSection && postSection.sections && postSection.sections[index]
-    }
-
-    const pdfView = () => {
-        return (
-            <PDFViewer style={styles.PDFContainer} showToolbar={false}>
-                {ResumePDF()}
-            </PDFViewer >
-        )
-    }
-
     const ResumePDF = () => {
         return (
             <Document>
@@ -466,7 +493,7 @@ export default function Resume(props) {
                             </View>
                             <View style={styles.infoView1}>
                                 {checkHidden(res.language) ? null : <Text style={styles.infoItem}>Language</Text>}
-                                {res.languages.map((lan, i) => lan && !lan.hidden ?
+                                {res.languages.map((lan, i) => lan.name && !lan.hidden ?
                                     <Text key={i} style={styles.regularText}>{`${lan.name} - ${lan.option}`}</Text> : null)
                                 }
                             </View>
@@ -575,7 +602,7 @@ export default function Resume(props) {
                                             </View>
                                             <View style={styles.experienceCol2}>
                                                 {checkHiddenPost(i, exp.company) ? null : <Text style={styles.experienceCompany}>{exp.company || ''}</Text>}
-                                                {checkHiddenPost(i, exp.role) ? null : <Text style={styles.experienceRole}>{exp.role || ''}</Text>}
+                                                {checkHiddenPost(i, exp.role) ? null : <Text style={{ ...styles.experienceRole, fontWeight: !exp.company && 'bold' }}>{exp.role || ''}</Text>}
                                                 {checkHiddenPost(i, exp.description) ? null : <Text style={styles.experienceDescription}>{exp.description || ''}</Text>}
                                                 <View>
                                                     <Text style={styles.experienceResponsibilities}>Key responsibilities:</Text>
@@ -585,7 +612,7 @@ export default function Resume(props) {
                                                 </View>
                                                 {exp.technologies && Array.isArray(exp.technologies) && exp.technologies[0] ?
                                                     <View>
-                                                        <Text style={styles.experienceResponsibilities}>Technologies:</Text>
+                                                        <Text style={styles.experienceResponsibilities}>Tools & Tech:</Text>
                                                         <View style={styles.experienceTechList}>
                                                             {exp.technologies.map((tech, j) => tech && !checkHiddenPost(i, tech) ?
                                                                 <Text key={j} style={styles.experienceTech}>{tech}</Text>
@@ -601,22 +628,23 @@ export default function Resume(props) {
                         </View>
                     </View>}
 
-                    {checkHidden('tools') ? null : <View style={styles.rowContainer} wrap={false}>
-                        <View style={styles.sectionColumn1}>
-                            <View style={styles.infoView1}>
-                                <Text style={styles.sectionTitle}>OTHER TOOLS & SOFTWARE</Text>
-                            </View>
-                        </View>
-                        <View style={styles.sectionColumn2}>
-                            <View style={styles.infoView2}>
-                                <View style={styles.experienceTechList}>
-                                    {res.otherTools.map((str, j) => str.value && !str.hidden ?
-                                        <Text key={j} style={styles.experienceTech}>{str.value}</Text>
-                                        : null)}
+                    {checkHidden('tools') || !res.otherTools.length || !res.otherTools[0].value ? null :
+                        <View style={styles.rowContainer} wrap={false}>
+                            <View style={styles.sectionColumn1}>
+                                <View style={styles.infoView1}>
+                                    <Text style={styles.sectionTitle}>OTHER TOOLS & SOFTWARE</Text>
                                 </View>
                             </View>
-                        </View>
-                    </View>}
+                            <View style={styles.sectionColumn2}>
+                                <View style={styles.infoView2}>
+                                    <View style={styles.experienceTechList}>
+                                        {res.otherTools.map((str, j) => str.value && !str.hidden ?
+                                            <Text key={j} style={styles.experienceTech}>{str.value}</Text>
+                                            : null)}
+                                    </View>
+                                </View>
+                            </View>
+                        </View>}
 
                     <View style={styles.footer} wrap={false} fixed>
                         <View style={styles.footerCol}>
@@ -649,20 +677,23 @@ export default function Resume(props) {
         <div className='view-resume-container'>
             <div className='view-resume-page'>
                 {loading ?
-                    <div style={{ alignSelf: 'center', display: 'flex', marginTop: '5vw' }}><MoonLoader color='#E59A2F' /></div>
+                    <div style={{ alignSelf: 'center', display: 'flex', marginTop: '20vw' }}><MoonLoader color='#E59A2F' /></div>
                     : res && res.name ?
                         <>
                             <div className='pdf-header-btns'>
-                                <PDFDownloadLink document={<ResumePDF />} fileName={`${fullName}-${res.type}.pdf`} style={styles.pdfDownload}>
-                                    <img src={DownloadIcon} className='pdf-download-svg' onClick={onDownloadPDF} />
-                                </PDFDownloadLink>
+                                <img
+                                    src={DownloadIcon}
+                                    className='pdf-download-svg'
+                                    onClick={downloadPDF}
+                                />
                                 <img src={EditIcon} className='pdf-edit-svg' onClick={onEdit} />
                                 <img src={CloseIcon} className='pdf-close-svg' onClick={onClose} />
                             </div>
-                            {Object.keys(res).length ? pdfView() : ''}
+                            {Object.keys(res).length ? <PDFView /> : ''}
                         </>
                         : ''}
             </div>
         </div>
     )
 }
+

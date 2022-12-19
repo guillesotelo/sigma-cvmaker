@@ -16,6 +16,8 @@ export default function ToolsTech() {
     const [tools, setTools] = useState([])
     const [fieldOptions, setFieldOptions] = useState([])
     const [typeOptions, setTypeOptions] = useState([])
+    const [removeModal, setRemoveModal] = useState(false)
+    const [isNew, setIsNew] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [selectedTool, setSelectedTool] = useState(-1)
     const [toolsEdit, setToolsEdit] = useState(false)
@@ -101,7 +103,9 @@ export default function ToolsTech() {
             if (!saved) toast.error('Error saving Tool')
             else toast.success('Tool saved successfully')
 
+            setIsNew(false)
             setLoading(false)
+            setRemoveModal(false)
         } catch (err) {
             setLoading(false)
             toast.error('Error saving Tool')
@@ -124,21 +128,59 @@ export default function ToolsTech() {
         setData({})
     }
 
+    const removeItem = () => {
+        const updated = tools
+        updated.splice(selectedTool, 1)
+
+        saveTools(updated)
+        setSelectedTool(-1)
+        if (toolsEdit) {
+            setToolsEdit(false)
+        }
+        setData({})
+    }
+
     return (
         <div className='tools-tech-container'>
             <div className='tools-tech-section'>
-                <div className='settings-new-skill-btn'>
+                {removeModal ?
+                    <div className='remove-modal'>
+                        <h4 style={{ textAlign: 'center' }}>Are you sure you want to delete <br />{data.name}?</h4>
+                        <div className='remove-modal-btns'>
+                            <CTAButton
+                                label='Cancel'
+                                handleClick={() => {
+                                    setRemoveModal(false)
+                                }}
+                                color={APP_COLORS.GRAY}
+                            />
+                            <CTAButton
+                                label='Confirm'
+                                handleClick={removeItem}
+                                color={APP_COLORS.RED}
+                            />
+                        </div>
+                    </div> : ''}
+                <div className='settings-new-skill-btn' style={{ filter: removeModal && 'blur(10px)' }}>
                     <CTAButton
                         label='New Tool / Tech'
                         handleClick={() => {
                             setSelectedTool(tools.length)
                             setToolsEdit(true)
+                            setIsNew(true)
                         }}
                         color={APP_COLORS.GREEN}
                         disabled={toolsEdit}
                     />
+                    {toolsEdit && !isNew ?
+                        <CTAButton
+                            label='Delete'
+                            handleClick={() => setRemoveModal(true)}
+                            color={APP_COLORS.RED}
+                            disabled={!toolsEdit}
+                        /> : ''}
                 </div>
-                <div className='settings-skills-container'>
+                <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
                     <DataTable
                         title='Tools & Tech'
                         subtitle='Here is a list of all tools & tech in the system'
@@ -160,7 +202,7 @@ export default function ToolsTech() {
                                     name='name'
                                     placeholder='Java'
                                     updateData={updateData}
-                                    style={{ color: 'rgb(71, 71, 71)' }}
+                                    style={{ color: 'rgb(71, 71, 71)', width: '95%' }}
                                     value={data.name || ''}
                                 />
                                 <InputField
@@ -169,7 +211,7 @@ export default function ToolsTech() {
                                     name='field'
                                     placeholder='Back End'
                                     updateData={updateData}
-                                    style={{ color: 'rgb(71, 71, 71)' }}
+                                    style={{ color: 'rgb(71, 71, 71)', width: '95%' }}
                                     value={data.field || ''}
                                     options={fieldOptions}
                                 />
@@ -179,7 +221,7 @@ export default function ToolsTech() {
                                     name='type'
                                     placeholder='Software Development'
                                     updateData={updateData}
-                                    style={{ color: 'rgb(71, 71, 71)' }}
+                                    style={{ color: 'rgb(71, 71, 71)', width: '95%' }}
                                     value={data.type || ''}
                                     options={typeOptions}
                                 />
@@ -191,6 +233,7 @@ export default function ToolsTech() {
                                         setSelectedTool(-1)
                                         setToolsEdit(false)
                                         setIsEdit(false)
+                                        setIsNew(false)
                                         setData({})
                                     }}
                                     color={APP_COLORS.GRAY}
