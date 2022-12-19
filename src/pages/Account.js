@@ -82,7 +82,7 @@ export default function Account() {
 
   const logOutUser = async () => {
     try {
-      const loggedOut = await dispatch(logOut()).then(data => data.payload)
+      const loggedOut = await dispatch(logOut(user)).then(data => data.payload)
       if (loggedOut) {
         toast.success('See you later!')
         setTimeout(() => history.push('/login'), 1500)
