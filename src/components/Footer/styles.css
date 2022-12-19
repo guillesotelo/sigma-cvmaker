@@ -49,12 +49,6 @@
     color: #6D0E00;
 }
 
-.footer-version {
-    font-size: .7vw;
-    width: 30%;
-    color: rgb(160, 160, 160);
-}
-
 .footer-logo-container {
     width: 30%;
     text-align: right;
@@ -63,6 +57,7 @@
 .footer-logo {
     height: 1.8vw;
     padding: 0 2vw;
+    margin-top: .5vw;
     cursor: pointer;
 }
 

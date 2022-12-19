@@ -26,7 +26,7 @@ export default function Register(props) {
   const registerUser = async () => {
     try {
       setLoading(true)
-      const created = await dispatch(createUser({ ...data, profilePic })).then(data => data.payload)
+      const created = await dispatch(createUser({ ...data, profilePic, user })).then(data => data.payload)
 
       if (created) {
         setLoading(false)

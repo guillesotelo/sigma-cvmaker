@@ -144,7 +144,7 @@ export default function Consultants() {
             setLoading(true)
             if (checkData()) {
                 if (isNew) {
-                    const saved = await dispatch(createUser({ ...data, profilePic })).then(data => data.payload)
+                    const saved = await dispatch(createUser({ ...data, profilePic, user })).then(data => data.payload)
                     if (saved) toast.success('User data saved successfully')
                     else toast.error('Error saving changes')
                     getAllUsers()

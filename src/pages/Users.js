@@ -13,7 +13,8 @@ import {
     updateUserData,
     getProfileImage,
     getAllManagers,
-    deleteUser
+    deleteUser,
+    createUser
 } from '../store/reducers/user'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
@@ -40,7 +41,7 @@ export default function Users() {
     const userHeaders = [
         {
             name: 'ADDED',
-            value: 'date'
+            value: 'createdAt'
         },
         {
             name: 'FULL NAME',
@@ -142,10 +143,15 @@ export default function Users() {
         try {
             setLoading(true)
             if (checkData()) {
-                const updated = await dispatch(updateUserData({ _id: users[selectedUser]._id, profilePic, newData: data })).then(data => data.payload)
-
-                if (updated) toast.success('User data saved successfully')
-                else toast.error('Error saving changes')
+                if (isNew) {
+                    const saved = await dispatch(createUser({ ...data, profilePic, user })).then(data => data.payload)
+                    if (!saved) return toast.error('Error saving user')
+                    toast.success('User saved successfully')
+                } else {
+                    const updated = await dispatch(updateUserData({ _id: users[selectedUser]._id, profilePic, newData: data, user })).then(data => data.payload)
+                    if (updated) toast.success('User data saved successfully')
+                    else toast.error('Error saving changes')
+                }
                 getAllUsers()
             } else {
                 setLoading(false)
@@ -154,9 +160,11 @@ export default function Users() {
 
             setLoading(false)
             setIsEdit(false)
+            setIsNew(false)
         } catch (err) {
             setLoading(false)
             setIsEdit(false)
+            setIsNew(false)
             toast.error('Error saving changes')
         }
     }
@@ -189,6 +197,17 @@ export default function Users() {
             console.error(err)
             toast.error('Error removing user')
         }
+    }
+
+    const generatePass = () => {
+        const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        const passwordLength = 8
+        let password = ""
+        for (let i = 0; i < passwordLength; i++) {
+            let randomNumber = Math.floor(Math.random() * chars.length);
+            password += chars.substring(randomNumber, randomNumber + 1);
+        }
+        return updateData('password', password, true)
     }
 
     return (
@@ -344,7 +363,14 @@ export default function Users() {
                             updateData={updateData}
                             placeholder='Mobilvägen 10, Lund, Sweden'
                             value={data.location || ''}
-                            style={{ marginBottom: '1vw' }}
+                        />
+                        <InputField
+                            label='Login Password'
+                            type='text'
+                            name='password'
+                            updateData={updateData}
+                            placeholder='Write new password'
+                            style={{ color: 'rgb(71, 71, 71)', marginBottom: '1vw' }}
                         />
                         <SwitchBTN
                             label='Is Manager?'
@@ -473,7 +499,14 @@ export default function Users() {
                                 updateData={updateData}
                                 placeholder='Mobilvägen 10, Lund, Sweden'
                                 value={data.location || ''}
-                                style={{ marginBottom: '1vw' }}
+                            />
+                            <InputField
+                                label='Login Password'
+                                type='text'
+                                name='password'
+                                updateData={updateData}
+                                value={data.password || data.password === '' ? data.password : generatePass()}
+                                style={{ color: 'rgb(71, 71, 71)', marginBottom: '1vw' }}
                             />
                             <SwitchBTN
                                 label='Is Manager?'

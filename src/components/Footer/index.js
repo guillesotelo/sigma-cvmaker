@@ -1,5 +1,4 @@
 import React from 'react'
-import { VERSION } from '../../constants/app'
 import EngineeringLogo from '../../assets/logos/engineering_by_sigma.png'
 import './styles.css'
 
@@ -14,7 +13,6 @@ export default function Footer() {
                 }}>Sigma Connectivity Engineering</h4>
                 <h4 className='footer-text-row'>Mobilvägen 10, 223 62 Lund, Sweden </h4> */}
             {/* </div> */}
-            <h4 className='footer-version'>{VERSION}</h4>
             {/* <div className='footer-text'>
                 <h4 className='footer-contact footer-hover' onClick={(e) => {
                     e.preventDefault()

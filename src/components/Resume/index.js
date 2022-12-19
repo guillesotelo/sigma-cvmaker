@@ -11,7 +11,6 @@ import ReactPDF, {
     StyleSheet,
     Image,
     Font,
-    PDFDownloadLink,
     pdf
 } from '@react-pdf/renderer'
 import SigmaLogo from '../../assets/logos/sigma.png'

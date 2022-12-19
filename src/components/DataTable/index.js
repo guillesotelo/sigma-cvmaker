@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import EditIcon from '../../icons/edit-icon.svg'
 import TrashCan from '../../icons/trash-icon.svg'
 import DownloadIcon from '../../icons/download-icon.svg'
 import MoonLoader from "react-spinners/MoonLoader"
 import './styles.css'
-import ResumePDF from '../Resume'
-import { pdf } from '@react-pdf/renderer'
-import { saveAs } from 'file-saver'
 
 export default function DataTable(props) {
     const {
@@ -101,7 +97,7 @@ export default function DataTable(props) {
                                                     setResumeData(row)
                                                 } else handleItem(i)
                                             }}>
-                                            {header.value === 'date' || header.value === 'updatedAt' ? `${new Date(row[header.value]).toDateString()} ${new Date(row[header.value]).toLocaleTimeString()}` :
+                                            {header.value === 'date' || header.value === 'createdAt' || header.value === 'updatedAt' ? `${new Date(row[header.value]).toDateString()} ${new Date(row[header.value]).toLocaleTimeString()}` :
                                                 header.value === 'isManager' || header.value === 'isAdmin' ?
                                                     row[header.value] ? 'Yes' : 'No'
                                                     :

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../../constants/app'
+import { VERSION } from '../../constants/app'
 import ChartPie from '../../icons/chart-pie.svg'
 import DocText from '../../icons/document-text.svg'
 import UsersIcon from '../../icons/users.svg'
@@ -114,6 +115,7 @@ export default function SdideBar(props) {
                     </div>
                 </div>
             </div>
+            <h4 className='sidebar-version'>{VERSION}</h4>
         </div>
     )
 }

@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import { APP_COLORS } from '../constants/app'
-import { logIn } from '../store/reducers/user'
-import MoonLoader from "react-spinners/MoonLoader"
-import ActionCard from '../components/ActionCard'
-import DownloadIcon from '../icons/download-icon.svg'
-import EditIcon from '../icons/edit-icon.svg'
-import TrashCan from '../icons/trash-icon.svg'
-import GoBackIcon from '../icons/goback-icon.svg'
 import Resume from '../components/Resume'
 import { getResumes, removeResume, saveLog } from '../store/reducers/resume'
 import SearchBar from '../components/SearchBar'
@@ -194,7 +187,6 @@ export default function CVs({ showAll }) {
                     setIsPdf={setIsPdf}
                     setDownload={setDownload}
                     modalView={true}
-                // sizes={['18%', '15%', '17%', '18%', '18%', '10%', '10%']}
                 />
             </div>
             {openModal && isPdf ?

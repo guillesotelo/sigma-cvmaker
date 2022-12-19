@@ -7,6 +7,7 @@
     min-height: 90vh;
     border-right: 1px solid #E4E7EB;
     background-color: white;
+    position: relative;
 }
 
 .sidebar-section {
@@ -59,4 +60,12 @@
 
 .sidebar-arrow {
     height: 20px;
+}
+
+.sidebar-version {
+    font-size: .8vw;
+    /* width: 30%; */
+    bottom: 0;
+    position: absolute;
+    color: #b5b5b5;
 }
