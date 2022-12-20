@@ -166,7 +166,7 @@ export default function Resume(props) {
         const asPdf = pdf()
         asPdf.updateContainer(<ResumePDF />)
         const blob = await asPdf.toBlob()
-        saveAs(blob, `${fullName}-${res.type}.pdf`)
+        saveAs(blob, `${fullName} - ${res.type}.pdf`)
         onDownloadPDF()
     }
 

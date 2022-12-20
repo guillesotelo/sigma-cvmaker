@@ -101,7 +101,7 @@ export default function Bullet(props) {
                     <div {...provided.droppableProps} ref={provided.innerRef}>
                         {items.map((item, i) =>
                             selected === i ?
-                                <div className='bullet-edit-row'>
+                                <div className='bullet-edit-row' key={i}>
                                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
                                         <input
                                             className='bullet-name'
@@ -209,7 +209,7 @@ export default function Bullet(props) {
                             <div {...provided.droppableProps} ref={provided.innerRef}>
                                 {items.map((item, i) =>
                                     selected === i ?
-                                        <div className='bullet-edit-row'>
+                                        <div className='bullet-edit-row' key={i}>
                                             <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
                                                 <input
                                                     className='bullet-name'

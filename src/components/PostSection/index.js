@@ -221,8 +221,8 @@ export default function PostSection(props) {
                         :
                         item.value && subindex !== bullets.length - 1 ?
                             <div className='bullet-row' key={subindex}>
-                                <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>●</h4>
-                                <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value || ''}</h4>
+                                <h4 className='bullet' style={{ opacity: item.hidden && '.3' }}>●</h4>
+                                <h4 className='bullet-text' style={{ opacity: item.hidden && '.3' }}>{item.value || ''}</h4>
                                 <img
                                     src={EditIcon}
                                     className='hide-icon-item edit-icon-item'
@@ -337,7 +337,7 @@ export default function PostSection(props) {
             <div className='post-column'>
                 <div className='post-col-dif'>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') && '.2' }} className='post-label'>Period</h4>
+                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') && '.3' }} className='post-label'>Period</h4>
                         <div className='input-hide-row'>
                             <input
                                 className='section-item-name'
@@ -345,7 +345,7 @@ export default function PostSection(props) {
                                 placeholder='2020 - 2022'
                                 type='text'
                                 value={selected.period || ''}
-                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') && '.2' }}
+                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') && '.3' }}
                             />
                             {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') ?
                                 <img
@@ -363,7 +363,7 @@ export default function PostSection(props) {
                         </div>
                     </GrammarlyEditorPlugin>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') && '.2' }} className='post-label'>Company name</h4>
+                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') && '.3' }} className='post-label'>Company name</h4>
                         <div className='input-hide-row'>
                             <input
                                 className='section-item-name'
@@ -371,7 +371,7 @@ export default function PostSection(props) {
                                 placeholder='Sigma Connectivity Engineering'
                                 type='text'
                                 value={selected.company || ''}
-                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') && '.2' }}
+                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') && '.3' }}
                             />
                             {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') ?
                                 <img
@@ -391,7 +391,7 @@ export default function PostSection(props) {
                 </div>
                 <div className='post-col-dif'>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') && '.2' }} className='post-label'>Role title</h4>
+                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') && '.3' }} className='post-label'>Role title</h4>
                         <div className='input-hide-row'>
                             <input
                                 className='section-item-name'
@@ -399,7 +399,7 @@ export default function PostSection(props) {
                                 placeholder='Android Developer'
                                 type='text'
                                 value={selected.role || ''}
-                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') && '.2' }}
+                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') && '.3' }}
                             />
                             {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') ?
                                 <img
@@ -417,7 +417,7 @@ export default function PostSection(props) {
                         </div>
                     </GrammarlyEditorPlugin>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Job / Tasks description') && '.2' }} className='post-label'>Job / Tasks description</h4>
+                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Job / Tasks description') && '.3' }} className='post-label'>Job / Tasks description</h4>
                         <div className='input-hide-row'>
                             <textarea
                                 className='section-item-name'
@@ -427,7 +427,7 @@ export default function PostSection(props) {
                                 cols={10}
                                 rows={10}
                                 value={selected.description || ''}
-                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Job / Tasks description') && '.2' }}
+                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Job / Tasks description') && '.3' }}
                             />
                             {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Job / Tasks description') ?
                                 <img
@@ -488,6 +488,7 @@ export default function PostSection(props) {
                                 {tech.map((tool, i) =>
                                     selectedTool === i ?
                                         <input
+                                            key={i}
                                             className='edit-manual-input'
                                             onChange={e => setEditTool(e.target.value)}
                                             onKeyDown={e => {
@@ -506,7 +507,7 @@ export default function PostSection(props) {
                                         />
                                         :
                                         <div key={i} className='post-tool-div' style={{ backgroundColor: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '#fafafa' }}>
-                                            <h4 className='post-tool' style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '.2' }}>{tool}</h4>
+                                            <h4 className='post-tool' style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '.3' }}>{tool}</h4>
                                             <img
                                                 src={EditIcon}
                                                 className='hide-icon-tool'
@@ -714,8 +715,8 @@ export default function PostSection(props) {
                                         <div className='post-tools-list'>
                                             {tech.map((tec, i) =>
                                                 <div key={i} className='post-tool-div' style={{ backgroundColor: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '#e5e5e5' }}>
-                                                    <h4 className='post-tool' style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.2' }}>{tec}</h4>
-                                                    <h4 className='post-remove-tool' style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.2' }} onClick={() => removeTech(i)}>X</h4>
+                                                    <h4 className='post-tool' style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.3' }}>{tec}</h4>
+                                                    <h4 className='post-remove-tool' style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.3' }} onClick={() => removeTech(i)}>X</h4>
                                                     {hidden.postSection[i] && hidden.postSection[i].includes(tec) ?
                                                         <img
                                                             src={ShwoIcon}

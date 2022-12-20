@@ -225,7 +225,7 @@ export default function ItemDropdown(props) {
                             <div {...provided.droppableProps} ref={provided.innerRef}>
                                 {itemsArr.map((item, i, fullArr) =>
                                     selected === i ?
-                                        <div className='skill-edit-row'>
+                                        <div key={i} className='skill-edit-row'>
                                             <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
                                                 <input
                                                     className='item-dropdown-name'

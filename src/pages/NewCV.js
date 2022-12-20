@@ -228,8 +228,10 @@ export default function NewCV() {
             if (saved) {
                 setLoading(false)
                 if (isEdit) toast.success('Resume updated successfully!')
-                else toast.success('Resume saved successfully!')
-                setTimeout(() => history.goBack(), 2000)
+                else {
+                    toast.success('Resume saved successfully!')
+                    setTimeout(() => history.goBack(), 2000)
+                }
             } else {
                 setLoading(false)
                 return toast.error('Error saving Resume. Please try again later')
