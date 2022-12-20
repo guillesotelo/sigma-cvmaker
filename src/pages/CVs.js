@@ -77,7 +77,7 @@ export default function CVs({ showAll }) {
         if (user && user.email) {
             try {
                 setLoading(true)
-                const cvs = await dispatch(getResumes({ ...user, getAll: getAll && isManager })).then(data => data.payload)
+                const cvs = await dispatch(getResumes({ ...user, getAll: getAll && isManager ? true : false })).then(data => data.payload)
                 if (cvs && Array.isArray(cvs)) {
                     setResumes(cvs)
                     setFilteredRes(cvs)
