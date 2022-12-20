@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import CTAButton from '../components/CTAButton'
@@ -18,10 +18,11 @@ export default function CVs({ showAll }) {
     const [search, setSearch] = useState([])
     const [openModal, setOpenModal] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [isPdf, setIsPdf] = useState(false)
     const [download, setDownload] = useState(false)
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
+    const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
     const dispatch = useDispatch()
     const history = useHistory()
     const cvHeaders = [
@@ -76,7 +77,7 @@ export default function CVs({ showAll }) {
         if (user && user.email) {
             try {
                 setLoading(true)
-                const cvs = await dispatch(getResumes({ ...user, getAll })).then(data => data.payload)
+                const cvs = await dispatch(getResumes({ ...user, getAll: getAll && isManager })).then(data => data.payload)
                 if (cvs && Array.isArray(cvs)) {
                     setResumes(cvs)
                     setFilteredRes(cvs)
@@ -178,6 +179,7 @@ export default function CVs({ showAll }) {
                     tableData={filteredRes}
                     tableHeaders={cvHeaders}
                     loading={loading}
+                    setLoading={setLoading}
                     item={selectedCV}
                     setItem={setSelectedCV}
                     isEdit={isEdit}
@@ -198,6 +200,8 @@ export default function CVs({ showAll }) {
                         onDownloadPDF={onDownloadPDF}
                         download={download}
                         setDownload={setDownload}
+                        loading={loading}
+                        setLoading={setLoading}
                     />
                 </div> : ''}
             {openModal && !isPdf ?

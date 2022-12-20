@@ -7,7 +7,7 @@ import {
   getImageByEmail,
   changePass,
   resetPassordByEmail,
-  getAdminStatus,
+  getUserPermissions,
   getAllUsers,
   getManagers,
   removeUser,
@@ -29,7 +29,7 @@ export const getProfileImage = createAsyncThunk('GET_PROFILE_IMAGE', getImageByE
 export const sendEmailResetPass = createAsyncThunk('SEND_EMAIL_RESET', resetPassordByEmail)
 export const changePassword = createAsyncThunk('CHANGE_PASSWORD', changePass)
 export const updateUserData = createAsyncThunk('UPDATE_USER', updateUser)
-export const getAdminCredentials = createAsyncThunk('GET_ADMIN_CREDENTIALS', getAdminStatus)
+export const getUserPermission = createAsyncThunk('GET_USER_PERMISSIONS', getUserPermissions)
 
 const userReducer = createReducer(initialState, {
   [logIn.fulfilled]: (state, action) => { return { ...state, user: action.payload } },
@@ -43,7 +43,7 @@ const userReducer = createReducer(initialState, {
   [sendEmailResetPass.fulfilled]: (state, action) => { return { ...state, sentEmailResetPass: action.payload } },
   [changePassword.fulfilled]: (state, action) => { return { ...state, changedPassword: action.payload } },
   [updateUserData.fulfilled]: (state, action) => { return { ...state, user: action.payload } },
-  [getAdminCredentials.fulfilled]: (state, action) => { return { ...state, adminCredentials: action.payload } },
+  [getUserPermission.fulfilled]: (state, action) => { return { ...state, userPermissions: action.payload } },
 });
 
 export default userReducer;

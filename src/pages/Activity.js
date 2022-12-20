@@ -19,6 +19,7 @@ export default function Activity() {
     const [selectedLog, setSelectedLog] = useState(-1)
 
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
+    const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
     const history = useHistory()
     const dispatch = useDispatch()
     const logHeaders = [
@@ -49,6 +50,7 @@ export default function Activity() {
     ]
 
     useEffect(() => {
+        if (!user || !user.email || !isManager) history.push('home')
         getAllLogs()
     }, [])
 

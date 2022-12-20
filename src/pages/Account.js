@@ -6,8 +6,9 @@ import ProfileIcon from '../icons/user-icon.svg'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import { APP_COLORS } from '../constants/app'
-import { getProfileImage, updateUserData, logOut } from '../store/reducers/user'
+import { getProfileImage, updateUserData, logOut, getAllManagers } from '../store/reducers/user'
 import GoBackIcon from '../icons/goback-icon.svg'
+import Dropdown from '../components/Dropdown'
 
 export default function Account() {
 
@@ -16,17 +17,41 @@ export default function Account() {
   const [updateDetails, setUpdateDetails] = useState(false)
   const [loading, setLoading] = useState(false)
   const [updatePass, setUpdatePass] = useState(false)
+  const [managers, setManagers] = useState([])
+  const [allManagers, setAllManagerrs] = useState([])
   const dispatch = useDispatch()
   const history = useHistory()
   const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || {}
 
   useEffect(() => {
+    if (!user || !user.email) history.push('/login')
     setData({ ...data, ...user })
     getPreview(user.email)
+    getManagers()
   }, [])
+
+  useEffect(() => {
+    if (data.managerName) {
+      let managerEmail = ''
+      allManagers.forEach(manager => {
+        if (manager.username === data.managerName) managerEmail = manager.email
+      })
+      updateData('managerEmail', managerEmail)
+    }
+  }, [data.managerName])
 
   const updateData = (key, value) => {
     setData({ ...data, [key]: value })
+  }
+
+  const getManagers = async () => {
+    try {
+      const _managers = await dispatch(getAllManagers(user)).then(data => data.payload)
+      if (_managers && Array.isArray(_managers)) {
+        setAllManagerrs(_managers)
+        setManagers(_managers.map(manager => manager.username))
+      }
+    } catch (err) { console.error(err) }
   }
 
   const saveUserData = async () => {
@@ -36,11 +61,13 @@ export default function Account() {
         const updated = await dispatch(updateUserData({
           _id: user._id,
           newData: data,
-          profilePic
+          profilePic,
+          user
         })).then(data => data.payload)
 
         if (updated) {
           setData({ ...data, ...updated.data })
+          localStorage.setItem('user', JSON.stringify(updated.data))
           toast.success('User data saved successfully')
         }
         else toast.error('Error saving changes')
@@ -102,10 +129,11 @@ export default function Account() {
           <h4 className='account-item-name'>Email</h4>
           <h4 className='account-item-value'>{user.email}</h4>
         </div>
-        <div className='account-item'>
-          <h4 className='account-item-name'>Manager</h4>
-          <h4 className='account-item-value'>{user.isManager ? 'Yes' : 'No'}</h4>
-        </div>
+        {user.isManager ?
+          <div className='account-item'>
+            <h4 className='account-item-name'>Manager</h4>
+            <h4 className='account-item-value'>{user.isManager ? 'Yes' : ''}</h4>
+          </div> : ''}
       </div>
       <div className='account-btns' style={{ filter: updateDetails || updatePass ? 'blur(10px)' : '' }}>
         <CTAButton
@@ -167,13 +195,13 @@ export default function Account() {
             style={{ color: 'rgb(71, 71, 71)' }}
             value={data.email || ''}
           />
-          <InputField
-            label='Manager Email'
-            type='text'
-            name='manager'
+          <Dropdown
+            label='Consultant Manager'
+            name='managerName'
+            options={managers}
+            value={data.managerName}
             updateData={updateData}
-            style={{ color: 'rgb(71, 71, 71)' }}
-            value={data.manager || ''}
+            size='24vw'
           />
           <div className='account-update-btns'>
             <CTAButton

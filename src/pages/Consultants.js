@@ -36,6 +36,7 @@ export default function Consultants() {
     const [managers, setManagers] = useState([])
     const [allManagers, setAllManagerrs] = useState([])
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
+    const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
     const history = useHistory()
     const dispatch = useDispatch()
     const userHeaders = [
@@ -66,6 +67,7 @@ export default function Consultants() {
     ]
 
     useEffect(() => {
+        if (!user || !user.email || !isManager) history.push('home')
         getAllUsers()
         getManagers()
     }, [])
@@ -371,12 +373,6 @@ export default function Consultants() {
                                     style={{ marginBottom: '1vw' }}
                                     value={data.location || ''}
                                 />
-                                <SwitchBTN
-                                    label='Is Manager?'
-                                    sw={data.isManager || false}
-                                    onChangeSw={() => updateData('isManager', !data.isManager)}
-                                    style={{ transform: 'scale(0.75)', width: '100%', margin: '1.5vw 0' }}
-                                />
                             </div>
                             <div className='users-btns'>
                                 {isEdit ?
@@ -507,12 +503,6 @@ export default function Consultants() {
                                         updateData={updateData}
                                         style={{ color: 'rgb(71, 71, 71)' }}
                                         value={data.password || data.password === '' ? data.password : generatePass()}
-                                    />
-                                    <SwitchBTN
-                                        label='Is Manager?'
-                                        sw={data.isManager || false}
-                                        onChangeSw={() => updateData('isManager', !data.isManager)}
-                                        style={{ transform: 'scale(0.75)', width: '100%', margin: '1.5vw 0' }}
                                     />
                                 </div>
                                 <div className='users-btns'>

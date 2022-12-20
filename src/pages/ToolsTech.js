@@ -23,6 +23,7 @@ export default function ToolsTech() {
     const [toolsEdit, setToolsEdit] = useState(false)
     const [loading, setLoading] = useState(false)
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
+    const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
     const history = useHistory()
     const dispatch = useDispatch()
     const toolsHeaders = [
@@ -58,6 +59,7 @@ export default function ToolsTech() {
     }, [appData])
 
     useEffect(() => {
+        if (!user || !user.email || !isManager) history.push('home')
         pullAppData()
     }, [])
 

@@ -27,6 +27,7 @@ export default function Settings() {
   const [selectedBuzzword, setSelectedBuzzword] = useState(-1)
   const [buzzwordEdit, setBuzzwordEdit] = useState(false)
   const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
+  const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
   const history = useHistory()
   const dispatch = useDispatch()
   const tabs = [`CV Logo`, `Skills`, `Buzzwords`]
@@ -52,6 +53,7 @@ export default function Settings() {
   ]
 
   useEffect(() => {
+    if (!user || !user.email || !isManager) history.push('home')
     setTab('CV Logo')
   }, [])
 

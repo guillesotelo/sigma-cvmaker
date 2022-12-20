@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import CTAButton from '../components/CTAButton'
@@ -12,8 +12,13 @@ import Dropdown from '../components/Dropdown'
 export default function Register(props) {
   const [loading, setLoading] = useState(false)
   const user = JSON.parse(localStorage.getItem('user'))
+  const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
   const dispatch = useDispatch()
   const history = useHistory()
+
+  useEffect(() => {
+    if (!user || !user.email || !isManager) history.push('home')
+  }, [])
 
   const {
     data,

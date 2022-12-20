@@ -26,6 +26,7 @@ export default function Clients() {
     const [isNew, setIsNew] = useState(false)
     const [loading, setLoading] = useState(false)
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
+    const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
     const history = useHistory()
     const dispatch = useDispatch()
     const clientsHeaders = [
@@ -83,6 +84,7 @@ export default function Clients() {
     }, [grayscale])
 
     useEffect(() => {
+        if (!user || !user.email || !isManager) history.push('home')
         pullAppData()
     }, [])
 

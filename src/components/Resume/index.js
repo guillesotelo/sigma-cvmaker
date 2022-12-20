@@ -21,11 +21,11 @@ import GreatVibes from '../../assets/fonts/GreatVibes-Regular.ttf'
 import { applyFiltersToImage } from '../../helpers/image'
 import './styles.css'
 import { getLogo, getResume } from '../../store/reducers/resume'
-import { MoonLoader } from 'react-spinners'
 import { saveAs } from 'file-saver'
 import DownloadIcon from '../../icons/download-icon.svg'
 import EditIcon from '../../icons/edit-icon.svg'
 import CloseIcon from '../../icons/close-icon.svg'
+import { MoonLoader } from 'react-spinners'
 
 export default function Resume(props) {
     const {
@@ -34,14 +34,15 @@ export default function Resume(props) {
         onEdit,
         onDownloadPDF,
         download,
-        setDownload
+        setDownload,
+        loading,
+        setLoading
     } = props
 
     const [data, setData] = useState(resumeData)
     const [res, setRes] = useState({})
     const [profileImage, setProfileImage] = useState({})
     const [cvLogo, setcvLogo] = useState({})
-    const [loading, setLoading] = useState(false)
     const [imageFilter, setImageFilter] = useState('')
     const [numPages, setNumPages] = useState(null)
     const [pageNumber, setPageNumber] = useState(1)
@@ -56,16 +57,18 @@ export default function Resume(props) {
         getFonts()
         getResumeData()
         getCVLogo()
-        setLoading(false)
     }, [])
 
     useEffect(() => {
-        if (Object.keys(res).length && download) {
-            setLoading(true)
-            setDownload(false)
-            setTimeout(() => {
-                onDownload()
-            }, 1000)
+        if (Object.keys(res).length) {
+            setLoading(false)
+            if (download) {
+                setLoading(true)
+                setDownload(false)
+                setTimeout(() => {
+                    onDownload()
+                }, 1000)
+            }
         }
     }, [res])
 

@@ -36,6 +36,7 @@ export default function Users() {
     const [managers, setManagers] = useState([])
     const [allManagers, setAllManagerrs] = useState([])
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
+    const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
     const history = useHistory()
     const dispatch = useDispatch()
     const userHeaders = [
@@ -66,6 +67,7 @@ export default function Users() {
     ]
 
     useEffect(() => {
+        if (!user || !user.email || !isManager) history.push('home')
         getAllUsers()
         getManagers()
     }, [])

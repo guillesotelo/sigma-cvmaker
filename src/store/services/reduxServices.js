@@ -138,9 +138,9 @@ const updateReportData = async data => {
     } catch (err) { console.log(err) }
 }
 
-const getAdminStatus = async data => {
+const getUserPermissions = async data => {
     try {
-        const user = await axios.get(`${API_URL}/api/user/admin`, { params: data })
+        const user = await axios.get(`${API_URL}/api/user/permissions`, { params: data })
         return user.data
     } catch (err) { console.log(err) }
 }
@@ -223,7 +223,7 @@ export {
     createReport,
     getReports,
     updateReportData,
-    getAdminStatus,
+    getUserPermissions,
     createAppData,
     updateAppDataItem,
     getAppDataByType,

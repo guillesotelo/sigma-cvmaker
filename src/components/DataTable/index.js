@@ -15,6 +15,7 @@ export default function DataTable(props) {
         setIsEdit,
         isEdit,
         loading,
+        setLoading,
         tableHeaders,
         setItem,
         item,
@@ -79,6 +80,7 @@ export default function DataTable(props) {
                                                 setOpenModal(true)
                                             }} className='data-table-icon' />
                                             <img src={DownloadIcon} className='data-table-icon' onClick={() => {
+                                                setLoading(true)
                                                 setOpenModal(true)
                                                 setIsPdf(true)
                                                 setResumeData(row)
@@ -92,6 +94,7 @@ export default function DataTable(props) {
                                             style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}
                                             onClick={() => {
                                                 if (modalView) {
+                                                    setLoading(true)
                                                     setOpenModal(true)
                                                     setIsPdf(true)
                                                     setResumeData(row)
