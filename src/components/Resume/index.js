@@ -16,6 +16,7 @@ import ReactPDF, {
 import SigmaLogo from '../../assets/logos/sigma.png'
 import RobotoRegular from '../../assets/fonts/Roboto-Regular.ttf'
 import RobotoBold from '../../assets/fonts/Roboto-Bold.ttf'
+import RobotoItalic from '../../assets/fonts/Roboto-Italic.ttf'
 import GreatVibes from '../../assets/fonts/GreatVibes-Regular.ttf'
 import { applyFiltersToImage } from '../../helpers/image'
 import './styles.css'
@@ -135,7 +136,7 @@ export default function Resume(props) {
                     fontWeight: 'bold',
                 },
                 {
-                    src: 'http://fonts.gstatic.com/s/roboto/v30/KFOkCnqEu92Fr1Mu52xPKTM1K9nz.ttf',
+                    src: RobotoItalic,
                     fontStyle: 'italic'
                 }
             ]
