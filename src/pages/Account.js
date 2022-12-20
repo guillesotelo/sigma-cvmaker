@@ -163,6 +163,7 @@ export default function Account() {
               style={profilePic.style}
               className='account-profile-image'
               onClick={() => document.getElementById('profileImage').click()}
+              loading='lazy'
             />
             : <img
               src={ProfileIcon}

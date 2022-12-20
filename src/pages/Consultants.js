@@ -284,6 +284,7 @@ export default function Consultants() {
                                             style={profilePic.style}
                                             className='profile-image'
                                             onClick={() => document.getElementById('profileImage').click()}
+                                            loading='lazy'
                                         />
                                         : <img
                                             src={ProfileIcon}
@@ -408,6 +409,7 @@ export default function Consultants() {
                                                 style={profilePic.style}
                                                 className='profile-image'
                                                 onClick={() => document.getElementById('profileImage').click()}
+                                                loading='lazy'
                                             />
                                             : <img
                                                 src={ProfileIcon}

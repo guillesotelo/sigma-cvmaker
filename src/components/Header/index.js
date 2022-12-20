@@ -75,7 +75,7 @@ export default function Header() {
       <ToastContainer autoClose={1500} />
       <div className='header-container'>
         <div className='header-logo-search'>
-          <img src={SigmaIso} className='header-logo' onClick={() => history.push('/')} />
+          <img src={SigmaIso} className='header-logo' onClick={() => history.push('/')} loading='lazy'/>
           {/* <div className='header-logo-container' onClick={() => history.push('/')}> */}
           {/* <h4 className='header-text'>CV Maker</h4> */}
           {/* </div> */}
@@ -96,6 +96,7 @@ export default function Header() {
                 src={profilePic.profileImage}
                 className='header-profile-image'
                 onClick={() => history.push('account')}
+                loading='lazy'
               />
               : <img
                 src={ProfileIcon}

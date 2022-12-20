@@ -256,6 +256,7 @@ export default function Clients() {
                                         style={clientLogo.style}
                                         className='client-logo-image'
                                         onClick={() => document.getElementById('logoImage').click()}
+                                        loading='lazy'
                                     />
                                     : <img
                                         src={ImagePlaceholder}

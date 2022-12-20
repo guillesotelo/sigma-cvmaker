@@ -11,7 +11,7 @@ export default function CVHeader(props) {
         <div className='cv-header-main'>
             <div className='cv-header-container'>
                 <div className='cv-header-col'>
-                    <img src={cvLogo || 'https://i.imgur.com/i0PwKWi.png'} className='cv-header-logo' />
+                    <img src={cvLogo || 'https://i.imgur.com/i0PwKWi.png'} className='cv-header-logo' loading='lazy'/>
                 </div>
                 <div className='cv-header-col'>
                     <h1 className='cv-header-name'>{fullName && fullName.toUpperCase() || 'FULL NAME'}</h1>

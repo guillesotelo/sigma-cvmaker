@@ -52,7 +52,11 @@ export default function Login() {
             <ToastContainer autoClose={2000} />
             <div className='login-box'>
                 <div className='login-image'>
-                    <img src='https://images.squarespace-cdn.com/content/v1/5b07d207b27e39fe2cf2070c/1536149156741-FR68IVVJ8Q362PWO3FSC/Sigma_connectivity_footer-logo.png' className='login-logo' />
+                    <img
+                        src='https://images.squarespace-cdn.com/content/v1/5b07d207b27e39fe2cf2070c/1536149156741-FR68IVVJ8Q362PWO3FSC/Sigma_connectivity_footer-logo.png'
+                        className='login-logo'
+                        loading='lazy'
+                    />
                     {/* <h4 className='login-text'>CV</h4> */}
                 </div>
                 {loading ?
@@ -75,7 +79,7 @@ export default function Login() {
                         />
                         <h4 className='forgot-pass-link' onClick={() => history.push('/forgotPassword')}>
                             {/* I forgot my password */}
-                            </h4>
+                        </h4>
                         <CTAButton
                             label='Login'
                             size='100%'

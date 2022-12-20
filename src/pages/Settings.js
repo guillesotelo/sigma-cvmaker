@@ -241,6 +241,7 @@ export default function Settings() {
                       src={cvLogo.cvImage}
                       className='settings-cv-logo'
                       onClick={() => document.getElementById('cvImage').click()}
+                      loading='lazy'
                     />
                     : <img
                       src={DropPhoto}

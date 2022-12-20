@@ -20,7 +20,12 @@ export default function Footer() {
                 }}>Contact: guillermo.sotelo@sigma.se</h4>
             </div> */}
             <div className='footer-logo-container'>
-                <img src={EngineeringLogo} className='footer-logo' onClick={() => window.open('https://www.sigma.se/sv/contact/sigma-connectivity-engineering/', '_blank')} />
+                <img
+                    src={EngineeringLogo}
+                    className='footer-logo'
+                    onClick={() => window.open('https://www.sigma.se/sv/contact/sigma-connectivity-engineering/', '_blank')}
+                    loading='lazy'
+                />
             </div>
         </div>
     )

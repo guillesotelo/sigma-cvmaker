@@ -260,6 +260,7 @@ export default function NewCV() {
                                 style={profilePic.style}
                                 className='profile-image'
                                 onClick={() => document.getElementById('profileImage').click()}
+                                loading='lazy'
                             />
                             :
                             <img
