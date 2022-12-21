@@ -19,6 +19,7 @@ import PlusIcon from '../icons/plus-icon.svg'
 import MinusIcon from '../icons/minus-icon.svg'
 import HideIcon from '../icons/hide-icon.svg'
 import ShwoIcon from '../icons/show-icon.svg'
+import Slider from '../components/Slider'
 
 export default function NewCV() {
     const [data, setData] = useState({})
@@ -40,6 +41,10 @@ export default function NewCV() {
     const [cvLogo, setcvLogo] = useState({})
     const [hiddenItems, setHiddenItems] = useState([])
     const [allResumes, setAllResumes] = useState([])
+    const [scale, setScale] = useState(1)
+    const [translateX, setTranslateX] = useState(0)
+    const [translateY, setTranslateY] = useState(0)
+    const [rotate, setRotate] = useState(0)
     const dispatch = useDispatch()
     const history = useHistory()
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || {}
@@ -49,6 +54,7 @@ export default function NewCV() {
     const skillYears = Array.from({ length: 40 }, (_, i) => `${i + 1} ${i > 0 ? 'Years' : 'Year'}`)
 
     // console.log("data", data)
+    // console.log("profilePic", profilePic)
     // console.log("hiddenItems", hiddenItems)
 
     useEffect(() => {
@@ -67,6 +73,21 @@ export default function NewCV() {
             if (edit) setEditData(edit)
         }
     }, [allResumes])
+
+    useEffect(() => {
+        setProfilePic({
+            ...profilePic,
+            style: {
+                ...profilePic.style,
+                transform: `scale(${scale}) translate(${translateX}%, ${translateY}%) rotate(${rotate}deg)`,
+                s: scale,
+                x: translateX,
+                y: translateY,
+                r: rotate
+            }
+        })
+    }, [scale, translateX, translateY, rotate])
+
 
     useEffect(() => {
         if (data.manager) {
@@ -159,7 +180,14 @@ export default function NewCV() {
     const getPreview = async email => {
         try {
             const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
-            if (image) setProfilePic({ profileImage: image.data, style: image.style && JSON.parse(image.style) || {} })
+            if (image) {
+                const imageStyle = image.style && JSON.parse(image.style) || {}
+                setProfilePic({ profileImage: image.data, style: imageStyle })
+                setTranslateX(imageStyle.x || 0)
+                setTranslateY(imageStyle.y || 0)
+                setScale(imageStyle.s || 1)
+                setRotate(imageStyle.r || 0)
+            }
         } catch (err) {
             console.error(err)
         }
@@ -217,7 +245,7 @@ export default function NewCV() {
             resumeData.email = data.email || ''
             resumeData.user = user
 
-            if (profilePic && profilePic.profileImage) resumeData.profilePic = profilePic.profileImage
+            if (profilePic && profilePic.profileImage) resumeData.profilePic = profilePic
 
             let saved = {}
 
@@ -259,18 +287,56 @@ export default function NewCV() {
                 <div className='resume-fill-col1'>
                     <>
                         {profilePic.profileImage ?
-                            <img
-                                src={profilePic.profileImage}
-                                style={profilePic.style}
-                                className='profile-image'
-                                onClick={() => document.getElementById('profileImage').click()}
-                                loading='lazy'
-                            />
+                            <div className='profile-image-section'>
+                                <div className='profile-image-cover'>
+                                    <img
+                                        src={profilePic.profileImage}
+                                        style={profilePic.style}
+                                        className='profile-image'
+                                        onClick={() => document.getElementById('profileImage').click()}
+                                        loading='lazy'
+                                    />
+                                </div>
+                                <div className='profile-image-settings'>
+                                    <Slider
+                                        label='Position X'
+                                        sign='%'
+                                        value={translateX}
+                                        setValue={setTranslateX}
+                                        min={-100}
+                                        max={100}
+                                    />
+                                    <Slider
+                                        label='Position Y'
+                                        sign='%'
+                                        value={translateY}
+                                        setValue={setTranslateY}
+                                        min={-100}
+                                        max={100}
+                                    />
+                                    <Slider
+                                        label='Scale'
+                                        sign=''
+                                        value={scale}
+                                        setValue={setScale}
+                                        min={0}
+                                        max={3}
+                                        step={0.01}
+                                    />
+                                    <Slider
+                                        label='Rotate'
+                                        sign='°'
+                                        value={rotate}
+                                        setValue={setRotate}
+                                        min={0}
+                                        max={360}
+                                    />
+                                </div>
+                            </div>
                             :
                             <img
                                 src={ProfileIcon}
-                                style={profilePic.style}
-                                className='account-profile-image-svg'
+                                className='profile-image-svg'
                                 onClick={() => document.getElementById('profileImage').click()}
                             />}
                         <InputField

@@ -8,7 +8,10 @@ export default function Slider(props) {
         setValue,
         label,
         setIsEdit,
+        min,
         max,
+        marks,
+        step,
         sign
     } = props
 
@@ -23,14 +26,15 @@ export default function Slider(props) {
                     thumbClassName="customSlider-thumb"
                     trackClassName="customSlider-track"
                     markClassName="customSlider-mark"
-                    marks={20}
-                    min={0}
+                    marks={marks || 0}
+                    step={step}
+                    min={min || 0}
                     max={max || 100}
                     defaultValue={0}
                     value={value}
                     onChange={(value) => {
                         setValue(value)
-                        setIsEdit(true)
+                        if(setIsEdit) setIsEdit(true)
                     }}
                     renderMark={(props) => {
                         if (props.key < value) {

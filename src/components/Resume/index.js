@@ -43,7 +43,7 @@ export default function Resume(props) {
     const [res, setRes] = useState({})
     const [profileImage, setProfileImage] = useState({})
     const [cvLogo, setcvLogo] = useState({})
-    const [imageFilter, setImageFilter] = useState('')
+    const [profileStyle, setProfileStyle] = useState({})
     const [numPages, setNumPages] = useState(null)
     const [pageNumber, setPageNumber] = useState(1)
     const dispatch = useDispatch()
@@ -86,8 +86,9 @@ export default function Resume(props) {
             const profilePic = await dispatch(getProfileImage({ email: resumeData.email })).then(data => data.payload)
 
             if (profilePic) {
-                const { filter } = profilePic.style && JSON.parse(profilePic.style) || {}
-                if (filter) setProfileImage(await applyFiltersToImage(profilePic.data, filter))
+                const imageStyles = profilePic.style && JSON.parse(profilePic.style) || {}
+                if (imageStyles) setProfileStyle(imageStyles)
+                if (imageStyles.filter) setProfileImage(await applyFiltersToImage(profilePic.data, imageStyles.filter))
                 else setProfileImage(profilePic.data)
             }
 
@@ -219,13 +220,19 @@ export default function Resume(props) {
             alignSelf: 'center',
             margin: 0
         },
-        profilePic: {
+        profilePicCover: {
             width: 130,
             height: 130,
-            objectFit: 'cover',
+            margin: '1vw 0',
+            alignSelf: 'center',
             borderRadius: '50%',
-            margin: '1vw 0 2vw 0',
-            alignSelf: 'center'
+            overflow: 'hidden'
+        },
+        profilePic: {
+            height: '100%',
+            width: '100%',
+            transform: profileStyle.transform,
+            objectFit: 'cover'
         },
         logo: {
             maxWidth: 200,
@@ -475,13 +482,15 @@ export default function Resume(props) {
                             {checkHidden('Name') ? null : <Text style={styles.name}>{res.name.toUpperCase()}</Text>}
                             {!checkHidden('Middle Name') && res.middlename ? <Text style={styles.name}>{res.middlename.toUpperCase()}</Text> : null}
                             {checkHidden('Surname') ? null : <Text style={styles.name}>{res.surname.toUpperCase() || 'Full Name'}</Text>}
-                            {checkHidden('Role / Title') ? null : <Text style={styles.role}>{res.role.toUpperCase() || 'Role'}</Text>}
+                            {checkHidden('Role / Title') ? null : <Text style={styles.role}>{res.role ? res.role.toUpperCase() : 'Role'}</Text>}
                         </View>
                     </View>
 
                     <View style={styles.rowContainer} wrap={false}>
                         <View style={styles.column1}>
-                            <Image style={styles.profilePic} src={profileImage} />
+                            <View style={styles.profilePicCover}>
+                                <Image style={styles.profilePic} src={profileImage} />
+                            </View>
                             <View style={styles.infoView1}>
                                 {checkHidden('Name') ? null : <Text style={styles.infoItem}>Name</Text>}
                                 {checkHidden('Name') ? null : <Text style={styles.regularText}>{fullName || ''}</Text>}
