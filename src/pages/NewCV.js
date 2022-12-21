@@ -17,6 +17,8 @@ import Dropdown from '../components/Dropdown'
 import ProfileIcon from '../icons/profile-icon.svg'
 import PlusIcon from '../icons/plus-icon.svg'
 import MinusIcon from '../icons/minus-icon.svg'
+import HideIcon from '../icons/hide-icon.svg'
+import ShwoIcon from '../icons/show-icon.svg'
 
 export default function NewCV() {
     const [data, setData] = useState({})
@@ -392,7 +394,26 @@ export default function NewCV() {
                         setHidden={setHiddenItems}
                         hidden={hiddenItems}
                     />
-                    {<h4 className='signature-text'>{fullName || ''}</h4>}
+                    <div className='signature-container'>
+                        <h4 className='signature-text' style={{ opacity: hiddenItems.includes('signature') && '.2' }}>{fullName || ''}</h4>
+                        {hiddenItems.includes('signature') ?
+                            <img
+                                src={ShwoIcon}
+                                className='hide-icon-signature'
+                                onClick={() => setHiddenItems(hiddenItems.filter(item => item !== 'signature'))}
+                            />
+                            :
+                            <img
+                                src={HideIcon}
+                                className='hide-icon-signature'
+                                onClick={() => {
+                                    const _hidden = [...hiddenItems]
+                                    _hidden.push('signature')
+                                    setHiddenItems(_hidden)
+                                }}
+                            />
+                        }
+                    </div>
                 </div>
             </div>
 

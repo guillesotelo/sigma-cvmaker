@@ -513,7 +513,7 @@ export default function Resume(props) {
                                 :
                                 null}
                             <View style={styles.infoView2}>
-                                {checkHidden('Name') ? null : <Text style={styles.signature}>{fullName || ''}</Text>}
+                                {checkHidden('signature') ? null : <Text style={styles.signature}>{fullName || ''}</Text>}
                             </View>
                         </View>
                     </View>

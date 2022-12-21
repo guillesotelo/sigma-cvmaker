@@ -421,6 +421,20 @@
     filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
 }
 
+.hide-icon-signature {
+    display: none;
+    height: 1.5vw;
+    margin-top: .3vw 2vw;
+    cursor: pointer;
+    line-height: 1.5vw;
+    filter: brightness(0%) contrast(0%);
+    transition: .3s;
+}
+
+.hide-icon-signature:hover {
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+}
+
 /* --- PDF MODAL ---  */
 .pdf-modal {
     display: flex;
@@ -473,8 +487,19 @@
     font-family: 'Great Vibes', cursive;
     font-weight: normal;
     font-size: 2vw;
-    margin: 3vw 0 0.5vw 1vw;
     text-align: left;
+    position: relative;
+    margin: 1vw;
+}
+
+.signature-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.signature-container:hover .hide-icon-signature{
+    display: block;
 }
 
 .go-back-btn {
