@@ -316,13 +316,15 @@
 
 .profile-image-settings {
     display: none;
+    flex-direction: row;
+    gap: 2vw;
     position: absolute;
     margin-left: 12vw;
     background-color: white;
     transform: scale(0.85);
     border-left: none;
     z-index: 2;
-    padding: 1vw 1vw 2vw 1vw;
+    padding: 1vw 2vw 2vw 2vw;
     border-radius: .5vw;
     box-shadow: 4px 4px 20px gray;
 }
