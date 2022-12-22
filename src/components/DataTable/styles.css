@@ -56,6 +56,7 @@
     text-align: left;
     height: fit-content;
     cursor: pointer;
+    align-items: center;
 }
 
 .data-table-row:hover {
@@ -139,6 +140,10 @@
 
 .data-table-icon:hover {
     filter: invert(75%) sepia(39%) saturate(3237%) brightness(70%) contrast(80%);
+}
+
+.data-table-image {
+    height: 30px;
 }
 
 @media only screen and (max-width: 640px) {}

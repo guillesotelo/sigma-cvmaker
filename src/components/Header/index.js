@@ -62,7 +62,7 @@ export default function Header() {
     try {
       const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
       if (image) {
-        setProfilePic({ profileImage: image.data, style: image.style ? JSON.parse(image.style) : {} })
+        setProfilePic({ image: image.data, style: image.style ? JSON.parse(image.style) : {} })
       }
       else setProfilePic({})
     } catch (err) {
@@ -91,9 +91,9 @@ export default function Header() {
           <div>
             <img src={ErrorIcon} className='error-icon' onClick={() => history.push('/report')} />
             {/* <img src={LogoutIcon} className='logout-icon' onClick={logOutUser} /> */}
-            {profilePic.profileImage ?
+            {profilePic.image ?
               <img
-                src={profilePic.profileImage}
+                src={profilePic.image}
                 className='header-profile-image'
                 onClick={() => history.push('account')}
                 loading='lazy'

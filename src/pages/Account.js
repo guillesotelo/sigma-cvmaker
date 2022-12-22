@@ -99,7 +99,7 @@ export default function Account() {
     try {
       const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
       if (image) {
-        setProfilePic({ profileImage: image.data, style: image.style ? JSON.parse(image.style) : {} })
+        setProfilePic({ image: image.data, style: image.style ? JSON.parse(image.style) : {} })
       }
       else setProfilePic({})
     } catch (err) {
@@ -157,25 +157,25 @@ export default function Account() {
       </div>
       {updateDetails ?
         <div className='account-update-details'>
-          {profilePic.profileImage ?
+          {profilePic.image ?
             <img
-              src={profilePic.profileImage}
+              src={profilePic.image}
               style={profilePic.style}
               className='account-profile-image'
-              onClick={() => document.getElementById('profileImage').click()}
+              onClick={() => document.getElementById('image').click()}
               loading='lazy'
             />
             : <img
               src={ProfileIcon}
               style={profilePic.style}
               className='account-profile-image-svg'
-              onClick={() => document.getElementById('profileImage').click()}
+              onClick={() => document.getElementById('image').click()}
             />}
           <InputField
             label=''
             type='file'
-            name='profileImage'
-            filename='profileImage'
+            name='image'
+            filename='image'
             image={profilePic}
             setImage={setProfilePic}
             style={{ color: 'rgb(71, 71, 71)' }}

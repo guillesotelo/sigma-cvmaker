@@ -136,6 +136,7 @@ export default function Clients() {
                     ...user,
                     type: 'clients',
                     data: JSON.stringify(updatedclients),
+                    clientName: data.name,
                     clientEmail: data.email,
                     clientLogo
                 })).then(data => data.payload)
@@ -144,6 +145,7 @@ export default function Clients() {
                     ...user,
                     type: 'clients',
                     data: JSON.stringify(updatedclients),
+                    clientName: data.name,
                     clientEmail: data.email,
                     clientLogo
                 })).then(data => data.payload)

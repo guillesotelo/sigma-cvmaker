@@ -89,6 +89,34 @@ const getImageByEmail = async data => {
     } catch (err) { console.log(err) }
 }
 
+const getAllImages = async () => {
+    try {
+        const images = await axios.get(`${API_URL}/api/image/getAll`)
+        return images.data
+    } catch (err) { console.log(err) }
+}
+
+const saveImage = async data => {
+    try {
+        const saved = await axios.post(`${API_URL}/api/image/create`, data)
+        return saved.data
+    } catch (err) { console.log(err) }
+}
+
+const updateImage = async data => {
+    try {
+        const updated = await axios.post(`${API_URL}/api/image/update`, data)
+        return updated.data
+    } catch (err) { console.log(err) }
+}
+
+const removeImage = async data => {
+    try {
+        const deleted = await axios.post(`${API_URL}/api/image/remove`, data)
+        return deleted.data
+    } catch (err) { console.log(err) }
+}
+
 const getResumeByEmail = async data => {
     try {
         const resumes = await axios.get(`${API_URL}/api/resume/myResume`, data)
@@ -229,5 +257,9 @@ export {
     getAppDataByType,
     getAllAppData,
     getAllLogs,
-    createLog
+    createLog,
+    getAllImages,
+    saveImage,
+    updateImage,
+    removeImage
 }

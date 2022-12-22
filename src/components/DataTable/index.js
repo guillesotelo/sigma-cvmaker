@@ -69,45 +69,52 @@ export default function DataTable(props) {
                             <div
                                 key={i}
                                 className='data-table-row'
-                                style={{ backgroundColor: item === i ? '#E4C69C' : i % 2 === 0 ? 'white' : '#F9FAFB' }}>
+                                style={{ backgroundColor: item === i ? '#E4C69C' : i % 2 === 0 ? 'white' : '#F9FAFB' }}
+                                onClick={() => {
+                                    if (modalView) {
+                                        setLoading(true)
+                                        setOpenModal(true)
+                                        setIsPdf(true)
+                                        setResumeData(row)
+                                    } else handleItem(i)
+                                }}
+                            >
                                 {tableHeaders.map((header, j) =>
-                                    header.value === 'icons' ?
-                                        <div key={j} className='data-table-icons' style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}>
-                                            {/* <img src={DownloadIcon} className='resume-icon' /> */}
-                                            <img src={EditIcon} className='data-table-icon' onClick={() => history.push(`/new-cv?edit=${row._id}`)} />
-                                            <img src={TrashCan} onClick={() => {
-                                                setResumeData(row)
-                                                setOpenModal(true)
-                                            }} className='data-table-icon' />
-                                            <img src={DownloadIcon} className='data-table-icon' onClick={() => {
-                                                setLoading(true)
-                                                setOpenModal(true)
-                                                setIsPdf(true)
-                                                setResumeData(row)
-                                                setDownload(true)
-                                            }} />
+                                    header.value === 'data' ?
+                                        <div key={j} style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}>
+                                            <img src={row[header.value]} className='data-table-image' />
                                         </div>
                                         :
-                                        <h4
-                                            key={j}
-                                            className={`data-table-row-item data-table-row-${header.value}`}
-                                            style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}
-                                            onClick={() => {
-                                                if (modalView) {
+                                        header.value === 'icons' ?
+                                            <div key={j} className='data-table-icons' style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}>
+                                                {/* <img src={DownloadIcon} className='resume-icon' /> */}
+                                                <img src={EditIcon} className='data-table-icon' onClick={() => history.push(`/new-cv?edit=${row._id}`)} />
+                                                <img src={TrashCan} onClick={() => {
+                                                    setResumeData(row)
+                                                    setOpenModal(true)
+                                                }} className='data-table-icon' />
+                                                <img src={DownloadIcon} className='data-table-icon' onClick={() => {
                                                     setLoading(true)
                                                     setOpenModal(true)
                                                     setIsPdf(true)
                                                     setResumeData(row)
-                                                } else handleItem(i)
-                                            }}>
-                                            {header.value === 'date' || header.value === 'createdAt' || header.value === 'updatedAt' ? `${new Date(row[header.value]).toDateString()} ${new Date(row[header.value]).toLocaleTimeString()}` :
-                                                header.value === 'isManager' || header.value === 'isAdmin' ?
-                                                    row[header.value] ? 'Yes' : 'No'
-                                                    :
-                                                    row[header.value] ? String(row[header.value])
+                                                    setDownload(true)
+                                                }} />
+                                            </div>
+                                            :
+                                            <h4
+                                                key={j}
+                                                className={`data-table-row-item data-table-row-${header.value}`}
+                                                style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}
+                                            >
+                                                {header.value === 'date' || header.value === 'createdAt' || header.value === 'updatedAt' ? `${new Date(row[header.value]).toDateString()} ${new Date(row[header.value]).toLocaleTimeString()}` :
+                                                    header.value === 'isManager' || header.value === 'isAdmin' ?
+                                                        row[header.value] ? 'Yes' : 'No'
                                                         :
-                                                        '--'}
-                                        </h4>
+                                                        row[header.value] ? String(row[header.value])
+                                                            :
+                                                            '--'}
+                                            </h4>
                                 )}
                             </div>
                         )}

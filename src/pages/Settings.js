@@ -7,11 +7,14 @@ import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import SwitchBTN from '../components/SwitchBTN'
 import Slider from '../components/Slider'
+import Dropdown from '../components/Dropdown'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
 import { getLogo, saveLogo } from '../store/reducers/resume'
 import MoonLoader from "react-spinners/MoonLoader"
+import ProfileIcon from '../icons/profile-icon.svg'
 import { getAppData, getOneAppData, saveAppData, updateAppData } from '../store/reducers/appData'
+import { createImage, deleteImage, getImages, updateImageData } from '../store/reducers/image'
 
 export default function Settings() {
   const [tab, setTab] = useState('user')
@@ -21,16 +24,23 @@ export default function Settings() {
   const [isEdit, setIsEdit] = useState(false)
   const [cvLogo, setcvLogo] = useState({})
   const [skills, setSkills] = useState([])
-  const [buzzwords, setBuzzwords] = useState([])
   const [selectedSkill, setSelectedSkill] = useState(-1)
   const [skillEdit, setSkillEdit] = useState(false)
+  const [imageData, setImageData] = useState({})
+  const [images, setImages] = useState([])
+  const [selectedImage, setSelectedImage] = useState(-1)
+  const [imageEdit, setImageEdit] = useState(false)
+  const [buzzwords, setBuzzwords] = useState([])
   const [selectedBuzzword, setSelectedBuzzword] = useState(-1)
   const [buzzwordEdit, setBuzzwordEdit] = useState(false)
+  const [removeModal, setRemoveModal] = useState(false)
+  const [imageTypes, setImageTypes] = useState([])
+  const [isNew, setIsNew] = useState(false)
   const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
   const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
   const history = useHistory()
   const dispatch = useDispatch()
-  const tabs = [`CV Logo`, `Skills`, `Buzzwords`]
+  const tabs = [`CV Logo`, `Skills`, `Buzzwords`, `Images`]
   const skillHeaders = [
     {
       name: 'SKILL',
@@ -51,6 +61,24 @@ export default function Settings() {
       value: 'type'
     }
   ]
+  const imageHeaders = [
+    {
+      name: 'IMAGE',
+      value: 'data'
+    },
+    {
+      name: 'NAME',
+      value: 'name'
+    },
+    {
+      name: 'EMAIL',
+      value: 'email'
+    },
+    {
+      name: 'TYPE',
+      value: 'type'
+    }
+  ]
 
   useEffect(() => {
     if (!user || !user.email || !isManager) history.push('home')
@@ -61,6 +89,13 @@ export default function Settings() {
     if (selectedSkill > -1) setData({ ...data, ...skills[selectedSkill] })
     if (selectedBuzzword > -1) setData({ ...data, ...buzzwords[selectedBuzzword] })
   }, [selectedSkill, selectedBuzzword])
+
+  useEffect(() => {
+    if (selectedImage > -1 && images[selectedImage]) {
+      setData({ ...images[selectedImage] })
+      if (images[selectedImage].data) setImageData({ image: images[selectedImage].data })
+    }
+  }, [selectedImage])
 
   useEffect(() => {
     if (appData.length) {
@@ -78,7 +113,16 @@ export default function Settings() {
   useEffect(() => {
     if (tab === 'CV Logo' && !cvLogo.cvImage) getCVLogo()
     else if (tab === 'Skills' || tab === 'Buzzwords' && !appData.length) pullAppData()
+    if (tab === 'Images') getAllImages()
   }, [tab])
+
+  const getAllImages = async () => {
+    const _images = await dispatch(getImages()).then(data => data.payload)
+    if (_images && _images.length) {
+      setImages(_images)
+      setImageTypes(['Profile', 'Client Logo', 'CV Logo', 'Experience Company'])
+    }
+  }
 
   const updateData = (key, value) => {
     setIsEdit(true)
@@ -88,7 +132,7 @@ export default function Settings() {
   const getCVLogo = async () => {
     try {
       setLoading(true)
-      const logo = await dispatch(getLogo({ type: 'cv-logo' })).then(data => data.payload)
+      const logo = await dispatch(getLogo({ type: 'CV Logo' })).then(data => data.payload)
       if (logo) setcvLogo({ cvImage: logo.data })
       else setcvLogo({})
       setLoading(false)
@@ -177,7 +221,7 @@ export default function Settings() {
   const saveCVLogo = async () => {
     try {
       setLoading(true)
-      const logo = await dispatch(saveLogo({ ...cvLogo, type: 'cv-logo' })).then(data => data.payload)
+      const logo = await dispatch(saveLogo({ ...cvLogo, type: 'CV Logo' })).then(data => data.payload)
       if (!logo) toast.error('Error uploading logo')
       else toast.success('Logo updated successfully')
       setLoading(false)
@@ -203,6 +247,38 @@ export default function Settings() {
     setData({})
   }
 
+  const saveImageData = async () => {
+    try {
+      setLoading(true)
+      if (!imageData.image) return toast.info('Please add an image')
+      let saved = null
+
+      if (isNew) saved = await dispatch(createImage({ ...data, data: imageData.image, user })).then(data => data.payload)
+      else saved = await dispatch(updateImageData({ ...data, data: imageData.image, user })).then(data => data.payload)
+
+      if (!saved) return toast.error('Error saving image')
+      toast.success('Image saved successfully')
+
+      setLoading(false)
+      setSelectedImage(-1)
+      setImageEdit(false)
+      setIsEdit(false)
+      setData({})
+      setIsNew(false)
+      getAllImages()
+    } catch (err) {
+      console.error(err)
+      toast.error('Error saving image')
+      setLoading(false)
+      setSelectedImage(-1)
+      setImageEdit(false)
+      setIsEdit(false)
+      setData({})
+      setIsNew(false)
+      getAllImages()
+    }
+  }
+
   const saveBuzzwordData = () => {
     const updatedBuzzwords = buzzwords
     updatedBuzzwords[selectedBuzzword] = {
@@ -215,6 +291,32 @@ export default function Settings() {
       setBuzzwordEdit(false)
     }
     setData({})
+  }
+
+  const removeImage = async () => {
+    try {
+      setRemoveModal(false)
+      setLoading(true)
+      const removed = await dispatch(deleteImage({ ...data, user })).then(data => data.payload)
+      if (!removed) return toast.error('Error deleting Image, try again later')
+      toast.success('Image deleted successfylly')
+      setLoading(false)
+      setSelectedImage(-1)
+      setImageEdit(false)
+      setIsEdit(false)
+      setData({})
+      setIsNew(false)
+      await getAllImages()
+    } catch (err) {
+      toast.error('Error deleting Image, try again later')
+      console.error(err)
+      setLoading(false)
+      setSelectedImage(-1)
+      setImageEdit(false)
+      setIsEdit(false)
+      setData({})
+      setIsNew(false)
+    }
   }
 
   return (
@@ -429,7 +531,139 @@ export default function Settings() {
                   </div>
                 </>
                 :
-                ''
+                tab === `Images` ?
+                  <>
+                    {removeModal ?
+                      <div className='remove-modal'>
+                        <h4 style={{ textAlign: 'center' }}>Are you sure you want to delete <br />{data.name || data.type || 'this'} image?</h4>
+                        <div className='remove-modal-btns'>
+                          <CTAButton
+                            label='Cancel'
+                            handleClick={() => {
+                              setRemoveModal(false)
+                            }}
+                            color={APP_COLORS.GRAY}
+                          />
+                          <CTAButton
+                            label='Confirm'
+                            handleClick={removeImage}
+                            color={APP_COLORS.RED}
+                          />
+                        </div>
+                      </div> : ''}
+                    <div className='settings-new-skill-btn' style={{ filter: removeModal && 'blur(10px)' }}>
+                      <CTAButton
+                        label='New Image'
+                        handleClick={() => {
+                          setIsNew(true)
+                          setSelectedImage(images.length)
+                          setImageEdit(true)
+                          setData({})
+                        }}
+                        color={APP_COLORS.GREEN}
+                        disabled={imageEdit}
+                      />
+                      {selectedImage !== -1 ?
+                        <CTAButton
+                          label='Delete'
+                          handleClick={() => setRemoveModal(true)}
+                          color={APP_COLORS.RED}
+                        /> : ''}
+                    </div>
+                    <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
+                      <DataTable
+                        title='Images'
+                        subtitle='Here is a list of all images in the system'
+                        maxRows={9}
+                        tableData={images}
+                        tableHeaders={imageHeaders}
+                        loading={loading}
+                        item={selectedImage}
+                        setItem={setSelectedImage}
+                        isEdit={imageEdit}
+                        setIsEdit={setImageEdit}
+                      />
+                      {imageEdit ?
+                        <div className='settings-select-section'>
+                          <div className='settings-details'>
+                            {imageData.image ?
+                              <img
+                                src={imageData.image}
+                                style={imageData.style}
+                                className='settings-image'
+                                onClick={() => document.getElementById('image').click()}
+                                loading='lazy'
+                              />
+                              :
+                              <img
+                                src={DropPhoto}
+                                className='profile-image-svg'
+                                onClick={() => document.getElementById('image').click()}
+                              />}
+                            <InputField
+                              label=''
+                              type='file'
+                              name='image'
+                              filename='image'
+                              image={imageData}
+                              setImage={setImageData}
+                              style={{ color: 'rgb(71, 71, 71)' }}
+                            />
+                            <InputField
+                              label='Image name'
+                              type='text'
+                              name='name'
+                              placeholder='Robert Ericsson'
+                              updateData={updateData}
+                              style={{ color: 'rgb(71, 71, 71)', width: '93%' }}
+                              value={data.name || ''}
+                            />
+                            <InputField
+                              label='Email'
+                              type='text'
+                              name='email'
+                              placeholder='full.name@sigma.se'
+                              updateData={updateData}
+                              style={{ color: 'rgb(71, 71, 71)', width: '93%' }}
+                              value={data.email || ''}
+                            />
+                            <Dropdown
+                              label='Type'
+                              name='type'
+                              options={imageTypes}
+                              value={data.type}
+                              updateData={updateData}
+                              size='16vw'
+                            />
+                          </div>
+                          <div className='settings-skill-btns'>
+                            <CTAButton
+                              label='Discard'
+                              handleClick={() => {
+                                setSelectedImage(-1)
+                                setImageEdit(false)
+                                setIsEdit(false)
+                                setData({})
+                                setIsNew(false)
+                              }}
+                              color={APP_COLORS.GRAY}
+                            />
+                            <CTAButton
+                              label='Save'
+                              handleClick={saveImageData}
+                              color={APP_COLORS.GREEN}
+                              loading={loading}
+                              disabled={!isEdit}
+                            />
+                          </div>
+                        </div>
+                        :
+                        ''
+                      }
+                    </div>
+                  </>
+                  :
+                  ''
         }
       </div>
     </div>

@@ -100,7 +100,7 @@ export default function Resume(props) {
 
     const getCVLogo = async () => {
         try {
-            const logo = await dispatch(getLogo({ type: 'cv-logo' })).then(data => data.payload)
+            const logo = await dispatch(getLogo({ type: 'CV Logo' })).then(data => data.payload)
             if (logo) setcvLogo(logo.data)
             else setcvLogo({})
         } catch (err) { console.error(err) }

@@ -115,7 +115,7 @@ export default function Users() {
         try {
             const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
             if (image) {
-                setProfilePic({ profileImage: image.data, style: image.style ? JSON.parse(image.style) : {} })
+                setProfilePic({ image: image.data, style: image.style ? JSON.parse(image.style) : {} })
                 if (image.style) {
                     const imageStyles = JSON.parse(image.style)
                     setBrightness(imageStyles.brightness || 100)
@@ -271,32 +271,33 @@ export default function Users() {
                 <div className='users-select-section' style={{ filter: removeModal && 'blur(10px)' }}>
                     <div className='users-image-section'>
                         <div className='users-image-input'>
-                            {profilePic.profileImage ?
+                            {profilePic.image ?
                                 <img
-                                    src={profilePic.profileImage}
+                                    src={profilePic.image}
                                     style={profilePic.style}
                                     className='account-profile-image'
-                                    onClick={() => document.getElementById('profileImage').click()}
+                                    onClick={() => document.getElementById('image').click()}
                                     loading='lazy'
                                 />
                                 : <img
                                     src={ProfileIcon}
                                     style={profilePic.style}
                                     className='account-profile-image-svg'
-                                    onClick={() => document.getElementById('profileImage').click()}
+                                    onClick={() => document.getElementById('image').click()}
                                 />}
                             <InputField
-                                label='Profile Image'
+                                label=''
                                 type='file'
-                                name='profileImage'
-                                filename='profileImage'
+                                name='image'
+                                filename='image'
                                 image={profilePic}
                                 setImage={setProfilePic}
                                 setIsEdit={setIsEdit}
                                 style={{ color: 'rgb(71, 71, 71)' }}
                             />
                         </div>
-                        {profilePic.profileImage ? <div className='color-users'>
+                        {profilePic.image ? 
+                        <div className='color-users'>
                             <Slider
                                 value={contrast}
                                 setValue={setContrast}
@@ -408,32 +409,33 @@ export default function Users() {
                     <div className='users-select-section' style={{ filter: removeModal && 'blur(10px)' }}>
                         <div className='users-image-section'>
                             <div className='users-image-input'>
-                                {profilePic.profileImage ?
+                                {profilePic.image ?
                                     <img
-                                        src={profilePic.profileImage}
+                                        src={profilePic.image}
                                         style={profilePic.style}
                                         className='account-profile-image'
-                                        onClick={() => document.getElementById('profileImage').click()}
+                                        onClick={() => document.getElementById('image').click()}
                                         loading='lazy'
                                     />
                                     : <img
                                         src={ProfileIcon}
                                         style={profilePic.style}
                                         className='account-profile-image-svg'
-                                        onClick={() => document.getElementById('profileImage').click()}
+                                        onClick={() => document.getElementById('image').click()}
                                     />}
                                 <InputField
-                                    label='Profile Image'
+                                    label=''
                                     type='file'
-                                    name='profileImage'
-                                    filename='profileImage'
+                                    name='image'
+                                    filename='image'
                                     image={profilePic}
                                     setImage={setProfilePic}
                                     setIsEdit={setIsEdit}
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                 />
                             </div>
-                            {profilePic.profileImage ? <div className='color-users'>
+                            {profilePic.image ? 
+                            <div className='color-users'>
                                 <Slider
                                     value={contrast}
                                     setValue={setContrast}

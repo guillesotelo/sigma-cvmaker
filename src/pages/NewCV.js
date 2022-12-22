@@ -167,7 +167,7 @@ export default function NewCV() {
 
     const getCVLogo = async () => {
         try {
-            const logo = await dispatch(getLogo({ type: 'cv-logo' })).then(data => data.payload)
+            const logo = await dispatch(getLogo({ type: 'CV Logo' })).then(data => data.payload)
             if (logo) setcvLogo(logo.data)
             else setcvLogo({})
         } catch (err) { console.error(err) }
@@ -182,7 +182,7 @@ export default function NewCV() {
             const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
             if (image) {
                 const imageStyle = image.style && JSON.parse(image.style) || {}
-                setProfilePic({ profileImage: image.data, style: imageStyle })
+                setProfilePic({ image: image.data, style: imageStyle })
                 setTranslateX(imageStyle.x || 0)
                 setTranslateY(imageStyle.y || 0)
                 setScale(imageStyle.s || 1)
@@ -245,7 +245,7 @@ export default function NewCV() {
             resumeData.email = data.email || ''
             resumeData.user = user
 
-            if (profilePic && profilePic.profileImage) resumeData.profilePic = profilePic
+            if (profilePic && profilePic.image) resumeData.profilePic = profilePic
 
             let saved = {}
 
@@ -286,14 +286,14 @@ export default function NewCV() {
             <div className='new-resume-fill'>
                 <div className='resume-fill-col1'>
                     <>
-                        {profilePic.profileImage ?
+                        {profilePic.image ?
                             <div className='profile-image-section'>
                                 <div className='profile-image-cover'>
                                     <img
-                                        src={profilePic.profileImage}
+                                        src={profilePic.image}
                                         style={profilePic.style}
                                         className='profile-image'
-                                        onClick={() => document.getElementById('profileImage').click()}
+                                        onClick={() => document.getElementById('image').click()}
                                         loading='lazy'
                                     />
                                 </div>
@@ -337,13 +337,13 @@ export default function NewCV() {
                             <img
                                 src={ProfileIcon}
                                 className='profile-image-svg'
-                                onClick={() => document.getElementById('profileImage').click()}
+                                onClick={() => document.getElementById('image').click()}
                             />}
                         <InputField
                             label='Profile Image'
                             type='file'
-                            name='profileImage'
-                            filename='profileImage'
+                            name='image'
+                            filename='image'
                             image={profilePic}
                             setImage={setProfilePic}
                             style={{ color: 'rgb(71, 71, 71)' }}

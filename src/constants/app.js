@@ -1,4 +1,4 @@
-export const VERSION = 'v1.5.7 [Beta]'
+export const VERSION = 'v1.5.8 [Beta]'
 
 export const APP_COLORS = {
     YELLOW: '#E59A2F',

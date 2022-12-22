@@ -319,14 +319,13 @@
     position: absolute;
     margin-left: 12vw;
     background-color: white;
-    border: 1px solid lightgray;
     transform: scale(0.85);
     border-left: none;
     z-index: 2;
     padding: 1vw 1vw 2vw 1vw;
     border-bottom-right-radius: 1vw;
     border-top-right-radius: 1vw;
-    box-shadow: 0px 4px 15px lightgray;
+    box-shadow: 4px 4px 15px lightgray;
 }
 
 .profile-image {
@@ -881,6 +880,23 @@
     border-radius: .5vw;
     margin-top: 1vw;
     gap: 1vw;
+}
+
+.settings-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-image {
+    max-width: 220px;
+    max-height: 220px;
+    align-self: center;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.settings-image:hover {
+    opacity: .8;
 }
 
 /* --- Users ---  */
