@@ -45,6 +45,9 @@ export default function NewCV() {
     const [translateX, setTranslateX] = useState(0)
     const [translateY, setTranslateY] = useState(0)
     const [rotate, setRotate] = useState(0)
+    const [contrast, setContrast] = useState(100)
+    const [brightness, setBrightness] = useState(100)
+    const [grayscale, setGrayscale] = useState(0)
     const dispatch = useDispatch()
     const history = useHistory()
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || {}
@@ -80,13 +83,14 @@ export default function NewCV() {
             style: {
                 ...profilePic.style,
                 transform: `scale(${scale}) translate(${translateX}%, ${translateY}%) rotate(${rotate}deg)`,
+                filter: `brightness(${brightness}%) contrast(${contrast}%) grayscale(${grayscale}%)`,
                 s: scale,
                 x: translateX,
                 y: translateY,
                 r: rotate
             }
         })
-    }, [scale, translateX, translateY, rotate])
+    }, [scale, translateX, translateY, rotate, contrast, brightness, grayscale])
 
 
     useEffect(() => {
@@ -187,6 +191,9 @@ export default function NewCV() {
                 setTranslateY(imageStyle.y || 0)
                 setScale(imageStyle.s || 1)
                 setRotate(imageStyle.r || 0)
+                setBrightness(imageStyle.brightness >= 0 ? imageStyle.brightness : 100)
+                setContrast(imageStyle.contrast >= 0 ? imageStyle.contrast : 100)
+                setGrayscale(imageStyle.grayscale || 0)
             }
         } catch (err) {
             console.error(err)
@@ -298,39 +305,67 @@ export default function NewCV() {
                                     />
                                 </div>
                                 <div className='profile-image-settings'>
-                                    <Slider
-                                        label='Position X'
-                                        sign='%'
-                                        value={translateX}
-                                        setValue={setTranslateX}
-                                        min={-100}
-                                        max={100}
-                                    />
-                                    <Slider
-                                        label='Position Y'
-                                        sign='%'
-                                        value={translateY}
-                                        setValue={setTranslateY}
-                                        min={-100}
-                                        max={100}
-                                    />
-                                    <Slider
-                                        label='Scale'
-                                        sign=''
-                                        value={scale}
-                                        setValue={setScale}
-                                        min={0}
-                                        max={3}
-                                        step={0.01}
-                                    />
-                                    <Slider
-                                        label='Rotate'
-                                        sign='°'
-                                        value={rotate}
-                                        setValue={setRotate}
-                                        min={0}
-                                        max={360}
-                                    />
+                                    <div>
+                                        <Slider
+                                            label='Position X'
+                                            sign='%'
+                                            value={translateX}
+                                            setValue={setTranslateX}
+                                            min={-100}
+                                            max={100}
+                                        />
+                                        <Slider
+                                            label='Position Y'
+                                            sign='%'
+                                            value={translateY}
+                                            setValue={setTranslateY}
+                                            min={-100}
+                                            max={100}
+                                        />
+                                        <Slider
+                                            label='Scale'
+                                            sign=''
+                                            value={scale}
+                                            setValue={setScale}
+                                            min={0}
+                                            max={3}
+                                            step={0.01}
+                                        />
+                                        <Slider
+                                            label='Rotate'
+                                            sign='°'
+                                            value={rotate}
+                                            setValue={setRotate}
+                                            min={0}
+                                            max={360}
+                                        />
+                                    </div>
+                                    <div>
+                                        <Slider
+                                            label='Contrast'
+                                            sign='%'
+                                            value={contrast}
+                                            setValue={setContrast}
+                                            min={0}
+                                            max={200}
+                                        />
+                                        <Slider
+                                            label='Brightness'
+                                            sign='%'
+                                            value={brightness}
+                                            setValue={setBrightness}
+                                            min={0}
+                                            max={200}
+                                        />
+                                        <Slider
+                                            label='Gray Scale'
+                                            sign='%'
+                                            value={grayscale}
+                                            setValue={setGrayscale}
+                                            min={0}
+                                            max={100}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             :

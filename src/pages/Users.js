@@ -118,8 +118,8 @@ export default function Users() {
                 setProfilePic({ image: image.data, style: image.style ? JSON.parse(image.style) : {} })
                 if (image.style) {
                     const imageStyles = JSON.parse(image.style)
-                    setBrightness(imageStyles.brightness || 100)
-                    setContrast(imageStyles.contrast || 100)
+                    setBrightness(imageStyles.brightness >= 0 ? imageStyles.brightness : 100)
+                    setContrast(imageStyles.contrast >= 0 ? imageStyles.contrast : 100)
                     setGrayscale(imageStyles.grayscale || 0)
                 }
             }
@@ -296,33 +296,33 @@ export default function Users() {
                                 style={{ color: 'rgb(71, 71, 71)' }}
                             />
                         </div>
-                        {profilePic.image ? 
-                        <div className='color-users'>
-                            <Slider
-                                value={contrast}
-                                setValue={setContrast}
-                                setIsEdit={setIsEdit}
-                                label='Contrast'
-                                max={200}
-                                sign='%'
-                            />
-                            <Slider
-                                value={brightness}
-                                setValue={setBrightness}
-                                setIsEdit={setIsEdit}
-                                label='Brightness'
-                                max={200}
-                                sign='%'
-                            />
-                            <Slider
-                                value={grayscale}
-                                setValue={setGrayscale}
-                                setIsEdit={setIsEdit}
-                                label='Gray Scale'
-                                max={100}
-                                sign='%'
-                            />
-                        </div> : ''}
+                        {profilePic.image ?
+                            <div className='color-users'>
+                                <Slider
+                                    value={contrast}
+                                    setValue={setContrast}
+                                    setIsEdit={setIsEdit}
+                                    label='Contrast'
+                                    max={200}
+                                    sign='%'
+                                />
+                                <Slider
+                                    value={brightness}
+                                    setValue={setBrightness}
+                                    setIsEdit={setIsEdit}
+                                    label='Brightness'
+                                    max={200}
+                                    sign='%'
+                                />
+                                <Slider
+                                    value={grayscale}
+                                    setValue={setGrayscale}
+                                    setIsEdit={setIsEdit}
+                                    label='Gray Scale'
+                                    max={100}
+                                    sign='%'
+                                />
+                            </div> : ''}
                     </div>
 
                     <div className='users-details'>
@@ -434,33 +434,33 @@ export default function Users() {
                                     style={{ color: 'rgb(71, 71, 71)' }}
                                 />
                             </div>
-                            {profilePic.image ? 
-                            <div className='color-users'>
-                                <Slider
-                                    value={contrast}
-                                    setValue={setContrast}
-                                    setIsEdit={setIsEdit}
-                                    label='Contrast'
-                                    max={200}
-                                    sign='%'
-                                />
-                                <Slider
-                                    value={brightness}
-                                    setValue={setBrightness}
-                                    setIsEdit={setIsEdit}
-                                    label='Brightness'
-                                    max={200}
-                                    sign='%'
-                                />
-                                <Slider
-                                    value={grayscale}
-                                    setValue={setGrayscale}
-                                    setIsEdit={setIsEdit}
-                                    label='Gray Scale'
-                                    max={100}
-                                    sign='%'
-                                />
-                            </div> : ''}
+                            {profilePic.image ?
+                                <div className='color-users'>
+                                    <Slider
+                                        value={contrast}
+                                        setValue={setContrast}
+                                        setIsEdit={setIsEdit}
+                                        label='Contrast'
+                                        max={200}
+                                        sign='%'
+                                    />
+                                    <Slider
+                                        value={brightness}
+                                        setValue={setBrightness}
+                                        setIsEdit={setIsEdit}
+                                        label='Brightness'
+                                        max={200}
+                                        sign='%'
+                                    />
+                                    <Slider
+                                        value={grayscale}
+                                        setValue={setGrayscale}
+                                        setIsEdit={setIsEdit}
+                                        label='Gray Scale'
+                                        max={100}
+                                        sign='%'
+                                    />
+                                </div> : ''}
                         </div>
 
                         <div className='users-details'>

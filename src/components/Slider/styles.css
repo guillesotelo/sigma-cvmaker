@@ -42,12 +42,12 @@
   }
 
   .slider-container {
-      margin: 1vw;
+      margin: .5vw 0;
   }
 
   .slider-label {
-      font-size: 1vw;
-      margin: .5vw 0 .3vw 0;
+      font-size: .9vw;
+      margin: .3vw 0;
       text-align: left;
       align-self: flex-start;
   }
@@ -58,7 +58,7 @@
   }
 
   .slider-thumb {
-    font-size: .9vw;
+    font-size: .8vw;
     height: .8vw;
     line-height: .8vw;
     margin: 0 1vw;

@@ -34,8 +34,15 @@ export default function Settings() {
   const [selectedBuzzword, setSelectedBuzzword] = useState(-1)
   const [buzzwordEdit, setBuzzwordEdit] = useState(false)
   const [removeModal, setRemoveModal] = useState(false)
-  const [imageTypes, setImageTypes] = useState([])
   const [isNew, setIsNew] = useState(false)
+  const [imageTypes, setImageTypes] = useState([])
+  const [scale, setScale] = useState(1)
+  const [translateX, setTranslateX] = useState(0)
+  const [translateY, setTranslateY] = useState(0)
+  const [rotate, setRotate] = useState(0)
+  const [contrast, setContrast] = useState(100)
+  const [brightness, setBrightness] = useState(100)
+  const [grayscale, setGrayscale] = useState(0)
   const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
   const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
   const history = useHistory()
@@ -93,9 +100,45 @@ export default function Settings() {
   useEffect(() => {
     if (selectedImage > -1 && images[selectedImage]) {
       setData({ ...images[selectedImage] })
-      if (images[selectedImage].data) setImageData({ image: images[selectedImage].data })
+
+      if (images[selectedImage].data) {
+        const imageStyle = images[selectedImage].style && JSON.parse(images[selectedImage].style) || {}
+        setImageData({
+          image: images[selectedImage].data,
+          style: imageStyle,
+          type: images[selectedImage].type
+        })
+
+        setTranslateX(imageStyle.x || 0)
+        setTranslateY(imageStyle.y || 0)
+        setScale(imageStyle.s || 1)
+        setRotate(imageStyle.r || 0)
+        setBrightness(imageStyle.brightness >= 0 ? imageStyle.brightness : 100)
+        setContrast(imageStyle.contrast >= 0 ? imageStyle.contrast : 100)
+        setGrayscale(imageStyle.grayscale || 0)
+      }
     }
   }, [selectedImage])
+
+  useEffect(() => {
+    if (isEdit) {
+      setImageData({
+        ...imageData,
+        style: {
+          ...imageData.style,
+          transform: `scale(${scale}) translate(${translateX}%, ${translateY}%) rotate(${rotate}deg)`,
+          filter: `brightness(${brightness}%) contrast(${contrast}%) grayscale(${grayscale}%)`,
+          s: scale,
+          x: translateX,
+          y: translateY,
+          r: rotate,
+          brightness,
+          contrast,
+          grayscale
+        }
+      })
+    }
+  }, [scale, translateX, translateY, rotate, contrast, brightness, grayscale])
 
   useEffect(() => {
     if (appData.length) {
@@ -217,7 +260,6 @@ export default function Settings() {
     }
   }
 
-
   const saveCVLogo = async () => {
     try {
       setLoading(true)
@@ -253,8 +295,15 @@ export default function Settings() {
       if (!imageData.image) return toast.info('Please add an image')
       let saved = null
 
-      if (isNew) saved = await dispatch(createImage({ ...data, data: imageData.image, user })).then(data => data.payload)
-      else saved = await dispatch(updateImageData({ ...data, data: imageData.image, user })).then(data => data.payload)
+      const imgData = {
+        ...data,
+        data: imageData.image,
+        style: JSON.stringify(imageData.style),
+        user
+      }
+
+      if (isNew) saved = await dispatch(createImage(imgData)).then(data => data.payload)
+      else saved = await dispatch(updateImageData(imgData)).then(data => data.payload)
 
       if (!saved) return toast.error('Error saving image')
       toast.success('Image saved successfully')
@@ -265,7 +314,8 @@ export default function Settings() {
       setIsEdit(false)
       setData({})
       setIsNew(false)
-      getAllImages()
+      await getAllImages()
+
     } catch (err) {
       console.error(err)
       toast.error('Error saving image')
@@ -275,7 +325,6 @@ export default function Settings() {
       setIsEdit(false)
       setData({})
       setIsNew(false)
-      getAllImages()
     }
   }
 
@@ -297,9 +346,12 @@ export default function Settings() {
     try {
       setRemoveModal(false)
       setLoading(true)
+
       const removed = await dispatch(deleteImage({ ...data, user })).then(data => data.payload)
       if (!removed) return toast.error('Error deleting Image, try again later')
+
       toast.success('Image deleted successfylly')
+
       setLoading(false)
       setSelectedImage(-1)
       setImageEdit(false)
@@ -307,6 +359,7 @@ export default function Settings() {
       setData({})
       setIsNew(false)
       await getAllImages()
+
     } catch (err) {
       toast.error('Error deleting Image, try again later')
       console.error(err)
@@ -587,19 +640,90 @@ export default function Settings() {
                         <div className='settings-select-section'>
                           <div className='settings-details'>
                             {imageData.image ?
-                              <img
-                                src={imageData.image}
-                                style={imageData.style}
-                                className='settings-image'
-                                onClick={() => document.getElementById('image').click()}
-                                loading='lazy'
-                              />
+                              <div className={imageData.type === 'Profile' ? 'profile-image-cover' : ''}>
+                                <img
+                                  src={imageData.image}
+                                  style={imageData.style}
+                                  className={imageData.type === 'Profile' ? 'profile-image' : 'settings-image'}
+                                  onClick={() => document.getElementById('image').click()}
+                                  loading='lazy'
+                                />
+                              </div>
                               :
                               <img
                                 src={DropPhoto}
                                 className='profile-image-svg'
                                 onClick={() => document.getElementById('image').click()}
                               />}
+                            <div className='settings-details-settings'>
+                              {imageData.type === 'Profile' ?
+                                <div>
+                                  <Slider
+                                    label='Position X'
+                                    sign='%'
+                                    value={translateX}
+                                    setValue={setTranslateX}
+                                    setIsEdit={setIsEdit}
+                                    min={-100}
+                                    max={100}
+                                  />
+                                  <Slider
+                                    label='Position Y'
+                                    sign='%'
+                                    value={translateY}
+                                    setValue={setTranslateY}
+                                    setIsEdit={setIsEdit}
+                                    min={-100}
+                                    max={100}
+                                  />
+                                  <Slider
+                                    label='Scale'
+                                    sign=''
+                                    value={scale}
+                                    setValue={setScale}
+                                    setIsEdit={setIsEdit}
+                                    min={0}
+                                    max={3}
+                                    step={0.01}
+                                  />
+                                  <Slider
+                                    label='Rotate'
+                                    sign='°'
+                                    value={rotate}
+                                    setValue={setRotate}
+                                    setIsEdit={setIsEdit}
+                                    min={0}
+                                    max={360}
+                                  />
+                                </div> : ''}
+                              <Slider
+                                label='Contrast'
+                                sign='%'
+                                value={contrast}
+                                setValue={setContrast}
+                                setIsEdit={setIsEdit}
+                                min={0}
+                                max={200}
+                              />
+                              <Slider
+                                label='Brightness'
+                                sign='%'
+                                value={brightness}
+                                setValue={setBrightness}
+                                setIsEdit={setIsEdit}
+                                min={0}
+                                max={200}
+                              />
+                              <Slider
+                                label='Gray Scale'
+                                sign='%'
+                                value={grayscale}
+                                setValue={setGrayscale}
+                                setIsEdit={setIsEdit}
+                                min={0}
+                                max={100}
+                              />
+                            </div>
                             <InputField
                               label=''
                               type='file'
