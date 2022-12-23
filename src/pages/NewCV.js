@@ -707,21 +707,14 @@ export default function NewCV() {
 
             {user.isManager &&
                 <>
-                    <div className='separator'></div>
-                    <Dropdown
-                        label='Consultant Manager'
-                        name='manager'
-                        options={managers}
-                        value={data.manager}
-                        updateData={updateData}
-                        size='15vw'
-                    />
-                    <CVFooter
-                        updateData={updateData}
-                        user={user}
-                        data={data}
-                    />
-
+                    <div className='separator'></div>                        
+                        <CVFooter
+                            updateData={updateData}
+                            user={user}
+                            data={data}
+                            managers={managers}
+                            manager={data.manager}
+                        />
                     <div className='separator'></div>
                     <div className='new-resume-fill'>
                         <div className='resume-fill-col1'>

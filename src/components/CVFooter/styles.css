@@ -1,9 +1,9 @@
 .cv-footer-container {
-    margin: 1vw 0 5vw 0;
+    margin: 1vw 0 2vw 0;
     display: flex;
     flex-direction: row;
     gap: 5vw;
-    justify-content: flex-end;
+    justify-content: space-between;
     color: rgb(105, 104, 105);
 }
 
@@ -20,7 +20,24 @@
     gap: 1vw;
 }
 
+.cv-footer-label {
+    font-size: 0.8vw;
+    margin: 0 0 0.3vw 0;
+    text-align: left;
+    width: 5vw;
+}
+
 .cv-footer-row input {
     width: 16vw;
     padding: 0.4vw;
+}
+
+.cv-footer-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.cv-footer-manager {
+    align-self: center;
+    margin-bottom: 1vw;
 }
