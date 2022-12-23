@@ -29,7 +29,7 @@ export default function Login() {
             setLoading(true)
             const logged = await dispatch(logIn(data)).then(data => data.payload)
 
-            if (logged) {
+            if (logged && logged.username) {
                 setData({ ...data, password: '', email: '' })
                 setLoading(false)
                 toast.success(`Welcome back, ${logged.username.split(' ')[0]}!`)

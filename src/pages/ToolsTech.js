@@ -204,7 +204,7 @@ export default function ToolsTech() {
                                     name='name'
                                     placeholder='Java'
                                     updateData={updateData}
-                                    style={{ color: 'rgb(71, 71, 71)', width: '95%' }}
+                                    style={{ color: 'rgb(71, 71, 71)', width: '98%' }}
                                     value={data.name || ''}
                                 />
                                 <InputField
@@ -213,7 +213,7 @@ export default function ToolsTech() {
                                     name='field'
                                     placeholder='Back End'
                                     updateData={updateData}
-                                    style={{ color: 'rgb(71, 71, 71)', width: '95%' }}
+                                    style={{ color: 'rgb(71, 71, 71)', width: '98%' }}
                                     value={data.field || ''}
                                     options={fieldOptions}
                                 />
@@ -223,7 +223,7 @@ export default function ToolsTech() {
                                     name='type'
                                     placeholder='Software Development'
                                     updateData={updateData}
-                                    style={{ color: 'rgb(71, 71, 71)', width: '95%' }}
+                                    style={{ color: 'rgb(71, 71, 71)', width: '98%' }}
                                     value={data.type || ''}
                                     options={typeOptions}
                                 />

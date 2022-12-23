@@ -290,7 +290,7 @@ export default function NewCV() {
             <CVHeader data={data} cvLogo={cvLogo} />
             <div className='separator'></div>
             <h2 className='section-title-row'>Personal Information</h2>
-            <div className='new-resume-fill'>
+            <div className='new-resume-fill' style={{ border: 'none' }}>
                 <div className='resume-fill-col1'>
                     <>
                         {profilePic.image ?
@@ -375,7 +375,7 @@ export default function NewCV() {
                                 onClick={() => document.getElementById('image').click()}
                             />}
                         <InputField
-                            label='Profile Image'
+                            label=''
                             type='file'
                             name='image'
                             filename='image'
@@ -476,14 +476,33 @@ export default function NewCV() {
                         setHidden={setHiddenItems}
                         hidden={hiddenItems}
                     />
-                    <Bullet
-                        label='Strengths'
-                        type='big'
-                        items={strengths}
-                        setItems={setStrengths}
-                        placeholder='Add new strength...'
-                        id='strengths'
-                    />
+                    <div className='resume-strengths-div'>
+                        {hiddenSections.strengths ?
+                            <h4 className='bullet-label'>Strengths</h4>
+                            :
+                            <Bullet
+                                label='Strengths'
+                                type='big'
+                                items={strengths}
+                                setItems={setStrengths}
+                                placeholder='Add new strength...'
+                                id='strengths'
+                            />
+                        }
+                        {hiddenSections.strengths ?
+                            <img
+                                src={PlusIcon}
+                                className='hide-section-icon no-top'
+                                onClick={() => setHiddenSections({ ...hiddenSections, strengths: '' })}
+                                style={{ display: 'block' }}
+                            />
+                            :
+                            <img
+                                src={MinusIcon}
+                                className='hide-section-icon'
+                                onClick={() => setHiddenSections({ ...hiddenSections, strengths: 'true' })}
+                            />}
+                    </div>
                     <InputField
                         label='Email'
                         type='text'
@@ -707,7 +726,11 @@ export default function NewCV() {
 
             {user.isManager &&
                 <>
-                    <div className='separator'></div>                        
+                    <div className='separator'></div>
+                    <div className='new-resume-fill-internal'>
+                        <div className='resume-fill-col1'>
+                            <h2 className='section-title'>Footer</h2>
+                        </div>
                         <CVFooter
                             updateData={updateData}
                             user={user}
@@ -715,14 +738,15 @@ export default function NewCV() {
                             managers={managers}
                             manager={data.manager}
                         />
+                    </div>
                     <div className='separator'></div>
-                    <div className='new-resume-fill'>
+                    <div className='new-resume-fill-internal'>
                         <div className='resume-fill-col1'>
-                            <h2 className='section-title'>CV Data (internal use)</h2>
+                            <h2 className='section-title'>Metadata (internal use)</h2>
                         </div>
                         <div className='resume-fill-col2'>
                             <Dropdown
-                                label='Type'
+                                label='CV Type'
                                 name='type'
                                 options={typeOptions}
                                 value={data.type}

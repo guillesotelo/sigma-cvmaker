@@ -282,11 +282,28 @@
 }
 
 .new-resume-fill {
-    width: 100%;
+    width: 80%;
     margin: 0;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    border: 1px solid transparent;
+    padding: 2vw 0;
+}
+
+.new-resume-fill-internal {
+    width: 80%;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 1px solid transparent;
+    padding: 2vw 0;
+}
+
+.new-resume-fill:hover {
+    border: 1px solid #E4C69C;
+    border-radius: .5vw;
 }
 
 .profile-image-cover {
@@ -363,7 +380,7 @@
 .resume-fill-col2 {
     display: flex;
     flex-direction: column;
-    width: 45%;
+    width: 60%;
     align-self: flex-start;
     justify-content: center;
     position: relative;
@@ -452,6 +469,24 @@
     display: block;
 }
 
+.resume-strengths-div {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin: 1vw 0;
+    border: 1px solid transparent;
+    min-height: 2vw;
+}
+
+.resume-strengths-div:hover {
+    border: 1px solid #E4C69C;
+    border-radius: .5vw;
+}
+
+.resume-strengths-div:hover .hide-section-icon {
+    display: block;
+}
+
 .hide-section-icon:hover {
     filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
 }
@@ -501,7 +536,7 @@
 .separator {
     border-bottom: 1px solid black;
     width: 80%;
-    margin: 2vw 0;
+    margin: 0;
 }
 
 .section-title-row {

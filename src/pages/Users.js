@@ -150,7 +150,10 @@ export default function Users() {
                     if (!saved) return toast.error('Error saving user')
                     toast.success('User saved successfully')
                 } else {
-                    const updated = await dispatch(updateUserData({ _id: users[selectedUser]._id, profilePic, newData: data, user })).then(data => data.payload)
+                    const newData = { ...data }
+                    if (!data.password) delete newData.password
+
+                    const updated = await dispatch(updateUserData({ _id: users[selectedUser]._id, profilePic, newData, user })).then(data => data.payload)
                     if (updated) toast.success('User data saved successfully')
                     else toast.error('Error saving changes')
                 }
@@ -350,7 +353,7 @@ export default function Users() {
                             options={managers}
                             value={data.managerName}
                             updateData={updateData}
-                            size='95%'
+                            size='98%'
                         />
                         <InputField
                             label='Phone'
@@ -488,7 +491,7 @@ export default function Users() {
                                 options={managers}
                                 value={data.managerName}
                                 updateData={updateData}
-                                size='95%'
+                                size='98%'
                             />
                             <InputField
                                 label='Phone'

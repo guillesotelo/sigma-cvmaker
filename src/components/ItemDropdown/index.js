@@ -351,7 +351,7 @@ export default function ItemDropdown(props) {
                         : null
                     )}
                 </div>
-                <h4 onClick={() => setEditSkills(true)} className='section-item-remove'>Edit</h4>
+                <h4 onClick={() => setEditSkills(true)} className='section-item-remove'>Edit Skills</h4>
             </div>
     }
 

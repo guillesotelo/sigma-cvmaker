@@ -316,7 +316,7 @@ export default function Bullet(props) {
                         : null
                     )}
                 </div>
-                <h4 onClick={() => setEditTools(true)} className='section-item-remove'>Edit</h4>
+                <h4 onClick={() => setEditTools(true)} className='section-item-remove'>Edit/Add Tools</h4>
             </div>
     }
 

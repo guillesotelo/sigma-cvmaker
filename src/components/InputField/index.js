@@ -171,7 +171,7 @@ export default function InputField(props) {
                                     : ''
                             }
                             {showDropDown ?
-                                <div className='input-dropdown-options'>
+                                <div className='input-dropdown-options' style={{ width: style.width || '100%' }}>
                                     {suggestions.map((suggestion, i) =>
                                         <h4
                                             key={i}
