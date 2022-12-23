@@ -199,7 +199,7 @@ export default function ItemDropdown(props) {
                                                         updateData={handleChange}
                                                         index={i}
                                                         style={{ margin: '0 .5vw' }}
-                                                        size='10vw'
+                                                        size='9vw'
                                                     />
                                                     <h4 onClick={() => addNewItem()} className='item-dropdown-new'>✓</h4>
                                                 </>

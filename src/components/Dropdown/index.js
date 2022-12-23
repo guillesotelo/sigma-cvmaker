@@ -34,20 +34,20 @@ export default function Dropdown(props) {
     }
 
     return (
-        <div className='dropdown-container' style={style}>
+        <div className='dropdown-container' style={{ ...style, width: size ? size : '10vw' }}>
             {label ?
                 <h4 className='dropdown-label' style={{ opacity: hidden && hidden.includes(label) && '.2' }}>
                     {label || ''}
                 </h4> : ''}
             <div className='dropdown-select-section'>
-                <div 
-                className='dropdown-select' 
-                style={{ 
-                    border: openDrop && (!hidden || !hidden.includes(label)) && '1px solid #E4C69C', 
-                    width: size ? size : '10vw',
-                    backgroundColor: label && hidden && hidden.includes(label) && '#fafafa'
-                 }} 
-                onClick={() => setOpenDrop(!openDrop)}>
+                <div
+                    className='dropdown-select'
+                    style={{
+                        border: openDrop && (!hidden || !hidden.includes(label)) && '1px solid #E4C69C',
+                        width: size ? size : '10vw',
+                        backgroundColor: label && hidden && hidden.includes(label) && '#fafafa'
+                    }}
+                    onClick={() => setOpenDrop(!openDrop)}>
                     <h4 className='dropdown-selected' style={{ opacity: hidden && hidden.includes(label) && '.2' }}>
                         {value ? value : selected ? selected : 'Select'}
                     </h4>

@@ -609,6 +609,7 @@ export default function Settings() {
                         label='New Image'
                         handleClick={() => {
                           setIsNew(true)
+                          setImageData({})
                           setSelectedImage(images.length)
                           setImageEdit(true)
                           setData({})
@@ -757,7 +758,7 @@ export default function Settings() {
                               options={imageTypes}
                               value={data.type}
                               updateData={updateData}
-                              size='16vw'
+                              size='95%'
                             />
                           </div>
                           <div className='settings-skill-btns'>

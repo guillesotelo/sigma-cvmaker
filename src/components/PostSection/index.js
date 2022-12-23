@@ -21,6 +21,7 @@ export default function PostSection(props) {
     const [allTools, setAllTools] = useState([])
     const [filteredTools, setFilteredTools] = useState([])
     const [tech, setTech] = useState([])
+    const [newTech, setNewTech] = useState('')
     const [fields, setFields] = useState([])
     const [editItem, setEditItem] = useState({})
     const [selectedItem, setSelectedItem] = useState(-1)
@@ -216,7 +217,7 @@ export default function PostSection(props) {
                                 else removeBullet(index, subindex)
                                 setEditItem({})
                                 setSelectedItem(-1)
-                            }} className='item-dropdown-new'>✓</h4>
+                            }} className='post-item-new'>✓</h4>
                         </div>
                         :
                         item.value && subindex !== bullets.length - 1 ?
@@ -266,7 +267,7 @@ export default function PostSection(props) {
                                         type='text'
                                         id={id}
                                     />
-                                    <h4 onClick={() => addNewBullet(index, subindex)} className='item-dropdown-new'>✓</h4>
+                                    <h4 onClick={() => addNewBullet(index, subindex)} className='post-item-new'>✓</h4>
                                 </div>
                                 : ''
                 ) : ''}
@@ -468,43 +469,68 @@ export default function PostSection(props) {
                                 value='Select'
                                 updateData={updateData}
                             />
-                            <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                                <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Add manually</h4>
-                                <input
-                                    className='post-manual-input'
-                                    onKeyDown={e => {
-                                        if (e.key === 'Enter' && e.target.value) {
-                                            setTech([...new Set(tech.concat(e.target.value))])
-                                            e.target.value = ''
-                                        }
-                                    }}
-                                    placeholder='e.g: C++'
-                                    type='text'
-                                />
-                            </GrammarlyEditorPlugin>
+                            <div className='post-manual-div'>
+                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "80%" }}>
+                                    <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Add manually</h4>
+                                    <input
+                                        className='post-manual-input'
+                                        onKeyDown={e => {
+                                            if (e.key === 'Enter' && e.target.value) {
+                                                setTech([...new Set(tech.concat(e.target.value))])
+                                                setNewTech('')
+                                            }
+                                        }}
+                                        placeholder='e.g. "Java"'
+                                        onChange={e => {
+                                            if (e.target.value) setNewTech(e.target.value)
+                                        }}
+                                        type='text'
+                                        value={newTech}
+                                    />
+                                </GrammarlyEditorPlugin>
+                                <h4 onClick={() => {
+                                    if (newTech) {
+                                        setTech([...new Set(tech.concat(newTech))])
+                                        setNewTech('')
+                                    }
+                                }}
+                                    className='post-item-new-dif'>✓</h4>
+                            </div>
                         </div>
                         {Array.isArray(tech) ?
                             <div className='post-tools-list'>
                                 {tech.map((tool, i) =>
                                     selectedTool === i ?
-                                        <input
-                                            key={i}
-                                            className='edit-manual-input'
-                                            onChange={e => setEditTool(e.target.value)}
-                                            onKeyDown={e => {
-                                                if (e.key === 'Enter') {
-                                                    if (editTool) {
-                                                        let newItemsArr = tech
-                                                        newItemsArr[i] = editTool || ''
-                                                        setTech(newItemsArr)
-                                                    } else removeTech(i)
-                                                    setEditTool(null)
-                                                    setSelectedTool(-1)
-                                                }
+                                        <div className='post-manual-div'>
+                                            <input
+                                                key={i}
+                                                className='edit-manual-input'
+                                                onChange={e => setEditTool(e.target.value)}
+                                                onKeyDown={e => {
+                                                    if (e.key === 'Enter') {
+                                                        if (editTool) {
+                                                            let newItemsArr = tech
+                                                            newItemsArr[i] = editTool || ''
+                                                            setTech(newItemsArr)
+                                                        } else removeTech(i)
+                                                        setEditTool(null)
+                                                        setSelectedTool(-1)
+                                                    }
+                                                }}
+                                                type='text'
+                                                value={editTool}
+                                            />
+                                            <h4 onClick={() => {
+                                                if (editTool) {
+                                                    let newItemsArr = tech
+                                                    newItemsArr[i] = editTool || ''
+                                                    setTech(newItemsArr)
+                                                } else removeTech(i)
+                                                setEditTool(null)
+                                                setSelectedTool(-1)
                                             }}
-                                            type='text'
-                                            value={editTool}
-                                        />
+                                                className='post-item-new'>✓</h4>
+                                        </div>
                                         :
                                         <div key={i} className='post-tool-div' style={{ backgroundColor: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '#fafafa' }}>
                                             <h4 className='post-tool' style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '.3' }}>{tool}</h4>
@@ -545,6 +571,7 @@ export default function PostSection(props) {
                         setSelectedIndex(null)
                         seteditPost(false)
                         setTech([])
+                        setNewTech('')
                     }}
                         className='section-item-new'>Discard</h4>
                     <h4 onClick={() => {
@@ -552,6 +579,7 @@ export default function PostSection(props) {
                         setSelected(null)
                         setSelectedIndex(null)
                         seteditPost(false)
+                        setNewTech('')
                     }}
                         className='section-item-new'>Save</h4>
                 </div>
@@ -576,17 +604,17 @@ export default function PostSection(props) {
                                             bullet.value && <h4 className='post-responsability' key={j} style={{ display: bullet.hidden && 'none' }}>● {bullet.value}</h4>
                                         )}
                                     </div>
-                                    <div className='post-tools-and-tech'>
-                                        <h4 className='post-technologies-text'>Tools & Tech:</h4>
-                                        {item.technologies && Array.isArray(item.technologies) ?
+                                    {Array.isArray(item.technologies) && item.technologies[0] ?
+                                        <div className='post-tools-and-tech'>
+                                            <h4 className='post-technologies-text'>Tools & Tech:</h4>
                                             <div className='post-tools-and-tech-list'>
                                                 {item.technologies.map((tec, t) =>
                                                     hidden.postSection[i] && hidden.postSection[i].includes(tec) ? ''
                                                         : <h4 key={t} className='post-tools-and-tech-div'>{tec}</h4>)}
                                             </div>
-                                            : ''
-                                        }
-                                    </div>
+                                        </div>
+                                        : ''
+                                    }
                                 </div>
                                 <div className='post-control-btns'>
                                     {!checkHiddenPost(i) ?
@@ -698,6 +726,7 @@ export default function PostSection(props) {
                                             size='10vw'
                                         />
                                         <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "20%" }}>
+                                            <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Add manually</h4>
                                             <input
                                                 className='post-manual-input'
                                                 onKeyDown={e => {
@@ -706,7 +735,7 @@ export default function PostSection(props) {
                                                         e.target.value = ''
                                                     }
                                                 }}
-                                                placeholder='e.g: C++'
+                                                placeholder='e.g. "Java"'
                                                 type='text'
                                             />
                                         </GrammarlyEditorPlugin>
@@ -716,7 +745,7 @@ export default function PostSection(props) {
                                             {tech.map((tec, i) =>
                                                 <div key={i} className='post-tool-div' style={{ backgroundColor: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '#e5e5e5' }}>
                                                     <h4 className='post-tool' style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.3' }}>{tec}</h4>
-                                                    <h4 className='post-remove-tool' style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.3' }} onClick={() => removeTech(i)}>X</h4>
+                                                    {/* <h4 className='post-remove-tool' style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.3' }} onClick={() => removeTech(i)}>X</h4> */}
                                                     {hidden.postSection[i] && hidden.postSection[i].includes(tec) ?
                                                         <img
                                                             src={ShwoIcon}
@@ -730,6 +759,12 @@ export default function PostSection(props) {
                                                             onClick={() => hideItem(i, tec)}
                                                         />
                                                     }
+                                                    <img
+                                                        src={TrashCan}
+                                                        className='hide-icon-tool'
+                                                        onClick={() => removeTech(i)}
+                                                        style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.3' }}
+                                                    />
                                                 </div>
                                             )}
                                         </div> : ''}

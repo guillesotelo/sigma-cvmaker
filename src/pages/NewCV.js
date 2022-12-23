@@ -389,7 +389,7 @@ export default function NewCV() {
                         type='text'
                         name='name'
                         updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)', width: '21vw' }}
+                        style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.name || ''}
                         placeholder='Anna'
                         setHidden={setHiddenItems}
@@ -400,7 +400,7 @@ export default function NewCV() {
                         type='text'
                         name='middlename'
                         updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)', width: '21vw' }}
+                        style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.middlename || ''}
                         placeholder='Grabielle'
                         setHidden={setHiddenItems}
@@ -411,7 +411,7 @@ export default function NewCV() {
                         type='text'
                         name='surname'
                         updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)', width: '21vw' }}
+                        style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.surname || ''}
                         placeholder='Kessler'
                         setHidden={setHiddenItems}
@@ -422,7 +422,7 @@ export default function NewCV() {
                         type='text'
                         name='role'
                         updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)', width: '21vw' }}
+                        style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.role || ''}
                         placeholder='Android Developer'
                         setHidden={setHiddenItems}
@@ -434,7 +434,7 @@ export default function NewCV() {
                         options={genderOptions}
                         value={data.gender}
                         updateData={updateData}
-                        size='20vw'
+                        size='98%'
                         setHidden={setHiddenItems}
                         hidden={hiddenItems}
                     />
@@ -443,7 +443,7 @@ export default function NewCV() {
                         type='text'
                         name='location'
                         updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)', width: '21vw' }}
+                        style={{ color: 'rgb(71, 71, 71)' }}
                         value={data.location || ''}
                         placeholder='Mobilvägen 10, Lund, Sweden'
                         setHidden={setHiddenItems}
@@ -751,7 +751,7 @@ export default function NewCV() {
                                 rows={6}
                                 name='note'
                                 updateData={updateData}
-                                placeholder="e.g: Exported January 28th for [Client Name] by [Manager Name]"
+                                placeholder='e.g. "Exported January 28th for [Client Name] by [Manager Name]"'
                                 style={{ color: 'rgb(71, 71, 71)', width: '35vw' }}
                                 value={data.note || ''}
                             />
