@@ -35,7 +35,9 @@ export default function PostSection(props) {
         setItems,
         hidden,
         setHidden,
-        id
+        id,
+        fontSize,
+        padding
     } = props
 
     useEffect(() => {
@@ -276,9 +278,12 @@ export default function PostSection(props) {
 
     const experienceItem = (index) => index !== 0 ? {
         borderTop: '1px solid gray',
-        paddingTop: '1vw',
-        margin: '1vw 0'
-    } : {}
+        padding: padding || padding === 0 ? `${padding / 20}vw 0` : '1vw 0',
+        margin: padding || padding === 0 ? `${padding / 20}vw 0` : '1vw 0'
+    } : {
+        padding: padding || padding === 0 ? `0 0 ${padding / 20}vw 0` : '0 0 1vw 0',
+        margin: 0
+    }
 
     const removeTech = index => {
         let newTech = [...tech]
@@ -333,7 +338,7 @@ export default function PostSection(props) {
     }
 
     return editPost ?
-        <div className='post-container'>
+        <div className='post-container' style={{ backgroundColor: '#F7F7F7', borderRadius: '.5vw' }}>
             <h4 className='post-item-label'>{label || ''}</h4>
             <div className='post-column'>
                 <div className='post-col-dif'>
@@ -587,30 +592,32 @@ export default function PostSection(props) {
         </div>
         :
         <div className='post-container'>
-            <h4 className='post-item-label'>{label || ''}</h4>
+            {label ? <h4 className='post-item-label'>{label}</h4> : ''}
             {items && items.length ?
                 items.map((item, i) =>
                     i < items.length - 1 && items.length > 1 ?
                         <div className='post-column' key={i} style={experienceItem(i)}>
                             <div className='post-row'>
-                                {hidden.postSection[i] && hidden.postSection[i].includes('Period') ? <h4 className='post-period'> </h4> : <h4 className='post-period' style={{ display: checkHiddenPost(i) && 'none' }}>{item.period}</h4>}
+                                {hidden.postSection[i] && hidden.postSection[i].includes('Period') ?
+                                    <h4 className='post-period'> </h4>
+                                    : <h4 className='post-period' style={{ display: checkHiddenPost(i) && 'none', fontSize: fontSize ? `${fontSize}vw` : '1vw' }}>{item.period}</h4>}
                                 <div className='post-column' style={{ display: checkHiddenPost(i) && 'none' }}>
-                                    {hidden.postSection[i] && hidden.postSection[i].includes('Company name') ? '' : <h4 className='post-company'>{item.company}</h4>}
-                                    {hidden.postSection[i] && hidden.postSection[i].includes('Role title') ? '' : <h4 className='post-role'>{item.role}</h4>}
-                                    {hidden.postSection[i] && hidden.postSection[i].includes('Job / Tasks description') ? '' : <h4 className='post-description'>{item.description}</h4>}
+                                    {hidden.postSection[i] && hidden.postSection[i].includes('Company name') ? '' : <h4 className='post-company' style={{ fontSize: fontSize ? `${fontSize + fontSize * 0.2}vw` : '1.2vw' }}>{item.company}</h4>}
+                                    {hidden.postSection[i] && hidden.postSection[i].includes('Role title') ? '' : <h4 className='post-role' style={{ fontSize: fontSize ? `${fontSize + fontSize * 0.1}vw` : '1.1vw' }}>{item.role}</h4>}
+                                    {hidden.postSection[i] && hidden.postSection[i].includes('Job / Tasks description') ? '' : <h4 className='post-description' style={{ fontSize: fontSize ? `${fontSize}vw` : '1vw', margin: fontSize ? `${fontSize}vw 0` : '1vw 0' }}>{item.description}</h4>}
                                     <div className='post-responsabilities'>
-                                        <h4 className='post-responsabilities-text'>Key Responsibilities:</h4>
+                                        <h4 className='post-responsabilities-text' style={{ fontSize: fontSize ? `${fontSize}vw` : '1vw', margin: fontSize ? `${fontSize / 2}vw 0` : '.5vw 0' }}>Key Responsibilities:</h4>
                                         {item.bullets.map((bullet, j) =>
-                                            bullet.value && <h4 className='post-responsability' key={j} style={{ display: bullet.hidden && 'none' }}>● {bullet.value}</h4>
+                                            bullet.value && <h4 className='post-responsability' key={j} style={{ display: bullet.hidden && 'none', fontSize: fontSize ? `${fontSize}vw` : '1vw', margin: fontSize ? `${fontSize / 2}vw ${fontSize * 2}vw` : '.5vw 2vw' }}>● {bullet.value}</h4>
                                         )}
                                     </div>
                                     {Array.isArray(item.technologies) && item.technologies[0] ?
-                                        <div className='post-tools-and-tech'>
-                                            <h4 className='post-technologies-text'>Tools & Tech:</h4>
+                                        <div className='post-tools-and-tech' style={{ margin: fontSize ? `${fontSize}vw 0` : '1vw 0' }}>
+                                            <h4 className='post-technologies-text' style={{ fontSize: fontSize ? `${fontSize}vw` : '1vw', margin: fontSize ? `${fontSize / 2}vw 0` : '.5vw 0' }}>Tools & Tech:</h4>
                                             <div className='post-tools-and-tech-list'>
                                                 {item.technologies.map((tec, t) =>
                                                     hidden.postSection[i] && hidden.postSection[i].includes(tec) ? ''
-                                                        : <h4 key={t} className='post-tools-and-tech-div'>{tec}</h4>)}
+                                                        : <h4 key={t} className='post-tools-and-tech-div' style={{ fontSize: fontSize ? `${fontSize}vw` : '1vw', margin: fontSize ? `${fontSize / 3}vw` : '.3vw' }}>{tec}</h4>)}
                                             </div>
                                         </div>
                                         : ''

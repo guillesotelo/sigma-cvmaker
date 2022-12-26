@@ -93,7 +93,7 @@ export default function CVs({ showAll }) {
     const handleDeleteResume = () => {
         try {
             setLoading(true)
-            const removed = dispatch(removeResume(resumeData)).then(data => data.payload)
+            const removed = dispatch(removeResume({ ...resumeData, user })).then(data => data.payload)
 
             if (removed) {
                 setLoading(false)

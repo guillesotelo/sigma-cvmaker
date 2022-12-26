@@ -18,7 +18,8 @@ export default function InputBullet(props) {
         setItems,
         bulletPlaceholder,
         valuePlaceholder,
-        id
+        id,
+        fontSize
     } = props
 
     useEffect(() => {
@@ -149,13 +150,16 @@ export default function InputBullet(props) {
                                                 <div ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
-                                                    style={getItemStyle(
-                                                        snapshot.isDragging,
-                                                        provided.draggableProps.style
-                                                    )}
+                                                    style={{
+                                                        ...getItemStyle(
+                                                            snapshot.isDragging,
+                                                            provided.draggableProps.style
+                                                        ),
+                                                        height: fontSize ? `${fontSize * 2}vw` : '2vw'
+                                                    }}
                                                     className='bullet-row draggable' key={i}>
-                                                    <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>{item.bullet}</h4>
-                                                    <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value}</h4>
+                                                    <h4 className='bullet' style={{ opacity: item.hidden && '.2', fontSize: fontSize ? `${fontSize}vw` : '.8vw' }}>{item.bullet}</h4>
+                                                    <h4 className='bullet-text' style={{ opacity: item.hidden && '.2', fontSize: fontSize ? `${fontSize}vw` : '.8vw' }}>{item.value}</h4>
                                                     <img
                                                         src={EditIcon}
                                                         className='hide-icon-item edit-icon-item'

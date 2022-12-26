@@ -107,7 +107,7 @@
 }
 
 .section-item-remove {
-    margin: 0.5vw 0 0.5vw 0;
+    margin: 0.5vw 0 0 0;
     color: gray;
     padding: .5vw 1vw;
     border: 1px solid #adadad;
@@ -129,7 +129,6 @@
 }
 
 .post-container {
-    margin: 1vw 0;
     color: rgb(105, 104, 105);
 }
 
@@ -173,12 +172,12 @@
     font-weight: 800;
     color: black;
     width: 25%;
-    margin: .5vw 1vw;
+    margin: 0 1vw;
     text-align: left;
 }
 
 .post-company {
-    margin: .5vw 0 .3vw 0;
+    margin: 0 0 .3vw 0;
     font-weight: 800;
     color: black;
     font-size: 1.2vw;
@@ -211,7 +210,7 @@
     font-weight: 800;
     color: black;
     width: 40%;
-    margin: .5vw 1vw;
+    margin: .5vw 0;
     text-align: left;
 }
 
@@ -226,7 +225,7 @@
     font-size: 1vw;
     font-weight: 800;
     color: black;
-    margin: 1vw 0;
+    margin: .5vw 0;
     text-align: left;
 }
 
@@ -396,7 +395,7 @@
 }
 
 .post-tools-and-tech {
-    margin: 1vw 0 1vw 0;
+    margin: .5vw 0;
     font-size: 1vw;
     text-align: justify;
 }

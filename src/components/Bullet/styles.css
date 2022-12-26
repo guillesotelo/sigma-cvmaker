@@ -1,15 +1,15 @@
 .bullet-container {
-    margin: 1vw 0;
+    /* margin: 1vw 0; */
     color: rgb(105, 104, 105);
 }
 
 .bullet {
-    font-size: 0.8vw;
+    font-size: .8vw;
     margin: 0;
 }
 
 .bullet-text {
-    font-size: 0.8vw;
+    font-size: .8vw;
     color: black;
     white-space: nowrap;
     overflow: hidden;

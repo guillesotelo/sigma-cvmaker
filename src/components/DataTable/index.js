@@ -70,18 +70,10 @@ export default function DataTable(props) {
                                 key={i}
                                 className='data-table-row'
                                 style={{ backgroundColor: item === i ? '#E4C69C' : i % 2 === 0 ? 'white' : '#F9FAFB' }}
-                                onClick={() => {
-                                    if (modalView) {
-                                        setLoading(true)
-                                        setOpenModal(true)
-                                        setIsPdf(true)
-                                        setResumeData(row)
-                                    } else handleItem(i)
-                                }}
                             >
                                 {tableHeaders.map((header, j) =>
                                     header.value === 'data' ?
-                                        <div key={j} style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}>
+                                        <div key={j} style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }} onClick={() => handleItem(i)}>
                                             <img src={row[header.value]} className='data-table-image' />
                                         </div>
                                         :
@@ -106,6 +98,14 @@ export default function DataTable(props) {
                                                 key={j}
                                                 className={`data-table-row-item data-table-row-${header.value}`}
                                                 style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}
+                                                onClick={() => {
+                                                    if (modalView) {
+                                                        setLoading(true)
+                                                        setOpenModal(true)
+                                                        setIsPdf(true)
+                                                        setResumeData(row)
+                                                    } else handleItem(i)
+                                                }}
                                             >
                                                 {header.value === 'date' || header.value === 'createdAt' || header.value === 'updatedAt' ? `${new Date(row[header.value]).toDateString()} ${new Date(row[header.value]).toLocaleTimeString()}` :
                                                     header.value === 'isManager' || header.value === 'isAdmin' ?

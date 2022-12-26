@@ -291,21 +291,6 @@
     padding: 2vw 0;
 }
 
-.new-resume-fill-internal {
-    width: 80%;
-    margin: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border: 1px solid transparent;
-    padding: 2vw 0;
-}
-
-.new-resume-fill:hover {
-    border: 1px solid #E4C69C;
-    border-radius: .5vw;
-}
-
 .profile-image-cover {
     width: 180px;
     height: 180px;
@@ -373,8 +358,9 @@
 .resume-fill-col1 {
     display: flex;
     flex-direction: column;
-    width: 25%;
+    width: 31%;
     align-self: flex-start;
+    position: relative;
 }
 
 .resume-fill-col2 {
@@ -391,12 +377,13 @@
     flex-direction: column;
     width: 10%;
     align-self: flex-start;
+    position: relative;
 }
 
 .resume-fill-col2-dif {
     display: flex;
     flex-direction: column;
-    width: 60%;
+    width: 75%;
     align-self: flex-start;
     justify-content: center;
     position: relative;
@@ -461,30 +448,34 @@
     top: unset;
 }
 
-.resume-fill-col2:hover .hide-section-icon {
+.new-resume-fill:hover .hide-section-icon {
     display: block;
 }
 
-.resume-fill-col2-dif:hover .hide-section-icon {
-    display: block;
+.new-resume-fill:hover .section-settings {
+    display: flex;
 }
 
 .resume-strengths-div {
     display: flex;
     flex-direction: row;
     position: relative;
-    margin: 1vw 0;
+    margin: 2vw 0;
     border: 1px solid transparent;
     min-height: 2vw;
 }
 
-.resume-strengths-div:hover {
+/* .resume-strengths-div:hover {
     border: 1px solid #E4C69C;
     border-radius: .5vw;
-}
+} */
 
 .resume-strengths-div:hover .hide-section-icon {
     display: block;
+}
+
+.resume-strengths-div:hover .section-settings{
+    display: flex;
 }
 
 .hide-section-icon:hover {
@@ -503,6 +494,53 @@
 
 .hide-icon-signature:hover {
     filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+}
+
+.section-settings {
+    display: none;
+    flex-direction: row;
+    justify-content: flex-start;
+    position: relative;
+    align-items: center;
+}
+
+.section-settings:hover .new-resume-fill {
+    border: 1px solid #E4C69C;
+    border-radius: .5vw;
+}
+
+.section-settings-icon {
+    height: 1.3vw;
+    line-height: 1.3vw;
+    margin: .3vw .5vw;
+    cursor: pointer;
+    filter: brightness(0%) contrast(0%);
+    transition: .3s;
+}
+
+.section-settings-icon:hover {
+    transition: .3s;
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+}
+
+.resume-fill-internal {
+    width: 80%;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 1px solid transparent;
+    padding: 2vw 0;
+}
+
+.section-settings-drop {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1vw;
+}
+
+.section-settings-drop-list {
+    border: none;
 }
 
 /* --- PDF MODAL ---  */
@@ -540,17 +578,19 @@
 }
 
 .section-title-row {
-    font-size: 1.2vw;
+    font-size: 1.1vw;
     font-weight: bolder;
     margin: 1vw 8vw;
     align-self: flex-start;
 }
 
 .section-title {
-    font-size: 1.2vw;
+    font-size: 1.1vw;
     font-weight: bolder;
-    margin: 1vw 0vw;
+    margin: 0;
     align-self: flex-start;
+    text-align: left;
+    letter-spacing: .3vw;
 }
 
 .signature-text {
@@ -696,7 +736,8 @@
 
 .account-details {
     box-shadow: 2px 2px 10px lightgray;
-    padding: 1vw;
+    border-radius: .5vw;
+    padding: 1.5vw 1vw;
     margin: 2vw 0;
 }
 

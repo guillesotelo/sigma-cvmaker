@@ -5,9 +5,13 @@ import './styles.css'
 export default function Slider(props) {
     const {
         value,
+        name,
+        type,
         setValue,
         label,
         setIsEdit,
+        onChangeSettings,
+        style,
         min,
         max,
         marks,
@@ -16,7 +20,7 @@ export default function Slider(props) {
     } = props
 
     return (
-        <div className='slider-container'>
+        <div className='slider-container' style={style}>
             {label &&
                 <h4 className='slider-label'>{label || ''}</h4>
             }
@@ -33,8 +37,9 @@ export default function Slider(props) {
                     defaultValue={0}
                     value={value}
                     onChange={(value) => {
-                        setValue(value)
-                        if(setIsEdit) setIsEdit(true)
+                        if (onChangeSettings) onChangeSettings(type, name, value)
+                        else setValue(value)
+                        if (setIsEdit) setIsEdit(true)
                     }}
                     renderMark={(props) => {
                         if (props.key < value) {

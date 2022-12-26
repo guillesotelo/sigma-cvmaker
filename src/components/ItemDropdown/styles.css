@@ -173,7 +173,7 @@
 }
 
 .skill-wrap-name {
-    font-size: 0.9vw;
+    font-size: .9vw;
     width: 12vw;
     margin: 0;
     color: black;
@@ -183,7 +183,7 @@
 
 .skill-wrap-option {
     font-weight: normal;
-    font-size: 0.9vw;
+    font-size: .9vw;
     width: 5vw;
     text-align: end;
     color: black;

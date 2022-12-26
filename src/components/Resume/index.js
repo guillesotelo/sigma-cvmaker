@@ -44,6 +44,9 @@ export default function Resume(props) {
     const [profileImage, setProfileImage] = useState({})
     const [cvLogo, setcvLogo] = useState({})
     const [profileStyle, setProfileStyle] = useState({})
+    const [skills, setSkills] = useState([])
+    const [fontSize, setFontSize] = useState({})
+    const [padding, setPadding] = useState({})
     const [numPages, setNumPages] = useState(null)
     const [pageNumber, setPageNumber] = useState(1)
     const dispatch = useDispatch()
@@ -71,6 +74,20 @@ export default function Resume(props) {
             }
         }
     }, [res])
+
+    useEffect(() => {
+        if (res.settings) {
+            setFontSize(res.settings.fontSize || {})
+            setPadding(res.settings.padding || {})
+        }
+    }, [res.settings])
+
+    useEffect(() => {
+        if (res.skills && Array.isArray(res.skills)) {
+            const filtered = res.skills.filter(skill => skill.name && !skill.hiddden)
+            setSkills(filtered)
+        }
+    }, [res.skills])
 
     const getCVById = async id => {
         try {
@@ -188,13 +205,20 @@ export default function Resume(props) {
         page: {
             flexDirection: 'column',
             position: 'relative',
-            paddingBottom: '5vw',
+            paddingBottom: '8vw',
             width: '100%',
             height: '100%'
         },
+        headerContainer: {
+            flexDirection: 'row',
+            padding: '2vw 0',
+            alignSelf: 'center',
+            width: '90%',
+            borderTop: '1px solid gray',
+            justifyContent: 'space-between'
+        },
         rowContainer: {
             flexDirection: 'row',
-            padding: '3vw 0 4vw 0',
             alignSelf: 'center',
             width: '90%',
             borderTop: '1px solid gray',
@@ -223,7 +247,7 @@ export default function Resume(props) {
         profilePicCover: {
             width: 130,
             height: 130,
-            margin: '1vw 0',
+            margin: '1.5vw 0',
             alignSelf: 'center',
             borderRadius: '50%',
             overflow: 'hidden'
@@ -240,32 +264,35 @@ export default function Resume(props) {
         },
         name: {
             fontFamily: 'Roboto',
-            fontSize: '4.5vw',
+            fontSize: '4vw',
             textAlign: 'right',
             letterSpacing: '1vw'
         },
         role: {
             fontFamily: 'Roboto',
-            fontSize: '3vw',
+            fontSize: '2.5vw',
             textAlign: 'right',
             color: 'gray',
             letterSpacing: '0.5vw',
             marginTop: '1vw'
         },
         infoView1: {
-            margin: '1.5vw 0',
+            padding: '1vw 0',
             textAlign: 'left'
         },
         infoView2: {
-            margin: '1.5vw 0 1vw 4vw',
+            margin: '0 0 0 10vw',
+            textAlign: 'left'
+        },
+        infoView3: {
+            margin: '2vw 0 0 4vw',
             textAlign: 'left'
         },
         infoItem: {
             fontSize: '1.7vw',
             fontFamily: 'Roboto',
             fontWeight: 'bold',
-            alignSelf: 'center',
-            marginBottom: '0.3vw'
+            alignSelf: 'center'
         },
         regularText: {
             fontFamily: 'Roboto',
@@ -288,8 +315,7 @@ export default function Resume(props) {
         dropItems: {
             fontSize: '1.7vw',
             fontFamily: 'Roboto',
-            alignSelf: 'flex-start',
-            margin: '0.5vw 2vw'
+            alignSelf: 'flex-start'
         },
         signature: {
             fontFamily: 'GreatVibes-Regular',
@@ -304,27 +330,31 @@ export default function Resume(props) {
             fontWeight: 'bold',
             alignSelf: 'flex-start',
             letterSpacing: '0.6vw',
-            maxWidth: '25%'
+            width: '25%'
+        },
+        sectionTitle2: {
+            fontSize: '1.8vw',
+            fontFamily: 'Roboto',
+            fontWeight: 'bold',
+            alignSelf: 'flex-start',
+            letterSpacing: '0.6vw',
+            marginRight: '6vw'
         },
         bullet: {
-            flexDirection: 'row',
-            margin: '0.5vw 2vw'
+            flexDirection: 'row'
         },
         skillsWrapper: {
             display: 'flex',
             flexDirection: 'row',
             flexWrap: 'wrap',
-            width: '100%',
-            justifyContent: 'center'
+            marginLeft: '2vw',
+            justifyContent: 'flex-start'
         },
         skillItem: {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            borderBottom: '1px solid gray',
             textAlign: 'left',
-            padding: '1vw 0',
-            margin: '0 2vw .4vw 0',
             width: '40%'
         },
         skillName: {
@@ -361,26 +391,24 @@ export default function Resume(props) {
         experienceContainer: {
             display: 'flex',
             flexDirection: 'column',
-            padding: '3vw 0 4vw 0',
             alignSelf: 'center',
-            borderTop: '1px solid gray',
             width: '90%'
+        },
+        experienceSection: {
+            alignContent: 'flex-start'
         },
         experienceRow: {
             display: 'flex',
-            flexDirection: 'row',
-            marginBottom: '2vw',
-            paddingLeft: '4w',
-            paddingBottom: '5w'
+            flexDirection: 'row'
         },
         experienceCol1: {
             flexDirection: 'column',
             marginHorizontal: '2vw',
-            width: '20%'
+            width: '16%'
         },
         experienceCol2: {
             flexDirection: 'column',
-            width: '70%',
+            width: '74%',
             alignSelf: 'flex-end'
         },
         experiencePeriod: {
@@ -414,7 +442,7 @@ export default function Resume(props) {
             fontFamily: 'Roboto',
             alignSelf: 'flex-start',
             fontWeight: 'bold',
-            margin: '2vw 0 1vw 0'
+            marginTop: '2vw'
         },
         experienceResponsibility: {
             fontSize: '1.6vw',
@@ -456,7 +484,7 @@ export default function Resume(props) {
         },
         footer: {
             flexDirection: 'row',
-            padding: '2vw 0 2vw 25vw',
+            padding: '1.5vw 0 2vw 25vw',
             alignSelf: 'center',
             margin: '0 5vw',
             borderTop: '1px solid gray',
@@ -474,15 +502,15 @@ export default function Resume(props) {
         return (
             <Document>
                 <Page size="A4" style={styles.page}>
-                    <View style={{ ...styles.rowContainer, border: 'none', alignItems: 'center' }} wrap={false} fixed>
+                    <View style={{ ...styles.headerContainer, border: 'none', alignItems: 'center' }} wrap={false} fixed>
                         <View style={styles.column1}>
                             <Image style={styles.logo} src={cvLogo} />
                         </View>
                         <View style={styles.column2}>
-                            {checkHidden('Name') ? null : <Text style={styles.name}>{res.name.toUpperCase()}</Text>}
-                            {!checkHidden('Middle Name') && res.middlename ? <Text style={styles.name}>{res.middlename.toUpperCase()}</Text> : null}
-                            {checkHidden('Surname') ? null : <Text style={styles.name}>{res.surname.toUpperCase() || 'Full Name'}</Text>}
-                            {checkHidden('Role / Title') ? null : <Text style={styles.role}>{res.role ? res.role.toUpperCase() : 'Role'}</Text>}
+                            {checkHidden('Name') ? null : <Text style={styles.name}>{res.name.toUpperCase() || ''}</Text>}
+                            {!checkHidden('Middle Name') && res.middlename ? <Text style={styles.name}>{res.middlename.toUpperCase() || ''}</Text> : null}
+                            {checkHidden('Surname') ? null : <Text style={styles.name}>{res.surname.toUpperCase() || ''}</Text>}
+                            {checkHidden('Role / Title') ? null : <Text style={styles.role}>{res.role ? res.role.toUpperCase() : ''}</Text>}
                         </View>
                     </View>
 
@@ -511,7 +539,7 @@ export default function Resume(props) {
                             </View>
                         </View>
                         <View style={styles.column2}>
-                            <View style={styles.infoView2}>
+                            <View style={styles.infoView3}>
                                 {checkHidden('Presentation') ? null : <Text style={styles.presentation}>{res.presentation || ''}</Text>}
                             </View>
                             {res.strengths.length ?
@@ -527,123 +555,185 @@ export default function Resume(props) {
                         </View>
                     </View>
 
-                    {checkHidden('expertise') ? null : <View style={styles.rowContainer} wrap={false}>
-                        <View style={styles.sectionColumn1}>
-                            <View style={styles.infoView1}>
-                                <Text style={styles.sectionTitle}>EXPERTISE</Text>
+                    {checkHidden('expertise') ? null :
+                        <View style={{ ...styles.rowContainer, padding: padding.expertise || padding.expertise === 0 ? `${.1 * padding.expertise}vw 0` : '2vw 0' }} wrap={false}>
+                            <View style={styles.sectionColumn1}>
+                                <View style={{ ...styles.infoView1, padding: padding.expertise || padding.expertise === 0 ? `${.1 * padding.expertise}vw 0` : '1vw 0' }}>
+                                    <Text style={styles.sectionTitle}>EXPERTISE</Text>
+                                </View>
                             </View>
-                        </View>
-                        <View style={styles.sectionColumn2}>
-                            <View style={styles.infoView2}>
-                                {res.expertise.map((exp, i) => exp.value && !exp.hidden ?
-                                    <Text key={i} style={styles.dropItems}>• {exp.value}</Text> : null)}
+                            <View style={styles.sectionColumn2}>
+                                <View style={styles.infoView2}>
+                                    {res.expertise.map((exp, i) => exp.value && !exp.hidden ?
+                                        <Text key={i} style={{
+                                            ...styles.dropItems,
+                                            margin: i === 0 || i === res.expertise.length - 1 ? '0 2vw' : fontSize.expertise || fontSize.expertise === 0 ? `${fontSize.expertise / 2}vw 2vw` : '.5vw 2vw',
+                                            fontSize: fontSize.expertise || fontSize.expertise === 0 ? `${fontSize.expertise + fontSize.expertise * 0.7}vw` : '1.7vw'
+                                        }}>• {exp.value}</Text> : null)}
+                                </View>
                             </View>
-                        </View>
-                    </View>}
+                        </View>}
 
-                    {checkHidden('education') ? null : <View style={styles.rowContainer} wrap={false}>
-                        <View style={styles.sectionColumn1}>
-                            <View style={styles.infoView1}>
-                                <Text style={styles.sectionTitle}>EDUCATION</Text>
+                    {checkHidden('education') ? null :
+                        <View style={{ ...styles.rowContainer, padding: padding.education || padding.education === 0 ? `${.1 * padding.education}vw 0` : '2vw 0' }} wrap={false}>
+                            <View style={styles.sectionColumn1}>
+                                <View style={{ ...styles.infoView1, padding: padding.education || padding.education === 0 ? `${.1 * padding.education}vw 0` : '1vw 0' }}>
+                                    <Text style={styles.sectionTitle}>EDUCATION</Text>
+                                </View>
                             </View>
-                        </View>
-                        <View style={styles.sectionColumn2}>
-                            <View style={styles.infoView2} wrap={false}>
-                                {res.education.map((ed, i) => ed && !ed.hidden ?
-                                    <View key={i} style={styles.bullet} wrap={false}>
-                                        <Text style={styles.infoItem}>{ed.bullet || ''}</Text>
-                                        <Text style={{ ...styles.regularText, marginLeft: '3vw' }}>{ed.value || ''}</Text>
-                                    </View> : null)}
-                            </View>
-                        </View>
-                    </View>}
-
-                    {checkHidden('certifications') ? null : <View style={styles.rowContainer} wrap={false}>
-                        <View style={styles.sectionColumn1}>
-                            <View style={styles.infoView1}>
-                                <Text style={styles.sectionTitle}>CERTIFICATIONS</Text>
-                            </View>
-                        </View>
-                        <View style={styles.sectionColumn2}>
-                            <View style={styles.infoView2} wrap={false}>
-                                {res.certifications.map((cert, i) => cert && !cert.hidden ?
-                                    <View key={i} style={styles.bullet} wrap={false}>
-                                        <Text style={styles.infoItem}>{cert.bullet || ''}</Text>
-                                        <Text style={{ ...styles.regularText, marginLeft: '3vw' }}>{cert.value || ''}</Text>
-                                    </View> : null)}
-                            </View>
-                        </View>
-                    </View>}
-
-                    {checkHidden('skills') ? null : <View style={styles.rowContainer} wrap={false}>
-                        <View style={styles.sectionColumn1}>
-                            <View style={styles.infoView1}>
-                                <Text style={styles.sectionTitle}>MAIN SKILLS</Text>
-                            </View>
-                        </View>
-                        <View style={styles.sectionColumn2}>
-                            <View style={styles.infoView2} wrap={false}>
-                                <View style={styles.skillsWrapper}>
-                                    {res.skills.map((skill, i) => skill.name && !skill.hidden ?
-                                        <View key={i} style={styles.skillItem}>
-                                            <Text style={styles.skillName}>{skill.name || ''}</Text>
-                                            <Text style={styles.skillOption}>{calculateTime(skill.option)}</Text>
+                            <View style={styles.sectionColumn2}>
+                                <View style={styles.infoView2} wrap={false}>
+                                    {res.education.map((ed, i) => ed && !ed.hidden ?
+                                        <View key={i} style={{ ...styles.bullet, margin: i === 0 || i === res.education.length - 1 ? '0 2vw' : '.5vw 2vw' }} wrap={false}>
+                                            <Text style={{
+                                                ...styles.infoItem,
+                                                fontSize: fontSize.education || fontSize.education === 0 ? `${fontSize.education + fontSize.education * 0.7}vw` : '1.7vw'
+                                            }}>{ed.bullet || ''}</Text>
+                                            <Text style={{
+                                                ...styles.regularText,
+                                                marginLeft: '3vw',
+                                                fontSize: fontSize.education || fontSize.education === 0 ? `${fontSize.education + fontSize.education * 0.7}vw` : '1.7vw'
+                                            }}>{ed.value || ''}</Text>
                                         </View> : null)}
                                 </View>
                             </View>
-                        </View>
-                    </View>}
+                        </View>}
 
-                    {checkHidden('experience') ? null : <View style={styles.experienceContainer}>
-                        <View style={styles.sectionColumn1}>
-                            <View style={styles.infoView1}>
-                                <Text style={styles.sectionTitle}>EXPERIENCE</Text>
+                    {checkHidden('certifications') ? null :
+                        <View style={{ ...styles.rowContainer, padding: padding.certifications || padding.certifications === 0 ? `${.1 * padding.certifications}vw 0` : '2vw 0' }} wrap={false}>
+                            <View style={styles.sectionColumn1}>
+                                <View style={{ ...styles.infoView1, padding: padding.certifications || padding.certifications === 0 ? `${.1 * padding.certifications}vw 0` : '1vw 0' }}>
+                                    <Text style={styles.sectionTitle}>CERTIFICATIONS</Text>
+                                </View>
                             </View>
-                        </View>
-                        <View style={styles.sectionColumn1} wrap>
-                            <View style={styles.infoView1}>
-                                {res.experience ? res.experience.map((exp, i) =>
-                                    Object.keys(exp).length > 1 && !checkHiddenPost(i, false) ?
-                                        <View key={i} style={{
-                                            ...styles.experienceRow,
-                                            borderTop: i !== 0 ? '1px solid rgb(227, 227, 227)' : 'none',
-                                            paddingTop: i !== 0 ? '2vw' : 0
-                                        }} wrap={false}>
-                                            <View style={styles.experienceCol1}>
-                                                {checkHiddenPost(i, exp.period) ? null : <Text style={styles.experiencePeriod}>{exp.period || ''}</Text>}
-                                            </View>
-                                            <View style={styles.experienceCol2}>
-                                                {checkHiddenPost(i, exp.company) ? null : <Text style={styles.experienceCompany}>{exp.company || ''}</Text>}
-                                                {checkHiddenPost(i, exp.role) ? null : <Text style={{ ...styles.experienceRole, fontWeight: !exp.company && 'bold' }}>{exp.role || ''}</Text>}
-                                                {checkHiddenPost(i, exp.description) ? null : <Text style={styles.experienceDescription}>{exp.description || ''}</Text>}
-                                                <View>
-                                                    <Text style={styles.experienceResponsibilities}>Key responsibilities:</Text>
-                                                    {exp.bullets.map((resp, j) => resp.value && !res.hidden ?
-                                                        <Text key={j} style={styles.experienceResponsibility}>• {resp.value}</Text>
-                                                        : null)}
+                            <View style={styles.sectionColumn2}>
+                                <View style={styles.infoView2} wrap={false}>
+                                    {res.certifications.map((cert, i) => cert && !cert.hidden ?
+                                        <View key={i} style={{ ...styles.bullet, margin: i === 0 || i === res.certifications.length - 1 ? '0 2vw' : '.5vw 2vw' }} wrap={false}>
+                                            <Text style={{
+                                                ...styles.infoItem,
+                                                fontSize: fontSize.certifications || fontSize.certifications === 0 ? `${fontSize.certifications + fontSize.certifications * 0.7}vw` : '1.7vw'
+                                            }}>{cert.bullet || ''}</Text>
+                                            <Text style={{
+                                                ...styles.regularText,
+                                                marginLeft: '3vw',
+                                                fontSize: fontSize.certifications || fontSize.certifications === 0 ? `${fontSize.certifications + fontSize.certifications * 0.7}vw` : '1.7vw'
+                                            }}>{cert.value || ''}</Text>
+                                        </View> : null)}
+                                </View>
+                            </View>
+                        </View>}
+
+                    {checkHidden('skills') ? null :
+                        <View style={{ ...styles.rowContainer, padding: padding.skills || padding.skills === 0 ? `${.1 * padding.skills}vw 0` : '2vw 0' }} wrap={false}>
+                            <View style={styles.sectionColumn1}>
+                                <View style={{ ...styles.infoView1, padding: padding.skills || padding.skills === 0 ? `${.1 * padding.skills}vw 0` : '1vw 0' }}>
+                                    <Text style={styles.sectionTitle}>MAIN SKILLS</Text>
+                                </View>
+                            </View>
+                            <View style={styles.sectionColumn2}>
+                                <View style={styles.infoView2} wrap={false}>
+                                    <View style={styles.skillsWrapper}>
+                                        {skills.map((skill, i) =>
+                                            <View key={i} style={{
+                                                ...styles.skillItem,
+                                                borderBottom: i < skills.length - 2 && '1px solid gray',
+                                                paddingBottom: (fontSize.skills || fontSize.skills === 0) && i < skills.length - 2 ? `${fontSize.skills}vw` : i < skills.length - 2 && '1vw',
+                                                margin: fontSize.skills || fontSize.skills === 0 ? `0 2vw ${fontSize.skills / 2}vw 0` : '0 2vw .4vw 0'
+                                            }}>
+                                                <Text style={{
+                                                    ...styles.skillName,
+                                                    fontSize: fontSize.skills || fontSize.skills === 0 ? `${fontSize.skills + fontSize.skills * 0.6}vw` : '1.6vw'
+                                                }}>{skill.name || ''}</Text>
+                                                <Text style={{
+                                                    ...styles.skillOption,
+                                                    fontSize: fontSize.skills || fontSize.skills === 0 ? `${fontSize.skills + fontSize.skills * 0.6}vw` : '1.6vw'
+                                                }}>{calculateTime(skill.option)}</Text>
+                                            </View>)}
+                                    </View>
+                                </View>
+                            </View>
+                        </View>}
+
+                    {checkHidden('experience') ? null :
+                        <View style={{ ...styles.experienceContainer, padding: padding.experience || padding.experience === 0 ? `${.1 * padding.experience}vw 0` : '2vw 0' }}>
+                            <View style={styles.experienceSection} wrap>
+                                <View style={{ ...styles.infoView1, padding: padding.experience || padding.experience === 0 ? `${.1 * padding.experience}vw 0` : '1vw 0' }}>
+                                    {res.experience ? res.experience.map((exp, i) =>
+                                        Object.keys(exp).length > 1 && !checkHiddenPost(i, false) ?
+                                            <View key={i} style={{
+                                                ...styles.experienceRow,
+                                                borderTop: i === 0 ? '1px solid gray' : '1px solid #AAAAAA',
+                                                padding: padding.experience || padding.experience === 0 ? `${.1 * padding.experience}vw 0` : '3vw 0'
+                                            }} wrap={false}>
+                                                {i === 0 ? <Text style={styles.sectionTitle2}>EXPERIENCE</Text> : <Text style={styles.sectionTitle}></Text>}
+                                                <View style={styles.experienceCol1}>
+                                                    {checkHiddenPost(i, exp.period) ? null :
+                                                        <Text style={{
+                                                            ...styles.experiencePeriod,
+                                                            fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
+                                                        }}>{exp.period || ''}</Text>}
                                                 </View>
-                                                {exp.technologies && Array.isArray(exp.technologies) && exp.technologies[0] ?
+                                                <View style={styles.experienceCol2}>
+                                                    {checkHiddenPost(i, exp.company) ? null :
+                                                        <Text style={{
+                                                            ...styles.experienceCompany,
+                                                            fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.8}vw` : '1.8vw'
+                                                        }}>{exp.company || ''}</Text>}
+                                                    {checkHiddenPost(i, exp.role) ? null :
+                                                        <Text style={{
+                                                            ...styles.experienceRole,
+                                                            fontWeight: !exp.company && 'bold',
+                                                            fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.7}vw` : '1.7vw'
+                                                        }}>{exp.role || ''}</Text>}
+                                                    {checkHiddenPost(i, exp.description) ? null :
+                                                        <Text style={{
+                                                            ...styles.experienceDescription,
+                                                            fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw',
+                                                            marginTop: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience}vw` : '1vw'
+                                                        }}>{exp.description || ''}</Text>}
                                                     <View>
-                                                        <Text style={styles.experienceResponsibilities}>Tools & Tech:</Text>
-                                                        <View style={styles.experienceTechList}>
-                                                            {exp.technologies.map((tech, j) => tech && !checkHiddenPost(i, tech) ?
-                                                                <Text key={j} style={styles.experienceTech}>{tech}</Text>
-                                                                : null)}
-                                                        </View>
+                                                        <Text style={{
+                                                            ...styles.experienceResponsibilities,
+                                                            fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw',
+                                                            marginTop: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience * 2}vw` : '2vw'
+                                                        }}>Key responsibilities:</Text>
+                                                        {exp.bullets.map((resp, j) => resp.value && !res.hidden ?
+                                                            <Text key={j} style={{
+                                                                ...styles.experienceResponsibility,
+                                                                fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
+                                                            }}>• {resp.value}</Text>
+                                                            : null)}
                                                     </View>
-                                                    : null}
+                                                    {exp.technologies && Array.isArray(exp.technologies) && exp.technologies[0] ?
+                                                        <View>
+                                                            <Text style={{
+                                                                ...styles.experienceResponsibilities,
+                                                                fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
+                                                            }}>Tools & Tech:</Text>
+                                                            <View style={styles.experienceTechList}>
+                                                                {exp.technologies.map((tech, j) => tech && !checkHiddenPost(i, tech) ?
+                                                                    <Text key={j} style={{
+                                                                        ...styles.experienceTech,
+                                                                        fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.7}vw` : '1.7vw',
+                                                                        margin: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience / 2.5}vw` : '.4vw',
+                                                                    }}>{tech}</Text>
+                                                                    : null)}
+                                                            </View>
+                                                        </View>
+                                                        : null}
+                                                </View>
                                             </View>
-                                        </View>
-                                        : null
-                                ) : null}
+                                            : null
+                                    ) : null}
+                                </View>
                             </View>
-                        </View>
-                    </View>}
+                        </View>}
 
                     {checkHidden('tools') || !res.otherTools.length || !res.otherTools[0].value ? null :
                         <View style={styles.rowContainer} wrap={false}>
                             <View style={styles.sectionColumn1}>
-                                <View style={styles.infoView1}>
+                                <View style={{ ...styles.infoView1, padding: padding.tools || padding.tools === 0 ? `${.1 * padding.tools}vw 0` : '1.5vw 0' }}>
                                     <Text style={styles.sectionTitle}>OTHER TOOLS & SOFTWARE</Text>
                                 </View>
                             </View>
@@ -651,7 +741,11 @@ export default function Resume(props) {
                                 <View style={styles.infoView2}>
                                     <View style={styles.experienceTechList}>
                                         {res.otherTools.map((str, j) => str.value && !str.hidden ?
-                                            <Text key={j} style={styles.experienceTech}>{str.value}</Text>
+                                            <Text key={j} style={{
+                                                ...styles.experienceTech,
+                                                fontSize: fontSize.tools || fontSize.tools === 0 ? `${fontSize.tools + fontSize.tools * 0.7}vw` : '1.7vw',
+                                                margin: fontSize.tools || fontSize.tools === 0 ? `${fontSize.tools / 2.5}vw` : '.4vw'
+                                            }}>{str.value}</Text>
                                             : null)}
                                     </View>
                                 </View>

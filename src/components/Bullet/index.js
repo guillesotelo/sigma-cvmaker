@@ -29,6 +29,7 @@ export default function Bullet(props) {
         items,
         setItems,
         placeholder,
+        fontSize,
         id
     } = props
 
@@ -134,13 +135,16 @@ export default function Bullet(props) {
                                             <div ref={provided.innerRef}
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}
-                                                style={getItemStyle(
-                                                    snapshot.isDragging,
-                                                    provided.draggableProps.style
-                                                )}
+                                                style={{
+                                                    ...getItemStyle(
+                                                        snapshot.isDragging,
+                                                        provided.draggableProps.style
+                                                    ),
+                                                    height: fontSize ? `${fontSize * 2}vw` : '2vw'
+                                                }}
                                                 className='bullet-row' key={i}>
-                                                <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>{bullets[type] || '•'}</h4>
-                                                <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value || ''}</h4>
+                                                <h4 className='bullet' style={{ opacity: item.hidden && '.2', fontSize: fontSize ? `${fontSize}vw` : '.8vw' }}>{bullets[type] || '•'}</h4>
+                                                <h4 className='bullet-text' style={{ opacity: item.hidden && '.2', fontSize: fontSize ? `${fontSize}vw` : '.8vw' }}>{item.value || ''}</h4>
                                                 <img
                                                     src={EditIcon}
                                                     className='hide-icon-item edit-icon-item'
@@ -242,10 +246,13 @@ export default function Bullet(props) {
                                                     <div ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
-                                                        style={getItemStyle(
-                                                            snapshot.isDragging,
-                                                            provided.draggableProps.style
-                                                        )}
+                                                        style={{
+                                                            ...getItemStyle(
+                                                                snapshot.isDragging,
+                                                                provided.draggableProps.style
+                                                            ),
+                                                            height: fontSize ? `${fontSize * 2}vw` : '2vw'
+                                                        }}
                                                         className='bullet-row' key={i}>
                                                         <h4 className='bullet' style={{ opacity: item.hidden && '.2' }}>{bullets[type] || '•'}</h4>
                                                         <h4 className='bullet-text' style={{ opacity: item.hidden && '.2' }}>{item.value || ''}</h4>
@@ -312,7 +319,7 @@ export default function Bullet(props) {
             <div className='tools-section-blocked'>
                 <div className='tools-wrapper'>
                     {items.map((item, i) => item.value && !item.hidden ?
-                        <h4 className='tool-wrap-name' key={i}>{item.value}</h4>
+                        <h4 className='tool-wrap-name' style={{ fontSize: fontSize ? `${fontSize}vw` : '1vw', margin: fontSize ? `${fontSize / 3}vw` : '.3vw' }} key={i}>{item.value}</h4>
                         : null
                     )}
                 </div>

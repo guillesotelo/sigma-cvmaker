@@ -22,7 +22,8 @@ export default function ItemDropdown(props) {
         options,
         style,
         type,
-        placeholder
+        placeholder,
+        fontSize
     } = props
 
     useEffect(() => {
@@ -147,8 +148,8 @@ export default function ItemDropdown(props) {
                                                             provided.draggableProps.style
                                                         )}
                                                         className='item-dropdown-blocked draggable'>
-                                                        <h4 className='item-dropdown-name' style={{ opacity: item.hidden && '.2' }}>{item.name}</h4>
-                                                        <h4 className='item-dropdown-select' style={{ opacity: item.hidden && '.2' }}>{item.option || '-'}</h4>
+                                                        <h4 className='item-dropdown-name' style={{ opacity: item.hidden && '.2', fontSize: fontSize ? `${fontSize}vw` : '.9vw' }}>{item.name}</h4>
+                                                        <h4 className='item-dropdown-select' style={{ opacity: item.hidden && '.2', fontSize: fontSize ? `${fontSize}vw` : '.9vw' }}>{item.option || '-'}</h4>
                                                         <img
                                                             src={EditIcon}
                                                             className='hide-icon-item edit-icon-item'
@@ -344,9 +345,12 @@ export default function ItemDropdown(props) {
             <div className='skills-section-blocked'>
                 <div className='skills-wrapper'>
                     {itemsArr.map((item, i) => item.name && !item.hidden ?
-                        <div className='skill-wrap-item' key={i}>
-                            <h4 className='skill-wrap-name'>{item.name}</h4>
-                            <h4 className='skill-wrap-option'>{item.option || '-'}</h4>
+                        <div className='skill-wrap-item' key={i} style={{
+                            paddingTop: fontSize ? `${fontSize / 2}vw` : '.5vw',
+                            paddingBottom: fontSize ? `${fontSize}vw` : '1vw'
+                        }}>
+                            <h4 className='skill-wrap-name' style={{ fontSize: fontSize ? `${fontSize}vw` : '.9vw' }}>{item.name}</h4>
+                            <h4 className='skill-wrap-option' style={{ fontSize: fontSize ? `${fontSize}vw` : '.9vw' }}>{item.option || '-'}</h4>
                         </div>
                         : null
                     )}

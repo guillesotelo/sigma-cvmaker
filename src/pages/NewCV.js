@@ -8,6 +8,7 @@ import { APP_COLORS } from '../constants/app'
 import ItemDropdown from '../components/ItemDropdown'
 import Bullet from '../components/Bullet'
 import InputBullet from '../components/InputBullet'
+import Slider from '../components/Slider'
 import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
 import { editResume, getLogo, getResume, getResumes, saveResume } from '../store/reducers/resume'
@@ -19,7 +20,8 @@ import PlusIcon from '../icons/plus-icon.svg'
 import MinusIcon from '../icons/minus-icon.svg'
 import HideIcon from '../icons/hide-icon.svg'
 import ShwoIcon from '../icons/show-icon.svg'
-import Slider from '../components/Slider'
+import FontIcon from '../icons/fontsize-icon.svg'
+import PaddingIcon from '../icons/padding-icon.svg'
 
 export default function NewCV() {
     const [data, setData] = useState({})
@@ -48,6 +50,10 @@ export default function NewCV() {
     const [contrast, setContrast] = useState(100)
     const [brightness, setBrightness] = useState(100)
     const [grayscale, setGrayscale] = useState(0)
+    const [fontDrop, setFontDrop] = useState(false)
+    const [paddingDrop, setPaddingDrop] = useState(false)
+    const [fontSize, setFontSize] = useState({})
+    const [padding, setPadding] = useState({})
     const dispatch = useDispatch()
     const history = useHistory()
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || {}
@@ -92,6 +98,10 @@ export default function NewCV() {
         })
     }, [scale, translateX, translateY, rotate, contrast, brightness, grayscale])
 
+    useEffect(() => {
+        setFontSize(data.settings && data.settings.fontSize ? data.settings.fontSize : {})
+        setPadding(data.settings && data.settings.padding ? data.settings.padding : {})
+    }, [data.settings])
 
     useEffect(() => {
         if (data.manager) {
@@ -142,6 +152,8 @@ export default function NewCV() {
 
                         setIsEdit(true)
                         setData({ ...resData, ...resume })
+                        setFontSize(resData.settings && resData.settings.fontSize ? resData.settings.fontSize : {})
+                        setPadding(resData.settings && resData.settings.padding ? resData.settings.padding : {})
                         setLanguages(resData.languages)
                         setSkills(resData.skills.length ? refreshTime(resData.skills, resume.date) : [{ name: '' }])
                         setEducation(resData.education.length ? resData.education : [{ bullet: '', value: '' }])
@@ -284,12 +296,18 @@ export default function NewCV() {
         return arr.filter(item => item.name || item.value || item.bullet)
     }
 
+    const onChangeSettings = (type, name, value) => {
+        const newSettings = data.settings || { fontSize: {}, padding: {} }
+        newSettings[type][name] = value
+        updateData('settings', newSettings)
+    }
+
     return (
         <div className='new-resume-container'>
             <ToastContainer autoClose={2000} />
             <CVHeader data={data} cvLogo={cvLogo} />
             <div className='separator'></div>
-            <h2 className='section-title-row'>Personal Information</h2>
+            {/* <h2 className='section-title-row'>Personal Information</h2> */}
             <div className='new-resume-fill' style={{ border: 'none' }}>
                 <div className='resume-fill-col1'>
                     <>
@@ -467,7 +485,7 @@ export default function NewCV() {
                         rows={15}
                         name='presentation'
                         updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)', width: '32vw' }}
+                        style={{ color: 'rgb(71, 71, 71)', width: '38vw' }}
                         placeholder="Anna is a nice fun and friendly person. 
                         She work well in a team but also on her own as she like to
                         set herself goals which she will achieve. She has good listening and 
@@ -538,9 +556,65 @@ export default function NewCV() {
             </div>
 
             <div className='separator'></div>
-            {<div className='new-resume-fill'>
+            <div className='new-resume-fill' style={{
+                padding: (padding.expertise || padding.expertise === 0) && !hiddenSections.expertise ? `${.1 * padding.expertise}vw 0` : '2vw 0'
+            }}>
                 <div className='resume-fill-col1'>
-                    {hiddenSections.expertise ? '' : <h2 className='section-title'>Expertise</h2>}
+                    {hiddenSections.expertise ? '' :
+                        <>
+                            <h2 className='section-title'>EXPERTISE</h2>
+                            <div className='section-settings'>
+                                <>
+                                    {!paddingDrop ?
+                                        <img
+                                            src={FontIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setPaddingDrop(false)
+                                                setFontDrop(!fontDrop)
+                                            }}
+                                        /> : ''}
+                                    {fontDrop ?
+                                        <Slider
+                                            label=''
+                                            name='expertise'
+                                            type='fontSize'
+                                            sign='x'
+                                            value={fontSize.expertise || fontSize.expertise === 0 ? fontSize.expertise : .8}
+                                            onChangeSettings={onChangeSettings}
+                                            min={0.1}
+                                            max={3}
+                                            step={0.05}
+                                            style={{ width: '10vw', transform: 'scale(.9)' }}
+                                        />
+                                        : ''}
+                                </>
+                                <>
+                                    {!fontDrop ?
+                                        <img
+                                            src={PaddingIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setFontDrop(false)
+                                                setPaddingDrop(!paddingDrop)
+                                            }}
+                                        /> : ''}
+                                    {paddingDrop ?
+                                        <Slider
+                                            label=''
+                                            name='expertise'
+                                            type='padding'
+                                            sign='x'
+                                            value={padding.expertise || padding.expertise === 0 ? padding.expertise : 20}
+                                            onChangeSettings={onChangeSettings}
+                                            min={0}
+                                            max={100}
+                                            style={{ width: '10vw', transform: 'scale(.9)' }}
+                                        />
+                                        : ''}
+                                </>
+                            </div>
+                        </>}
                 </div>
                 <div className='resume-fill-col2'>
                     {hiddenSections.expertise ? '' :
@@ -551,6 +625,7 @@ export default function NewCV() {
                             setItems={setExpertise}
                             placeholder='Add new expertise...'
                             id='expertise'
+                            fontSize={fontSize.expertise}
                         />}
                     {hiddenSections.expertise ?
                         <img
@@ -566,12 +641,68 @@ export default function NewCV() {
                             onClick={() => setHiddenSections({ ...hiddenSections, expertise: 'true' })}
                         />}
                 </div>
-            </div>}
+            </div>
 
             <div className='separator'></div>
-            <div className='new-resume-fill'>
+            <div className='new-resume-fill' style={{
+                padding: (padding.education || padding.education === 0) && !hiddenSections.education ? `${.1 * padding.education}vw 0` : '2vw 0'
+            }}>
                 <div className='resume-fill-col1'>
-                    {hiddenSections.education ? '' : <h2 className='section-title'>Education</h2>}
+                    {hiddenSections.education ? '' :
+                        <>
+                            <h2 className='section-title'>EDUCATION</h2>
+                            <div className='section-settings'>
+                                <>
+                                    {!paddingDrop ?
+                                        <img
+                                            src={FontIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setPaddingDrop(false)
+                                                setFontDrop(!fontDrop)
+                                            }}
+                                        /> : ''}
+                                    {fontDrop ?
+                                        <Slider
+                                            label=''
+                                            name='education'
+                                            type='fontSize'
+                                            sign='x'
+                                            value={fontSize.education || fontSize.education === 0 ? fontSize.education : .8}
+                                            onChangeSettings={onChangeSettings}
+                                            min={0.1}
+                                            max={3}
+                                            step={0.05}
+                                            style={{ width: '10vw', transform: 'scale(.9)' }}
+                                        />
+                                        : ''}
+                                </>
+                                <>
+                                    {!fontDrop ?
+                                        <img
+                                            src={PaddingIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setFontDrop(false)
+                                                setPaddingDrop(!paddingDrop)
+                                            }}
+                                        /> : ''}
+                                    {paddingDrop ?
+                                        <Slider
+                                            label=''
+                                            name='education'
+                                            type='padding'
+                                            sign='x'
+                                            value={padding.education || padding.education === 0 ? padding.education : 20}
+                                            onChangeSettings={onChangeSettings}
+                                            min={0}
+                                            max={100}
+                                            style={{ width: '10vw', transform: 'scale(.9)' }}
+                                        />
+                                        : ''}
+                                </>
+                            </div>
+                        </>}
                 </div>
                 <div className='resume-fill-col2'>
                     {hiddenSections.education ? '' :
@@ -582,6 +713,7 @@ export default function NewCV() {
                             bulletPlaceholder='2018'
                             valuePlaceholder='Bachelor of Computer Science, MIT'
                             id='education'
+                            fontSize={fontSize.education}
                         />}
                     {hiddenSections.education ?
                         <img
@@ -600,9 +732,65 @@ export default function NewCV() {
             </div>
 
             <div className='separator'></div>
-            <div className='new-resume-fill'>
+            <div className='new-resume-fill' style={{
+                padding: (padding.certifications || padding.certifications === 0) && !hiddenSections.certifications ? `${.1 * padding.certifications}vw 0` : '2vw 0'
+            }}>
                 <div className='resume-fill-col1'>
-                    {hiddenSections.certifications ? '' : <h2 className='section-title'>Certifications / Courses</h2>}
+                    {hiddenSections.certifications ? '' :
+                        <>
+                            <h2 className='section-title'>CERTIFICATIONS</h2>
+                            <div className='section-settings'>
+                                <>
+                                    {!paddingDrop ?
+                                        <img
+                                            src={FontIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setPaddingDrop(false)
+                                                setFontDrop(!fontDrop)
+                                            }}
+                                        /> : ''}
+                                    {fontDrop ?
+                                        <Slider
+                                            label=''
+                                            name='certifications'
+                                            type='fontSize'
+                                            sign='x'
+                                            value={fontSize.certifications || fontSize.certifications === 0 ? fontSize.certifications : .8}
+                                            onChangeSettings={onChangeSettings}
+                                            min={0.1}
+                                            max={3}
+                                            step={0.05}
+                                            style={{ width: '10vw', transform: 'scale(.9)' }}
+                                        />
+                                        : ''}
+                                </>
+                                <>
+                                    {!fontDrop ?
+                                        <img
+                                            src={PaddingIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setFontDrop(false)
+                                                setPaddingDrop(!paddingDrop)
+                                            }}
+                                        /> : ''}
+                                    {paddingDrop ?
+                                        <Slider
+                                            label=''
+                                            name='certifications'
+                                            type='padding'
+                                            sign='x'
+                                            value={padding.certifications || padding.certifications === 0 ? padding.certifications : 20}
+                                            onChangeSettings={onChangeSettings}
+                                            min={0}
+                                            max={100}
+                                            style={{ width: '10vw', transform: 'scale(.9)' }}
+                                        />
+                                        : ''}
+                                </>
+                            </div>
+                        </>}
                 </div>
                 <div className='resume-fill-col2'>
                     {hiddenSections.certifications ? '' :
@@ -613,6 +801,7 @@ export default function NewCV() {
                             bulletPlaceholder='2019'
                             valuePlaceholder='Android Development Certification'
                             id='certifications'
+                            fontSize={fontSize.certifications}
                         />}
                     {hiddenSections.certifications ?
                         <img
@@ -631,9 +820,65 @@ export default function NewCV() {
             </div>
 
             <div className='separator'></div>
-            <div className='new-resume-fill'>
+            <div className='new-resume-fill' style={{
+                padding: (padding.skills || padding.skills === 0) && !hiddenSections.skills ? `${.1 * padding.skills}vw 0` : '2vw 0'
+            }}>
                 <div className='resume-fill-col1'>
-                    {hiddenSections.skills ? '' : <h2 className='section-title'>Main Skills</h2>}
+                    {hiddenSections.skills ? '' :
+                        <>
+                            <h2 className='section-title'>MAIN SKILLS</h2>
+                            <div className='section-settings'>
+                                <>
+                                    {!paddingDrop ?
+                                        <img
+                                            src={FontIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setPaddingDrop(false)
+                                                setFontDrop(!fontDrop)
+                                            }}
+                                        /> : ''}
+                                    {fontDrop ?
+                                        <Slider
+                                            label=''
+                                            name='skills'
+                                            type='fontSize'
+                                            sign='x'
+                                            value={fontSize.skills || fontSize.skills === 0 ? fontSize.skills : .9}
+                                            onChangeSettings={onChangeSettings}
+                                            min={0.1}
+                                            max={3}
+                                            step={0.05}
+                                            style={{ width: '10vw', transform: 'scale(.9)' }}
+                                        />
+                                        : ''}
+                                </>
+                                <>
+                                    {!fontDrop ?
+                                        <img
+                                            src={PaddingIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setFontDrop(false)
+                                                setPaddingDrop(!paddingDrop)
+                                            }}
+                                        /> : ''}
+                                    {paddingDrop ?
+                                        <Slider
+                                            label=''
+                                            name='skills'
+                                            type='padding'
+                                            sign='x'
+                                            value={padding.skills || padding.skills === 0 ? padding.skills : 20}
+                                            onChangeSettings={onChangeSettings}
+                                            min={0}
+                                            max={100}
+                                            style={{ width: '10vw', transform: 'scale(.9)' }}
+                                        />
+                                        : ''}
+                                </>
+                            </div>
+                        </>}
                 </div>
                 <div className='resume-fill-col2'>
                     {hiddenSections.skills ? '' :
@@ -644,6 +889,7 @@ export default function NewCV() {
                             items={skills}
                             setItems={setSkills}
                             placeholder='Add new skill...'
+                            fontSize={fontSize.skills}
                         />}
                     {hiddenSections.skills ?
                         <img
@@ -662,9 +908,65 @@ export default function NewCV() {
             </div>
 
             <div className='separator'></div>
-            <div className='new-resume-fill'>
+            <div className='new-resume-fill' style={{
+                padding: (padding.experience || padding.experience === 0) && !hiddenSections.experience ? `${.1 * padding.experience}vw 0` : '2vw 0'
+            }}>
                 <div className='resume-fill-col1-dif'>
-                    {hiddenSections.experience ? '' : <h2 className='section-title'>Experience</h2>}
+                    {hiddenSections.experience ? '' :
+                        <>
+                            <h2 className='section-title'>EXPERIENCE</h2>
+                            <div className='section-settings'>
+                                <>
+                                    {!paddingDrop ?
+                                        <img
+                                            src={FontIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setPaddingDrop(false)
+                                                setFontDrop(!fontDrop)
+                                            }}
+                                        /> : ''}
+                                    {fontDrop ?
+                                        <Slider
+                                            label=''
+                                            name='experience'
+                                            type='fontSize'
+                                            sign='x'
+                                            value={fontSize.experience || fontSize.experience === 0 ? fontSize.experience : 1}
+                                            onChangeSettings={onChangeSettings}
+                                            min={0.1}
+                                            max={3}
+                                            step={0.05}
+                                            style={{ width: '10vw', transform: 'scale(.9)' }}
+                                        />
+                                        : ''}
+                                </>
+                                <>
+                                    {!fontDrop ?
+                                        <img
+                                            src={PaddingIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setFontDrop(false)
+                                                setPaddingDrop(!paddingDrop)
+                                            }}
+                                        /> : ''}
+                                    {paddingDrop ?
+                                        <Slider
+                                            label=''
+                                            name='experience'
+                                            type='padding'
+                                            sign='x'
+                                            value={padding.experience || padding.experience === 0 ? padding.experience : 20}
+                                            onChangeSettings={onChangeSettings}
+                                            min={0}
+                                            max={100}
+                                            style={{ width: '10vw', transform: 'scale(.9)' }}
+                                        />
+                                        : ''}
+                                </>
+                            </div>
+                        </>}
                 </div>
                 <div className='resume-fill-col2-dif'>
                     {hiddenSections.experience ? '' :
@@ -675,6 +977,8 @@ export default function NewCV() {
                             hidden={hiddenSections}
                             setHidden={setHiddenSections}
                             id='post-section'
+                            fontSize={fontSize.experience}
+                            padding={padding.experience}
                         />}
                     {hiddenSections.experience ?
                         <img
@@ -693,9 +997,65 @@ export default function NewCV() {
             </div>
 
             <div className='separator'></div>
-            <div className='new-resume-fill'>
+            <div className='new-resume-fill' style={{
+                padding: (padding.tools || padding.tools === 0) && !hiddenSections.tools ? `${.1 * padding.tools}vw 0` : '2vw 0'
+            }}>
                 <div className='resume-fill-col1'>
-                    {hiddenSections.tools ? '' : <h2 className='section-title'>Other Tools & Software</h2>}
+                    {hiddenSections.tools ? '' :
+                        <>
+                            <h2 className='section-title'>OTHER TOOLS & SOFTWARE</h2>
+                            <div className='section-settings'>
+                                <>
+                                    {!paddingDrop ?
+                                        <img
+                                            src={FontIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setPaddingDrop(false)
+                                                setFontDrop(!fontDrop)
+                                            }}
+                                        /> : ''}
+                                    {fontDrop ?
+                                        <Slider
+                                            label=''
+                                            name='tools'
+                                            type='fontSize'
+                                            sign='x'
+                                            value={fontSize.tools || fontSize.tools === 0 ? fontSize.tools : .9}
+                                            onChangeSettings={onChangeSettings}
+                                            min={0.1}
+                                            max={3}
+                                            step={0.05}
+                                            style={{ width: '10vw', transform: 'scale(.9)' }}
+                                        />
+                                        : ''}
+                                </>
+                                <>
+                                    {!fontDrop ?
+                                        <img
+                                            src={PaddingIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setFontDrop(false)
+                                                setPaddingDrop(!paddingDrop)
+                                            }}
+                                        /> : ''}
+                                    {paddingDrop ?
+                                        <Slider
+                                            label=''
+                                            name='tools'
+                                            type='padding'
+                                            sign='x'
+                                            value={padding.tools || padding.tools === 0 ? padding.tools : 10}
+                                            onChangeSettings={onChangeSettings}
+                                            min={0}
+                                            max={100}
+                                            style={{ width: '10vw', transform: 'scale(.9)' }}
+                                        />
+                                        : ''}
+                                </>
+                            </div>
+                        </>}
                 </div>
                 <div className='resume-fill-col2'>
                     {hiddenSections.tools ? '' :
@@ -706,6 +1066,7 @@ export default function NewCV() {
                             setItems={setOtherTools}
                             placeholder='Altium Designer'
                             id='otherTools'
+                            fontSize={fontSize.tools}
                         />
                     }
                     {hiddenSections.tools ?
@@ -727,9 +1088,9 @@ export default function NewCV() {
             {user.isManager &&
                 <>
                     <div className='separator'></div>
-                    <div className='new-resume-fill-internal'>
+                    <div className='resume-fill-internal'>
                         <div className='resume-fill-col1'>
-                            <h2 className='section-title'>Footer</h2>
+                            <h2 className='section-title'>FOOTER</h2>
                         </div>
                         <CVFooter
                             updateData={updateData}
@@ -740,9 +1101,10 @@ export default function NewCV() {
                         />
                     </div>
                     <div className='separator'></div>
-                    <div className='new-resume-fill-internal'>
+                    <div className='resume-fill-internal'>
                         <div className='resume-fill-col1'>
-                            <h2 className='section-title'>Metadata (internal use)</h2>
+                            <h2 className='section-title'>METADATA</h2>
+                            <h2 className='section-title'>(internal use)</h2>
                         </div>
                         <div className='resume-fill-col2'>
                             <Dropdown
