@@ -29,7 +29,8 @@ export default function InputField(props) {
         setIsEdit,
         options,
         hidden,
-        setHidden
+        setHidden,
+        fontSize
     } = props
 
     useEffect(() => {
@@ -97,10 +98,15 @@ export default function InputField(props) {
     }
 
     return (
-        <div className='inputfield-container'>
+        <div className='inputfield-container' style={{
+            margin: fontSize ? `${fontSize / 2}vw 0` : '.5vw 0'
+        }}>
             {label ?
                 <h4
-                    style={{ color: APP_COLORS.GRAY, opacity: hidden && hidden.includes(label) && '.2' }}
+                    style={{
+                        color: APP_COLORS.GRAY, opacity: hidden && hidden.includes(label) && '.2',
+                        fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.8vw'
+                    }}
                     className='inputfield-label'>
                     {label || ''}
                 </h4> : ''}
@@ -112,7 +118,12 @@ export default function InputField(props) {
                         placeholder={placeholder || ''}
                         cols={cols || 2}
                         rows={rows || 4}
-                        style={{ ...style, opacity: hidden && hidden.includes(label) && '.2' }}
+                        style={{
+                            ...style,
+                            opacity: hidden && hidden.includes(label) && '.2',
+                            fontSize: fontSize ? `${fontSize}vw` : '.9vw',
+                            padding: fontSize ? `${fontSize / 1.5}vw` : '.7vw'
+                        }}
                         value={value}
                     />
                     {hidden && hidden.includes(label) ?
@@ -151,7 +162,11 @@ export default function InputField(props) {
                                     onChange={handleChange}
                                     placeholder={placeholder || ''}
                                     type={type || 'text'}
-                                    style={{ opacity: hidden && hidden.includes(label) && '.2' }}
+                                    style={{
+                                        opacity: hidden && hidden.includes(label) && '.2',
+                                        fontSize: fontSize ? `${fontSize}vw` : '.9vw',
+                                        padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
+                                    }}
                                     value={value}
                                     onFocus={() => setFocus(true)}
                                 />
@@ -176,7 +191,10 @@ export default function InputField(props) {
                                         <h4
                                             key={i}
                                             className='dropdown-option'
-                                            style={{ borderTop: i === 0 && 'none' }}
+                                            style={{
+                                                borderTop: i === 0 && 'none',
+                                                fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.8vw'
+                                            }}
                                             onClick={() => {
                                                 updateData(name, suggestion)
                                                 setDropValue(suggestion)
@@ -192,7 +210,11 @@ export default function InputField(props) {
                             onChange={handleChange}
                             placeholder={placeholder || ''}
                             type={type || 'text'}
-                            style={style || null}
+                            style={{
+                                ...style,
+                                fontSize: fontSize ? `${fontSize}vw` : '.9vw',
+                                padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
+                            }}
                             value={value}
                         />
 

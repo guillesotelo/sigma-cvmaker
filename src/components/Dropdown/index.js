@@ -18,7 +18,8 @@ export default function Dropdown(props) {
         style,
         size,
         hidden,
-        setHidden
+        setHidden,
+        fontSize
     } = props
 
     const hideItem = item => {
@@ -36,7 +37,10 @@ export default function Dropdown(props) {
     return (
         <div className='dropdown-container' style={{ ...style, width: size ? size : '10vw' }}>
             {label ?
-                <h4 className='dropdown-label' style={{ opacity: hidden && hidden.includes(label) && '.2' }}>
+                <h4 className='dropdown-label' style={{
+                    opacity: hidden && hidden.includes(label) && '.2',
+                    fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.8vw'
+                }}>
                     {label || ''}
                 </h4> : ''}
             <div className='dropdown-select-section'>
@@ -45,10 +49,14 @@ export default function Dropdown(props) {
                     style={{
                         border: openDrop && (!hidden || !hidden.includes(label)) && '1px solid #E4C69C',
                         width: size ? size : '10vw',
-                        backgroundColor: label && hidden && hidden.includes(label) && '#fafafa'
+                        backgroundColor: label && hidden && hidden.includes(label) && '#fafafa',
+                        padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
                     }}
                     onClick={() => setOpenDrop(!openDrop)}>
-                    <h4 className='dropdown-selected' style={{ opacity: hidden && hidden.includes(label) && '.2' }}>
+                    <h4 className='dropdown-selected' style={{
+                        opacity: hidden && hidden.includes(label) && '.2',
+                        fontSize: fontSize ? `${fontSize}vw` : '1vw'
+                    }}>
                         {value ? value : selected ? selected : 'Select'}
                     </h4>
                     {hidden && label && hidden.includes(label) ?
@@ -64,7 +72,10 @@ export default function Dropdown(props) {
                                 onClick={() => hideItem(label)}
                             />
                             : ''}
-                    < h4 className='dropdown-selected' style={{ opacity: hidden && hidden.includes(label) && '.2' }}>▾</h4>
+                    < h4 className='dropdown-selected' style={{
+                        opacity: hidden && hidden.includes(label) && '.2',
+                        fontSize: fontSize ? `${fontSize}vw` : '1vw'
+                    }}>▾</h4>
                 </div>
                 {openDrop && (!hidden || !hidden.includes(label)) ?
                     <div
@@ -72,7 +83,8 @@ export default function Dropdown(props) {
                         style={{
                             border: openDrop && '1px solid #E4C69C',
                             borderTop: 'none',
-                            width: size ? size : '10vw'
+                            width: size ? size : '10vw',
+                            marginTop: fontSize ? `${fontSize * 2}vw` : '2vw'
                         }}>
                         {options.map((option, i) =>
                             option && option !== '' &&

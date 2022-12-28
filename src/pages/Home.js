@@ -11,7 +11,24 @@ export default function Home() {
 
   useEffect(() => {
     const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
-    if (!localUser || !localUser.email) history.push('/login')
+
+    if (!localUser || !localUser.email) return history.push('/login')
+
+    if (localUser.app && localUser.app !== 'cvmaker') {
+      localStorage.clear()
+      return history.push('/login')
+    }
+
+    if (localUser.login) {
+      const login = new Date(localUser.login).getTime()
+      const now = new Date().getTime()
+
+      if (now - login > 2592000000) {
+        localStorage.clear()
+        return history.push('/login')
+      }
+    }
+
     setUser(localUser)
   }, [])
 
@@ -22,8 +39,8 @@ export default function Home() {
         <p className='home-welcome-text'>Here you can create, review and edit CVs, as well as manage user data within the app.</p>
         <p className='home-welcome-text'>Select an action to start</p>
         <p className='home-welcome-comment'>NOTE: This application is currently in a <b>Beta Stage</b>.
-        This means that new features are currently being added and some things may change without notice.
-        <br/>If you run into a problem, you can submit a report and help us fix it as soon as possible. Check the ( ! ) sign for this.</p>
+          This means that new features are currently being added and some things may change without notice.
+          <br />If you run into a problem, you can submit a report and help us fix it as soon as possible. Check the ( ! ) sign for this.</p>
       </div>
       <div className='home-tooltip-container' style={tooltipStyle}>
         <h4 className='home-tooltip'>{tooltip || ''}</h4>

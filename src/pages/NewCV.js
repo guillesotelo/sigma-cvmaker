@@ -249,10 +249,10 @@ export default function NewCV() {
             resumeData.otherTools = otherTools
             resumeData.buzzwords = buzzwords
             resumeData.hiddenSections = { ...hiddenSections, hiddenItems }
-            resumeData.footer_contact = data.footer_contact || '-'
-            resumeData.footer_email = data.footer_email || '-'
-            resumeData.footer_phone = data.footer_phone || '-'
-            resumeData.footer_location = data.footer_location || '-'
+            resumeData.footer_contact = data.footer_contact || ''
+            resumeData.footer_email = data.footer_email || ''
+            resumeData.footer_phone = data.footer_phone || ''
+            resumeData.footer_location = data.footer_location || ''
 
             const strData = JSON.stringify(resumeData)
             resumeData.data = strData
@@ -260,7 +260,7 @@ export default function NewCV() {
             resumeData.type = data.type || 'Master'
             resumeData.username = `${data.name}${data.middlename ? ' ' + data.middlename : ''} ${data.surname || ''}`
             resumeData.managerName = data.footer_contact || ''
-            resumeData.managerEmail = data.footer_email || '-'
+            resumeData.managerEmail = data.footer_email || ''
             resumeData.email = data.email || ''
             resumeData.user = user
 
@@ -308,7 +308,10 @@ export default function NewCV() {
             <CVHeader data={data} cvLogo={cvLogo} />
             <div className='separator'></div>
             {/* <h2 className='section-title-row'>Personal Information</h2> */}
-            <div className='new-resume-fill' style={{ border: 'none' }}>
+            <div className='new-resume-fill' style={{
+                border: 'none',
+                padding: (padding.personalInfo || padding.personalInfo === 0) && !hiddenSections.personalInfo ? `${.1 * padding.personalInfo}vw 0` : '2vw 0'
+            }}>
                 <div className='resume-fill-col1'>
                     <>
                         {profilePic.image ?
@@ -412,6 +415,7 @@ export default function NewCV() {
                         placeholder='Anna'
                         setHidden={setHiddenItems}
                         hidden={hiddenItems}
+                        fontSize={fontSize.personalInfo}
                     />
                     <InputField
                         label='Middle Name'
@@ -423,6 +427,7 @@ export default function NewCV() {
                         placeholder='Grabielle'
                         setHidden={setHiddenItems}
                         hidden={hiddenItems}
+                        fontSize={fontSize.personalInfo}
                     />
                     <InputField
                         label='Surname'
@@ -434,6 +439,7 @@ export default function NewCV() {
                         placeholder='Kessler'
                         setHidden={setHiddenItems}
                         hidden={hiddenItems}
+                        fontSize={fontSize.personalInfo}
                     />
                     <InputField
                         label='Role / Title'
@@ -445,6 +451,7 @@ export default function NewCV() {
                         placeholder='Android Developer'
                         setHidden={setHiddenItems}
                         hidden={hiddenItems}
+                        fontSize={fontSize.personalInfo}
                     />
                     <Dropdown
                         label='Gender'
@@ -452,9 +459,10 @@ export default function NewCV() {
                         options={genderOptions}
                         value={data.gender}
                         updateData={updateData}
-                        size='98%'
+                        size='19vw'
                         setHidden={setHiddenItems}
                         hidden={hiddenItems}
+                        fontSize={fontSize.personalInfo}
                     />
                     <InputField
                         label='Location'
@@ -466,6 +474,7 @@ export default function NewCV() {
                         placeholder='Mobilvägen 10, Lund, Sweden'
                         setHidden={setHiddenItems}
                         hidden={hiddenItems}
+                        fontSize={fontSize.personalInfo}
                     />
                     <ItemDropdown
                         label='Languages'
@@ -475,6 +484,7 @@ export default function NewCV() {
                         setItems={setLanguages}
                         placeholder='Add new language...'
                         style={{ width: '6.5vw' }}
+                        fontSize={fontSize.personalInfo}
                     />
                 </div>
                 <div className='resume-fill-col2-personal'>
@@ -493,33 +503,18 @@ export default function NewCV() {
                         value={data.presentation || ''}
                         setHidden={setHiddenItems}
                         hidden={hiddenItems}
+                        fontSize={fontSize.personalInfo}
                     />
                     <div className='resume-strengths-div'>
-                        {hiddenSections.strengths ?
-                            <h4 className='bullet-label'>Strengths</h4>
-                            :
-                            <Bullet
-                                label='Strengths'
-                                type='big'
-                                items={strengths}
-                                setItems={setStrengths}
-                                placeholder='Add new strength...'
-                                id='strengths'
-                            />
-                        }
-                        {hiddenSections.strengths ?
-                            <img
-                                src={PlusIcon}
-                                className='hide-section-icon no-top'
-                                onClick={() => setHiddenSections({ ...hiddenSections, strengths: '' })}
-                                style={{ display: 'block' }}
-                            />
-                            :
-                            <img
-                                src={MinusIcon}
-                                className='hide-section-icon'
-                                onClick={() => setHiddenSections({ ...hiddenSections, strengths: 'true' })}
-                            />}
+                        <Bullet
+                            label='Strengths'
+                            type='big'
+                            items={strengths}
+                            setItems={setStrengths}
+                            placeholder='Add new strength...'
+                            id='strengths'
+                            fontSize={fontSize.personalInfo}
+                        />
                     </div>
                     <InputField
                         label='Email'
@@ -531,9 +526,15 @@ export default function NewCV() {
                         value={data.email || ''}
                         setHidden={setHiddenItems}
                         hidden={hiddenItems}
+                        fontSize={fontSize.personalInfo}
                     />
                     <div className='signature-container'>
-                        <h4 className='signature-text' style={{ opacity: hiddenItems.includes('signature') && '.2' }}>{fullName || ''}</h4>
+                        <h4 className='signature-text' style={{
+                            opacity: hiddenItems.includes('signature') && '.2',
+                            fontSize: fontSize.personalInfo ? `${fontSize.personalInfo * 2}vw` : '2vw'
+                        }}>
+                            {fullName !== ' ' ? fullName : 'Signature'}
+                        </h4>
                         {hiddenItems.includes('signature') ?
                             <img
                                 src={ShwoIcon}
@@ -551,6 +552,57 @@ export default function NewCV() {
                                 }}
                             />
                         }
+                    </div>
+                    <div className='section-settings' style={{ marginTop: '6vw' }}>
+                        <>
+                            {!paddingDrop ?
+                                <img
+                                    src={FontIcon}
+                                    className='section-settings-icon'
+                                    onClick={() => {
+                                        setPaddingDrop(false)
+                                        setFontDrop(!fontDrop)
+                                    }}
+                                /> : ''}
+                            {fontDrop ?
+                                <Slider
+                                    label=''
+                                    name='personalInfo'
+                                    type='fontSize'
+                                    sign='x'
+                                    value={fontSize.personalInfo || fontSize.personalInfo === 0 ? fontSize.personalInfo : .9}
+                                    onChangeSettings={onChangeSettings}
+                                    min={0.1}
+                                    max={3}
+                                    step={0.05}
+                                    style={{ width: '10vw', transform: 'scale(.9)' }}
+                                />
+                                : ''}
+                        </>
+                        <>
+                            {!fontDrop ?
+                                <img
+                                    src={PaddingIcon}
+                                    className='section-settings-icon'
+                                    onClick={() => {
+                                        setFontDrop(false)
+                                        setPaddingDrop(!paddingDrop)
+                                    }}
+                                /> : ''}
+                            {paddingDrop ?
+                                <Slider
+                                    label=''
+                                    name='personalInfo'
+                                    type='padding'
+                                    sign='x'
+                                    value={padding.personalInfo || padding.personalInfo === 0 ? padding.personalInfo : 20}
+                                    onChangeSettings={onChangeSettings}
+                                    min={0}
+                                    max={100}
+                                    style={{ width: '10vw', transform: 'scale(.9)' }}
+                                />
+                                : ''}
+                        </>
                     </div>
                 </div>
             </div>

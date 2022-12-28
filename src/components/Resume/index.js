@@ -134,6 +134,14 @@ export default function Resume(props) {
         return '-'
     }
 
+    const isAllHidden = arr => {
+        let allHidden = true
+        arr.forEach(item => {
+            if ((item.name || item.value) && !item.hidden) allHidden = false
+        })
+        return allHidden
+    }
+
     const onDownload = async () => {
         await downloadPDF()
         setLoading(false)
@@ -142,31 +150,6 @@ export default function Resume(props) {
 
     const updateData = (key, value) => {
         setData({ ...data, [key]: value })
-    }
-
-    const getFonts = () => {
-        Font.register({
-            family: 'Roboto',
-            fonts: [
-                {
-                    src: RobotoRegular,
-                    fontWeight: 'normal'
-                },
-                {
-                    src: RobotoBold,
-                    fontWeight: 'bold',
-                },
-                {
-                    src: RobotoItalic,
-                    fontStyle: 'italic'
-                }
-            ]
-        })
-
-        Font.register({
-            family: 'GreatVibes-Regular',
-            src: GreatVibes
-        })
     }
 
     const checkHidden = item => {
@@ -194,6 +177,31 @@ export default function Resume(props) {
                 <ResumePDF />
             </PDFViewer >
         )
+    }
+
+    const getFonts = () => {
+        Font.register({
+            family: 'Roboto',
+            fonts: [
+                {
+                    src: RobotoRegular,
+                    fontWeight: 'normal'
+                },
+                {
+                    src: RobotoBold,
+                    fontWeight: 'bold',
+                },
+                {
+                    src: RobotoItalic,
+                    fontStyle: 'italic'
+                }
+            ]
+        })
+
+        Font.register({
+            family: 'GreatVibes-Regular',
+            src: GreatVibes
+        })
     }
 
     const styles = StyleSheet.create({
@@ -289,9 +297,14 @@ export default function Resume(props) {
             textAlign: 'left'
         },
         infoItem: {
-            fontSize: '1.7vw',
+            fontSize: fontSize.personalInfo || fontSize.personalInfo === 0 ? `${fontSize.personalInfo + fontSize.personalInfo * 0.7}vw` : '1.7vw',
             fontFamily: 'Roboto',
             fontWeight: 'bold',
+            alignSelf: 'center'
+        },
+        infoText: {
+            fontFamily: 'Roboto',
+            fontSize: fontSize.personalInfo || fontSize.personalInfo === 0 ? `${fontSize.personalInfo + fontSize.personalInfo * 0.7}vw` : '1.7vw',
             alignSelf: 'center'
         },
         regularText: {
@@ -301,9 +314,10 @@ export default function Resume(props) {
         },
         presentation: {
             fontFamily: 'Roboto',
-            fontSize: '1.7vw',
+            fontSize: fontSize.personalInfo || fontSize.personalInfo === 0 ? `${fontSize.personalInfo + fontSize.personalInfo * 0.7}vw` : '1.7vw',
             alignSelf: 'center',
-            textAlign: 'justify'
+            textAlign: 'justify',
+            margin: '0 0 0 2vw'
         },
         title: {
             fontSize: '1.7vw',
@@ -514,48 +528,55 @@ export default function Resume(props) {
                         </View>
                     </View>
 
-                    <View style={styles.rowContainer} wrap={false}>
+                    <View style={{ ...styles.rowContainer, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.1 * padding.personalInfo}vw 0` : '2vw 0' }} wrap={false}>
                         <View style={styles.column1}>
                             <View style={styles.profilePicCover}>
                                 <Image style={styles.profilePic} src={profileImage} />
                             </View>
-                            <View style={styles.infoView1}>
+                            <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.3 + padding.personalInfo}vw 0` : '1vw 0' }}>
                                 {checkHidden('Name') ? null : <Text style={styles.infoItem}>Name</Text>}
-                                {checkHidden('Name') ? null : <Text style={styles.regularText}>{fullName || ''}</Text>}
+                                {checkHidden('Name') ? null : <Text style={styles.infoText}>{fullName || ''}</Text>}
                             </View>
-                            <View style={styles.infoView1}>
-                                {checkHidden('Gender') ? null : <Text style={styles.infoItem}>Gender</Text>}
-                                {checkHidden('Gender') ? null : <Text style={styles.regularText}>{res.gender || ''}</Text>}
+                            <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.3 + padding.personalInfo}vw 0` : '1vw 0' }}>
+                                {checkHidden('Gender') || !res.gender ? null : <Text style={styles.infoItem}>Gender</Text>}
+                                {checkHidden('Gender') ? null : <Text style={styles.infoText}>{res.gender || ''}</Text>}
                             </View>
-                            <View style={styles.infoView1}>
-                                {checkHidden('Location') ? null : <Text style={styles.infoItem}>Location</Text>}
-                                {checkHidden('Location') ? null : <Text style={styles.regularText}>{res.location || ''}</Text>}
+                            <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.3 + padding.personalInfo}vw 0` : '1vw 0' }}>
+                                {checkHidden('Location') || !res.location ? null : <Text style={styles.infoItem}>Location</Text>}
+                                {checkHidden('Location') ? null : <Text style={styles.infoText}>{res.location || ''}</Text>}
                             </View>
-                            <View style={styles.infoView1}>
-                                {checkHidden(res.language) ? null : <Text style={styles.infoItem}>Language</Text>}
+                            <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.3 + padding.personalInfo}vw 0` : '1vw 0' }}>
+                                {isAllHidden(res.languages) ? null : <Text style={styles.infoItem}>Language</Text>}
                                 {res.languages.map((lan, i) => lan.name && !lan.hidden ?
-                                    <Text key={i} style={styles.regularText}>{`${lan.name} - ${lan.option}`}</Text> : null)
+                                    <Text key={i} style={styles.infoText}>{`${lan.name} - ${lan.option}`}</Text> : null)
                                 }
                             </View>
                         </View>
                         <View style={styles.column2}>
-                            <View style={styles.infoView3}>
+                            <View style={{ ...styles.infoView3, margin: fontSize.personalInfo || fontSize.personalInfo === 0 ? `${fontSize.personalInfo * 2}vw 0 0 0` : '2vw 0 0 0' }}>
                                 {checkHidden('Presentation') ? null : <Text style={styles.presentation}>{res.presentation || ''}</Text>}
                             </View>
-                            {res.strengths.length ?
-                                <View style={styles.infoView2}>
-                                    <Text style={styles.title}>Strengths</Text>
-                                    {res.strengths.map((str, i) => str.value && !str.hidden ? <Text key={i} style={styles.dropItems}>• {str.value}</Text> : null)}
-                                </View>
-                                :
-                                null}
-                            <View style={styles.infoView2}>
-                                {checkHidden('signature') ? null : <Text style={styles.signature}>{fullName || ''}</Text>}
+                            {isAllHidden(res.strengths) ? null : <View style={{ ...styles.infoView2, margin: '0 0 0 4vw' }}>
+                                <Text style={{
+                                    ...styles.title,
+                                    fontSize: fontSize.personalInfo || fontSize.personalInfo === 0 ? `${fontSize.personalInfo + fontSize.personalInfo * 0.7}vw` : '1.7vw',
+                                    margin: fontSize.personalInfo || fontSize.personalInfo === 0 ? `${fontSize.personalInfo * 2.5}vw 0 0.3vw 0` : '2.5vw 0 0.3vw 0'
+                                }}>Strengths</Text>
+                                {res.strengths.map((str, i) => str.value && !str.hidden ? <Text key={i} style={{
+                                    ...styles.dropItems,
+                                    fontSize: fontSize.personalInfo || fontSize.personalInfo === 0 ? `${fontSize.personalInfo + fontSize.personalInfo * 0.7}vw` : '1.7vw'
+                                }}>• {str.value}</Text> : null)}
+                            </View>}
+                            <View style={{ ...styles.infoView2, margin: 0 }}>
+                                {checkHidden('signature') ? null : <Text style={{
+                                    ...styles.signature,
+                                    fontSize: fontSize.personalInfo || fontSize.personalInfo === 0 ? `${fontSize.personalInfo * 3}vw` : '3vw'
+                                }}>{fullName || ''}</Text>}
                             </View>
                         </View>
                     </View>
 
-                    {checkHidden('expertise') ? null :
+                    {checkHidden('expertise') || (res.expertise[0] && !res.expertise[0].value) ? null :
                         <View style={{ ...styles.rowContainer, padding: padding.expertise || padding.expertise === 0 ? `${.1 * padding.expertise}vw 0` : '2vw 0' }} wrap={false}>
                             <View style={styles.sectionColumn1}>
                                 <View style={{ ...styles.infoView1, padding: padding.expertise || padding.expertise === 0 ? `${.1 * padding.expertise}vw 0` : '1vw 0' }}>
@@ -574,7 +595,7 @@ export default function Resume(props) {
                             </View>
                         </View>}
 
-                    {checkHidden('education') ? null :
+                    {checkHidden('education') || (res.education[0] && !res.education[0].value) ? null :
                         <View style={{ ...styles.rowContainer, padding: padding.education || padding.education === 0 ? `${.1 * padding.education}vw 0` : '2vw 0' }} wrap={false}>
                             <View style={styles.sectionColumn1}>
                                 <View style={{ ...styles.infoView1, padding: padding.education || padding.education === 0 ? `${.1 * padding.education}vw 0` : '1vw 0' }}>
@@ -599,7 +620,7 @@ export default function Resume(props) {
                             </View>
                         </View>}
 
-                    {checkHidden('certifications') ? null :
+                    {checkHidden('certifications') || (res.certifications[0] && !res.certifications[0].value) ? null :
                         <View style={{ ...styles.rowContainer, padding: padding.certifications || padding.certifications === 0 ? `${.1 * padding.certifications}vw 0` : '2vw 0' }} wrap={false}>
                             <View style={styles.sectionColumn1}>
                                 <View style={{ ...styles.infoView1, padding: padding.certifications || padding.certifications === 0 ? `${.1 * padding.certifications}vw 0` : '1vw 0' }}>
@@ -624,7 +645,7 @@ export default function Resume(props) {
                             </View>
                         </View>}
 
-                    {checkHidden('skills') ? null :
+                    {checkHidden('skills') || !skills.length ? null :
                         <View style={{ ...styles.rowContainer, padding: padding.skills || padding.skills === 0 ? `${.1 * padding.skills}vw 0` : '2vw 0' }} wrap={false}>
                             <View style={styles.sectionColumn1}>
                                 <View style={{ ...styles.infoView1, padding: padding.skills || padding.skills === 0 ? `${.1 * padding.skills}vw 0` : '1vw 0' }}>
@@ -655,7 +676,7 @@ export default function Resume(props) {
                             </View>
                         </View>}
 
-                    {checkHidden('experience') ? null :
+                    {checkHidden('experience') || !res.experience.length ? null :
                         <View style={{ ...styles.experienceContainer, padding: padding.experience || padding.experience === 0 ? `${.1 * padding.experience}vw 0` : '2vw 0' }}>
                             <View style={styles.experienceSection} wrap>
                                 <View style={{ ...styles.infoView1, padding: padding.experience || padding.experience === 0 ? `${.1 * padding.experience}vw 0` : '1vw 0' }}>
@@ -755,21 +776,21 @@ export default function Resume(props) {
                     <View style={styles.footer} wrap={false} fixed>
                         <View style={styles.footerCol}>
                             <View style={styles.footerRow}>
-                                <Text style={styles.footerItem}>Concact:</Text>
+                                {res.footer_contact ? <Text style={styles.footerItem}>Concact:</Text> : null}
                                 <Text style={styles.footerValue}>{res.footer_contact || '-'}</Text>
                             </View>
                             <View style={styles.footerRow}>
-                                <Text style={styles.footerItem}>E-mail:</Text>
+                                {res.footer_email ? <Text style={styles.footerItem}>E-mail:</Text> : null}
                                 <Text style={styles.footerValue}>{res.footer_email || '-'}</Text>
                             </View>
                         </View>
                         <View style={styles.footerCol}>
                             <View style={styles.footerRow}>
-                                <Text style={styles.footerItem}>Phone:</Text>
+                                {res.footer_phone ? <Text style={styles.footerItem}>Phone:</Text> : null}
                                 <Text style={styles.footerValue}>{res.footer_phone || '-'}</Text>
                             </View>
                             <View style={styles.footerRow}>
-                                <Text style={styles.footerItem}>Location:</Text>
+                                {res.footer_location ? <Text style={styles.footerItem}>Location:</Text> : null}
                                 <Text style={styles.footerValue}>{res.footer_location || '-'}</Text>
                             </View>
                         </View>

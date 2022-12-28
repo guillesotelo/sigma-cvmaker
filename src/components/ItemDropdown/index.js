@@ -108,7 +108,10 @@ export default function ItemDropdown(props) {
                                                     onChange={e => setEditItem({ ...editItem, name: e.target.value })}
                                                     placeholder={placeholder || ''}
                                                     type={type || 'text'}
-                                                    style={style || null}
+                                                    style={{
+                                                        ...style,
+                                                        fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.9vw'
+                                                    }}
                                                     value={editItem.name || ''}
                                                 />
                                             </GrammarlyEditorPlugin>
@@ -148,8 +151,16 @@ export default function ItemDropdown(props) {
                                                             provided.draggableProps.style
                                                         )}
                                                         className='item-dropdown-blocked draggable'>
-                                                        <h4 className='item-dropdown-name' style={{ opacity: item.hidden && '.2', fontSize: fontSize ? `${fontSize}vw` : '.9vw' }}>{item.name}</h4>
-                                                        <h4 className='item-dropdown-select' style={{ opacity: item.hidden && '.2', fontSize: fontSize ? `${fontSize}vw` : '.9vw' }}>{item.option || '-'}</h4>
+                                                        <h4 className='item-dropdown-name' style={{
+                                                            opacity: item.hidden && '.2',
+                                                            fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.9vw',
+                                                            padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
+                                                        }}>{item.name}</h4>
+                                                        <h4 className='item-dropdown-select' style={{
+                                                            opacity: item.hidden && '.2',
+                                                            fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.9vw',
+                                                            padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
+                                                        }}>{item.option || '-'}</h4>
                                                         <img
                                                             src={EditIcon}
                                                             className='hide-icon-item edit-icon-item'

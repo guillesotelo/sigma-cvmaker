@@ -6,7 +6,11 @@ const loginUser = async data => {
     try {
         const res = await axios.post(`${API_URL}/api/user/login`, data)
         const user = res.data
-        localStorage.setItem('user', JSON.stringify(user))
+        localStorage.setItem('user', JSON.stringify({
+            ...user,
+            app: 'cvmaker',
+            login: new Date()
+        }))
         return user
     } catch (error) { console.log(error) }
 }

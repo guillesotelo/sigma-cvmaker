@@ -55,11 +55,11 @@
     background-color: #e5e5e5;
     font-weight: normal;
     border-radius: 0.5vw;
-    margin: 0 !important;
+    margin: 0;
     padding: .7vw;
     width: 95%;
     display: block;
-    font-size: 0.9vw !important;
+    font-size: 0.9vw;
     font-family: 'Inter', sans-serif;
     font-weight: normal;
     resize: none;
