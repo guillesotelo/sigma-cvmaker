@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import imageCompression from 'browser-image-compression';
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../../constants/app'
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
@@ -30,7 +31,8 @@ export default function InputField(props) {
         options,
         hidden,
         setHidden,
-        fontSize
+        fontSize,
+        id
     } = props
 
     useEffect(() => {
@@ -76,7 +78,14 @@ export default function InputField(props) {
         try {
             const file = e.target.files[0]
             if (file) {
-                const base64 = await convertToBase64(file)
+                const compressOptions = {
+                    maxSizeMB: 0.3,
+                    maxWidthOrHeight: 300,
+                    useWebWorker: true
+                }
+                const compressedFile = await imageCompression(file, compressOptions)
+                
+                const base64 = await convertToBase64(compressedFile)
                 setImage({ ...image, [filename]: base64 })
                 if (setIsEdit) setIsEdit(true)
             }
@@ -150,7 +159,7 @@ export default function InputField(props) {
                         accept=".jpeg, .png, .jpg"
                         onChange={(e) => uploadFile(e)}
                         style={{ height: 0, width: 0 }}
-                        id={filename}
+                        id={id || filename}
                     />
                     :
                     type === 'text' ?

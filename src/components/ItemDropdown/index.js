@@ -193,7 +193,7 @@ export default function ItemDropdown(props) {
 
                                             :
                                             !dragging && selected === -1 ?
-                                                <>
+                                                <div style={{ display: 'flex', marginTop: '.4vw' }}>
                                                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
                                                         <input
                                                             className='item-dropdown-name'
@@ -201,7 +201,7 @@ export default function ItemDropdown(props) {
                                                             onChange={e => handleChange('name', e.target.value, i)}
                                                             placeholder={placeholder || ''}
                                                             type={type || 'text'}
-                                                            style={style || null}
+                                                            style={{ ...style, padding: '.6vw' }}
                                                         />
                                                     </GrammarlyEditorPlugin>
                                                     <Dropdown
@@ -210,11 +210,11 @@ export default function ItemDropdown(props) {
                                                         options={options}
                                                         updateData={handleChange}
                                                         index={i}
-                                                        style={{ margin: '0 .5vw' }}
+                                                        style={{ margin: '0 .5vw', height: '2vw' }}
                                                         size='9vw'
                                                     />
                                                     <h4 onClick={() => addNewItem()} className='item-dropdown-new'>✓</h4>
-                                                </>
+                                                </div>
                                                 :
                                                 ''
                                         }
@@ -317,7 +317,7 @@ export default function ItemDropdown(props) {
                                                 </Draggable>
 
                                                 :
-                                                !dragging ?
+                                                !dragging && selected === -1 ?
                                                     <>
                                                         <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
                                                             <input
@@ -350,7 +350,10 @@ export default function ItemDropdown(props) {
                         }
                     </Droppable>
                 </DragDropContext>
-                <h4 onClick={() => setEditSkills(false)} className='section-item-remove'>Done</h4>
+                <h4 onClick={() => {
+                    setEditSkills(false)
+                    addNewItem()
+                }} className='section-item-remove'>Done</h4>
             </div>
             :
             <div className='skills-section-blocked'>

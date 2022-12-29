@@ -21,6 +21,7 @@
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.1.0",
+    "browser-image-compression": "^2.0.0",
     "cors": "^2.8.5",
     "devextreme-react": "^21.1.5",
     "dotenv": "^16.0.1",

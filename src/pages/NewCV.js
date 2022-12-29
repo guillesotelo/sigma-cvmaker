@@ -66,8 +66,6 @@ export default function NewCV() {
     const sigCanvas = useRef({})
 
     // console.log("data", data)
-    // console.log("profilePic", profilePic)
-    // console.log("hiddenItems", hiddenItems)
 
     useEffect(() => {
         setLoading(true)
@@ -287,19 +285,19 @@ export default function NewCV() {
 
             if (saved) {
                 setLoading(false)
-                if (isEdit) toast.success('Resume updated successfully!')
+                if (isEdit) return toast.success('Resume updated successfully!')
                 else {
                     toast.success('Resume saved successfully!')
-                    setTimeout(() => history.goBack(), 2000)
+                    return setTimeout(() => history.goBack(), 2000)
                 }
             } else {
                 setLoading(false)
                 return toast.error('Error saving Resume. Please try again later')
             }
         } catch (err) {
-            toast.error('Error saving Resume. Please try again later')
-            console.error(err)
             setLoading(false)
+            console.error(err)
+            return toast.error('Error saving Resume. Please try again later')
         }
     }
 
@@ -333,7 +331,6 @@ export default function NewCV() {
             <ToastContainer autoClose={2000} />
             <CVHeader data={data} cvLogo={cvLogo} />
             <div className='separator'></div>
-            {/* <h2 className='section-title-row'>Personal Information</h2> */}
             <div className='new-resume-fill' style={{
                 border: 'none',
                 padding: (padding.personalInfo || padding.personalInfo === 0) && !hiddenSections.personalInfo ? `${.1 * padding.personalInfo}vw 0` : '2vw 0'
@@ -559,12 +556,11 @@ export default function NewCV() {
                             <div className='signature-image-container'>
                                 <img
                                     src={signatureCanvas.image}
-                                    style={{ ...signatureCanvas.style, opacity: hiddenItems.includes('signature') && '.2' }}
+                                    style={{ ...signatureCanvas.style, opacity: hiddenItems.includes('signature') && '.15' }}
                                     className='signature-image'
                                     loading='lazy'
                                 />
-                                <button onClick={clearSignature}>Clear</button>
-                                <button onClick={() => document.getElementById('image').click()}>Upload Image</button>
+                                {hiddenItems.includes('signature') ? '' : <button onClick={clearSignature}>Clear</button>}
                             </div>
                             :
                             <div className='resume-signature-canvas-container' style={{ opacity: hiddenItems.includes('signature') && '.2' }}>
@@ -574,8 +570,8 @@ export default function NewCV() {
                                         <SignaturePad ref={sigCanvas} penColor='#3b3b3b' canvasProps={{ className: 'resume-signature-canvas', dotSize: 1 }} />
                                         <div className='signature-canvas-btns'>
                                             <button onClick={clearSignature}>Clear</button>
-                                            <button onClick={() => document.getElementById('image').click()}>Upload Image</button>
                                             <button onClick={saveSignature}>Save</button>
+                                            <button style={{ marginTop: '1vw' }} onClick={() => document.getElementById('signature').click()}>Upload Image</button>
                                         </div>
                                     </div>}
                             </div>}
@@ -584,6 +580,7 @@ export default function NewCV() {
                             type='file'
                             name='image'
                             filename='image'
+                            id='signature'
                             image={signatureCanvas}
                             setImage={setSignatureCanvas}
                             style={{ color: 'rgb(71, 71, 71)' }}

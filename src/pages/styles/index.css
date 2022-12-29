@@ -615,6 +615,7 @@
     height: 130px;
     border: 2px solid #aeaeae;
     border-radius: .5vw;
+    cursor: crosshair;
 }
 
 .signature-image {
@@ -688,6 +689,7 @@
     flex-direction: row;
     align-items: center;
     width: fit-content;
+    margin-top: 1vw;
 }
 
 .signature-container:hover .hide-icon-signature {
