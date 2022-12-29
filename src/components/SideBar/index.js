@@ -67,7 +67,7 @@ export default function SdideBar() {
                             <img src={UsersIcon} className='sidebar-svg' onClick={() => { }} />
                             <h4 className='sidebar-label'>Consultants</h4>
                         </div>
-                        <img src={Chevron} className='sidebar-arrow' onClick={() => { }} />
+                        {/* <img src={Chevron} className='sidebar-arrow' onClick={() => { }} /> */}
                     </div> : ''}
 
                 {isManager ?
@@ -79,7 +79,7 @@ export default function SdideBar() {
                             <img src={ServerIcon} className='sidebar-svg' onClick={() => { }} />
                             <h4 className='sidebar-label'>Clients</h4>
                         </div>
-                        <img src={Chevron} className='sidebar-arrow' onClick={() => { }} />
+                        {/* <img src={Chevron} className='sidebar-arrow' onClick={() => { }} /> */}
                     </div> : ''}
 
                 {isManager ?
@@ -91,7 +91,7 @@ export default function SdideBar() {
                             <img src={TruckIcon} className='sidebar-svg' onClick={() => { }} />
                             <h4 className='sidebar-label'>Tools & Tech</h4>
                         </div>
-                        <img src={Chevron} className='sidebar-arrow' onClick={() => { }} />
+                        {/* <img src={Chevron} className='sidebar-arrow' onClick={() => { }} /> */}
                     </div> : ''}
 
                 {isManager ?
@@ -116,7 +116,7 @@ export default function SdideBar() {
                             <img src={UserGroup} className='sidebar-svg' onClick={() => { }} />
                             <h4 className='sidebar-label'>Users</h4>
                         </div>
-                        <img src={Chevron} className='sidebar-arrow' onClick={() => { }} />
+                        {/* <img src={Chevron} className='sidebar-arrow' onClick={() => { }} /> */}
                     </div> : ''}
 
                 {isManager ?

@@ -356,8 +356,8 @@ export default function Consultants() {
                                     options={managers}
                                     value={data.managerName}
                                     updateData={updateData}
-                                    size='98%'
-                                />
+                                    size='13vw'
+                                    />
                                 <InputField
                                     label='Phone'
                                     type='text'
@@ -482,8 +482,8 @@ export default function Consultants() {
                                         options={managers}
                                         value={data.managerName}
                                         updateData={updateData}
-                                        size='98%'
-                                    />
+                                        size='13vw'
+                                        />
                                     <InputField
                                         label='Phone'
                                         type='text'

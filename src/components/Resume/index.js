@@ -30,13 +30,16 @@ import { MoonLoader } from 'react-spinners'
 export default function Resume(props) {
     const {
         resumeData,
+        previewData,
         onClose,
         onEdit,
         onDownloadPDF,
         download,
         setDownload,
         loading,
-        setLoading
+        setLoading,
+        profilePreview,
+        signaturePreview
     } = props
 
     const [data, setData] = useState(resumeData)
@@ -99,24 +102,31 @@ export default function Resume(props) {
 
     const getResumeData = async () => {
         try {
-            const cv = await getCVById(resumeData._id)
-            const parsedData = JSON.parse(cv && cv.data || {})
-            const profilePic = await dispatch(getProfileImage({ email: resumeData.email })).then(data => data.payload)
-            const signature = await dispatch(getSignature({ email: resumeData.email })).then(data => data.payload)
+            if (data.data) {
+                const parsedData = JSON.parse(data.data || {})
+                setRes(parsedData)
+            }
+            else {
+                const cv = await getCVById(resumeData._id)
+                const parsedData = JSON.parse(cv && cv.data || {})
+                setRes(parsedData)
+            }
+
+            const profilePic = profilePreview ? { data: profilePreview.image, style: profilePreview.style } : await dispatch(getProfileImage({ email: resumeData.email })).then(data => data.payload)
+            const signature = signaturePreview ? { data: signaturePreview.image, style: signaturePreview.style } : await dispatch(getSignature({ email: resumeData.email })).then(data => data.payload)
 
             if (profilePic) {
-                const imageStyles = profilePic.style && JSON.parse(profilePic.style) || {}
+                const imageStyles = profilePreview ? profilePreview.style : profilePic.style && JSON.parse(profilePic.style) || {}
                 if (imageStyles) setProfileStyle(imageStyles)
                 if (imageStyles.filter) setProfileImage(await applyFiltersToImage(profilePic.data, imageStyles.filter))
                 else setProfileImage(profilePic.data)
             }
             if (signature) {
-                const signatureStyles = profilePic.style && JSON.parse(profilePic.style) || {}
+                const signatureStyles = signaturePreview ? signaturePreview.style : signature.style && JSON.parse(signature.style) || {}
                 if (signatureStyles.filter) setSignatureCanvas(await applyFiltersToImage(signature.data, signatureStyles.filter))
                 else setSignatureCanvas(signature.data)
             }
 
-            setRes(parsedData)
         } catch (err) {
             console.error(err)
         }
@@ -792,14 +802,14 @@ export default function Resume(props) {
                             </View>
                         </View>
                         <View style={styles.footerCol}>
-                            <View style={styles.footerRow}>
-                                {res.footer_phone ? <Text style={styles.footerItem}>Phone:</Text> : null}
+                            {res.footer_phone ? <View style={styles.footerRow}>
+                                <Text style={styles.footerItem}>Phone:</Text>
                                 <Text style={styles.footerValue}>{res.footer_phone || '-'}</Text>
-                            </View>
-                            <View style={styles.footerRow}>
-                                {res.footer_location ? <Text style={styles.footerItem}>Location:</Text> : null}
+                            </View> : null}
+                            {res.footer_location ? <View style={styles.footerRow}>
+                                <Text style={styles.footerItem}>Location:</Text>
                                 <Text style={styles.footerValue}>{res.footer_location || '-'}</Text>
-                            </View>
+                            </View> : null}
                         </View>
                     </View>
                 </Page>
@@ -815,12 +825,13 @@ export default function Resume(props) {
                     : res && res.name ?
                         <>
                             <div className='pdf-header-btns'>
-                                <img
-                                    src={DownloadIcon}
-                                    className='pdf-download-svg'
-                                    onClick={downloadPDF}
-                                />
-                                <img src={EditIcon} className='pdf-edit-svg' onClick={onEdit} />
+                                {onDownloadPDF ?
+                                    <img
+                                        src={DownloadIcon}
+                                        className='pdf-download-svg'
+                                        onClick={downloadPDF}
+                                    /> : ''}
+                                {onEdit ? <img src={EditIcon} className='pdf-edit-svg' onClick={onEdit} /> : ''}
                                 <img src={CloseIcon} className='pdf-close-svg' onClick={onClose} />
                             </div>
                             {Object.keys(res).length ? <PDFView /> : ''}

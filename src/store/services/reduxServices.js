@@ -156,6 +156,13 @@ const deleteResume = async data => {
     } catch (err) { console.log(err) }
 }
 
+const getCVTypeByEmail = async data => {
+    try {
+        const master = await axios.get(`${API_URL}/api/resume/getByType`, { params: data })
+        return master.data
+    } catch (err) { console.log(err) }
+}
+
 const createReport = async data => {
     try {
         const report = await axios.post(`${API_URL}/api/report/create`, data)
@@ -255,6 +262,7 @@ export {
     getImageByEmail,
     getSignatureByEmail,
     getResumeByEmail,
+    getCVTypeByEmail,
     getCVLogo,
     saveCVLogo,
     createResume,

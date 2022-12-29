@@ -762,7 +762,7 @@ export default function Settings() {
                               options={imageTypes}
                               value={data.type}
                               updateData={updateData}
-                              size='95%'
+                              size='15.6vw'
                             />
                           </div>
                           <div className='settings-skill-btns'>

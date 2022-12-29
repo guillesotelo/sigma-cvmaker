@@ -353,7 +353,7 @@ export default function Users() {
                             options={managers}
                             value={data.managerName}
                             updateData={updateData}
-                            size='98%'
+                            size='16.7vw'
                         />
                         <InputField
                             label='Phone'

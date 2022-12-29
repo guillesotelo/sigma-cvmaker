@@ -11,7 +11,7 @@ import InputBullet from '../components/InputBullet'
 import Slider from '../components/Slider'
 import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
-import { editResume, getLogo, getResume, getResumes, saveResume } from '../store/reducers/resume'
+import { editResume, getCVByType, getLogo, getResume, getResumes, saveResume } from '../store/reducers/resume'
 import { getAllManagers, getProfileImage, getSignature } from '../store/reducers/user'
 import PostSection from '../components/PostSection'
 import Dropdown from '../components/Dropdown'
@@ -23,9 +23,11 @@ import ShwoIcon from '../icons/show-icon.svg'
 import FontIcon from '../icons/fontsize-icon.svg'
 import PaddingIcon from '../icons/padding-icon.svg'
 import SignaturePad from 'react-signature-canvas'
+import Resume from '../components/Resume'
 
 export default function NewCV() {
     const [data, setData] = useState({})
+    const [previewData, setPreviewData] = useState({})
     const [loading, setLoading] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [allManagers, setAllManagerrs] = useState([])
@@ -56,6 +58,8 @@ export default function NewCV() {
     const [fontSize, setFontSize] = useState({})
     const [padding, setPadding] = useState({})
     const [signatureCanvas, setSignatureCanvas] = useState({})
+    const [masterModal, setMasterModal] = useState(false)
+    const [previewModal, setPreviewModal] = useState(false)
     const dispatch = useDispatch()
     const history = useHistory()
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || {}
@@ -241,59 +245,96 @@ export default function NewCV() {
         })
     }
 
+    const checkCVData = () => {
+        let check = true
+        if (!data.name || !data.surname) {
+            check = false
+            toast.error('Please add a Name and Surname')
+        }
+        if (!data.email || !data.email.includes('@') || !data.email.includes('.')) {
+            check = false
+            toast.error('Please add a valid Email')
+        }
+        if (!data.role) {
+            check = false
+            toast.error('Please add a Role / Title')
+        }
+        if (!data.type) {
+            check = false
+            toast.error('Please select CV Type')
+        }
+        if (!data.footer_contact || !data.footer_email) {
+            check = false
+            toast.error('Please add Manager Contact Info')
+        }
+        return check
+    }
+
     const onSaveResume = async saveAsNew => {
         try {
             setLoading(true)
+            if (checkCVData()) {
+                if (saveAsNew && data.type === 'Master') {
+                    const exists = await dispatch(getCVByType({ type: 'Master', email: data.email.toLowerCase() })).then(data => data.payload)
+                    if (exists) {
+                        setLoading(false)
+                        return toast.error(`Master type for ${fullName} already exists. Please change it to Variant`)
+                    }
 
-            const resumeData = { ...data }
 
-            resumeData.languages = languages
-            resumeData.skills = skills
-            resumeData.education = education
-            resumeData.certifications = certifications
-            resumeData.experience = experience
-            resumeData.strengths = strengths
-            resumeData.expertise = expertise
-            resumeData.otherTools = otherTools
-            resumeData.buzzwords = buzzwords
-            resumeData.hiddenSections = { ...hiddenSections, hiddenItems }
-            resumeData.footer_contact = data.footer_contact || ''
-            resumeData.footer_email = data.footer_email || ''
-            resumeData.footer_phone = data.footer_phone || ''
-            resumeData.footer_location = data.footer_location || ''
-
-            const strData = JSON.stringify(resumeData)
-            resumeData.data = strData
-            resumeData.note = data.note || `${user.username ? `Created by ${user.username}` : ''}`
-            resumeData.type = data.type || 'Master'
-            resumeData.username = `${data.name}${data.middlename ? ' ' + data.middlename : ''} ${data.surname || ''}`
-            resumeData.managerName = data.footer_contact || ''
-            resumeData.managerEmail = data.footer_email || ''
-            resumeData.email = data.email || ''
-            resumeData.user = user
-
-            if (profilePic && profilePic.image) resumeData.profilePic = profilePic
-            if (signatureCanvas && signatureCanvas.image) resumeData.signatureCanvas = signatureCanvas
-
-            let saved = {}
-
-            if (isEdit && !saveAsNew) saved = await dispatch(editResume(resumeData)).then(data => data.payload)
-            else {
-                delete resumeData._id
-                saved = await dispatch(saveResume(resumeData)).then(data => data.payload)
-            }
-
-            if (saved) {
-                setLoading(false)
-                if (isEdit) return toast.success('Resume updated successfully!')
-                else {
-                    toast.success('Resume saved successfully!')
-                    return setTimeout(() => history.goBack(), 2000)
                 }
-            } else {
-                setLoading(false)
-                return toast.error('Error saving Resume. Please try again later')
+
+                const resumeData = { ...data }
+
+                resumeData.languages = languages
+                resumeData.skills = skills
+                resumeData.education = education
+                resumeData.certifications = certifications
+                resumeData.experience = experience
+                resumeData.strengths = strengths
+                resumeData.expertise = expertise
+                resumeData.otherTools = otherTools
+                resumeData.buzzwords = buzzwords
+                resumeData.hiddenSections = { ...hiddenSections, hiddenItems }
+                resumeData.footer_contact = data.footer_contact || ''
+                resumeData.footer_email = data.footer_email || ''
+                resumeData.footer_phone = data.footer_phone || ''
+                resumeData.footer_location = data.footer_location || ''
+
+                const strData = JSON.stringify(resumeData)
+                resumeData.data = strData
+                resumeData.note = data.note || `${user.username ? `Created by ${user.username}` : ''}`
+                resumeData.type = data.type || 'Master'
+                resumeData.username = `${data.name}${data.middlename ? ' ' + data.middlename : ''} ${data.surname || ''}`
+                resumeData.managerName = data.footer_contact || ''
+                resumeData.managerEmail = data.footer_email || ''
+                resumeData.email = data.email ? data.email.toLowerCase() : ''
+                resumeData.user = user
+
+                if (profilePic && profilePic.image) resumeData.profilePic = profilePic
+                if (signatureCanvas && signatureCanvas.image) resumeData.signatureCanvas = signatureCanvas
+
+                let saved = {}
+
+                if (isEdit && !saveAsNew) saved = await dispatch(editResume(resumeData)).then(data => data.payload)
+                else {
+                    delete resumeData._id
+                    saved = await dispatch(saveResume(resumeData)).then(data => data.payload)
+                }
+
+                if (saved) {
+                    setLoading(false)
+                    if (isEdit) return toast.success('Resume updated successfully!')
+                    else {
+                        toast.success('Resume saved successfully!')
+                        return setTimeout(() => history.goBack(), 2000)
+                    }
+                } else {
+                    setLoading(false)
+                    return toast.error('Error saving Resume. Please try again later')
+                }
             }
+            setLoading(false)
         } catch (err) {
             setLoading(false)
             console.error(err)
@@ -321,19 +362,80 @@ export default function NewCV() {
         setSignatureCanvas({ ...signatureCanvas, image: signature })
     }
 
+    const setCVPreview = () => {
+        const resumeData = { ...data }
+
+        resumeData.languages = languages
+        resumeData.skills = skills
+        resumeData.education = education
+        resumeData.certifications = certifications
+        resumeData.experience = experience
+        resumeData.strengths = strengths
+        resumeData.expertise = expertise
+        resumeData.otherTools = otherTools
+        resumeData.buzzwords = buzzwords
+        resumeData.hiddenSections = { ...hiddenSections, hiddenItems }
+        resumeData.footer_contact = data.footer_contact || ''
+        resumeData.footer_email = data.footer_email || ''
+        resumeData.footer_phone = data.footer_phone || ''
+        resumeData.footer_location = data.footer_location || ''
+
+        const strData = JSON.stringify(resumeData)
+        resumeData.data = strData
+        resumeData.note = data.note || `${user.username ? `Created by ${user.username}` : ''}`
+        resumeData.type = data.type || 'Master'
+        resumeData.username = `${data.name}${data.middlename ? ' ' + data.middlename : ''} ${data.surname || ''}`
+        resumeData.managerName = data.footer_contact || ''
+        resumeData.managerEmail = data.footer_email || ''
+        resumeData.email = data.email ? data.email.toLowerCase() : ''
+        resumeData.user = user
+
+        setPreviewData(resumeData)
+    }
+
     return (
         <div className='new-resume-container'>
-            <div className='resume-type-banner'>
+            {previewModal ?
+                <div className='pdf-modal' style={{ position: 'fixed' }}>
+                    <Resume
+                        resumeData={previewData}
+                        profilePreview={profilePic}
+                        signaturePreview={signatureCanvas}
+                        onClose={() => setPreviewModal(false)}
+                        loading={loading}
+                        setLoading={setLoading}
+                    />
+                </div> : ''}
+            {masterModal ?
+                <div className='remove-modal'>
+                    <h4 style={{ textAlign: 'center' }}>All the master changes will overwrite the variant CVs. <br />Are you sure you want to proceed?</h4>
+                    <div className='remove-modal-btns'>
+                        <CTAButton
+                            label='Cancel'
+                            handleClick={() => setMasterModal(false)}
+                            color={APP_COLORS.GRAY}
+                        />
+                        <CTAButton
+                            label='Confirm'
+                            handleClick={() => {
+                                setMasterModal(false)
+                                onSaveResume(false)
+                            }}
+                            color={APP_COLORS.MURREY}
+                        />
+                    </div>
+                </div> : ''}
+            <div className='resume-type-banner' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}>
                 {Array.from({ length: 100 }).map((_, i) =>
-                    <h4 key={i} className='resume-type-text' style={{ color: data.type && data.type === 'Master' ? '#fff3e4' : '#f1f3ff' }}>{data.type ? data.type.toUpperCase() : 'MASTER'}</h4>
+                    <h4 key={i} className='resume-type-text' style={{ color: data.type && data.type === 'Master' ? '#fff3e4' : '#f1f3ff' }}>{data.type ? data.type.toUpperCase() : ''}</h4>
                 )}
             </div>
-            <ToastContainer autoClose={2000} />
-            <CVHeader data={data} cvLogo={cvLogo} />
-            <div className='separator'></div>
+            <CVHeader data={data} cvLogo={cvLogo} style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }} />
+            <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
             <div className='new-resume-fill' style={{
                 border: 'none',
-                padding: (padding.personalInfo || padding.personalInfo === 0) && !hiddenSections.personalInfo ? `${.1 * padding.personalInfo}vw 0` : '2vw 0'
+                padding: (padding.personalInfo || padding.personalInfo === 0) && !hiddenSections.personalInfo ? `${.1 * padding.personalInfo}vw 0` : '2vw 0',
+                filter: masterModal || previewModal ? 'blur(10px)' : 'none'
             }}>
                 <div className='resume-fill-col1'>
                     <>
@@ -657,9 +759,10 @@ export default function NewCV() {
                 </div>
             </div>
 
-            <div className='separator'></div>
+            <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
             <div className='new-resume-fill' style={{
-                padding: (padding.expertise || padding.expertise === 0) && !hiddenSections.expertise ? `${.1 * padding.expertise}vw 0` : '2vw 0'
+                padding: (padding.expertise || padding.expertise === 0) && !hiddenSections.expertise ? `${.1 * padding.expertise}vw 0` : '2vw 0',
+                filter: masterModal || previewModal ? 'blur(10px)' : 'none'
             }}>
                 <div className='resume-fill-col1'>
                     {hiddenSections.expertise ? '' :
@@ -745,9 +848,10 @@ export default function NewCV() {
                 </div>
             </div>
 
-            <div className='separator'></div>
+            <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
             <div className='new-resume-fill' style={{
-                padding: (padding.education || padding.education === 0) && !hiddenSections.education ? `${.1 * padding.education}vw 0` : '2vw 0'
+                padding: (padding.education || padding.education === 0) && !hiddenSections.education ? `${.1 * padding.education}vw 0` : '2vw 0',
+                filter: masterModal || previewModal ? 'blur(10px)' : 'none'
             }}>
                 <div className='resume-fill-col1'>
                     {hiddenSections.education ? '' :
@@ -833,9 +937,10 @@ export default function NewCV() {
                 </div>
             </div>
 
-            <div className='separator'></div>
+            <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
             <div className='new-resume-fill' style={{
-                padding: (padding.certifications || padding.certifications === 0) && !hiddenSections.certifications ? `${.1 * padding.certifications}vw 0` : '2vw 0'
+                padding: (padding.certifications || padding.certifications === 0) && !hiddenSections.certifications ? `${.1 * padding.certifications}vw 0` : '2vw 0',
+                filter: masterModal || previewModal ? 'blur(10px)' : 'none'
             }}>
                 <div className='resume-fill-col1'>
                     {hiddenSections.certifications ? '' :
@@ -921,9 +1026,10 @@ export default function NewCV() {
                 </div>
             </div>
 
-            <div className='separator'></div>
+            <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
             <div className='new-resume-fill' style={{
-                padding: (padding.skills || padding.skills === 0) && !hiddenSections.skills ? `${.1 * padding.skills}vw 0` : '2vw 0'
+                padding: (padding.skills || padding.skills === 0) && !hiddenSections.skills ? `${.1 * padding.skills}vw 0` : '2vw 0',
+                filter: masterModal || previewModal ? 'blur(10px)' : 'none'
             }}>
                 <div className='resume-fill-col1'>
                     {hiddenSections.skills ? '' :
@@ -1009,9 +1115,10 @@ export default function NewCV() {
                 </div>
             </div>
 
-            <div className='separator'></div>
+            <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
             <div className='new-resume-fill' style={{
-                padding: (padding.experience || padding.experience === 0) && !hiddenSections.experience ? `${.1 * padding.experience}vw 0` : '2vw 0'
+                padding: (padding.experience || padding.experience === 0) && !hiddenSections.experience ? `${.1 * padding.experience}vw 0` : '2vw 0',
+                filter: masterModal || previewModal ? 'blur(10px)' : 'none'
             }}>
                 <div className='resume-fill-col1-dif'>
                     {hiddenSections.experience ? '' :
@@ -1098,9 +1205,10 @@ export default function NewCV() {
                 </div>
             </div>
 
-            <div className='separator'></div>
+            <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
             <div className='new-resume-fill' style={{
-                padding: (padding.tools || padding.tools === 0) && !hiddenSections.tools ? `${.1 * padding.tools}vw 0` : '2vw 0'
+                padding: (padding.tools || padding.tools === 0) && !hiddenSections.tools ? `${.1 * padding.tools}vw 0` : '2vw 0',
+                filter: masterModal || previewModal ? 'blur(10px)' : 'none'
             }}>
                 <div className='resume-fill-col1'>
                     {hiddenSections.tools ? '' :
@@ -1190,8 +1298,8 @@ export default function NewCV() {
             {
                 user.isManager &&
                 <>
-                    <div className='separator'></div>
-                    <div className='resume-fill-internal'>
+                    <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
+                    <div className='resume-fill-internal' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}>
                         <div className='resume-fill-col1'>
                             <h2 className='section-title'>FOOTER</h2>
                         </div>
@@ -1203,8 +1311,8 @@ export default function NewCV() {
                             manager={data.manager}
                         />
                     </div>
-                    <div className='separator'></div>
-                    <div className='resume-fill-internal'>
+                    <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
+                    <div className='resume-fill-internal' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}>
                         <div className='resume-fill-col1'>
                             <h2 className='section-title'>METADATA</h2>
                             <h2 className='section-title'>(internal use)</h2>
@@ -1241,27 +1349,41 @@ export default function NewCV() {
                     </div>
                 </>
             }
-            <div className='new-resume-btns'>
-                <CTAButton
-                    label='Discard'
-                    color={APP_COLORS.GRAY}
-                    handleClick={() => history.push('/cvs')}
-                />
-                <CTAButton
-                    label={isEdit ? 'Update' : 'Save'}
-                    color={APP_COLORS.GREEN}
-                    handleClick={() => onSaveResume(false)}
-                    loading={loading}
-                />
-                {isEdit ?
+            {!previewModal && !masterModal ?
+                <div className='new-resume-btns'>
                     <CTAButton
-                        label='Save as new'
-                        color={APP_COLORS.GREEN}
-                        handleClick={() => onSaveResume(true)}
+                        label='Discard'
+                        color={APP_COLORS.GRAY}
+                        handleClick={() => history.push('/cvs')}
+                    />
+                    <CTAButton
+                        label='Preview'
+                        color={APP_COLORS.YELLOW}
+                        style={{ color: 'black' }}
+                        handleClick={() => {
+                            setCVPreview()
+                            setTimeout(() => setPreviewModal(true), 500)
+                        }}
                         loading={loading}
                     />
-                    : ''}
-            </div>
+                    <CTAButton
+                        label={isEdit ? 'Update' : 'Save'}
+                        color={APP_COLORS.GREEN}
+                        handleClick={() => {
+                            if (isEdit && data.type && data.type === 'Master') setMasterModal(true)
+                            else onSaveResume(false)
+                        }}
+                        loading={loading}
+                    />
+                    {isEdit ?
+                        <CTAButton
+                            label='Save as new'
+                            color={APP_COLORS.GREEN}
+                            handleClick={() => onSaveResume(true)}
+                            loading={loading}
+                        />
+                        : ''}
+                </div> : ''}
         </div >
     )
 }

@@ -146,10 +146,12 @@ export default function ItemDropdown(props) {
                                                     <div ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
-                                                        style={getItemStyle(
+                                                        style={{...getItemStyle(
                                                             snapshot.isDragging,
                                                             provided.draggableProps.style
-                                                        )}
+                                                        ),
+                                                        height: fontSize ? `${fontSize * 3}vw` : '3vw',
+                                                    }}
                                                         className='item-dropdown-blocked draggable'>
                                                         <h4 className='item-dropdown-name' style={{
                                                             opacity: item.hidden && '.2',
@@ -375,7 +377,7 @@ export default function ItemDropdown(props) {
 
     return (
         <div className='item-dropdown'>
-            <h4 className='item-label'>{label || ''}</h4>
+            <h4 className='item-label' style={{ fontSize: fontSize ? `${fontSize * 0.9}vw` : '.8vw' }}>{label || ''}</h4>
             {name === 'skills' ? renderSkills(items) : renderItems(items)}
         </div>
     )

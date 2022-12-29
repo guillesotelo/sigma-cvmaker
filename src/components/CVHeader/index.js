@@ -3,12 +3,12 @@ import './styles.css'
 
 export default function CVHeader(props) {
 
-    const { data, cvLogo } = props
+    const { data, cvLogo, style } = props
 
     const fullName = (data.name ? data.name : '') + (data.middlename ? `${' ' + data.middlename}` : '')
 
     return (
-        <div className='cv-header-main'>
+        <div className='cv-header-main' style={style}>
             <div className='cv-header-container'>
                 <div className='cv-header-col'>
                     <img src={cvLogo || 'https://i.imgur.com/i0PwKWi.png'} className='cv-header-logo' loading='lazy'/>

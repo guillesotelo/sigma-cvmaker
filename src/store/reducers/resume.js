@@ -8,7 +8,8 @@ import {
   getCVLogo,
   saveCVLogo,
   getResumeById,
-  createLog
+  createLog,
+  getCVTypeByEmail
 } from "../services/reduxServices";
 
 const initialState = {
@@ -24,6 +25,7 @@ export const getLogo = createAsyncThunk('GET_LOGO', getCVLogo)
 export const saveLogo = createAsyncThunk('SAVE_LOGO', saveCVLogo)
 export const removeResume = createAsyncThunk('DELETE_RESUME', deleteResume)
 export const saveLog = createAsyncThunk('CREATE_LOG', createLog)
+export const getCVByType = createAsyncThunk('GET_MASTER_CV', getCVTypeByEmail)
 
 const resumeReducer = createReducer(initialState, {
   [getResumes.fulfilled]: (state, action) => { return { ...state, allResumes: action.payload } },
@@ -34,7 +36,8 @@ const resumeReducer = createReducer(initialState, {
   [saveLogo.fulfilled]: (state, action) => { return { ...state, CVLogo: action.payload } },
   [editResume.fulfilled]: (state, action) => { return { ...state, edited: action.payload } },
   [removeResume.fulfilled]: (state, action) => { return { ...state, removed: action.payload } },
-  [saveLog.fulfilled]: (state, action) => { return { ...state, log: action.payload } }
+  [saveLog.fulfilled]: (state, action) => { return { ...state, log: action.payload } },
+  [getCVByType.fulfilled]: (state, action) => { return { ...state, master: action.payload } }
 });
 
 export default resumeReducer;
