@@ -93,6 +93,13 @@ const getImageByEmail = async data => {
     } catch (err) { console.log(err) }
 }
 
+const getSignatureByEmail = async data => {
+    try {
+        const image = await axios.get(`${API_URL}/api/user/getSignature`, { params: { email: data.email } })
+        return image.data
+    } catch (err) { console.log(err) }
+}
+
 const getAllImages = async () => {
     try {
         const images = await axios.get(`${API_URL}/api/image/getAll`)
@@ -246,6 +253,7 @@ export {
     getAllResumes,
     getResumeById,
     getImageByEmail,
+    getSignatureByEmail,
     getResumeByEmail,
     getCVLogo,
     saveCVLogo,

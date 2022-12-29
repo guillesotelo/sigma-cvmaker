@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
@@ -12,7 +12,7 @@ import Slider from '../components/Slider'
 import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
 import { editResume, getLogo, getResume, getResumes, saveResume } from '../store/reducers/resume'
-import { getAllManagers, getProfileImage } from '../store/reducers/user'
+import { getAllManagers, getProfileImage, getSignature } from '../store/reducers/user'
 import PostSection from '../components/PostSection'
 import Dropdown from '../components/Dropdown'
 import ProfileIcon from '../icons/profile-icon.svg'
@@ -22,6 +22,7 @@ import HideIcon from '../icons/hide-icon.svg'
 import ShwoIcon from '../icons/show-icon.svg'
 import FontIcon from '../icons/fontsize-icon.svg'
 import PaddingIcon from '../icons/padding-icon.svg'
+import SignaturePad from 'react-signature-canvas'
 
 export default function NewCV() {
     const [data, setData] = useState({})
@@ -54,6 +55,7 @@ export default function NewCV() {
     const [paddingDrop, setPaddingDrop] = useState(false)
     const [fontSize, setFontSize] = useState({})
     const [padding, setPadding] = useState({})
+    const [signatureCanvas, setSignatureCanvas] = useState({})
     const dispatch = useDispatch()
     const history = useHistory()
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || {}
@@ -61,6 +63,7 @@ export default function NewCV() {
     const genderOptions = ['Female', 'Male', 'Other', 'Prefer not to say']
     const fullName = `${data.name || ''}${data.middlename ? ` ${data.middlename} ` : ' '}${data.surname || ''}`
     const skillYears = Array.from({ length: 40 }, (_, i) => `${i + 1} ${i > 0 ? 'Years' : 'Year'}`)
+    const sigCanvas = useRef({})
 
     // console.log("data", data)
     // console.log("profilePic", profilePic)
@@ -165,7 +168,7 @@ export default function NewCV() {
                         setExpertise(resData.expertise && resData.expertise.length ? resData.expertise : [{ value: '' }])
                         setOtherTools(resData.otherTools && resData.otherTools.length ? resData.otherTools : [{ value: '' }])
                         setBuzzwords(resData.buzzwords && resData.buzzwords.length ? resData.buzzwords : [''])
-                        getPreview(resume.email)
+                        getImages(resume.email)
                     }
                 })
             }
@@ -193,9 +196,11 @@ export default function NewCV() {
         setData({ ...data, [key]: value })
     }
 
-    const getPreview = async email => {
+    const getImages = async email => {
         try {
             const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
+            const signature = await dispatch(getSignature({ email })).then(data => data.payload)
+
             if (image) {
                 const imageStyle = image.style && JSON.parse(image.style) || {}
                 setProfilePic({ image: image.data, style: imageStyle })
@@ -206,6 +211,11 @@ export default function NewCV() {
                 setBrightness(imageStyle.brightness >= 0 ? imageStyle.brightness : 100)
                 setContrast(imageStyle.contrast >= 0 ? imageStyle.contrast : 100)
                 setGrayscale(imageStyle.grayscale || 0)
+            }
+
+            if (signature) {
+                const signatureStyle = signature.style && JSON.parse(signature.style) || {}
+                setSignatureCanvas({ image: signature.data, style: signatureStyle })
             }
         } catch (err) {
             console.error(err)
@@ -265,6 +275,7 @@ export default function NewCV() {
             resumeData.user = user
 
             if (profilePic && profilePic.image) resumeData.profilePic = profilePic
+            if (signatureCanvas && signatureCanvas.image) resumeData.signatureCanvas = signatureCanvas
 
             let saved = {}
 
@@ -302,8 +313,23 @@ export default function NewCV() {
         updateData('settings', newSettings)
     }
 
+    const clearSignature = () => {
+        if (sigCanvas.current) sigCanvas.current.clear()
+        setSignatureCanvas({})
+    }
+
+    const saveSignature = () => {
+        const signature = sigCanvas.current.getTrimmedCanvas().toDataURL('image/png')
+        setSignatureCanvas({ ...signatureCanvas, image: signature })
+    }
+
     return (
         <div className='new-resume-container'>
+            <div className='resume-type-banner'>
+                {Array.from({ length: 100 }).map((_, i) =>
+                    <h4 key={i} className='resume-type-text' style={{ color: data.type && data.type === 'Master' ? '#fff3e4' : '#f1f3ff' }}>{data.type ? data.type.toUpperCase() : 'MASTER'}</h4>
+                )}
+            </div>
             <ToastContainer autoClose={2000} />
             <CVHeader data={data} cvLogo={cvLogo} />
             <div className='separator'></div>
@@ -529,12 +555,39 @@ export default function NewCV() {
                         fontSize={fontSize.personalInfo}
                     />
                     <div className='signature-container'>
-                        <h4 className='signature-text' style={{
-                            opacity: hiddenItems.includes('signature') && '.2',
-                            fontSize: fontSize.personalInfo ? `${fontSize.personalInfo * 2}vw` : '2vw'
-                        }}>
-                            {fullName !== ' ' ? fullName : 'Signature'}
-                        </h4>
+                        {signatureCanvas.image ?
+                            <div className='signature-image-container'>
+                                <img
+                                    src={signatureCanvas.image}
+                                    style={{ ...signatureCanvas.style, opacity: hiddenItems.includes('signature') && '.2' }}
+                                    className='signature-image'
+                                    loading='lazy'
+                                />
+                                <button onClick={clearSignature}>Clear</button>
+                                <button onClick={() => document.getElementById('image').click()}>Upload Image</button>
+                            </div>
+                            :
+                            <div className='resume-signature-canvas-container' style={{ opacity: hiddenItems.includes('signature') && '.2' }}>
+                                <h4 className='signature-canvas-label'>Sign by hand</h4>
+                                {hiddenItems.includes('signature') ? '' :
+                                    <div className='signature-canvas-row'>
+                                        <SignaturePad ref={sigCanvas} penColor='#3b3b3b' canvasProps={{ className: 'resume-signature-canvas', dotSize: 1 }} />
+                                        <div className='signature-canvas-btns'>
+                                            <button onClick={clearSignature}>Clear</button>
+                                            <button onClick={() => document.getElementById('image').click()}>Upload Image</button>
+                                            <button onClick={saveSignature}>Save</button>
+                                        </div>
+                                    </div>}
+                            </div>}
+                        <InputField
+                            label=''
+                            type='file'
+                            name='image'
+                            filename='image'
+                            image={signatureCanvas}
+                            setImage={setSignatureCanvas}
+                            style={{ color: 'rgb(71, 71, 71)' }}
+                        />
                         {hiddenItems.includes('signature') ?
                             <img
                                 src={ShwoIcon}
@@ -1137,7 +1190,8 @@ export default function NewCV() {
                 </div>
             </div>
 
-            {user.isManager &&
+            {
+                user.isManager &&
                 <>
                     <div className='separator'></div>
                     <div className='resume-fill-internal'>
@@ -1211,6 +1265,6 @@ export default function NewCV() {
                     />
                     : ''}
             </div>
-        </div>
+        </div >
     )
 }

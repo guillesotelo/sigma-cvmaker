@@ -84,7 +84,7 @@ export default function Dropdown(props) {
                             border: openDrop && '1px solid #E4C69C',
                             borderTop: 'none',
                             width: size ? size : '10vw',
-                            marginTop: fontSize ? `${fontSize * 2}vw` : '2vw'
+                            marginTop: fontSize ? `${fontSize * 2.1}vw` : '2.1vw'
                         }}>
                         {options.map((option, i) =>
                             option && option !== '' &&

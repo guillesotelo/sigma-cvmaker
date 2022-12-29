@@ -84,6 +84,10 @@ export default function Settings() {
     {
       name: 'TYPE',
       value: 'type'
+    },
+    {
+      name: 'SIZE',
+      value: 'size'
     }
   ]
 

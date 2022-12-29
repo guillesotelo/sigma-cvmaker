@@ -279,6 +279,8 @@
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     background-color: #fff;
     min-height: 73vh;
+    position: relative;
+    overflow: hidden;
 }
 
 .new-resume-fill {
@@ -312,7 +314,7 @@
     padding: 0 5vw;
 }
 
-.profile-image-section:hover .profile-image-settings{ 
+.profile-image-section:hover .profile-image-settings {
     display: flex;
 }
 
@@ -465,16 +467,11 @@
     min-height: 2vw;
 }
 
-/* .resume-strengths-div:hover {
-    border: 1px solid #E4C69C;
-    border-radius: .5vw;
-} */
-
 .resume-strengths-div:hover .hide-section-icon {
     display: block;
 }
 
-.resume-strengths-div:hover .section-settings{
+.resume-strengths-div:hover .section-settings {
     display: flex;
 }
 
@@ -543,6 +540,90 @@
     border: none;
 }
 
+.resume-type-banner {
+    position: absolute;
+    left: 0;
+}
+
+.resume-type-text {
+    transform: rotate(-90deg);
+    margin: 5vw 0 25vw 0;
+    font-size: 2vw;
+}
+
+.resume-signature-canvas-container {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1vw;
+}
+
+.signature-canvas-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1vw;
+}
+
+.signature-canvas-btns {
+    display: flex;
+    flex-direction: column;
+    width: 10vw;
+}
+
+.signature-canvas-label {
+    margin: 0 0 .2vw 0;
+    font-size: .8vw;
+    text-align: left;
+    width: fit-content;
+    color: #696869;
+    min-width: 7vw;
+}
+
+.signature-image-container {
+
+}
+
+.signature-image-container button{
+    border: none;
+    margin: .2vw 0;
+    padding: .3vw 0;
+    border-radius: .5vw;
+    cursor: pointer;
+    transition: .3s;
+    width: 100%;
+}
+
+.signature-image-container button:hover{
+    background-color: #E4C69C;
+}
+
+.resume-signature-canvas-container button{
+    border: none;
+    margin: .2vw 0;
+    padding: .3vw 0;
+    border-radius: .5vw;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.resume-signature-canvas-container button:hover{
+    background-color: #E4C69C;
+}
+
+.resume-signature-canvas {
+    width: 250px;
+    height: 130px;
+    border: 2px solid #aeaeae;
+    border-radius: .5vw;
+}
+
+.signature-image {
+    max-width: 170px;
+    max-height: 80px;
+    margin-right: 1vw;
+    padding: 0 1vw;
+}
+
 /* --- PDF MODAL ---  */
 .pdf-modal {
     display: flex;
@@ -606,6 +687,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    width: fit-content;
 }
 
 .signature-container:hover .hide-icon-signature {

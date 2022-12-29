@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { getProfileImage } from '../../store/reducers/user'
+import { getProfileImage, getSignature } from '../../store/reducers/user'
 import ReactPDF, {
     PDFViewer,
     Page,
@@ -44,6 +44,7 @@ export default function Resume(props) {
     const [profileImage, setProfileImage] = useState({})
     const [cvLogo, setcvLogo] = useState({})
     const [profileStyle, setProfileStyle] = useState({})
+    const [signatureCanvas, setSignatureCanvas] = useState({})
     const [skills, setSkills] = useState([])
     const [fontSize, setFontSize] = useState({})
     const [padding, setPadding] = useState({})
@@ -101,12 +102,18 @@ export default function Resume(props) {
             const cv = await getCVById(resumeData._id)
             const parsedData = JSON.parse(cv && cv.data || {})
             const profilePic = await dispatch(getProfileImage({ email: resumeData.email })).then(data => data.payload)
+            const signature = await dispatch(getSignature({ email: resumeData.email })).then(data => data.payload)
 
             if (profilePic) {
                 const imageStyles = profilePic.style && JSON.parse(profilePic.style) || {}
                 if (imageStyles) setProfileStyle(imageStyles)
                 if (imageStyles.filter) setProfileImage(await applyFiltersToImage(profilePic.data, imageStyles.filter))
                 else setProfileImage(profilePic.data)
+            }
+            if (signature) {
+                const signatureStyles = profilePic.style && JSON.parse(profilePic.style) || {}
+                if (signatureStyles.filter) setSignatureCanvas(await applyFiltersToImage(signature.data, signatureStyles.filter))
+                else setSignatureCanvas(signature.data)
             }
 
             setRes(parsedData)
@@ -255,7 +262,7 @@ export default function Resume(props) {
         profilePicCover: {
             width: 130,
             height: 130,
-            margin: '1.5vw 0',
+            margin: '0 0 1.5vw 0',
             alignSelf: 'center',
             borderRadius: '50%',
             overflow: 'hidden'
@@ -265,6 +272,11 @@ export default function Resume(props) {
             width: '100%',
             transform: profileStyle.transform,
             objectFit: 'cover'
+        },
+        signatureCanvas: {
+            width: 75,
+            height: 39,
+            margin: '3vw 0 0 3vw'
         },
         logo: {
             maxWidth: 200,
@@ -285,7 +297,6 @@ export default function Resume(props) {
             marginTop: '1vw'
         },
         infoView1: {
-            padding: '1vw 0',
             textAlign: 'left'
         },
         infoView2: {
@@ -293,7 +304,6 @@ export default function Resume(props) {
             textAlign: 'left'
         },
         infoView3: {
-            margin: '2vw 0 0 4vw',
             textAlign: 'left'
         },
         infoItem: {
@@ -528,7 +538,7 @@ export default function Resume(props) {
                         </View>
                     </View>
 
-                    <View style={{ ...styles.rowContainer, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.1 * padding.personalInfo}vw 0` : '2vw 0' }} wrap={false}>
+                    <View style={{ ...styles.rowContainer, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.15 * padding.personalInfo}vw 0` : '3vw 0' }} wrap={false}>
                         <View style={styles.column1}>
                             <View style={styles.profilePicCover}>
                                 <Image style={styles.profilePic} src={profileImage} />
@@ -553,7 +563,7 @@ export default function Resume(props) {
                             </View>
                         </View>
                         <View style={styles.column2}>
-                            <View style={{ ...styles.infoView3, margin: fontSize.personalInfo || fontSize.personalInfo === 0 ? `${fontSize.personalInfo * 2}vw 0 0 0` : '2vw 0 0 0' }}>
+                            <View style={styles.infoView3}>
                                 {checkHidden('Presentation') ? null : <Text style={styles.presentation}>{res.presentation || ''}</Text>}
                             </View>
                             {isAllHidden(res.strengths) ? null : <View style={{ ...styles.infoView2, margin: '0 0 0 4vw' }}>
@@ -568,10 +578,7 @@ export default function Resume(props) {
                                 }}>• {str.value}</Text> : null)}
                             </View>}
                             <View style={{ ...styles.infoView2, margin: 0 }}>
-                                {checkHidden('signature') ? null : <Text style={{
-                                    ...styles.signature,
-                                    fontSize: fontSize.personalInfo || fontSize.personalInfo === 0 ? `${fontSize.personalInfo * 3}vw` : '3vw'
-                                }}>{fullName || ''}</Text>}
+                                {checkHidden('signature') ? null : <Image style={styles.signatureCanvas} src={signatureCanvas} />}
                             </View>
                         </View>
                     </View>
@@ -579,7 +586,7 @@ export default function Resume(props) {
                     {checkHidden('expertise') || (res.expertise[0] && !res.expertise[0].value) ? null :
                         <View style={{ ...styles.rowContainer, padding: padding.expertise || padding.expertise === 0 ? `${.1 * padding.expertise}vw 0` : '2vw 0' }} wrap={false}>
                             <View style={styles.sectionColumn1}>
-                                <View style={{ ...styles.infoView1, padding: padding.expertise || padding.expertise === 0 ? `${.1 * padding.expertise}vw 0` : '1vw 0' }}>
+                                <View style={styles.infoView1}>
                                     <Text style={styles.sectionTitle}>EXPERTISE</Text>
                                 </View>
                             </View>
@@ -598,7 +605,7 @@ export default function Resume(props) {
                     {checkHidden('education') || (res.education[0] && !res.education[0].value) ? null :
                         <View style={{ ...styles.rowContainer, padding: padding.education || padding.education === 0 ? `${.1 * padding.education}vw 0` : '2vw 0' }} wrap={false}>
                             <View style={styles.sectionColumn1}>
-                                <View style={{ ...styles.infoView1, padding: padding.education || padding.education === 0 ? `${.1 * padding.education}vw 0` : '1vw 0' }}>
+                                <View style={styles.infoView1}>
                                     <Text style={styles.sectionTitle}>EDUCATION</Text>
                                 </View>
                             </View>
@@ -623,7 +630,7 @@ export default function Resume(props) {
                     {checkHidden('certifications') || (res.certifications[0] && !res.certifications[0].value) ? null :
                         <View style={{ ...styles.rowContainer, padding: padding.certifications || padding.certifications === 0 ? `${.1 * padding.certifications}vw 0` : '2vw 0' }} wrap={false}>
                             <View style={styles.sectionColumn1}>
-                                <View style={{ ...styles.infoView1, padding: padding.certifications || padding.certifications === 0 ? `${.1 * padding.certifications}vw 0` : '1vw 0' }}>
+                                <View style={styles.infoView1}>
                                     <Text style={styles.sectionTitle}>CERTIFICATIONS</Text>
                                 </View>
                             </View>
@@ -648,7 +655,7 @@ export default function Resume(props) {
                     {checkHidden('skills') || !skills.length ? null :
                         <View style={{ ...styles.rowContainer, padding: padding.skills || padding.skills === 0 ? `${.1 * padding.skills}vw 0` : '2vw 0' }} wrap={false}>
                             <View style={styles.sectionColumn1}>
-                                <View style={{ ...styles.infoView1, padding: padding.skills || padding.skills === 0 ? `${.1 * padding.skills}vw 0` : '1vw 0' }}>
+                                <View style={styles.infoView1}>
                                     <Text style={styles.sectionTitle}>MAIN SKILLS</Text>
                                 </View>
                             </View>
@@ -679,7 +686,7 @@ export default function Resume(props) {
                     {checkHidden('experience') || !res.experience.length ? null :
                         <View style={{ ...styles.experienceContainer, padding: padding.experience || padding.experience === 0 ? `${.1 * padding.experience}vw 0` : '2vw 0' }}>
                             <View style={styles.experienceSection} wrap>
-                                <View style={{ ...styles.infoView1, padding: padding.experience || padding.experience === 0 ? `${.1 * padding.experience}vw 0` : '1vw 0' }}>
+                                <View style={styles.infoView1}>
                                     {res.experience ? res.experience.map((exp, i) =>
                                         Object.keys(exp).length > 1 && !checkHiddenPost(i, false) ?
                                             <View key={i} style={{
@@ -752,9 +759,9 @@ export default function Resume(props) {
                         </View>}
 
                     {checkHidden('tools') || !res.otherTools.length || !res.otherTools[0].value ? null :
-                        <View style={styles.rowContainer} wrap={false}>
+                        <View style={{ ...styles.rowContainer, padding: padding.tools || padding.tools === 0 ? `${.1 * padding.tools}vw 0` : '2vw 0' }} wrap={false}>
                             <View style={styles.sectionColumn1}>
-                                <View style={{ ...styles.infoView1, padding: padding.tools || padding.tools === 0 ? `${.1 * padding.tools}vw 0` : '1.5vw 0' }}>
+                                <View style={styles.infoView1}>
                                     <Text style={styles.sectionTitle}>OTHER TOOLS & SOFTWARE</Text>
                                 </View>
                             </View>
