@@ -79,8 +79,9 @@ export default function CVs({ showAll }) {
                 setLoading(true)
                 const cvs = await dispatch(getResumes({ ...user, getAll: getAll && isManager ? true : false })).then(data => data.payload)
                 if (cvs && Array.isArray(cvs)) {
-                    setResumes(cvs)
-                    setFilteredRes(cvs)
+                    const nonRemoved = cvs.filter(cv => !cv.removed)
+                    setResumes(nonRemoved)
+                    setFilteredRes(nonRemoved)
                 }
                 setLoading(false)
             } catch (err) {
@@ -100,7 +101,7 @@ export default function CVs({ showAll }) {
                 setOpenModal(false)
                 setIsPdf(false)
                 setTimeout(() => getAllResumes(showAll), 500)
-                return toast.success('Resume deleted successfully')
+                return toast.success('Resume moved to trash')
             } else {
                 setLoading(false)
                 setOpenModal(false)
@@ -206,7 +207,9 @@ export default function CVs({ showAll }) {
                 </div> : ''}
             {openModal && !isPdf ?
                 <div className='remove-modal'>
-                    <h4 style={{ textAlign: 'center' }}>Are you sure you want to delete <br />{resumeData.username}'s CV?</h4>
+                    {resumeData.type && resumeData.type === 'Master' ?
+                        <h4 style={{ textAlign: 'center' }}>Are you sure you want to delete {resumeData.username}'s Master CV? <br /> If you proceed, all its variants will be deleted.</h4>
+                        : <h4 style={{ textAlign: 'center' }}>Are you sure you want to delete <br />{resumeData.username}'s CV?</h4>}
                     <div className='remove-modal-btns'>
                         <CTAButton
                             label='Cancel'

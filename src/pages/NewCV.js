@@ -12,7 +12,7 @@ import Slider from '../components/Slider'
 import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
 import { editResume, getCVByType, getLogo, getResume, getResumes, saveResume } from '../store/reducers/resume'
-import { getAllManagers, getProfileImage, getSignature } from '../store/reducers/user'
+import { getAllManagers, getProfileImage, getSignature, updateUserData } from '../store/reducers/user'
 import PostSection from '../components/PostSection'
 import Dropdown from '../components/Dropdown'
 import ProfileIcon from '../icons/profile-icon.svg'
@@ -274,16 +274,6 @@ export default function NewCV() {
         try {
             setLoading(true)
             if (checkCVData()) {
-                if (saveAsNew && data.type === 'Master') {
-                    const exists = await dispatch(getCVByType({ type: 'Master', email: data.email.toLowerCase() })).then(data => data.payload)
-                    if (exists) {
-                        setLoading(false)
-                        return toast.error(`Master type for ${fullName} already exists. Please change it to Variant`)
-                    }
-
-
-                }
-
                 const resumeData = { ...data }
 
                 resumeData.languages = languages
@@ -311,20 +301,39 @@ export default function NewCV() {
                 resumeData.email = data.email ? data.email.toLowerCase() : ''
                 resumeData.user = user
 
+                const managerUpdated = await dispatch(updateUserData({
+                    user,
+                    email: data.email ? data.email.toLowerCase() : '',
+                    newData: {
+                        managerName: data.footer_contact || '',
+                        managerEmail: data.footer_email || ''
+                    },
+                    managerUpdate: true
+                })).then(data => data.payload)
+                if (managerUpdated) toast.success('Consultant data updated with new manager')
+
                 if (profilePic && profilePic.image) resumeData.profilePic = profilePic
                 if (signatureCanvas && signatureCanvas.image) resumeData.signatureCanvas = signatureCanvas
+
+                if (!isEdit && saveAsNew && data.type === 'Master') {
+                    const exists = await dispatch(getCVByType({ type: 'Master', email: data.email.toLowerCase() })).then(data => data.payload)
+                    if (exists) {
+                        setLoading(false)
+                        return toast.error(`Master type for ${fullName} already exists. Please change it to Variant`)
+                    }
+                }
 
                 let saved = {}
 
                 if (isEdit && !saveAsNew) saved = await dispatch(editResume(resumeData)).then(data => data.payload)
                 else {
                     delete resumeData._id
-                    saved = await dispatch(saveResume(resumeData)).then(data => data.payload)
+                    saved = await dispatch(saveResume({ ...resumeData, type: 'Variant' })).then(data => data.payload)
                 }
 
                 if (saved) {
                     setLoading(false)
-                    if (isEdit) return toast.success('Resume updated successfully!')
+                    if (isEdit && !saveAsNew) return toast.success('Resume updated successfully!')
                     else {
                         toast.success('Resume saved successfully!')
                         return setTimeout(() => history.goBack(), 2000)
@@ -1361,8 +1370,10 @@ export default function NewCV() {
                         color={APP_COLORS.YELLOW}
                         style={{ color: 'black' }}
                         handleClick={() => {
-                            setCVPreview()
-                            setTimeout(() => setPreviewModal(true), 500)
+                            if (checkCVData()) {
+                                setCVPreview()
+                                setTimeout(() => setPreviewModal(true), 200)
+                            }
                         }}
                         loading={loading}
                     />
@@ -1371,7 +1382,8 @@ export default function NewCV() {
                         color={APP_COLORS.GREEN}
                         handleClick={() => {
                             if (isEdit && data.type && data.type === 'Master') setMasterModal(true)
-                            else onSaveResume(false)
+                            else if (isEdit) onSaveResume(false)
+                            else onSaveResume(true)
                         }}
                         loading={loading}
                     />

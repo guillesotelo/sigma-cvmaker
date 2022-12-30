@@ -19,7 +19,8 @@ export default function Dropdown(props) {
         size,
         hidden,
         setHidden,
-        fontSize
+        fontSize,
+        placeholder
     } = props
 
     const hideItem = item => {
@@ -57,7 +58,7 @@ export default function Dropdown(props) {
                         opacity: hidden && hidden.includes(label) && '.2',
                         fontSize: fontSize ? `${fontSize}vw` : '1vw'
                     }}>
-                        {value ? value : selected ? selected : 'Select'}
+                        {value ? value : selected ? selected : placeholder ? placeholder : 'Select'}
                     </h4>
                     {hidden && label && hidden.includes(label) ?
                         <img

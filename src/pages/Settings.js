@@ -13,7 +13,7 @@ import { APP_COLORS } from '../constants/app'
 import { getLogo, saveLogo } from '../store/reducers/resume'
 import MoonLoader from "react-spinners/MoonLoader"
 import ProfileIcon from '../icons/profile-icon.svg'
-import { getAppData, getOneAppData, saveAppData, updateAppData } from '../store/reducers/appData'
+import { getAppData, getOneAppData, saveAppData, updateAppData, getTrashCan, deletePermanently, restoreItemFromTrash } from '../store/reducers/appData'
 import { createImage, deleteImage, getImages, updateImageData } from '../store/reducers/image'
 
 export default function Settings() {
@@ -24,15 +24,14 @@ export default function Settings() {
   const [isEdit, setIsEdit] = useState(false)
   const [cvLogo, setcvLogo] = useState({})
   const [skills, setSkills] = useState([])
-  const [selectedSkill, setSelectedSkill] = useState(-1)
-  const [skillEdit, setSkillEdit] = useState(false)
+  const [itemEdit, setItemEdit] = useState(false)
+  const [removedItems, setRemovedItems] = useState({})
+  const [trashHeaders, setTrashHeaders] = useState([])
+  const [trash, setTrash] = useState([])
+  const [selectedItem, setSelectedItem] = useState(-1)
   const [imageData, setImageData] = useState({})
   const [images, setImages] = useState([])
-  const [selectedImage, setSelectedImage] = useState(-1)
-  const [imageEdit, setImageEdit] = useState(false)
   const [buzzwords, setBuzzwords] = useState([])
-  const [selectedBuzzword, setSelectedBuzzword] = useState(-1)
-  const [buzzwordEdit, setBuzzwordEdit] = useState(false)
   const [removeModal, setRemoveModal] = useState(false)
   const [isNew, setIsNew] = useState(false)
   const [imageTypes, setImageTypes] = useState([])
@@ -47,7 +46,8 @@ export default function Settings() {
   const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
   const history = useHistory()
   const dispatch = useDispatch()
-  const tabs = [`CV Logo`, `Skills`, `Buzzwords`, `Images`]
+  const tabs = [`CV Logo`, `Skills`, `Buzzwords`, `Images`, `Trash`]
+  const trashModules = [`CV's`, 'Images', 'Users']
   const skillHeaders = [
     {
       name: 'SKILL',
@@ -90,6 +90,58 @@ export default function Settings() {
       value: 'size'
     }
   ]
+  const userHeaders = [
+    {
+      name: 'ADDED',
+      value: 'createdAt'
+    },
+    {
+      name: 'FULL NAME',
+      value: 'username'
+    },
+    {
+      name: 'EMAIL',
+      value: 'email'
+    },
+    {
+      name: 'MANAGER',
+      value: 'managerName'
+    },
+    {
+      name: 'IS MANAGER',
+      value: 'isManager'
+    },
+    {
+      name: 'IS ADMIN',
+      value: 'isAdmin'
+    }
+  ]
+  const cvHeaders = [
+    {
+      name: 'NAME',
+      value: 'username'
+    },
+    {
+      name: 'LAST UPDATED',
+      value: 'updatedAt'
+    },
+    {
+      name: 'JOB DESCRIPTION',
+      value: 'role'
+    },
+    {
+      name: 'MANAGER',
+      value: 'managerName'
+    },
+    {
+      name: 'NOTE',
+      value: 'note'
+    },
+    {
+      name: 'TYPE',
+      value: 'type'
+    }
+  ]
 
   useEffect(() => {
     if (!user || !user.email || !isManager) history.push('home')
@@ -97,32 +149,36 @@ export default function Settings() {
   }, [])
 
   useEffect(() => {
-    if (selectedSkill > -1) setData({ ...data, ...skills[selectedSkill] })
-    if (selectedBuzzword > -1) setData({ ...data, ...buzzwords[selectedBuzzword] })
-  }, [selectedSkill, selectedBuzzword])
+    if (selectedItem > -1) {
+      if (tab === 'Skills') setData({ ...data, ...skills[selectedItem] })
+      if (tab === 'Buzzwords') setData({ ...data, ...buzzwords[selectedItem] })
+    }
+  }, [selectedItem])
 
   useEffect(() => {
-    if (selectedImage > -1 && images[selectedImage]) {
-      setData({ ...images[selectedImage] })
+    if (tab === 'Images') {
+      if (selectedItem > -1 && images[selectedItem]) {
+        setData({ ...images[selectedItem] })
 
-      if (images[selectedImage].data) {
-        const imageStyle = images[selectedImage].style && JSON.parse(images[selectedImage].style) || {}
-        setImageData({
-          image: images[selectedImage].data,
-          style: imageStyle,
-          type: images[selectedImage].type
-        })
+        if (images[selectedItem].data) {
+          const imageStyle = images[selectedItem].style && JSON.parse(images[selectedItem].style) || {}
+          setImageData({
+            image: images[selectedItem].data,
+            style: imageStyle,
+            type: images[selectedItem].type
+          })
 
-        setTranslateX(imageStyle.x || 0)
-        setTranslateY(imageStyle.y || 0)
-        setScale(imageStyle.s || 1)
-        setRotate(imageStyle.r || 0)
-        setBrightness(imageStyle.brightness >= 0 ? imageStyle.brightness : 100)
-        setContrast(imageStyle.contrast >= 0 ? imageStyle.contrast : 100)
-        setGrayscale(imageStyle.grayscale || 0)
+          setTranslateX(imageStyle.x || 0)
+          setTranslateY(imageStyle.y || 0)
+          setScale(imageStyle.s || 1)
+          setRotate(imageStyle.r || 0)
+          setBrightness(imageStyle.brightness >= 0 ? imageStyle.brightness : 100)
+          setContrast(imageStyle.contrast >= 0 ? imageStyle.contrast : 100)
+          setGrayscale(imageStyle.grayscale || 0)
+        }
       }
     }
-  }, [selectedImage])
+  }, [selectedItem])
 
   useEffect(() => {
     if (isEdit) {
@@ -158,15 +214,49 @@ export default function Settings() {
   }, [appData])
 
   useEffect(() => {
+    setIsEdit(false)
     if (tab === 'CV Logo' && !cvLogo.cvImage) getCVLogo()
     else if (tab === 'Skills' || tab === 'Buzzwords' && !appData.length) pullAppData()
     if (tab === 'Images') getAllImages()
+    if (tab === 'Trash') getRemovedItems()
   }, [tab])
+
+  useEffect(() => {
+    if (data.module === `CV's`) {
+      setTrashHeaders(cvHeaders)
+      setTrash(removedItems.resumes || [])
+    }
+    else if (data.module === 'Images') {
+      setTrashHeaders(imageHeaders)
+      setTrash(removedItems.images || [])
+    }
+    else if (data.module === 'Users') {
+      setTrashHeaders(userHeaders)
+      setTrash(removedItems.users || [])
+    }
+    else setTrash([])
+  }, [data.module, removedItems])
+
+  const getRemovedItems = async () => {
+    try {
+      setLoading(true)
+      const removed = await dispatch(getTrashCan(user)).then(data => data.payload)
+      if (removed) {
+        setRemovedItems(removed)
+        if (!data.module) setTimeout(() => updateData('module', `CV's`), 200)
+      }
+      setLoading(false)
+    } catch (err) {
+      console.error(err)
+      setLoading(false)
+    }
+  }
 
   const getAllImages = async () => {
     const _images = await dispatch(getImages()).then(data => data.payload)
     if (_images && _images.length) {
-      setImages(_images)
+      const nonRemoved = _images.filter(image => !image.removed)
+      setImages(nonRemoved)
       setImageTypes(['Profile', 'Client Logo', 'CV Logo', 'Experience Company'])
     }
   }
@@ -281,14 +371,14 @@ export default function Settings() {
 
   const saveSkillData = () => {
     const updatedSkills = skills
-    updatedSkills[selectedSkill] = {
+    updatedSkills[selectedItem] = {
       name: data.name,
       field: data.field
     }
     saveSkills(updatedSkills)
-    setSelectedSkill(-1)
-    if (skillEdit) {
-      setSkillEdit(false)
+    setSelectedItem(-1)
+    if (itemEdit) {
+      setItemEdit(false)
     }
     setData({})
   }
@@ -313,8 +403,8 @@ export default function Settings() {
       toast.success('Image saved successfully')
 
       setLoading(false)
-      setSelectedImage(-1)
-      setImageEdit(false)
+      setSelectedItem(-1)
+      setItemEdit(false)
       setIsEdit(false)
       setData({})
       setIsNew(false)
@@ -324,8 +414,8 @@ export default function Settings() {
       console.error(err)
       toast.error('Error saving image')
       setLoading(false)
-      setSelectedImage(-1)
-      setImageEdit(false)
+      setSelectedItem(-1)
+      setItemEdit(false)
       setIsEdit(false)
       setData({})
       setIsNew(false)
@@ -334,14 +424,14 @@ export default function Settings() {
 
   const saveBuzzwordData = () => {
     const updatedBuzzwords = buzzwords
-    updatedBuzzwords[selectedBuzzword] = {
+    updatedBuzzwords[selectedItem] = {
       name: data.name,
       type: data.type
     }
     saveBuzzwords(updatedBuzzwords)
-    setSelectedBuzzword(-1)
-    if (buzzwordEdit) {
-      setBuzzwordEdit(false)
+    setSelectedItem(-1)
+    if (itemEdit) {
+      setItemEdit(false)
     }
     setData({})
   }
@@ -354,11 +444,11 @@ export default function Settings() {
       const removed = await dispatch(deleteImage({ ...data, user })).then(data => data.payload)
       if (!removed) return toast.error('Error deleting Image, try again later')
 
-      toast.success('Image deleted successfylly')
+      toast.success('Image moved to trash')
 
       setLoading(false)
-      setSelectedImage(-1)
-      setImageEdit(false)
+      setSelectedItem(-1)
+      setItemEdit(false)
       setIsEdit(false)
       setData({})
       setIsNew(false)
@@ -368,17 +458,59 @@ export default function Settings() {
       toast.error('Error deleting Image, try again later')
       console.error(err)
       setLoading(false)
-      setSelectedImage(-1)
-      setImageEdit(false)
+      setSelectedItem(-1)
+      setItemEdit(false)
       setIsEdit(false)
       setData({})
       setIsNew(false)
     }
   }
 
+  const restoreItem = async () => {
+    try {
+      setLoading(true)
+      setRemoveModal(false)
+
+      const restored = await dispatch(restoreItemFromTrash({
+        email: user.email,
+        _id: trash[selectedItem]._id,
+        item: data.module
+      })).then(data => data.payload)
+
+      if (!restored) return toast.error('Error restoring item, try again lataer')
+      toast.success('Item restored successfully')
+      getRemovedItems()
+      setLoading(false)
+    } catch (err) {
+      console.error(err)
+      setLoading(false)
+    }
+  }
+
+  const removeItem = async () => {
+    try {
+      setLoading(true)
+      setRemoveModal(false)
+
+      const removed = await dispatch(deletePermanently({
+        email: user.email,
+        _id: trash[selectedItem]._id,
+        item: data.module
+      })).then(data => data.payload)
+
+      if (!removed) return toast.error('Error removing item, try again lataer')
+      toast.success('Item removed successfully')
+      getRemovedItems()
+      setLoading(false)
+    } catch (err) {
+      console.error(err)
+      setLoading(false)
+    }
+  }
+
   return (
     <div className='settings-container'>
-      <div className='settings-tabs'>
+      <div className='settings-tabs' style={{ filter: removeModal && 'blur(10px)' }}>
         {tabs.map((tabName, i) =>
           <h4
             key={i}
@@ -446,11 +578,11 @@ export default function Settings() {
                   <CTAButton
                     label='New Skill'
                     handleClick={() => {
-                      setSelectedSkill(skills.length)
-                      setSkillEdit(true)
+                      setSelectedItem(skills.length)
+                      setItemEdit(true)
                     }}
                     color={APP_COLORS.GREEN}
-                    disabled={skillEdit}
+                    disabled={itemEdit}
                   />
                 </div>
                 <div className='settings-skills-container'>
@@ -461,12 +593,12 @@ export default function Settings() {
                     tableData={skills}
                     tableHeaders={skillHeaders}
                     loading={loading}
-                    item={selectedSkill}
-                    setItem={setSelectedSkill}
-                    isEdit={skillEdit}
-                    setIsEdit={setSkillEdit}
+                    item={selectedItem}
+                    setItem={setSelectedItem}
+                    isEdit={itemEdit}
+                    setIsEdit={setItemEdit}
                   />
-                  {skillEdit ?
+                  {itemEdit ?
                     <div className='settings-select-section'>
                       <div className='users-details'>
                         <InputField
@@ -492,8 +624,8 @@ export default function Settings() {
                         <CTAButton
                           label='Discard'
                           handleClick={() => {
-                            setSelectedSkill(-1)
-                            setSkillEdit(false)
+                            setSelectedItem(-1)
+                            setItemEdit(false)
                             setIsEdit(false)
                             setData({})
                           }}
@@ -520,11 +652,11 @@ export default function Settings() {
                     <CTAButton
                       label='New Buzzword'
                       handleClick={() => {
-                        setSelectedBuzzword(buzzwords.length)
-                        setBuzzwordEdit(true)
+                        setSelectedItem(buzzwords.length)
+                        setItemEdit(true)
                       }}
                       color={APP_COLORS.GREEN}
-                      disabled={buzzwordEdit}
+                      disabled={itemEdit}
                     />
                   </div>
                   <div className='settings-skills-container'>
@@ -535,12 +667,12 @@ export default function Settings() {
                       tableData={buzzwords}
                       tableHeaders={buzzwordHeaders}
                       loading={loading}
-                      item={selectedBuzzword}
-                      setItem={setSelectedBuzzword}
-                      isEdit={buzzwordEdit}
-                      setIsEdit={setBuzzwordEdit}
+                      item={selectedItem}
+                      setItem={setSelectedItem}
+                      isEdit={itemEdit}
+                      setIsEdit={setItemEdit}
                     />
-                    {buzzwordEdit ?
+                    {itemEdit ?
                       <div className='settings-select-section'>
                         <div className='users-details'>
                           <InputField
@@ -566,8 +698,8 @@ export default function Settings() {
                           <CTAButton
                             label='Discard'
                             handleClick={() => {
-                              setSelectedBuzzword(-1)
-                              setBuzzwordEdit(false)
+                              setSelectedItem(-1)
+                              setItemEdit(false)
                               setIsEdit(false)
                               setData({})
                             }}
@@ -614,14 +746,14 @@ export default function Settings() {
                         handleClick={() => {
                           setIsNew(true)
                           setImageData({})
-                          setSelectedImage(images.length)
-                          setImageEdit(true)
+                          setSelectedItem(images.length)
+                          setItemEdit(true)
                           setData({})
                         }}
                         color={APP_COLORS.GREEN}
-                        disabled={imageEdit}
+                        disabled={itemEdit}
                       />
-                      {selectedImage !== -1 ?
+                      {selectedItem !== -1 ?
                         <CTAButton
                           label='Delete'
                           handleClick={() => setRemoveModal(true)}
@@ -636,12 +768,12 @@ export default function Settings() {
                         tableData={images}
                         tableHeaders={imageHeaders}
                         loading={loading}
-                        item={selectedImage}
-                        setItem={setSelectedImage}
-                        isEdit={imageEdit}
-                        setIsEdit={setImageEdit}
+                        item={selectedItem}
+                        setItem={setSelectedItem}
+                        isEdit={itemEdit}
+                        setIsEdit={setItemEdit}
                       />
-                      {imageEdit ?
+                      {itemEdit ?
                         <div className='settings-select-section'>
                           <div className='settings-details'>
                             {imageData.image ?
@@ -769,8 +901,8 @@ export default function Settings() {
                             <CTAButton
                               label='Discard'
                               handleClick={() => {
-                                setSelectedImage(-1)
-                                setImageEdit(false)
+                                setSelectedItem(-1)
+                                setItemEdit(false)
                                 setIsEdit(false)
                                 setData({})
                                 setIsNew(false)
@@ -791,8 +923,67 @@ export default function Settings() {
                       }
                     </div>
                   </>
-                  :
-                  ''
+                  : tab === `Trash` ?
+                    <>
+                      {removeModal ?
+                        <div className='remove-modal'>
+                          <h4 style={{ textAlign: 'center' }}>Are you sure you want to permanently delete this item?</h4>
+                          <div className='remove-modal-btns'>
+                            <CTAButton
+                              label='Cancel'
+                              handleClick={() => {
+                                setRemoveModal(false)
+                              }}
+                              color={APP_COLORS.GRAY}
+                            />
+                            <CTAButton
+                              label='Delete'
+                              handleClick={removeItem}
+                              color={APP_COLORS.RED}
+                            />
+                          </div>
+                        </div> : ''}
+                      <div className='settings-trash-header' style={{ filter: removeModal && 'blur(10px)' }}>
+                        <Dropdown
+                          placeholder='Select module'
+                          name='module'
+                          options={trashModules}
+                          value={data.module}
+                          updateData={updateData}
+                          size='10vw'
+                        />
+                        <div className='settings-trash-btns'>
+                          <CTAButton
+                            label='Restore'
+                            handleClick={restoreItem}
+                            color={APP_COLORS.GREEN}
+                            disabled={selectedItem === -1}
+                          />
+                          <CTAButton
+                            label='Delete'
+                            handleClick={() => setRemoveModal(true)}
+                            color={APP_COLORS.RED}
+                            disabled={selectedItem === -1}
+                          />
+                        </div>
+                      </div>
+                      <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
+                        <DataTable
+                          title='Trash'
+                          subtitle={`Here is a list of all removed ${data.module ? data.module.toLowerCase() : 'items'} in the system`}
+                          maxRows={9}
+                          tableData={trash}
+                          tableHeaders={trashHeaders}
+                          loading={loading}
+                          item={selectedItem}
+                          setItem={setSelectedItem}
+                          isEdit={itemEdit}
+                          setIsEdit={setItemEdit}
+                        />
+                      </div>
+                    </>
+                    :
+                    ''
         }
       </div>
     </div>

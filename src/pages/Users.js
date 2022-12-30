@@ -105,8 +105,9 @@ export default function Users() {
         try {
             const _managers = await dispatch(getAllManagers(user)).then(data => data.payload)
             if (_managers && Array.isArray(_managers)) {
-                setAllManagerrs(_managers)
-                setManagers(_managers.map(manager => manager.username))
+                const nonRemoved = _managers.filter(manager => !manager.removed)
+                setAllManagerrs(nonRemoved)
+                setManagers(nonRemoved.map(manager => manager.username))
             }
         } catch (err) { console.error(err) }
     }
@@ -133,7 +134,10 @@ export default function Users() {
         try {
             setLoading(true)
             const _users = await dispatch(getUsers(user)).then(data => data.payload)
-            if (_users) setUsers(_users)
+            if (_users && Array.isArray(_users)) {
+                const nonRemoved = _users.filter(user => !user.removed)
+                setUsers(nonRemoved)
+            }
             setLoading(false)
         } catch (err) {
             setLoading(false)
@@ -190,7 +194,7 @@ export default function Users() {
         try {
             setLoading(true)
             const removed = await dispatch(deleteUser({ ...user, userData: data })).then(data => data.payload)
-            if (removed) toast.success('User removed successfully')
+            if (removed) toast.success('User moved to trash')
             else toast.error('Error removing user')
 
             setRemoveModal(false)
@@ -353,7 +357,7 @@ export default function Users() {
                             options={managers}
                             value={data.managerName}
                             updateData={updateData}
-                            size='16.7vw'
+                            size='16.2vw'
                         />
                         <InputField
                             label='Phone'
@@ -491,7 +495,7 @@ export default function Users() {
                                 options={managers}
                                 value={data.managerName}
                                 updateData={updateData}
-                                size='98%'
+                                size='16.2vw'
                             />
                             <InputField
                                 label='Phone'

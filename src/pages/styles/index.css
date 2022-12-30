@@ -988,10 +988,11 @@
     width: 18vw;
     cursor: pointer;
     transition: .3s;
+    margin: 0 1vw;
 }
 
 .settings-cv-logo:hover {
-    opacity: .8;
+    opacity: .5;
 }
 
 .settings-cv-logo-svg {
@@ -1068,6 +1069,23 @@
     align-items: center;
 }
 
+.settings-trash-header {
+    width: 30vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3vw;
+    /* justify-content: space-between; */
+    margin: -1vw 0 1vw 1vw;
+}
+
+.settings-trash-btns {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1vw;
+}
+
 /* --- Users ---  */
 .users-container {
     display: flex;
@@ -1132,6 +1150,13 @@
     align-items: flex-start;
     width: 100%;
     margin: .5vw 2vw 0 0
+}
+
+.users-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 17vw;
 }
 
 .users-section {

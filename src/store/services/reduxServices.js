@@ -72,6 +72,13 @@ const changePass = async data => {
     } catch (err) { console.log(err) }
 }
 
+const getRemovedItems = async data => {
+    try {
+        const removed = await axios.get(`${API_URL}/api/app/getRemovedItems`, { params: { email: data.email } })
+        return removed.data
+    } catch (err) { console.log(err) }
+}
+
 const getAllResumes = async data => {
     try {
         const resumes = await axios.get(`${API_URL}/api/resume/getAll`, { params: { email: data.email, getAll: data.getAll } })
@@ -125,6 +132,20 @@ const removeImage = async data => {
     try {
         const deleted = await axios.post(`${API_URL}/api/image/remove`, data)
         return deleted.data
+    } catch (err) { console.log(err) }
+}
+
+const restoreItemfromTrash = async data => {
+    try {
+        const restored = await axios.get(`${API_URL}/api/app/restoreItem`, { params: data })
+        return restored.data
+    } catch (err) { console.log(err) }
+}
+
+const permanentlyRemove = async data => {
+    try {
+        const removed = await axios.get(`${API_URL}/api/app/removeItem`, { params: data })
+        return removed.data
     } catch (err) { console.log(err) }
 }
 
@@ -281,5 +302,8 @@ export {
     getAllImages,
     saveImage,
     updateImage,
-    removeImage
+    removeImage,
+    getRemovedItems,
+    restoreItemfromTrash,
+    permanentlyRemove
 }
