@@ -73,7 +73,7 @@ export default function Dropdown(props) {
                                 onClick={() => hideItem(label)}
                             />
                             : ''}
-                    < h4 className='dropdown-selected' style={{
+                    < h4 className='dropdown-chevron' style={{
                         opacity: hidden && hidden.includes(label) && '.2',
                         fontSize: fontSize ? `${fontSize}vw` : '1vw'
                     }}>▾</h4>

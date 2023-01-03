@@ -11,11 +11,11 @@ import Dropdown from '../components/Dropdown'
 import {
     getUsers,
     updateUserData,
-    getProfileImage,
     getAllManagers,
     deleteUser,
     createUser
 } from '../store/reducers/user'
+import { getImageByType } from '../store/reducers/image'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
 
@@ -114,7 +114,7 @@ export default function Users() {
 
     const getPreview = async email => {
         try {
-            const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
+            const image = await dispatch(getImageByType({ email, type: 'Profile' })).then(data => data.payload)
             if (image) {
                 setProfilePic({ image: image.data, style: image.style ? JSON.parse(image.style) : {} })
                 if (image.style) {

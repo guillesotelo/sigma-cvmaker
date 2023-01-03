@@ -56,6 +56,7 @@
     text-overflow: ellipsis;
     outline: none;
     transition: .3s;
+    white-space: pre-wrap;
 }
 
 .section-item-name:focus {
@@ -132,6 +133,13 @@
     color: rgb(105, 104, 105);
 }
 
+.post-container-edit {
+    color: rgb(105, 104, 105);
+    padding: 1vw 0 1.5vw 0;
+    border: 2px solid #E59A2F;
+    border-radius: .5vw;
+}
+
 .post {
     font-size: 0.9vw;
 }
@@ -171,9 +179,9 @@
     font-size: 1vw;
     font-weight: 800;
     color: black;
-    width: 25%;
-    margin: 0 1vw;
-    text-align: left;
+    /* width: 25%; */
+    margin: 0;
+    /* text-align: left; */
 }
 
 .post-company {
@@ -515,4 +523,74 @@
     text-overflow: ellipsis;
     outline: none;
     transition: .3s;
+}
+
+.post-col-logo-input {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.post-col-dif2 {
+    width: 50%;
+    flex-direction: column;
+    align-self: center;
+    position: relative;
+    justify-self: flex-end;
+}
+
+.post-client-logo-new {
+    max-height: 60px;
+    max-width: 120px;
+    margin: 0 0 1vw 0;
+    align-self: center;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.post-client-logo-image:hover {
+    opacity: .6;
+}
+
+.post-logo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post-company-logo {
+    font-size: .8vw;
+    text-align: center;
+    margin: 0
+}
+
+.post-period-logo-div {
+    display: flex;
+    flex-direction: column;
+
+    width: 25%;
+    margin: 0 1vw;
+    text-align: left;
+    align-items: flex-start;
+}
+
+.post-client-logo-post {
+    max-height: 60px;
+    max-width: 90px;
+    margin: 2vw 0 0 0;
+    align-self: flex-start;
+    transition: .3s;
+}
+
+.post-client-logo-edit {
+    max-height: 60px;
+    max-width: 120px;
+    margin: 0 0 1vw 0;
+    align-self: center;
+    cursor: pointer;
+    transition: .3s;
+}
+.post-client-logo-edit:hover {
+    opacity: .6;
 }

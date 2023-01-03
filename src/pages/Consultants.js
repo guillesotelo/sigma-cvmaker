@@ -10,11 +10,11 @@ import Slider from '../components/Slider'
 import {
     getUsers,
     updateUserData,
-    getProfileImage,
     createUser,
     deleteUser,
     getAllManagers
 } from '../store/reducers/user'
+import { getImageByType } from '../store/reducers/image'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
 import Dropdown from '../components/Dropdown'
@@ -113,7 +113,7 @@ export default function Consultants() {
 
     const getPreview = async email => {
         try {
-            const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
+            const image = await dispatch(getImageByType({ email, type: 'Profile' })).then(data => data.payload)
             if (image) {
                 setProfilePic({ image: image.data, style: image.style ? JSON.parse(image.style) : {} })
                 if (image.style) {
@@ -357,7 +357,7 @@ export default function Consultants() {
                                     value={data.managerName}
                                     updateData={updateData}
                                     size='16.2vw'
-                                    />
+                                />
                                 <InputField
                                     label='Phone'
                                     type='text'
@@ -483,7 +483,7 @@ export default function Consultants() {
                                         value={data.managerName}
                                         updateData={updateData}
                                         size='16.2vw'
-                                        />
+                                    />
                                     <InputField
                                         label='Phone'
                                         type='text'

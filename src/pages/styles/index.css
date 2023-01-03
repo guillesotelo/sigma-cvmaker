@@ -530,6 +530,13 @@
     padding: 2vw 0;
 }
 
+.resume-fill-col2-personal {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 60%;
+}
+
 .section-settings-drop {
     display: flex;
     flex-direction: column;
@@ -1052,7 +1059,7 @@
 
 .settings-image {
     max-width: 220px;
-    max-height: 220px;
+    max-height: 150px;
     align-self: center;
     cursor: pointer;
     transition: .3s;

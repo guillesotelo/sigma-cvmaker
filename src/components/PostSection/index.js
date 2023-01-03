@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { getAppData } from '../../store/reducers/appData'
+import { getAllClientLogos } from '../../store/reducers/image'
 import Dropdown from '../Dropdown'
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import { APP_COLORS } from '../../constants/app'
@@ -10,7 +11,9 @@ import UpIcon from '../../icons/up-icon.svg'
 import DownIcon from '../../icons/down-icon.svg'
 import EditIcon from '../../icons/edit-icon.svg'
 import TrashCan from '../../icons/trash-icon.svg'
+import ImagePlaceholder from '../../icons/image-placeholder.svg'
 import './styles.css'
+import InputField from '../InputField'
 
 export default function PostSection(props) {
     const [data, setData] = useState({})
@@ -24,6 +27,8 @@ export default function PostSection(props) {
     const [newTech, setNewTech] = useState('')
     const [fields, setFields] = useState([])
     const [editItem, setEditItem] = useState({})
+    const [logo, setLogo] = useState({})
+    const [clientLogos, setClientLogos] = useState([])
     const [selectedItem, setSelectedItem] = useState(-1)
     const [editTool, setEditTool] = useState(null)
     const [selectedTool, setSelectedTool] = useState(-1)
@@ -37,12 +42,15 @@ export default function PostSection(props) {
         setHidden,
         id,
         fontSize,
-        padding
+        padding,
+        images,
+        setImages
     } = props
 
     useEffect(() => {
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
         pullAppData(localUser.email)
+        fetchClientLogos()
     }, [])
 
     useEffect(() => {
@@ -53,6 +61,21 @@ export default function PostSection(props) {
             setFilteredTools([...new Set(_filtered)])
         }
     }, [data.field])
+
+    useEffect(() => {
+        if (data.clientSelected) {
+            clientLogos.forEach(client => {
+                if (client.name && client.name === data.clientSelected) {
+                    setLogo({
+                        ...client,
+                        image: client.data,
+                        style: client.style ? JSON.parse(client.style) : {}
+                    })
+                    handleUpdate('company', client.name)
+                }
+            })
+        }
+    }, [data.clientSelected])
 
     useEffect(() => {
         if (appData.length) {
@@ -67,6 +90,13 @@ export default function PostSection(props) {
         }
     }, [appData])
 
+    const fetchClientLogos = async () => {
+        try {
+            const logos = await dispatch(getAllClientLogos()).then(data => data.payload)
+            if (logos) setClientLogos(logos)
+        } catch (err) { console.error(err) }
+    }
+
     const pullAppData = async email => {
         try {
             const _appData = await dispatch(getAppData({ email })).then(data => data.payload)
@@ -75,11 +105,26 @@ export default function PostSection(props) {
     }
 
     const addNewItem = () => {
-        if (items[items.length - 1].role) {
+        const lastItem = items.length - 1
+        if (items[lastItem].role) {
+            const companyName = items[lastItem].company
             const newTech = [...tech]
-            handleChange('technologies', newTech, items.length - 1)
+            handleChange('technologies', newTech, lastItem)
             setItems(items.concat({ bullets: [''] }))
             setTech([])
+
+            if (logo.image) {
+                const logos = { ...images }
+
+                logos[lastItem] = {
+                    ...logo,
+                    name: companyName,
+                    type: 'Client Logo'
+                }
+
+                setImages(logos)
+                setTimeout(() => setLogo({}), 200)
+            }
         }
     }
 
@@ -103,6 +148,8 @@ export default function PostSection(props) {
         const newItemsArr = [...items]
         newItemsArr.splice(index, 1)
         setItems(newItemsArr)
+
+        if (images[index]) delete images[index]
     }
 
     const removeBullet = (index, subindex) => {
@@ -153,10 +200,24 @@ export default function PostSection(props) {
     const saveUpdatedItem = () => {
         const newItemsArr = items
         const newTech = [...tech]
+        const companyName = newItemsArr[selectedIndex].company
         newItemsArr[selectedIndex] = selected
         newItemsArr[selectedIndex].technologies = newTech
+
+        if (logo.image) {
+            const logos = { ...images }
+
+            logos[selectedIndex] = {
+                ...logo,
+                name: companyName,
+                type: 'Client Logo'
+            }
+            setImages(logos)
+            setTimeout(() => setLogo({}), 200)
+        }
         setItems(newItemsArr)
         setTech([])
+        updateData('clientSelected', '')
     }
 
     const hideItem = (index, item) => {
@@ -189,6 +250,10 @@ export default function PostSection(props) {
         newBullets[subindex] = { ...newBullets[subindex], hidden: '' }
         newItemsArr[index] = { ...newItemsArr[index], bullets: newBullets }
         setItems(newItemsArr)
+    }
+
+    const getImage = index => {
+        if (Object.keys(images).length) return images[index]
     }
 
     const bullets = ({ bullets }, index) => (
@@ -338,90 +403,145 @@ export default function PostSection(props) {
     }
 
     return editPost ?
-        <div className='post-container' style={{ backgroundColor: '#F7F7F7', borderRadius: '.5vw' }}>
+        <div className='post-container-edit'>
             <h4 className='post-item-label'>{label || ''}</h4>
             <div className='post-column'>
-                <div className='post-col-dif'>
-                    <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') && '.3' }} className='post-label'>Period</h4>
-                        <div className='input-hide-row'>
-                            <input
-                                className='section-item-name'
-                                onChange={e => handleUpdate('period', e.target.value)}
-                                placeholder='2020 - 2022'
-                                type='text'
-                                value={selected.period || ''}
-                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') && '.3' }}
-                            />
-                            {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') ?
+                <div className='post-col-logo-input'>
+                    <InputField
+                        label=''
+                        type='file'
+                        name='image'
+                        filename='image'
+                        id='client-logo'
+                        image={logo}
+                        setImage={setLogo}
+                        style={{ color: 'rgb(71, 71, 71)' }}
+                    />
+                    {logo.image ?
+                        <div className='post-col-dif2'>
+                            <div className='post-logo-placeholder'>
                                 <img
-                                    src={ShwoIcon}
-                                    className='hide-icon-post'
-                                    onClick={() => showItem(selectedIndex, 'Period')}
+                                    src={logo.image}
+                                    style={logo.style}
+                                    className='post-client-logo-edit'
+                                    onClick={() => document.getElementById('client-logo').click()}
+                                    loading='lazy'
                                 />
-                                :
-                                <img
-                                    src={HideIcon}
-                                    className='hide-icon-post'
-                                    onClick={() => hideItem(selectedIndex, 'Period')}
+                                <Dropdown
+                                    label='Select client'
+                                    name='clientSelected'
+                                    options={clientLogos.map(client => { if (client.name) return client.name })}
+                                    value={data.clientSelected}
+                                    updateData={updateData}
+                                    size='8vw'
+                                    style={{ alignSelf: 'center' }}
                                 />
-                            }
+                            </div>
                         </div>
-                    </GrammarlyEditorPlugin>
-                    <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') && '.3' }} className='post-label'>Company name</h4>
-                        <div className='input-hide-row'>
-                            <input
-                                className='section-item-name'
-                                onChange={e => handleUpdate('company', e.target.value)}
-                                placeholder='Sigma Connectivity Engineering'
-                                type='text'
-                                value={selected.company || ''}
-                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') && '.3' }}
-                            />
-                            {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') ?
+                        :
+                        <div className='post-col-dif2'>
+                            <div className='post-logo-placeholder'>
                                 <img
-                                    src={ShwoIcon}
-                                    className='hide-icon-post'
-                                    onClick={() => showItem(selectedIndex, 'Company name')}
+                                    src={ImagePlaceholder}
+                                    className='client-logo-svg'
+                                    onClick={() => document.getElementById('client-logo').click()}
+                                    loading='lazy'
                                 />
-                                :
-                                <img
-                                    src={HideIcon}
-                                    className='hide-icon-post'
-                                    onClick={() => hideItem(selectedIndex, 'Company name')}
+                                <h4 className='post-company-logo'>Company Logo</h4>
+                                <Dropdown
+                                    label='Select client'
+                                    name='clientSelected'
+                                    options={clientLogos.map(client => { if (client.name) return client.name })}
+                                    value={data.clientSelected}
+                                    updateData={updateData}
+                                    size='8vw'
+                                    style={{ alignSelf: 'center' }}
                                 />
-                            }
+                            </div>
                         </div>
-                    </GrammarlyEditorPlugin>
+                    }
+                    <div className='post-col-dif'>
+                        <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                            <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') && '.3' }} className='post-label'>Period</h4>
+                            <div className='input-hide-row'>
+                                <input
+                                    className='section-item-name'
+                                    onChange={e => handleUpdate('period', e.target.value)}
+                                    placeholder='2020 - 2022'
+                                    type='text'
+                                    value={selected.period || ''}
+                                    style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') && '.3' }}
+                                />
+                                {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') ?
+                                    <img
+                                        src={ShwoIcon}
+                                        className='hide-icon-post'
+                                        onClick={() => showItem(selectedIndex, 'Period')}
+                                    />
+                                    :
+                                    <img
+                                        src={HideIcon}
+                                        className='hide-icon-post'
+                                        onClick={() => hideItem(selectedIndex, 'Period')}
+                                    />
+                                }
+                            </div>
+                        </GrammarlyEditorPlugin>
+                        <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                            <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') && '.3' }} className='post-label'>Company name</h4>
+                            <div className='input-hide-row'>
+                                <input
+                                    className='section-item-name'
+                                    onChange={e => handleUpdate('company', e.target.value)}
+                                    placeholder='Sigma Connectivity Engineering'
+                                    type='text'
+                                    value={selected.company || ''}
+                                    style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') && '.3' }}
+                                />
+                                {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') ?
+                                    <img
+                                        src={ShwoIcon}
+                                        className='hide-icon-post'
+                                        onClick={() => showItem(selectedIndex, 'Company name')}
+                                    />
+                                    :
+                                    <img
+                                        src={HideIcon}
+                                        className='hide-icon-post'
+                                        onClick={() => hideItem(selectedIndex, 'Company name')}
+                                    />
+                                }
+                            </div>
+                        </GrammarlyEditorPlugin>
+                        <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                            <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') && '.3' }} className='post-label'>Role title</h4>
+                            <div className='input-hide-row'>
+                                <input
+                                    className='section-item-name'
+                                    onChange={e => handleUpdate('role', e.target.value)}
+                                    placeholder='Android Developer'
+                                    type='text'
+                                    value={selected.role || ''}
+                                    style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') && '.3' }}
+                                />
+                                {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') ?
+                                    <img
+                                        src={ShwoIcon}
+                                        className='hide-icon-post'
+                                        onClick={() => showItem(selectedIndex, 'Role title')}
+                                    />
+                                    :
+                                    <img
+                                        src={HideIcon}
+                                        className='hide-icon-post'
+                                        onClick={() => hideItem(selectedIndex, 'Role title')}
+                                    />
+                                }
+                            </div>
+                        </GrammarlyEditorPlugin>
+                    </div>
                 </div>
                 <div className='post-col-dif'>
-                    <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                        <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') && '.3' }} className='post-label'>Role title</h4>
-                        <div className='input-hide-row'>
-                            <input
-                                className='section-item-name'
-                                onChange={e => handleUpdate('role', e.target.value)}
-                                placeholder='Android Developer'
-                                type='text'
-                                value={selected.role || ''}
-                                style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') && '.3' }}
-                            />
-                            {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') ?
-                                <img
-                                    src={ShwoIcon}
-                                    className='hide-icon-post'
-                                    onClick={() => showItem(selectedIndex, 'Role title')}
-                                />
-                                :
-                                <img
-                                    src={HideIcon}
-                                    className='hide-icon-post'
-                                    onClick={() => hideItem(selectedIndex, 'Role title')}
-                                />
-                            }
-                        </div>
-                    </GrammarlyEditorPlugin>
                     <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
                         <h4 style={{ color: APP_COLORS.GRAY, opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Job / Tasks description') && '.3' }} className='post-label'>Job / Tasks description</h4>
                         <div className='input-hide-row'>
@@ -430,6 +550,7 @@ export default function PostSection(props) {
                                 onChange={e => handleUpdate('description', e.target.value)}
                                 placeholder='As a Android Developer, Anna was a part of a great team of.. and made...'
                                 type='textarea'
+                                wrap="hard"
                                 cols={10}
                                 rows={10}
                                 value={selected.description || ''}
@@ -577,6 +698,8 @@ export default function PostSection(props) {
                         seteditPost(false)
                         setTech([])
                         setNewTech('')
+                        setLogo({})
+                        updateData('clientSelected', '')
                     }}
                         className='section-item-new'>Discard</h4>
                     <h4 onClick={() => {
@@ -598,9 +721,18 @@ export default function PostSection(props) {
                     i < items.length - 1 && items.length > 1 ?
                         <div className='post-column' key={i} style={experienceItem(i)}>
                             <div className='post-row'>
-                                {hidden.postSection[i] && hidden.postSection[i].includes('Period') ?
-                                    <h4 className='post-period'> </h4>
-                                    : <h4 className='post-period' style={{ display: checkHiddenPost(i) && 'none', fontSize: fontSize ? `${fontSize}vw` : '1vw' }}>{item.period}</h4>}
+                                <div className='post-period-logo-div'>
+                                    {hidden.postSection[i] && hidden.postSection[i].includes('Period') ?
+                                        <h4 className='post-period'> </h4>
+                                        : <h4 className='post-period' style={{ display: checkHiddenPost(i) && 'none', fontSize: fontSize ? `${fontSize}vw` : '1vw' }}>{item.period}</h4>}
+                                    {getImage(i) ?
+                                        <img
+                                            src={getImage(i).image}
+                                            style={getImage(i).style}
+                                            className='post-client-logo-post'
+                                            loading='lazy'
+                                        /> : ''}
+                                </div>
                                 <div className='post-column' style={{ display: checkHiddenPost(i) && 'none' }}>
                                     {hidden.postSection[i] && hidden.postSection[i].includes('Company name') ? '' : <h4 className='post-company' style={{ fontSize: fontSize ? `${fontSize + fontSize * 0.2}vw` : '1.2vw' }}>{item.company}</h4>}
                                     {hidden.postSection[i] && hidden.postSection[i].includes('Role title') ? '' : <h4 className='post-role' style={{ fontSize: fontSize ? `${fontSize + fontSize * 0.1}vw` : '1.1vw' }}>{item.role}</h4>}
@@ -656,6 +788,7 @@ export default function PostSection(props) {
                                 <h4 onClick={() => {
                                     setSelected(item)
                                     setSelectedIndex(i)
+                                    setLogo(getImage(i) || {})
                                     seteditPost(true)
                                     setTech(item.technologies && item.technologies.length ? item.technologies : [])
                                 }}
@@ -665,36 +798,91 @@ export default function PostSection(props) {
                         </div>
                         :
                         <div className='post-column' key={i} style={experienceItem(i)}>
-                            <div className='post-col-dif'>
-                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                                    <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Period</h4>
-                                    <input
-                                        className='section-item-name'
-                                        onChange={e => handleChange('period', e.target.value, i)}
-                                        placeholder='2020 - 2022'
-                                        type='text'
-                                    />
-                                </GrammarlyEditorPlugin>
-                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                                    <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Company name</h4>
-                                    <input
-                                        className='section-item-name'
-                                        onChange={e => handleChange('company', e.target.value, i)}
-                                        placeholder='Sigma Connectivity Engineering'
-                                        type='text'
-                                    />
-                                </GrammarlyEditorPlugin>
+                            <div className='post-col-logo-input'>
+                                <InputField
+                                    label=''
+                                    type='file'
+                                    name='image'
+                                    filename='image'
+                                    id='client-logo'
+                                    image={logo}
+                                    setImage={setLogo}
+                                    style={{ color: 'rgb(71, 71, 71)' }}
+                                />
+                                {logo.image ?
+                                    <div className='post-col-dif2'>
+                                        <div className='post-logo-placeholder'>
+                                            <img
+                                                src={logo.image}
+                                                style={logo.style}
+                                                className='post-client-logo-new'
+                                                onClick={() => document.getElementById('client-logo').click()}
+                                                loading='lazy'
+                                            />
+                                            <Dropdown
+                                                label='Select client'
+                                                name='clientSelected'
+                                                options={clientLogos.map(client => { if (client.name) return client.name })}
+                                                value={data.clientSelected}
+                                                updateData={updateData}
+                                                size='8vw'
+                                                style={{ alignSelf: 'center' }}
+                                            />
+                                        </div>
+                                    </div>
+                                    :
+                                    <div className='post-col-dif2'>
+                                        <div className='post-logo-placeholder'>
+                                            <img
+                                                src={ImagePlaceholder}
+                                                className='client-logo-svg'
+                                                onClick={() => document.getElementById('client-logo').click()}
+                                                loading='lazy'
+                                            />
+                                            <h4 className='post-company-logo'>Company Logo</h4>
+                                            <Dropdown
+                                                label='Select client'
+                                                name='clientSelected'
+                                                options={clientLogos.map(client => { if (client.name) return client.name })}
+                                                value={data.clientSelected}
+                                                updateData={updateData}
+                                                size='8vw'
+                                                style={{ alignSelf: 'center' }}
+                                            />
+                                        </div>
+                                    </div>
+                                }
+                                <div className='post-col-dif2'>
+                                    <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                        <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Period</h4>
+                                        <input
+                                            className='section-item-name'
+                                            onChange={e => handleChange('period', e.target.value, i)}
+                                            placeholder='2020 - 2022'
+                                            type='text'
+                                        />
+                                    </GrammarlyEditorPlugin>
+                                    <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                        <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Company name</h4>
+                                        <input
+                                            className='section-item-name'
+                                            onChange={e => handleChange('company', e.target.value, i)}
+                                            placeholder='Sigma Connectivity Engineering'
+                                            type='text'
+                                        />
+                                    </GrammarlyEditorPlugin>
+                                    <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
+                                        <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Role title</h4>
+                                        <input
+                                            className='section-item-name'
+                                            onChange={e => handleChange('role', e.target.value, i)}
+                                            placeholder='Android Developer'
+                                            type='text'
+                                        />
+                                    </GrammarlyEditorPlugin>
+                                </div>
                             </div>
                             <div className='post-col-dif'>
-                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
-                                    <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Role title</h4>
-                                    <input
-                                        className='section-item-name'
-                                        onChange={e => handleChange('role', e.target.value, i)}
-                                        placeholder='Android Developer'
-                                        type='text'
-                                    />
-                                </GrammarlyEditorPlugin>
                                 <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%" }}>
                                     <h4 style={{ color: APP_COLORS.GRAY }} className='post-label'>Job / Tasks description</h4>
                                     <textarea
@@ -702,6 +890,7 @@ export default function PostSection(props) {
                                         onChange={e => handleChange('description', e.target.value, i)}
                                         placeholder='As a Android Developer, Anna was a part of a great team of.. and made...'
                                         type='textarea'
+                                        wrap="hard"
                                         cols={10}
                                         rows={10}
                                     />

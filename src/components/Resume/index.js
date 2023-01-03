@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { getProfileImage, getSignature } from '../../store/reducers/user'
 import ReactPDF, {
     PDFViewer,
     Page,
@@ -26,11 +25,11 @@ import DownloadIcon from '../../icons/download-icon.svg'
 import EditIcon from '../../icons/edit-icon.svg'
 import CloseIcon from '../../icons/close-icon.svg'
 import { MoonLoader } from 'react-spinners'
+import { getImageByType, getClientLogo } from '../../store/reducers/image'
 
 export default function Resume(props) {
     const {
         resumeData,
-        previewData,
         onClose,
         onEdit,
         onDownloadPDF,
@@ -39,7 +38,8 @@ export default function Resume(props) {
         loading,
         setLoading,
         profilePreview,
-        signaturePreview
+        signaturePreview,
+        companyLogos
     } = props
 
     const [data, setData] = useState(resumeData)
@@ -48,6 +48,7 @@ export default function Resume(props) {
     const [cvLogo, setcvLogo] = useState({})
     const [profileStyle, setProfileStyle] = useState({})
     const [signatureCanvas, setSignatureCanvas] = useState({})
+    const [clientLogos, setClientLogos] = useState({})
     const [skills, setSkills] = useState([])
     const [fontSize, setFontSize] = useState({})
     const [padding, setPadding] = useState({})
@@ -93,6 +94,11 @@ export default function Resume(props) {
         }
     }, [res.skills])
 
+    const getImage = index => {
+        if (Object.keys(clientLogos).length) return clientLogos[index]
+        return {}
+    }
+
     const getCVById = async id => {
         try {
             const cv = await dispatch(getResume(id)).then(data => data.payload)
@@ -102,18 +108,38 @@ export default function Resume(props) {
 
     const getResumeData = async () => {
         try {
+            let parsedData = {}
             if (data.data) {
-                const parsedData = JSON.parse(data.data || {})
-                setRes(parsedData)
+                parsedData = JSON.parse(data.data || {})
             }
             else {
                 const cv = await getCVById(resumeData._id)
-                const parsedData = JSON.parse(cv && cv.data || {})
-                setRes(parsedData)
+                parsedData = JSON.parse(cv && cv.data || {})
+            }
+            setRes(parsedData)
+            const clients = parsedData.experience.map(exp => { if (exp.company) return exp.company })
+            const _logos = companyLogos && Object.keys(companyLogos).length ? []
+                : await Promise.all(clients.map(async client => {
+                    const image = await dispatch(getClientLogo(client)).then(data => data.payload)
+                    return {
+                        ...image,
+                        image: image.data,
+                        style: image.style ? JSON.parse(image.style) : {}
+                    }
+                }))
+
+            let clientLogos = {}
+            if (_logos.length) {
+                _logos.forEach((logo, i) => {
+                    clientLogos[i] = logo
+                })
             }
 
-            const profilePic = profilePreview ? { data: profilePreview.image, style: profilePreview.style } : await dispatch(getProfileImage({ email: resumeData.email })).then(data => data.payload)
-            const signature = signaturePreview ? { data: signaturePreview.image, style: signaturePreview.style } : await dispatch(getSignature({ email: resumeData.email })).then(data => data.payload)
+            const profilePic = profilePreview ? { data: profilePreview.image, style: profilePreview.style }
+                : await dispatch(getImageByType({ email: resumeData.email, type: 'Profile' })).then(data => data.payload)
+            const signature = signaturePreview ? { data: signaturePreview.image, style: signaturePreview.style }
+                : await dispatch(getImageByType({ email: resumeData.email, type: 'Signature' })).then(data => data.payload)
+            const logos = companyLogos && Object.keys(companyLogos).length ? companyLogos : clientLogos
 
             if (profilePic) {
                 const imageStyles = profilePreview ? profilePreview.style : profilePic.style && JSON.parse(profilePic.style) || {}
@@ -126,6 +152,7 @@ export default function Resume(props) {
                 if (signatureStyles.filter) setSignatureCanvas(await applyFiltersToImage(signature.data, signatureStyles.filter))
                 else setSignatureCanvas(signature.data)
             }
+            if (logos) setClientLogos(logos)
 
         } catch (err) {
             console.error(err)
@@ -438,7 +465,8 @@ export default function Resume(props) {
         experienceCol1: {
             flexDirection: 'column',
             marginHorizontal: '2vw',
-            width: '16%'
+            width: '16%',
+            alignItems: 'flex-start'
         },
         experienceCol2: {
             flexDirection: 'column',
@@ -529,6 +557,12 @@ export default function Resume(props) {
         },
         pdfDownload: {
             textDecoration: 'none'
+        },
+        clientLogo: {
+            maxHeight: 40,
+            maxWidth: 60,
+            objectFit: 'contain',
+            margin: '2vw 0',
         }
     })
 
@@ -676,7 +710,7 @@ export default function Resume(props) {
                                             <View key={i} style={{
                                                 ...styles.skillItem,
                                                 borderBottom: i < skills.length - 2 && '1px solid gray',
-                                                paddingBottom: (fontSize.skills || fontSize.skills === 0) && i < skills.length - 2 ? `${fontSize.skills}vw` : i < skills.length - 2 && '1vw',
+                                                paddingBottom: (fontSize.skills || fontSize.skills === 0) && i < skills.length - 2 ? `${fontSize.skills}vw` : i < skills.length - 2 ? '1vw' : null,
                                                 margin: fontSize.skills || fontSize.skills === 0 ? `0 2vw ${fontSize.skills / 2}vw 0` : '0 2vw .4vw 0'
                                             }}>
                                                 <Text style={{
@@ -711,6 +745,7 @@ export default function Resume(props) {
                                                             ...styles.experiencePeriod,
                                                             fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
                                                         }}>{exp.period || ''}</Text>}
+                                                    {getImage(i) && getImage(i).image ? <Image style={styles.clientLogo} src={getImage(i).image} /> : null}
                                                 </View>
                                                 <View style={styles.experienceCol2}>
                                                     {checkHiddenPost(i, exp.company) ? null :

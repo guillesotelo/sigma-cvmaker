@@ -107,14 +107,14 @@ export default function DataTable(props) {
                                                     } else handleItem(i)
                                                 }}
                                             >
-                                                {header.value === 'date' || header.value === 'createdAt' || header.value === 'updatedAt' ? `${new Date(row[header.value]).toDateString()} ${new Date(row[header.value]).toLocaleTimeString()}` :
+                                                {header.value === 'createdAt' || header.value === 'updatedAt' ? `${new Date(row[header.value]).toDateString()} ${new Date(row[header.value]).toLocaleTimeString()}` :
                                                     header.value === 'size' ? row[header.value] > 100000 ? `${(row[header.value] * 0.000001).toFixed(2)} MB` : `${(row[header.value] * 0.001).toFixed(2)} KB` :
-                                                    header.value === 'isManager' || header.value === 'isAdmin' ?
-                                                        row[header.value] ? 'Yes' : 'No'
-                                                        :
-                                                        row[header.value] ? String(row[header.value])
+                                                        header.value === 'isManager' || header.value === 'isAdmin' ?
+                                                            row[header.value] ? 'Yes' : 'No'
                                                             :
-                                                            '--'}
+                                                            row[header.value] ? String(row[header.value])
+                                                                :
+                                                                '--'}
                                             </h4>
                                 )}
                             </div>

@@ -47,6 +47,15 @@
     margin: 0;
     color: rgb(99, 99, 99);
     font-weight: normal;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.dropdown-chevron {
+    margin: 0;
+    color: rgb(99, 99, 99);
+    font-weight: normal;
 }
 
 .dropdown-options {
@@ -77,6 +86,9 @@
     padding: .4vw 0;
     border-top: 1px solid rgb(231, 231, 231);
     transition: .3s;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .dropdown-option:hover {

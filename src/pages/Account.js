@@ -6,7 +6,8 @@ import ProfileIcon from '../icons/user-icon.svg'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import { APP_COLORS } from '../constants/app'
-import { getProfileImage, updateUserData, logOut, getAllManagers } from '../store/reducers/user'
+import { updateUserData, logOut, getAllManagers } from '../store/reducers/user'
+import { getImageByType } from '../store/reducers/image'
 import GoBackIcon from '../icons/goback-icon.svg'
 import Dropdown from '../components/Dropdown'
 
@@ -97,7 +98,7 @@ export default function Account() {
 
   const getPreview = async email => {
     try {
-      const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
+      const image = await dispatch(getImageByType({ email, type: 'Profile' })).then(data => data.payload)
       if (image) {
         setProfilePic({ image: image.data, style: image.style ? JSON.parse(image.style) : {} })
       }

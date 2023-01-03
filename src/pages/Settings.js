@@ -879,15 +879,16 @@ export default function Settings() {
                               style={{ color: 'rgb(71, 71, 71)', width: '93%' }}
                               value={data.name || ''}
                             />
-                            <InputField
-                              label='Email'
-                              type='text'
-                              name='email'
-                              placeholder='full.name@sigma.se'
-                              updateData={updateData}
-                              style={{ color: 'rgb(71, 71, 71)', width: '93%' }}
-                              value={data.email || ''}
-                            />
+                            {imageData.type === 'Profile' || imageData.type === 'Signature' || data.email ?
+                              <InputField
+                                label='Email'
+                                type='text'
+                                name='email'
+                                placeholder='full.name@sigma.se'
+                                updateData={updateData}
+                                style={{ color: 'rgb(71, 71, 71)', width: '93%' }}
+                                value={data.email || ''}
+                              /> : ''}
                             <Dropdown
                               label='Type'
                               name='type'

@@ -84,7 +84,7 @@ export default function InputField(props) {
                     useWebWorker: true
                 }
                 const compressedFile = await imageCompression(file, compressOptions)
-                
+
                 const base64 = await convertToBase64(compressedFile)
                 setImage({ ...image, [filename]: base64 })
                 if (setIsEdit) setIsEdit(true)
@@ -108,7 +108,9 @@ export default function InputField(props) {
 
     return (
         <div className='inputfield-container' style={{
-            margin: fontSize ? `${fontSize / 2}vw 0` : '.5vw 0'
+            margin: fontSize ? `${fontSize / 2}vw 0` : '.5vw 0',
+            width: type === 'file' && 0,
+            height: type === 'file' && 0
         }}>
             {label ?
                 <h4
@@ -127,6 +129,7 @@ export default function InputField(props) {
                         placeholder={placeholder || ''}
                         cols={cols || 2}
                         rows={rows || 4}
+                        wrap="hard"
                         style={{
                             ...style,
                             opacity: hidden && hidden.includes(label) && '.2',

@@ -12,7 +12,8 @@ import Slider from '../components/Slider'
 import CVFooter from '../components/CVFooter'
 import CVHeader from '../components/CVHeader'
 import { editResume, getCVByType, getLogo, getResume, getResumes, saveResume } from '../store/reducers/resume'
-import { getAllManagers, getProfileImage, getSignature, updateUserData } from '../store/reducers/user'
+import { getAllManagers, updateUserData } from '../store/reducers/user'
+import { getClientLogo, getImageByType } from '../store/reducers/image'
 import PostSection from '../components/PostSection'
 import Dropdown from '../components/Dropdown'
 import ProfileIcon from '../icons/profile-icon.svg'
@@ -24,6 +25,7 @@ import FontIcon from '../icons/fontsize-icon.svg'
 import PaddingIcon from '../icons/padding-icon.svg'
 import SignaturePad from 'react-signature-canvas'
 import Resume from '../components/Resume'
+import { promises } from 'nodemailer/lib/xoauth2'
 
 export default function NewCV() {
     const [data, setData] = useState({})
@@ -46,6 +48,7 @@ export default function NewCV() {
     const [cvLogo, setcvLogo] = useState({})
     const [hiddenItems, setHiddenItems] = useState([])
     const [allResumes, setAllResumes] = useState([])
+    const [clientLogos, setClientLogos] = useState({})
     const [scale, setScale] = useState(1)
     const [translateX, setTranslateX] = useState(0)
     const [translateY, setTranslateY] = useState(0)
@@ -170,7 +173,7 @@ export default function NewCV() {
                         setExpertise(resData.expertise && resData.expertise.length ? resData.expertise : [{ value: '' }])
                         setOtherTools(resData.otherTools && resData.otherTools.length ? resData.otherTools : [{ value: '' }])
                         setBuzzwords(resData.buzzwords && resData.buzzwords.length ? resData.buzzwords : [''])
-                        getImages(resume.email)
+                        getImages(resume.email, resData.experience.map(exp => { if (exp && exp.company) return exp.company }))
                     }
                 })
             }
@@ -198,10 +201,18 @@ export default function NewCV() {
         setData({ ...data, [key]: value })
     }
 
-    const getImages = async email => {
+    const getImages = async (email, clients) => {
         try {
-            const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
-            const signature = await dispatch(getSignature({ email })).then(data => data.payload)
+            const image = await dispatch(getImageByType({ email, type: 'Profile' })).then(data => data.payload)
+            const signature = await dispatch(getImageByType({ email, type: 'Signature' })).then(data => data.payload)
+            const logos = await Promise.all(clients.map(async client => {
+                const image = await dispatch(getClientLogo(client)).then(data => data.payload)
+                return {
+                    ...image,
+                    image: image.data,
+                    style: image.style ? JSON.parse(image.style) : {}
+                }
+            }))
 
             if (image) {
                 const imageStyle = image.style && JSON.parse(image.style) || {}
@@ -218,6 +229,14 @@ export default function NewCV() {
             if (signature) {
                 const signatureStyle = signature.style && JSON.parse(signature.style) || {}
                 setSignatureCanvas({ image: signature.data, style: signatureStyle })
+            }
+
+            if (logos && Array.isArray(logos)) {
+                const _clientLogos = {}
+                logos.forEach((logo, i) => {
+                    _clientLogos[i] = logo
+                })
+                setClientLogos(_clientLogos)
             }
         } catch (err) {
             console.error(err)
@@ -310,10 +329,13 @@ export default function NewCV() {
                     },
                     managerUpdate: true
                 })).then(data => data.payload)
-                if (managerUpdated) toast.success('Consultant data updated with new manager')
 
                 if (profilePic && profilePic.image) resumeData.profilePic = profilePic
                 if (signatureCanvas && signatureCanvas.image) resumeData.signatureCanvas = signatureCanvas
+                if (clientLogos && Object.keys(clientLogos).length) {
+                    resumeData.clientLogos = clientLogos
+                    resumeData.clients = experience.map(exp => { if (exp && exp.company) return exp.company })
+                }
 
                 if (!isEdit && saveAsNew && data.type === 'Master') {
                     const exists = await dispatch(getCVByType({ type: 'Master', email: data.email.toLowerCase() })).then(data => data.payload)
@@ -333,9 +355,14 @@ export default function NewCV() {
 
                 if (saved) {
                     setLoading(false)
-                    if (isEdit && !saveAsNew) return toast.success('Resume updated successfully!')
+                    if (isEdit && !saveAsNew) {
+                        toast.success('Resume updated successfully!')
+                        if (managerUpdated) toast.success('Consultant Manager assigned to consultant')
+                        return
+                    }
                     else {
                         toast.success('Resume saved successfully!')
+                        if (managerUpdated) toast.success('Consultant Manager assigned to consultant')
                         return setTimeout(() => history.goBack(), 2000)
                     }
                 } else {
@@ -410,6 +437,7 @@ export default function NewCV() {
                         resumeData={previewData}
                         profilePreview={profilePic}
                         signaturePreview={signatureCanvas}
+                        companyLogos={clientLogos}
                         onClose={() => setPreviewModal(false)}
                         loading={loading}
                         setLoading={setLoading}
@@ -417,7 +445,7 @@ export default function NewCV() {
                 </div> : ''}
             {masterModal ?
                 <div className='remove-modal'>
-                    <h4 style={{ textAlign: 'center' }}>All the master changes will overwrite the variant CVs. <br />Are you sure you want to proceed?</h4>
+                    <h4 style={{ textAlign: 'center' }}>All the master changes will overwrite the variant CVs, if there's any.<br />Are you sure you want to proceed?</h4>
                     <div className='remove-modal-btns'>
                         <CTAButton
                             label='Cancel'
@@ -629,7 +657,7 @@ export default function NewCV() {
                         rows={15}
                         name='presentation'
                         updateData={updateData}
-                        style={{ color: 'rgb(71, 71, 71)', width: '38vw' }}
+                        style={{ color: 'rgb(71, 71, 71)', width: '36.5vw', alignSelf: 'flex-start' }}
                         placeholder="Anna is a nice fun and friendly person. 
                         She work well in a team but also on her own as she like to
                         set herself goals which she will achieve. She has good listening and 
@@ -714,7 +742,7 @@ export default function NewCV() {
                             />
                         }
                     </div>
-                    <div className='section-settings' style={{ marginTop: '6vw' }}>
+                    <div className='section-settings' style={{ marginTop: '5vw' }}>
                         <>
                             {!paddingDrop ?
                                 <img
@@ -1197,6 +1225,8 @@ export default function NewCV() {
                             id='post-section'
                             fontSize={fontSize.experience}
                             padding={padding.experience}
+                            images={clientLogos}
+                            setImages={setClientLogos}
                         />}
                     {hiddenSections.experience ?
                         <img

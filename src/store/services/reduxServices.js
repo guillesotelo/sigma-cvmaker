@@ -100,9 +100,9 @@ const getImageByEmail = async data => {
     } catch (err) { console.log(err) }
 }
 
-const getSignatureByEmail = async data => {
+const getImageByEmailAndType = async data => {
     try {
-        const image = await axios.get(`${API_URL}/api/user/getSignature`, { params: { email: data.email } })
+        const image = await axios.get(`${API_URL}/api/image/getByType`, { params: { name: data.name, email: data.email, type: data.type } })
         return image.data
     } catch (err) { console.log(err) }
 }
@@ -111,6 +111,20 @@ const getAllImages = async () => {
     try {
         const images = await axios.get(`${API_URL}/api/image/getAll`)
         return images.data
+    } catch (err) { console.log(err) }
+}
+
+const getCompanyLogo = async client => {
+    try {
+        const logos = await axios.get(`${API_URL}/api/image/getClientLogo`, { params: { client } })
+        return logos.data
+    } catch (err) { console.log(err) }
+}
+
+const getAllCompanyLogos = async client => {
+    try {
+        const logos = await axios.get(`${API_URL}/api/image/getAllClientLogos`)
+        return logos.data
     } catch (err) { console.log(err) }
 }
 
@@ -281,7 +295,7 @@ export {
     getAllResumes,
     getResumeById,
     getImageByEmail,
-    getSignatureByEmail,
+    getImageByEmailAndType,
     getResumeByEmail,
     getCVTypeByEmail,
     getCVLogo,
@@ -305,5 +319,7 @@ export {
     removeImage,
     getRemovedItems,
     restoreItemfromTrash,
-    permanentlyRemove
+    permanentlyRemove,
+    getCompanyLogo,
+    getAllCompanyLogos
 }

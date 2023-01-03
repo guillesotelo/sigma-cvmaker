@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
-import { getProfileImage, logOut } from '../../store/reducers/user'
+import { logOut } from '../../store/reducers/user'
+import { getImageByType } from '../../store/reducers/image'
 import ProfileIcon from '../../icons/user-icon.svg'
 import LogoutIcon from '../../icons/logout-icon.svg'
 import ErrorIcon from '../../icons/error-icon.svg'
@@ -60,7 +61,7 @@ export default function Header() {
 
   const getPreview = async email => {
     try {
-      const image = await dispatch(getProfileImage({ email })).then(data => data.payload)
+      const image = await dispatch(getImageByType({ email, type: 'Profile' })).then(data => data.payload)
       if (image) {
         setProfilePic({ image: image.data, style: image.style ? JSON.parse(image.style) : {} })
       }
@@ -75,7 +76,7 @@ export default function Header() {
       <ToastContainer autoClose={1500} />
       <div className='header-container'>
         <div className='header-logo-search'>
-          <img src={SigmaIso} className='header-logo' onClick={() => history.push('/')} loading='lazy'/>
+          <img src={SigmaIso} className='header-logo' onClick={() => history.push('/')} loading='lazy' />
           {/* <div className='header-logo-container' onClick={() => history.push('/')}> */}
           {/* <h4 className='header-text'>CV Maker</h4> */}
           {/* </div> */}

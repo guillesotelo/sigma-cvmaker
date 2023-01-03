@@ -11,7 +11,7 @@ import Slider from '../components/Slider'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
 import { getAppData, getOneAppData, saveAppData, updateAppData } from '../store/reducers/appData'
-import { getProfileImage } from '../store/reducers/user'
+import { getImageByType } from '../store/reducers/image'
 
 export default function Clients() {
     const [data, setData] = useState({})
@@ -90,7 +90,7 @@ export default function Clients() {
 
     const getPreview = async clientData => {
         try {
-            const image = await dispatch(getProfileImage({ email: clientData && clientData.email || '' })).then(data => data.payload)
+            const image = await dispatch(getImageByType({ name: clientData && clientData.name || '', type: 'Client Logo' })).then(data => data.payload)
             if (image) {
                 setClientLogo({ logoImage: image.data, style: image.style ? JSON.parse(image.style) : {} })
                 if (image.style) {
@@ -284,6 +284,7 @@ export default function Clients() {
                                         label='Gray Scale'
                                         max={100}
                                         sign='%'
+                                        style={{ marginBottom: '1vw' }}
                                     />
                                 </div> : ''}
                                 <InputField
