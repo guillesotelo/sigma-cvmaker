@@ -146,12 +146,13 @@ export default function ItemDropdown(props) {
                                                     <div ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
-                                                        style={{...getItemStyle(
-                                                            snapshot.isDragging,
-                                                            provided.draggableProps.style
-                                                        ),
-                                                        height: fontSize ? `${fontSize * 3}vw` : '3vw',
-                                                    }}
+                                                        style={{
+                                                            ...getItemStyle(
+                                                                snapshot.isDragging,
+                                                                provided.draggableProps.style
+                                                            ),
+                                                            height: fontSize ? `${fontSize * 3}vw` : '3vw',
+                                                        }}
                                                         className='item-dropdown-blocked draggable'>
                                                         <h4 className='item-dropdown-name' style={{
                                                             opacity: item.hidden && '.2',
@@ -254,6 +255,7 @@ export default function ItemDropdown(props) {
                                             <Dropdown
                                                 label=''
                                                 name='option'
+                                                type='skill'
                                                 options={options}
                                                 updateData={handleChange}
                                                 index={i}
@@ -334,6 +336,7 @@ export default function ItemDropdown(props) {
                                                         <Dropdown
                                                             label=''
                                                             name='option'
+                                                            type='skill'
                                                             options={options}
                                                             updateData={handleChange}
                                                             index={i}

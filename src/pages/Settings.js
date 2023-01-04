@@ -253,11 +253,18 @@ export default function Settings() {
   }
 
   const getAllImages = async () => {
-    const _images = await dispatch(getImages()).then(data => data.payload)
-    if (_images && _images.length) {
-      const nonRemoved = _images.filter(image => !image.removed)
-      setImages(nonRemoved)
-      setImageTypes(['Profile', 'Client Logo', 'CV Logo', 'Experience Company'])
+    try {
+      setLoading(true)
+      const _images = await dispatch(getImages()).then(data => data.payload)
+      if (_images && _images.length) {
+        const nonRemoved = _images.filter(image => !image.removed)
+        setImages(nonRemoved)
+        setImageTypes(['Profile', 'Client Logo', 'CV Logo', 'Experience Company'])
+      }
+      setLoading(false)
+    } catch (err) {
+      console.error(err)
+      setLoading(false)
     }
   }
 

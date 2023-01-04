@@ -17,6 +17,7 @@ export default function Dropdown(props) {
         index,
         style,
         size,
+        type,
         hidden,
         setHidden,
         fontSize,
@@ -92,7 +93,7 @@ export default function Dropdown(props) {
                             <h4
                                 key={i}
                                 className='dropdown-option'
-                                style={{ borderTop: i === 0 && 'none' }}
+                                style={{ borderTop: i === 0 && 'none', overflow: type === 'skill' && 'visible' }}
                                 onClick={() => {
                                     updateData(name, option, index)
                                     setSelected(option)

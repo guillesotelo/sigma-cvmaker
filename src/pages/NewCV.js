@@ -163,7 +163,7 @@ export default function NewCV() {
                         setFontSize(resData.settings && resData.settings.fontSize ? resData.settings.fontSize : {})
                         setPadding(resData.settings && resData.settings.padding ? resData.settings.padding : {})
                         setLanguages(resData.languages)
-                        setSkills(resData.skills.length ? refreshTime(resData.skills, resume.date) : [{ name: '' }])
+                        setSkills(resData.skills.length ? refreshTime(resData.skills, resume.updatedAt) : [{ name: '' }])
                         setEducation(resData.education.length ? resData.education : [{ bullet: '', value: '' }])
                         setCertifications(resData.certifications.length ? resData.certifications : [{ bullet: '', value: '' }])
                         setExperience(resData.experience && resData.experience.length ? resData.experience : [{ bullets: [{ value: '' }] }])

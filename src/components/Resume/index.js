@@ -171,7 +171,7 @@ export default function Resume(props) {
         if (currentTime && data.date) {
             const years = Number(currentTime.split(' ')[0])
             const now = new Date()
-            const cvDate = new Date(data.date)
+            const cvDate = new Date(data.updatedAt)
             const diff = now.getFullYear() - cvDate.getFullYear()
             return diff ? `${years + diff} Years` : currentTime
         }
