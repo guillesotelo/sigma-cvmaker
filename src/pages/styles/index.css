@@ -1213,6 +1213,12 @@
     min-height: 73vh;
 }
 
+.activity-column {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
 /* --- Help ---  */
 .help-container {
     display: flex;

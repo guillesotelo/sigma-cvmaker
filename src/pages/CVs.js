@@ -129,9 +129,10 @@ export default function CVs({ showAll }) {
         setLoading(true)
         if (search.length) {
             const filtered = resumes.filter(res => {
+                const stringCV = JSON.stringify(res)
                 let matches = true
                 search.forEach(word => {
-                    if (!JSON.stringify(res).toLowerCase().includes(word.toLowerCase())) matches = false
+                    if (!stringCV.toLowerCase().includes(word.toLowerCase())) matches = false
                 })
                 if (matches) return res
             })
