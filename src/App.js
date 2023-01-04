@@ -20,6 +20,7 @@ import Help from "./pages/Help";
 import ToolsTech from "./pages/ToolsTech";
 import Clients from "./pages/Clients";
 import Consultants from "./pages/Consultants";
+import Statistics from "./pages/Statistics";
 
 function App() {
   return (
@@ -142,6 +143,16 @@ function App() {
           <SdideBar />
           <div className="root-column">
             <Activity />
+            <Footer />
+          </div>
+        </div>
+      </Route>
+      <Route path="/statistics">
+        <Header />
+        <div className="root-container">
+          <SdideBar />
+          <div className="root-column">
+            <Statistics />
             <Footer />
           </div>
         </div>

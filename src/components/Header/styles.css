@@ -18,7 +18,7 @@
 }
 
 .header-logo:hover {
-    filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+    filter: invert(79%) sepia(13%) saturate(5839%) hue-rotate(339deg) brightness(96%) contrast(87%);
     color: #E59A2F;
 }
 

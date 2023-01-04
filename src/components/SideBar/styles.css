@@ -58,6 +58,12 @@
     margin-right: .5vw;
 }
 
+.sidebar-new-cv {
+    height: 20px;
+    margin-right: .5vw;
+    margin-left: .05vw;
+}
+
 .sidebar-arrow {
     height: 20px;
 }
