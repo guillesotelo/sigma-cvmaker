@@ -17,7 +17,10 @@
 }
 
 .cta-btn:hover {
-    opacity: 0.8 !important;
+    /* opacity: 0.8 !important; */
+    transform: translateY(-7%);
+    box-shadow: 1px 5px 8px rgb(196, 196, 196);
+    filter: contrast(130%);
 }
 
 .category-budget-setter {

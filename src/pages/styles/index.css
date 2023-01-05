@@ -38,6 +38,13 @@
     filter: invert(8%) sepia(84%) saturate(3926%) hue-rotate(15deg) brightness(102%) contrast(108%);
 }
 
+.chart-title {
+    font-size: 1vw;
+    font-weight: normal;
+    text-align: center;
+    margin: 0 0 1vw 0;
+}
+
 /* --- Login --- */
 .login-container {
     display: flex;
@@ -1224,7 +1231,7 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    padding: 1vw .5vw;
+    padding: 1vw;
     margin: 1vw 1vw 2vw 1vw;
     border-radius: 1vw;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -1232,12 +1239,27 @@
     min-height: 73vh;
 }
 
+.statistics-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.statistics-graphrow {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 2vw;
+    justify-content: center;
+    margin-top: 1vw;
+}
+
 /* --- Help ---  */
 .help-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    padding: 1vw .5vw;
+    padding: 1vw;
     margin: 1vw 1vw 2vw 1vw;
     border-radius: 1vw;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);

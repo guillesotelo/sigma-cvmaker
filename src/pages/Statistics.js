@@ -1,54 +1,55 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import GoBackIcon from '../icons/goback-icon.svg'
-import DataTable from '../components/DataTable'
-import CTAButton from '../components/CTAButton'
-import InputField from '../components/InputField'
-import SwitchBTN from '../components/SwitchBTN'
-import Slider from '../components/Slider'
-import { toast } from 'react-toastify'
-import { APP_COLORS } from '../constants/app'
-import { getLogs } from '../store/reducers/user'
-import SearchBar from '../components/SearchBar'
+import BarChart from '../components/BarChart'
+import PieChart from '../components/PieChart'
+import PolarChart from '../components/PolarChart'
+import { PALETTE } from '../constants/app'
+import { getAppData } from '../store/reducers/appData'
+import { getImages } from '../store/reducers/image'
+import { getResumes } from '../store/reducers/resume'
+import { getLogs, getUsers } from '../store/reducers/user'
 
 export default function Statistics() {
     const [data, setData] = useState({})
-    const [logs, setLogs] = useState([])
     const [search, setSearch] = useState([])
-    const [isEdit, setIsEdit] = useState(false)
+    const [logs, setLogs] = useState([])
     const [loading, setLoading] = useState(false)
-    const [selectedLog, setSelectedLog] = useState(-1)
-
+    const [logsModule, setLogsModule] = useState({ labels: [], datasets: [] })
+    const [logsAction, setLogsAction] = useState({ labels: [], datasets: [] })
+    const [totalCount, setTotalCount] = useState({ labels: [], datasets: [] })
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
     const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
     const history = useHistory()
     const dispatch = useDispatch()
-    const logHeaders = [
-        {
-            name: 'DATE',
-            value: 'updatedAt'
-        },
-        {
-            name: 'DETAILS',
-            value: 'details'
-        },
-        {
-            name: 'USER',
-            value: 'username'
-        },
-        {
-            name: 'USER EMAIL',
-            value: 'email'
-        },
-        {
-            name: 'MODULE',
-            value: 'module'
-        },
-        {
-            name: 'ID',
-            value: 'itemId'
-        }
+    const modules = ['CV', 'Image', 'AppData', 'User']
+    const actions = [
+        'CV created',
+        'CV exported',
+        'CV updated',
+        'CV moved to trash',
+        'CV removed permanently',
+        'CV restored',
+        'Image updated',
+        'Image moved to trash',
+        'Image removed permanently',
+        'Image restored',
+        'New login',
+        'Failed login attempt',
+        'User logged out',
+        'User moved to trash',
+        'User restored',
+        'User updated',
+        'New App Data created',
+        'App Data updated',
+        'Report created',
+        'Report updated',
+    ]
+    const countLabels = [
+        'CVs',
+        'Users',
+        'Images',
+        'App Data',
     ]
 
     useEffect(() => {
@@ -57,10 +58,80 @@ export default function Statistics() {
     }, [])
 
     useEffect(() => {
+        setChartsData()
+    }, [logs])
+
+    const setChartsData = async () => {
+        const colorPattern = logs.map(_ => randomColors(PALETTE)[0])
+        const countPattern = countLabels.map(_ => randomColors(PALETTE)[0])
+
+        setLogsModule({
+            labels: modules,
+            datasets: [{
+                data: modules.map(module => countLogsByModule(module, 'module')),
+                backgroundColor: colorPattern
+            }]
+        })
+
+        setLogsAction({
+            labels: actions,
+            datasets: [{
+                data: actions.map(action => countLogsByAction(action, 'details')),
+                backgroundColor: colorPattern
+            }]
+        })
+
+        setTotalCount({
+            labels: countLabels,
+            datasets: [{
+                data: await getCountByLabel(countLabels),
+                backgroundColor: countPattern
+            }]
+        })
+    }
+
+    useEffect(() => {
         if (!search.length) {
             getAllLogs()
         }
     }, [search.length])
+
+    const getCountByLabel = async labels => {
+        let data = []
+        const cvs = await dispatch(getResumes({ ...user, getAll: true })).then(data => data.payload)
+        const users = await dispatch(getUsers(user)).then(data => data.payload)
+        const images = await dispatch(getImages()).then(data => data.payload)
+        const appDatas = await dispatch(getAppData({ email: user.email })).then(data => data.payload)
+
+        if (cvs && cvs.length) data[0] = cvs.length
+        if (users && users.length) data[1] = users.length
+        if (images && images.length) data[2] = images.length
+        if (appDatas && appDatas.length) data[3] = appDatas.length
+
+        return data
+    }
+
+    const countLogsByAction = (value, col) => {
+        let count = 0
+        logs.forEach(log => {
+            if (log[col] && log[col].toLowerCase().includes(value.toLowerCase())) count += 1
+        })
+        return count
+    }
+
+    const countLogsByModule = (value, col) => {
+        let count = 0
+        logs.forEach(log => {
+            if (log[col] === value) count += 1
+        })
+        return count
+    }
+
+    const randomColors = array => {
+        return array.map(value => ({ value, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ value }) => value)
+    }
 
     const getAllLogs = async () => {
         setLoading(true)
@@ -70,38 +141,21 @@ export default function Statistics() {
     }
 
     const updateData = (key, value) => {
-        setIsEdit(true)
         setData({ ...data, [key]: value })
-    }
-
-    const handleSearch = e => {
-        if (e.key === 'Enter') {
-            triggerSearch()
-        } else {
-            const words = e.target.value ? e.target.value.split(' ') : []
-            setSearch(words)
-        }
-    }
-
-    const triggerSearch = () => {
-        setLoading(true)
-        if (search.length) {
-            const filtered = logs.filter(log => {
-                const stringLog = JSON.stringify(log)
-                let matches = true
-                search.forEach(word => {
-                    if (!stringLog.toLowerCase().includes(word.toLowerCase())) matches = false
-                })
-                if (matches) return log
-            })
-            setLogs(filtered)
-        }
-        setLoading(false)
     }
 
     return (
         <div className='statistics-container'>
-            
+            <div className='statistics-section'>
+                <h4 className='page-title'>Statistics</h4>
+                <div className='statistics-graphrow'>
+                    <BarChart chartData={logsAction} position='y' title='Logs by action' />
+                    <PolarChart chartData={logsModule} title='Logs by module' size={200} />
+                    <PieChart chartData={totalCount} title='Total count' size={200} />
+                </div>
+                <div className='statistics-graphrow'>
+                </div>
+            </div>
         </div>
     )
 }

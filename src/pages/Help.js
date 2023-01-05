@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import GoBackIcon from '../icons/goback-icon.svg'
 import DataTable from '../components/DataTable'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
@@ -25,7 +24,7 @@ export default function Help() {
 
     return (
         <div className='help-container'>
-            HELP
+            <h4 className='page-title'>Help</h4>
         </div>
     )
 }

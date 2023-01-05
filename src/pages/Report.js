@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
-import GoBackIcon from '../icons/goback-icon.svg'
 import { APP_COLORS } from '../constants/app'
 import { saveReport, getAllReports, updateReport } from '../store/reducers/report'
 

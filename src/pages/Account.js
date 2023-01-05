@@ -8,7 +8,6 @@ import InputField from '../components/InputField'
 import { APP_COLORS } from '../constants/app'
 import { updateUserData, logOut, getAllManagers } from '../store/reducers/user'
 import { getImageByType } from '../store/reducers/image'
-import GoBackIcon from '../icons/goback-icon.svg'
 import Dropdown from '../components/Dropdown'
 
 export default function Account() {

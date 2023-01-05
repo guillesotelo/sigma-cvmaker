@@ -1,0 +1,18 @@
+.piechart-container {
+    /* margin-top: 3vw; */
+    /* width: 70%; */
+    /* margin: 1vw; */
+    border-radius: 1vw;
+    box-shadow: 4px 4px 10px lightgray;
+    padding: 1vw 2vw 2vw 1.5vw;
+    height: fit-content;
+}
+
+@media only screen and (max-width: 640px) {
+    .piechart-container {
+        margin-bottom: 8vw;
+        width: 65vw;
+        height: 65vw;
+        align-self: center;
+    }
+}
