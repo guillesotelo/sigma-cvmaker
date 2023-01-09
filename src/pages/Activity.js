@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
 import { getLogs } from '../store/reducers/user'
 import SearchBar from '../components/SearchBar'
+import { logHeaders } from '../constants/tableHeaders'
 
 export default function Activity() {
     const [data, setData] = useState({})
@@ -23,32 +24,6 @@ export default function Activity() {
     const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
     const history = useHistory()
     const dispatch = useDispatch()
-    const logHeaders = [
-        {
-            name: 'DATE',
-            value: 'updatedAt'
-        },
-        {
-            name: 'DETAILS',
-            value: 'details'
-        },
-        {
-            name: 'USER',
-            value: 'username'
-        },
-        {
-            name: 'USER EMAIL',
-            value: 'email'
-        },
-        {
-            name: 'MODULE',
-            value: 'module'
-        },
-        {
-            name: 'ID',
-            value: 'itemId'
-        }
-    ]
 
     useEffect(() => {
         if (!user || !user.email || !isManager) history.push('home')

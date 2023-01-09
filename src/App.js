@@ -21,6 +21,7 @@ import ToolsTech from "./pages/ToolsTech";
 import Clients from "./pages/Clients";
 import Consultants from "./pages/Consultants";
 import Statistics from "./pages/Statistics";
+import Search from "./pages/Search";
 
 function App() {
   return (
@@ -83,6 +84,26 @@ function App() {
           <SdideBar />
           <div className="root-column">
             <NewCV />
+            <Footer />
+          </div>
+        </div>
+      </Route>
+      <Route path="/elastic">
+        <Header />
+        <div className="root-container">
+          <SdideBar />
+          <div className="root-column">
+            <Search />
+            <Footer />
+          </div>
+        </div>
+      </Route>
+      <Route path="/elastic:search">
+        <Header />
+        <div className="root-container">
+          <SdideBar />
+          <div className="root-column">
+            <Search />
             <Footer />
           </div>
         </div>

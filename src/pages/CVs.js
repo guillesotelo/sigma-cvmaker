@@ -9,6 +9,7 @@ import Resume from '../components/Resume'
 import { getResumes, removeResume, saveLog } from '../store/reducers/resume'
 import SearchBar from '../components/SearchBar'
 import DataTable from '../components/DataTable'
+import { cvHeaders } from '../constants/tableHeaders'
 
 export default function CVs({ showAll }) {
     const [resumes, setResumes] = useState([])
@@ -25,36 +26,6 @@ export default function CVs({ showAll }) {
     const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
     const dispatch = useDispatch()
     const history = useHistory()
-    const cvHeaders = [
-        {
-            name: 'NAME',
-            value: 'username'
-        },
-        {
-            name: 'LAST UPDATED',
-            value: 'updatedAt'
-        },
-        {
-            name: 'JOB DESCRIPTION',
-            value: 'role'
-        },
-        {
-            name: 'MANAGER',
-            value: 'managerName'
-        },
-        {
-            name: 'NOTE',
-            value: 'note'
-        },
-        {
-            name: 'TYPE',
-            value: 'type'
-        },
-        {
-            name: 'ACTIONS',
-            value: 'icons'
-        }
-    ]
 
     useEffect(() => {
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
@@ -154,7 +125,7 @@ export default function CVs({ showAll }) {
             await dispatch(saveLog({
                 email: user.email,
                 username: user.username,
-                details: `CV exported: ${resumeData.username}-${resumeData.type}`,
+                details: `CV exported: ${resumeData.username} - ${resumeData.type}`,
                 module: 'CV',
                 itemId: resumeData._id || null
             })).then(data => data.payload)

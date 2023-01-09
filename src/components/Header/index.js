@@ -45,18 +45,7 @@ export default function Header() {
   }
 
   const triggerSearch = () => {
-    // setLoading(true)
-    // if (search.length) {
-    //   const filtered = resumes.filter(res => {
-    //     let matches = true
-    //     search.forEach(word => {
-    //       if (!JSON.stringify(res).toLowerCase().includes(word.toLowerCase())) matches = false
-    //     })
-    //     if (matches) return res
-    //   })
-    //   setFilteredRes(filtered)
-    // }
-    // setLoading(false)
+    if (search.length) history.push(`/elastic?search=${search.join(',')}`)
   }
 
   const getPreview = async email => {

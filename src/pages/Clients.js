@@ -11,6 +11,7 @@ import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
 import { getAppData, getOneAppData, saveAppData, updateAppData } from '../store/reducers/appData'
 import { getImageByType } from '../store/reducers/image'
+import { clientsHeaders } from '../constants/tableHeaders'
 
 export default function Clients() {
     const [data, setData] = useState({})
@@ -28,32 +29,6 @@ export default function Clients() {
     const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
     const history = useHistory()
     const dispatch = useDispatch()
-    const clientsHeaders = [
-        {
-            name: 'NAME',
-            value: 'name'
-        },
-        {
-            name: 'LOCATION',
-            value: 'location'
-        },
-        {
-            name: 'TYPE',
-            value: 'type'
-        },
-        {
-            name: 'CONTACT NAME',
-            value: 'contact'
-        },
-        {
-            name: 'EMAIL',
-            value: 'email'
-        },
-        {
-            name: 'BUSINESS',
-            value: 'business'
-        }
-    ]
 
     useEffect(() => {
         if (selectedClient > -1) {

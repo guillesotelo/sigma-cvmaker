@@ -13,8 +13,28 @@ import { APP_COLORS } from '../constants/app'
 import { getLogo, saveLogo } from '../store/reducers/resume'
 import MoonLoader from "react-spinners/MoonLoader"
 import ProfileIcon from '../icons/profile-icon.svg'
-import { getAppData, getOneAppData, saveAppData, updateAppData, getTrashCan, deletePermanently, restoreItemFromTrash } from '../store/reducers/appData'
-import { createImage, deleteImage, getImages, updateImageData } from '../store/reducers/image'
+import {
+  getAppData,
+  getOneAppData,
+  saveAppData,
+  updateAppData,
+  getTrashCan,
+  deletePermanently,
+  restoreItemFromTrash
+} from '../store/reducers/appData'
+import {
+  createImage,
+  deleteImage,
+  getImages,
+  updateImageData
+} from '../store/reducers/image'
+import {
+  skillHeaders,
+  buzzwordHeaders,
+  imageHeaders,
+  userHeaders,
+  cvHeaders
+} from '../constants/tableHeaders'
 
 export default function Settings() {
   const [tab, setTab] = useState('user')
@@ -48,100 +68,6 @@ export default function Settings() {
   const dispatch = useDispatch()
   const tabs = [`CV Logo`, `Skills`, `Buzzwords`, `Images`, `Trash`]
   const trashModules = [`CV's`, 'Images', 'Users']
-  const skillHeaders = [
-    {
-      name: 'SKILL',
-      value: 'name'
-    },
-    {
-      name: 'FIELD',
-      value: 'field'
-    }
-  ]
-  const buzzwordHeaders = [
-    {
-      name: 'SKILL',
-      value: 'name'
-    },
-    {
-      name: 'TYPE',
-      value: 'type'
-    }
-  ]
-  const imageHeaders = [
-    {
-      name: 'IMAGE',
-      value: 'data'
-    },
-    {
-      name: 'NAME',
-      value: 'name'
-    },
-    {
-      name: 'EMAIL',
-      value: 'email'
-    },
-    {
-      name: 'TYPE',
-      value: 'type'
-    },
-    {
-      name: 'SIZE',
-      value: 'size'
-    }
-  ]
-  const userHeaders = [
-    {
-      name: 'ADDED',
-      value: 'createdAt'
-    },
-    {
-      name: 'FULL NAME',
-      value: 'username'
-    },
-    {
-      name: 'EMAIL',
-      value: 'email'
-    },
-    {
-      name: 'MANAGER',
-      value: 'managerName'
-    },
-    {
-      name: 'IS MANAGER',
-      value: 'isManager'
-    },
-    {
-      name: 'IS ADMIN',
-      value: 'isAdmin'
-    }
-  ]
-  const cvHeaders = [
-    {
-      name: 'NAME',
-      value: 'username'
-    },
-    {
-      name: 'LAST UPDATED',
-      value: 'updatedAt'
-    },
-    {
-      name: 'JOB DESCRIPTION',
-      value: 'role'
-    },
-    {
-      name: 'MANAGER',
-      value: 'managerName'
-    },
-    {
-      name: 'NOTE',
-      value: 'note'
-    },
-    {
-      name: 'TYPE',
-      value: 'type'
-    }
-  ]
 
   useEffect(() => {
     if (!user || !user.email || !isManager) history.push('home')

@@ -8,6 +8,7 @@ import SwitchBTN from '../components/SwitchBTN'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
 import { getAppData, getOneAppData, saveAppData, updateAppData } from '../store/reducers/appData'
+import { toolsHeaders } from '../constants/tableHeaders'
 
 export default function ToolsTech() {
     const [data, setData] = useState({})
@@ -25,21 +26,6 @@ export default function ToolsTech() {
     const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
     const history = useHistory()
     const dispatch = useDispatch()
-    const toolsHeaders = [
-        {
-            name: 'TOOL',
-            value: 'name'
-        },
-        {
-            name: 'TYPE',
-            value: 'type'
-        },
-        {
-            name: 'FIELD',
-            value: 'field'
-        }
-    ]
-
 
     useEffect(() => {
         if (selectedTool > -1) setData({ ...data, ...tools[selectedTool] })

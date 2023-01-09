@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import EditIcon from '../../icons/edit-icon.svg'
 import TrashCan from '../../icons/trash-icon.svg'
@@ -29,7 +29,13 @@ export default function DataTable(props) {
     } = props
 
     const [maxItems, setMaxItems] = useState(maxRows || 10)
+    const [ordered, setOrdered] = useState({})
+    const [filterData, setFilterData] = useState([])
     const history = useHistory()
+
+    useEffect(() => {
+        if (tableData && tableData.length) setFilterData(tableData)
+    }, [tableData])
 
     const handleItem = key => {
         if (isEdit) {
@@ -45,6 +51,23 @@ export default function DataTable(props) {
         }
     }
 
+    const orderBy = header => {
+        const copyData = [...filterData]
+        const orderedData = copyData.sort((a, b) => {
+            if (ordered[header.name]) {
+                if (a[header.value] > b[header.value]) return -1
+                if (a[header.value] < b[header.value]) return 1
+                return 0
+            } else {
+                if (a[header.value] < b[header.value]) return -1
+                if (a[header.value] > b[header.value]) return 1
+                return 0
+            }
+        })
+        setOrdered({ [header.name]: !ordered[header.name] })
+        setFilterData(orderedData)
+    }
+
     return (
         <div className='data-table-container' style={style}>
             <div className='data-table-titles'>
@@ -57,15 +80,21 @@ export default function DataTable(props) {
                         <h4
                             key={i}
                             className='data-table-header'
-                            style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}>{header.name}</h4
-                        >)
+                            onClick={() => orderBy(header)}
+                            style={{
+                                width: sizes ? sizes[i] : `${100 / tableHeaders.length}%`,
+                                textDecoration: Object.keys(ordered).includes(header.name) && 'none'
+                            }}>
+                            {header.name} {Object.keys(ordered).includes(header.name) ? ordered[header.name] ? ` ▼` : ` ▲` : ''}
+                        </h4>
+                    )
                 }
             </div>
             {loading ? <div style={{ alignSelf: 'center', display: 'flex', marginTop: '5vw' }}><MoonLoader color='#E59A2F' /></div>
                 :
-                tableData && tableData.length ?
+                filterData && filterData.length ?
                     <>
-                        {tableData.map((row, i) => i < maxItems &&
+                        {filterData.map((row, i) => i < maxItems &&
                             <div
                                 key={i}
                                 className='data-table-row'
@@ -119,7 +148,7 @@ export default function DataTable(props) {
                                 )}
                             </div>
                         )}
-                        {maxItems < tableData.length &&
+                        {maxItems < filterData.length &&
                             <button className='data-table-lazy-btn' onClick={() => setMaxItems(maxItems + 10)}>{`Show more ${title.toLowerCase()} ▼`}</button>
                         }
                     </>

@@ -18,6 +18,7 @@ import {
 import { getImageByType } from '../store/reducers/image'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
+import { userHeaders } from '../constants/tableHeaders'
 
 export default function Users() {
     const [tab, setTab] = useState('user')
@@ -39,32 +40,6 @@ export default function Users() {
     const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
     const history = useHistory()
     const dispatch = useDispatch()
-    const userHeaders = [
-        {
-            name: 'ADDED',
-            value: 'createdAt'
-        },
-        {
-            name: 'FULL NAME',
-            value: 'username'
-        },
-        {
-            name: 'EMAIL',
-            value: 'email'
-        },
-        {
-            name: 'MANAGER',
-            value: 'managerName'
-        },
-        {
-            name: 'IS MANAGER',
-            value: 'isManager'
-        },
-        {
-            name: 'IS ADMIN',
-            value: 'isAdmin'
-        }
-    ]
 
     useEffect(() => {
         if (!user || !user.email || !isManager) history.push('home')
