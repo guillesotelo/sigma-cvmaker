@@ -593,11 +593,9 @@
     min-width: 7vw;
 }
 
-.signature-image-container {
+.signature-image-container {}
 
-}
-
-.signature-image-container button{
+.signature-image-container button {
     border: none;
     margin: .2vw 0;
     padding: .3vw 0;
@@ -607,11 +605,11 @@
     width: 100%;
 }
 
-.signature-image-container button:hover{
+.signature-image-container button:hover {
     background-color: #E4C69C;
 }
 
-.resume-signature-canvas-container button{
+.resume-signature-canvas-container button {
     border: none;
     margin: .2vw 0;
     padding: .3vw 0;
@@ -620,7 +618,7 @@
     transition: .3s;
 }
 
-.resume-signature-canvas-container button:hover{
+.resume-signature-canvas-container button:hover {
     background-color: #E4C69C;
 }
 
@@ -1256,6 +1254,10 @@
 
 .elastic-words {
     font-weight: normal;
+}
+
+.elastic-table-container {
+  margin-top: 1vw;
 }
 
 /* --- Elastic Search ---  */

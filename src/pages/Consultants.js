@@ -242,6 +242,7 @@ export default function Consultants() {
                         subtitle='Here is a list of all consultants in the system'
                         maxRows={9}
                         tableData={users}
+                        setTableData={setUsers}
                         tableHeaders={userHeaders}
                         loading={loading}
                         item={selectedUser}

@@ -240,6 +240,7 @@ export default function Users() {
                     subtitle='Here is a list of all users in the system'
                     maxRows={9}
                     tableData={users}
+                    setTableData={setUsers}
                     tableHeaders={userHeaders}
                     loading={loading}
                     item={selectedUser}

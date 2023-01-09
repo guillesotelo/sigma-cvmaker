@@ -150,6 +150,7 @@ export default function CVs({ showAll }) {
                     subtitle={`Here is a list of all CV's in the system`}
                     maxRows={9}
                     tableData={filteredRes}
+                    setTableData={setFilteredRes}
                     tableHeaders={cvHeaders}
                     loading={loading}
                     setLoading={setLoading}

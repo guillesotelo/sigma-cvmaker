@@ -215,6 +215,7 @@ export default function Clients() {
                         title='Clients'
                         subtitle='Here is a list of all clients in the system'
                         tableData={clients}
+                        setTableData={setClients}
                         tableHeaders={clientsHeaders}
                         maxRows={9}
                         loading={loading}

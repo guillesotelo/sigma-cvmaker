@@ -2,12 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import DataTable from '../components/DataTable'
-import CTAButton from '../components/CTAButton'
-import InputField from '../components/InputField'
-import SwitchBTN from '../components/SwitchBTN'
-import Slider from '../components/Slider'
-import { toast } from 'react-toastify'
-import { APP_COLORS } from '../constants/app'
 import { getLogs } from '../store/reducers/user'
 import SearchBar from '../components/SearchBar'
 import { logHeaders } from '../constants/tableHeaders'
@@ -88,6 +82,7 @@ export default function Activity() {
                     title='Activity'
                     subtitle='Here is a list of the complete app log'
                     tableData={logs}
+                    setTableData={setLogs}
                     tableHeaders={logHeaders}
                     loading={loading}
                     item={selectedLog}
@@ -95,6 +90,7 @@ export default function Activity() {
                     isEdit={isEdit}
                     setIsEdit={setIsEdit}
                     maxRows={9}
+                    style={{ width: '97.5%' }}
                 />
             </div>
         </div>

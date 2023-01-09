@@ -9,6 +9,7 @@ import './styles.css'
 export default function DataTable(props) {
     const {
         tableData,
+        setTableData,
         title,
         subtitle,
         maxRows,
@@ -29,13 +30,8 @@ export default function DataTable(props) {
     } = props
 
     const [maxItems, setMaxItems] = useState(maxRows || 10)
-    const [ordered, setOrdered] = useState({})
-    const [filterData, setFilterData] = useState([])
+    const [ordered, setOrdered] = useState({ ...tableHeaders.forEach(h => { return { [h.name]: false } }) })
     const history = useHistory()
-
-    useEffect(() => {
-        if (tableData && tableData.length) setFilterData(tableData)
-    }, [tableData])
 
     const handleItem = key => {
         if (isEdit) {
@@ -52,20 +48,29 @@ export default function DataTable(props) {
     }
 
     const orderBy = header => {
-        const copyData = [...filterData]
+        const copyData = [...tableData]
         const orderedData = copyData.sort((a, b) => {
             if (ordered[header.name]) {
+                if (header.value === 'createdAt' || header.value === 'updatedAt') {
+                    if (new Date(a[header.value]).getTime() < new Date(b[header.value]).getTime()) return -1
+                    if (new Date(a[header.value]).getTime() > new Date(b[header.value]).getTime()) return 1
+                }
                 if (a[header.value] > b[header.value]) return -1
                 if (a[header.value] < b[header.value]) return 1
-                return 0
             } else {
+                if (header.value === 'createdAt' || header.value === 'updatedAt') {
+                    if (new Date(a[header.value]).getTime() > new Date(b[header.value]).getTime()) return -1
+                    if (new Date(a[header.value]).getTime() < new Date(b[header.value]).getTime()) return 1
+                }
                 if (a[header.value] < b[header.value]) return -1
                 if (a[header.value] > b[header.value]) return 1
-                return 0
             }
+            return 0
         })
+        setTableData(orderedData)
         setOrdered({ [header.name]: !ordered[header.name] })
-        setFilterData(orderedData)
+        setItem(-1)
+        setIsEdit(false)
     }
 
     return (
@@ -85,20 +90,23 @@ export default function DataTable(props) {
                                 width: sizes ? sizes[i] : `${100 / tableHeaders.length}%`,
                                 textDecoration: Object.keys(ordered).includes(header.name) && 'none'
                             }}>
-                            {header.name} {Object.keys(ordered).includes(header.name) ? ordered[header.name] ? ` ▼` : ` ▲` : ''}
+                            {header.name} {Object.keys(ordered).includes(header.name) ? ordered[header.name] ? `▼` : `▲` : ''}
                         </h4>
                     )
                 }
             </div>
             {loading ? <div style={{ alignSelf: 'center', display: 'flex', marginTop: '5vw' }}><MoonLoader color='#E59A2F' /></div>
                 :
-                filterData && filterData.length ?
+                tableData && tableData.length ?
                     <>
-                        {filterData.map((row, i) => i < maxItems &&
+                        {tableData.map((row, i) => i < maxItems &&
                             <div
                                 key={i}
                                 className='data-table-row'
-                                style={{ backgroundColor: item === i ? '#E4C69C' : i % 2 === 0 ? 'white' : '#F9FAFB' }}
+                                style={{
+                                    backgroundColor: item === i ? '#E4C69C' : i % 2 === 0 ? 'white' : '#F9FAFB',
+                                    marginBottom: i === tableData.length - 1 && '3vw'
+                                }}
                             >
                                 {tableHeaders.map((header, j) =>
                                     header.value === 'data' ?
@@ -148,7 +156,7 @@ export default function DataTable(props) {
                                 )}
                             </div>
                         )}
-                        {maxItems < filterData.length &&
+                        {maxItems < tableData.length &&
                             <button className='data-table-lazy-btn' onClick={() => setMaxItems(maxItems + 10)}>{`Show more ${title.toLowerCase()} ▼`}</button>
                         }
                     </>

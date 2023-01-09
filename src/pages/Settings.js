@@ -524,6 +524,7 @@ export default function Settings() {
                     subtitle='Here is a list of all skills in the system'
                     maxRows={9}
                     tableData={skills}
+                    setTableData={setSkills}
                     tableHeaders={skillHeaders}
                     loading={loading}
                     item={selectedItem}
@@ -598,6 +599,7 @@ export default function Settings() {
                       subtitle='Here is a list of all buzzwords in the system'
                       maxRows={9}
                       tableData={buzzwords}
+                      setTableData={setBuzzwords}
                       tableHeaders={buzzwordHeaders}
                       loading={loading}
                       item={selectedItem}
@@ -699,6 +701,7 @@ export default function Settings() {
                         subtitle='Here is a list of all images in the system'
                         maxRows={9}
                         tableData={images}
+                        setTableData={setImages}
                         tableHeaders={imageHeaders}
                         loading={loading}
                         item={selectedItem}
@@ -907,6 +910,7 @@ export default function Settings() {
                           subtitle={`Here is a list of all removed ${data.module ? data.module.toLowerCase() : 'items'} in the system`}
                           maxRows={9}
                           tableData={trash}
+                          setTableData={setTrash}
                           tableHeaders={trashHeaders}
                           loading={loading}
                           item={selectedItem}

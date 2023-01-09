@@ -1,25 +1,36 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import BarChart from '../components/BarChart'
-import PieChart from '../components/PieChart'
-import PolarChart from '../components/PolarChart'
-import { PALETTE } from '../constants/app'
 import { getAppData } from '../store/reducers/appData'
 import { getImages } from '../store/reducers/image'
 import { getResumes } from '../store/reducers/resume'
 import { getLogs, getUsers } from '../store/reducers/user'
-import { cvHeaders, imageHeaders, userHeaders } from '../constants/tableHeaders'
+import {
+    cvHeaders,
+    imageHeaders,
+    userHeaders,
+    appDataHeaders,
+    logHeaders
+} from '../constants/tableHeaders'
+import DataTable from '../components/DataTable'
 
 export default function Search() {
     const [words, setWords] = useState([])
-    const [results, setResults] = useState({})
     const [loading, setLoading] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
+    const [selectedCV, setSelectedCV] = useState(false)
+    const [selectedUser, setSelectedUser] = useState(false)
+    const [selectedImage, setSelectedImage] = useState(false)
+    const [selectedData, setSelectedData] = useState(false)
+    const [selectedLog, setSelectedLog] = useState(false)
+    const [cvs, setCVs] = useState([])
+    const [users, setUsers] = useState([])
+    const [images, setImages] = useState([])
+    const [appDatas, setAppDatas] = useState([])
+    const [logs, setLogs] = useState([])
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
     const history = useHistory()
     const dispatch = useDispatch()
-
-    console.log("Results", results)
 
     useEffect(() => {
         if (!user || !user.email) return history.push('/login')
@@ -47,18 +58,34 @@ export default function Search() {
             const appDatas = await dispatch(getAppData({ email: user.email })).then(data => data.payload) || []
             const logs = await dispatch(getLogs(user)).then(data => data.payload) || []
 
-            setResults({
-                cvs: filterData(cvs),
-                users: filterData(users),
-                images: filterData(images),
-                appDatas: filterData(appDatas),
-                logs: filterData(logs)
-            })
+            setUsers(filterData(users))
+            setCVs(filterData(cvs))
+            setImages(filterData(images))
+            setAppDatas(filterData(appDatas))
+            setLogs(filterData(logs))
             setLoading(false)
         } catch (err) {
             console.error(err)
             setLoading(false)
         }
+    }
+
+    const organizeAppData = data => {
+        let newItems = []
+        data.forEach(item => {
+            const parsed = JSON.parse(item.data)
+            parsed.forEach(appData => {
+                let newData = {
+                    ...item,
+                    module: item.type || '',
+                    name: appData.name || '',
+                    itemType: appData.type || '',
+                    field: appData.field || ''
+                }
+                newItems.push(newData)
+            })
+        })
+        return newItems
     }
 
     const filterData = data => {
@@ -78,8 +105,75 @@ export default function Search() {
     return (
         <div className='elastic-search-container'>
             <div className='elastic-search-section'>
-                <h4 className='page-title'>Results for: <span className='elastic-words'>{words.join(' ')}</span></h4>
-
+                <h4 className='page-title'>Results for: <span className='elastic-words'>"{words.join(' ')}"</span></h4>
+                <div className='elastic-table-container'>
+                    <DataTable
+                        title='Users'
+                        subtitle=''
+                        tableData={users}
+                        setTableData={setUsers}
+                        tableHeaders={userHeaders}
+                        loading={loading}
+                        item={selectedUser}
+                        setItem={setSelectedUser}
+                        isEdit={isEdit}
+                        setIsEdit={setIsEdit}
+                        maxRows={4}
+                        style={{ width: 'unset' }}
+                    />
+                    <DataTable
+                        title='CVs'
+                        subtitle=''
+                        tableData={cvs}
+                        setTableData={setCVs}                        tableHeaders={cvHeaders}
+                        loading={loading}
+                        item={selectedCV}
+                        setItem={setSelectedCV}
+                        isEdit={isEdit}
+                        setIsEdit={setIsEdit}
+                        maxRows={4}
+                        style={{ width: 'unset' }}
+                    />
+                    <DataTable
+                        title='Images'
+                        subtitle=''
+                        tableData={images}
+                        setTableData={setImages}                        tableHeaders={imageHeaders}
+                        loading={loading}
+                        item={selectedImage}
+                        setItem={setSelectedImage}
+                        isEdit={isEdit}
+                        setIsEdit={setIsEdit}
+                        maxRows={4}
+                        style={{ width: 'unset' }}
+                    />
+                    <DataTable
+                        title='App Data'
+                        subtitle=''
+                        tableData={appDatas}
+                        setTableData={setAppDatas}                        tableHeaders={appDataHeaders}
+                        loading={loading}
+                        item={selectedData}
+                        setItem={setSelectedData}
+                        isEdit={isEdit}
+                        setIsEdit={setIsEdit}
+                        maxRows={4}
+                        style={{ width: 'unset' }}
+                    />
+                    <DataTable
+                        title='Logs'
+                        subtitle=''
+                        tableData={logs}
+                        setTableData={setLogs}                        tableHeaders={logHeaders}
+                        loading={loading}
+                        item={selectedLog}
+                        setItem={setSelectedLog}
+                        isEdit={isEdit}
+                        setIsEdit={setIsEdit}
+                        maxRows={4}
+                        style={{ width: 'unset' }}
+                    />
+                </div>
             </div>
         </div>
     )

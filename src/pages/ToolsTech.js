@@ -173,6 +173,7 @@ export default function ToolsTech() {
                         subtitle='Here is a list of all tools & tech in the system'
                         maxRows={9}
                         tableData={tools}
+                        setTableData={setTools}
                         tableHeaders={toolsHeaders}
                         loading={loading}
                         item={selectedTool}
