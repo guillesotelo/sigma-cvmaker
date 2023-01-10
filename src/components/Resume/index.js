@@ -59,7 +59,6 @@ export default function Resume(props) {
     const fullName = `${res.name || ''}${res.middlename ? ` ${res.middlename} ` : ' '}${res.surname || ''}`
 
     useEffect(() => {
-        setLoading(true)
         const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
         if (!user || !user.email) history.push('/login')
         getFonts()
@@ -69,7 +68,6 @@ export default function Resume(props) {
 
     useEffect(() => {
         if (Object.keys(res).length) {
-            setLoading(false)
             if (download) {
                 setLoading(true)
                 setDownload(false)
@@ -108,6 +106,7 @@ export default function Resume(props) {
 
     const getResumeData = async () => {
         try {
+            setLoading(true)
             let parsedData = {}
             if (data.data) {
                 parsedData = JSON.parse(data.data || {})
@@ -154,8 +153,10 @@ export default function Resume(props) {
             }
             if (logos) setClientLogos(logos)
 
+            setLoading(false)
         } catch (err) {
             console.error(err)
+            setLoading(false)
         }
     }
 

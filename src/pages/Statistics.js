@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import { MoonLoader } from 'react-spinners'
 import BarChart from '../components/BarChart'
 import PieChart from '../components/PieChart'
 import PolarChart from '../components/PolarChart'
@@ -96,19 +97,26 @@ export default function Statistics() {
         }
     }, [search.length])
 
-    const getCountByLabel = async labels => {
-        let data = []
-        const cvs = await dispatch(getResumes({ ...user, getAll: true })).then(data => data.payload)
-        const users = await dispatch(getUsers(user)).then(data => data.payload)
-        const images = await dispatch(getImages()).then(data => data.payload)
-        const appDatas = await dispatch(getAppData({ email: user.email })).then(data => data.payload)
+    const getCountByLabel = async () => {
+        try {
+            setLoading(true)
+            let data = []
+            const cvs = await dispatch(getResumes({ ...user, getAll: true })).then(data => data.payload)
+            const users = await dispatch(getUsers(user)).then(data => data.payload)
+            const images = await dispatch(getImages()).then(data => data.payload)
+            const appDatas = await dispatch(getAppData({ email: user.email })).then(data => data.payload)
 
-        if (cvs && cvs.length) data[0] = cvs.length
-        if (users && users.length) data[1] = users.length
-        if (images && images.length) data[2] = images.length
-        if (appDatas && appDatas.length) data[3] = appDatas.length
+            if (cvs && cvs.length) data[0] = cvs.length
+            if (users && users.length) data[1] = users.length
+            if (images && images.length) data[2] = images.length
+            if (appDatas && appDatas.length) data[3] = appDatas.length
 
-        return data
+            setLoading(false)
+            return data
+        } catch (err) {
+            console.error(err)
+            setLoading(false)
+        }
     }
 
     const countLogsByAction = (value, col) => {
@@ -148,13 +156,14 @@ export default function Statistics() {
         <div className='statistics-container'>
             <div className='statistics-section'>
                 <h4 className='page-title'>Statistics</h4>
-                <div className='statistics-graphrow'>
-                    <BarChart chartData={logsAction} position='y' title='Logs by action' />
-                    <PolarChart chartData={logsModule} title='Logs by module' size={200} />
-                    <PieChart chartData={totalCount} title='Total count' size={200} />
-                </div>
-                <div className='statistics-graphrow'>
-                </div>
+                {loading ? <div style={{ alignSelf: 'center', display: 'flex', marginTop: '5vw' }}><MoonLoader color='#E59A2F' /></div>
+                    :
+                    <div className='statistics-graphrow'>
+                        <BarChart chartData={logsAction} position='y' title='Logs by action' />
+                        <PolarChart chartData={logsModule} title='Logs by module' size={200} />
+                        <PieChart chartData={totalCount} title='Total count' size={200} />
+                    </div>
+                }
             </div>
         </div>
     )
