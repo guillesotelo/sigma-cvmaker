@@ -587,19 +587,19 @@ export default function Resume(props) {
                             <View style={styles.profilePicCover}>
                                 <Image style={styles.profilePic} src={profileImage} />
                             </View>
-                            <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.3 + padding.personalInfo}vw 0` : '1vw 0' }}>
+                            <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.05 * padding.personalInfo}vw 0` : '1vw 0' }}>
                                 {checkHidden('Name') ? null : <Text style={styles.infoItem}>Name</Text>}
                                 {checkHidden('Name') ? null : <Text style={styles.infoText}>{fullName || ''}</Text>}
                             </View>
-                            <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.3 + padding.personalInfo}vw 0` : '1vw 0' }}>
+                            <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.05 * padding.personalInfo}vw 0` : '1vw 0' }}>
                                 {checkHidden('Gender') || !res.gender ? null : <Text style={styles.infoItem}>Gender</Text>}
                                 {checkHidden('Gender') ? null : <Text style={styles.infoText}>{res.gender || ''}</Text>}
                             </View>
-                            <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.3 + padding.personalInfo}vw 0` : '1vw 0' }}>
+                            <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.05 * padding.personalInfo}vw 0` : '1vw 0' }}>
                                 {checkHidden('Location') || !res.location ? null : <Text style={styles.infoItem}>Location</Text>}
                                 {checkHidden('Location') ? null : <Text style={styles.infoText}>{res.location || ''}</Text>}
                             </View>
-                            <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.3 + padding.personalInfo}vw 0` : '1vw 0' }}>
+                            <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.05 * padding.personalInfo}vw 0` : '1vw 0' }}>
                                 {isAllHidden(res.languages) ? null : <Text style={styles.infoItem}>Language</Text>}
                                 {res.languages.map((lan, i) => lan.name && !lan.hidden ?
                                     <Text key={i} style={styles.infoText}>{`${lan.name} - ${lan.option}`}</Text> : null)

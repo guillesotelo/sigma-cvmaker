@@ -542,6 +542,7 @@
     flex-direction: column;
     align-items: flex-start;
     width: 60%;
+    position: relative;
 }
 
 .section-settings-drop {

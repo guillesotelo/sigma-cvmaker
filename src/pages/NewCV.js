@@ -742,7 +742,7 @@ export default function NewCV() {
                             />
                         }
                     </div>
-                    <div className='section-settings' style={{ marginTop: '5vw' }}>
+                    <div className='section-settings' style={{ marginTop: '2vw' }}>
                         <>
                             {!paddingDrop ?
                                 <img
