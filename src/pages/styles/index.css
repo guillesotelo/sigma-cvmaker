@@ -941,7 +941,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 1vw .5vw;
+    /* padding: 1vw .5vw; */
     margin: 1vw 1vw 2vw 1vw;
     border-radius: 1vw;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -957,12 +957,10 @@
 .settings-tabs {
     display: flex;
     flex-direction: row;
-    gap: 1vw;
-    border: 1px solid rgb(233, 233, 233);
     border-radius: .5vw;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    margin: 0 1vw 1vw 1vw;
+    width: 100%;
 }
 
 .settings-tab {
@@ -972,6 +970,13 @@
     padding: .5vw 1vw;
     cursor: pointer;
     transition: .3s;
+    width: 20%;
+    text-align: center;
+    border-top: 1px solid #d7d7d7;
+    border-radius: .4vw;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: #fff;
 }
 
 .settings-tab:hover {
@@ -979,7 +984,7 @@
 }
 
 .settings-tab-selected {
-    background-color: #ffe9ca;
+    background: linear-gradient(180deg, #ffd395 0%, #fff 100%);
     margin: 0;
     border-radius: .4vw;
     border-bottom-left-radius: 0;
@@ -988,13 +993,39 @@
     cursor: pointer;
     font-size: .9vw;
     transition: .3s;
+    width: 20%;
+    text-align: center;
 }
 
 .settings-section {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin: 1vw 0;
+    padding: 2vw 0;
+}
+
+.settings-logo-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.settings-logo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.settings-logo-title {
+    font-size: 1vw;
+    font-weight: normal;
+    margin: 0 0 1.5vw 1vw;
+}
+
+.settings-logo-btns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .settings-cv-logo {
@@ -1022,7 +1053,6 @@
     display: flex;
     flex-direction: row;
     gap: 1vw;
-    align-self: flex-start;
     margin: 1vw;
 }
 
@@ -1258,7 +1288,7 @@
 }
 
 .elastic-table-container {
-  margin-top: 1vw;
+    margin-top: 1vw;
 }
 
 /* --- Elastic Search ---  */

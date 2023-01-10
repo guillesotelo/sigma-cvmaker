@@ -16,6 +16,17 @@
     transition: 0.3s;
 }
 
+.cta-btn-disabled {
+    font-size: 1vw !important;
+    padding: .7vw 1.2vw !important;
+    margin: 0vw !important;
+    color: #E5E5E5;
+    border: none;
+    border-radius: 0.5vw;
+    cursor: not-allowed;
+    transition: 0.3s;
+}
+
 .cta-btn:hover {
     /* opacity: 0.8 !important; */
     transform: translateY(-7%);

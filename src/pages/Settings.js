@@ -448,7 +448,9 @@ export default function Settings() {
           <h4
             key={i}
             className={tab === tabName ? 'settings-tab-selected' : 'settings-tab'}
-            onClick={() => setTab(tabName)}>
+            onClick={() => setTab(tabName)}
+            style={{ borderLeft: i !== 0 && '1px solid #E2E2E2', borderRight: i !== tabs.length -1 && '1px solid #E2E2E2' }}
+            >
             {tabName}
           </h4>)}
       </div>
@@ -458,52 +460,63 @@ export default function Settings() {
           tab === `CV Logo` ?
             loading ? <div style={{ alignSelf: 'center', display: 'flex', marginTop: '1vw' }}><MoonLoader color='#E59A2F' /></div>
               :
-              <>
-                <div className='settings-logo-input'>
-                  {cvLogo.cvImage ?
-                    <img
-                      src={cvLogo.cvImage}
-                      className='settings-cv-logo'
-                      onClick={() => document.getElementById('cvImage').click()}
-                      loading='lazy'
-                    />
-                    : <img
-                      src={DropPhoto}
-                      className='settings-cv-logo-svg'
-                      onClick={() => document.getElementById('cvImage').click()}
-                    />}
-                  <InputField
-                    label=''
-                    type='file'
-                    name='cvImage'
-                    filename='cvImage'
-                    image={cvLogo}
-                    setImage={setcvLogo}
-                    setIsEdit={setIsEdit}
-                    style={{ color: 'rgb(71, 71, 71)', margin: '1vw' }}
-                  />
+              <div className='settings-logo-container'>
+                <div className='settings-logo-section'>
+                  <h4 className='settings-logo-title'>Here you can upload or update the logo that will be displayed in every CV</h4>
+                  <div className='settings-logo-btns'>
+                    <div className='settings-logo-input'>
+                      {cvLogo.cvImage ?
+                        <img
+                          src={cvLogo.cvImage}
+                          className='settings-cv-logo'
+                          onClick={() => document.getElementById('cvImage').click()}
+                          loading='lazy'
+                        />
+                        : <img
+                          src={DropPhoto}
+                          className='settings-cv-logo-svg'
+                          onClick={() => document.getElementById('cvImage').click()}
+                        />}
+                      <InputField
+                        label=''
+                        type='file'
+                        name='cvImage'
+                        filename='cvImage'
+                        image={cvLogo}
+                        setImage={setcvLogo}
+                        setIsEdit={setIsEdit}
+                        style={{ color: 'rgb(71, 71, 71)', margin: '1vw' }}
+                      />
+                    </div>
+                    <div className='settings-cvlogo-btns'>
+                      {isEdit ?
+                        <CTAButton
+                          label='Discard'
+                          handleClick={() => {
+                            getCVLogo()
+                            setIsEdit(false)
+                          }}
+                          color={APP_COLORS.GRAY}
+                          disabled={!isEdit}
+                        />
+                        : ''}
+                      <CTAButton
+                        label='Replace'
+                        handleClick={() => document.getElementById('cvImage').click()}
+                        color={APP_COLORS.YELLOW}
+                        style={{ color: 'black' }}
+                      />
+                      <CTAButton
+                        label='Save'
+                        handleClick={saveCVLogo}
+                        color={APP_COLORS.GREEN}
+                        loading={loading}
+                        disabled={!isEdit}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className='settings-cvlogo-btns'>
-                  {isEdit ?
-                    <CTAButton
-                      label='Discard'
-                      handleClick={() => {
-                        getCVLogo()
-                        setIsEdit(false)
-                      }}
-                      color={APP_COLORS.GRAY}
-                      disabled={!isEdit}
-                    />
-                    : ''}
-                  <CTAButton
-                    label='Save'
-                    handleClick={saveCVLogo}
-                    color={APP_COLORS.GREEN}
-                    loading={loading}
-                    disabled={!isEdit}
-                  />
-                </div>
-              </>
+              </div>
             :
             tab === `Skills` ?
               <>
