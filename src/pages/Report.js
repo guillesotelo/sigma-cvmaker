@@ -91,6 +91,7 @@ export default function Report() {
                         cols={56}
                         rows={6}
                         placeholder='Desicribe what happened...'
+                        style={{ marginBottom: '1vw' }}
                     />
                     <CTAButton
                         label='Create Report'

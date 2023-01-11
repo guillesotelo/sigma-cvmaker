@@ -7,6 +7,7 @@ import { getImageByType } from '../../store/reducers/image'
 import ProfileIcon from '../../icons/user-icon.svg'
 import LogoutIcon from '../../icons/logout-icon.svg'
 import ErrorIcon from '../../icons/error-icon.svg'
+import BugIcon from '../../icons/bug-icon.svg'
 import SigmaIso from '../../assets/logos/sigma_connectivity_iso.png'
 import SearchBar from '../SearchBar'
 import './styles.css'
@@ -78,8 +79,8 @@ export default function Header() {
           />
         </div>
         {user && user.email ?
-          <div>
-            <img src={ErrorIcon} className='error-icon' onClick={() => history.push('/report')} />
+          <div className='header-right-icons'>
+            <img src={BugIcon} className='error-icon' onClick={() => history.push('/report')} />
             {/* <img src={LogoutIcon} className='logout-icon' onClick={logOutUser} /> */}
             {profilePic.image ?
               <img

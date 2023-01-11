@@ -1,0 +1,86 @@
+export const HELP = {
+    'new-cv': {
+        title: 'Creating a new CV',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'edit-cv': {
+        title: 'Editing a CV',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'type-of-data': {
+        title: 'Types of data',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'activity-and-statistics': {
+        title: 'Activity & Statistics',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'new-image': {
+        title: 'Upload a new image',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'image-styling': {
+        title: 'Edit image styling',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'tips-profile': {
+        title: 'Tips for a nice profile image',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'common-errors': {
+        title: 'Common errors',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'sumbit-report': {
+        title: 'Submit a report',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'new-account': {
+        title: 'Create a new account (Manager or Consultant)',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'edit-user': {
+        title: 'Edit user data',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'what-to-know-consultant-data': {
+        title: 'What to know when updating consultant data',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'hr-info': {
+        title: 'Contact Information - HR Coordinator',
+        description: '',
+        link: '',
+        images: {},
+    },
+    'development-info': {
+        title: 'Contact Information - App Development',
+        description: 'Guillermo Sotelo \n guillermo.sotelo@sigma.se \n +46761274862',
+        link: '',
+        images: {},
+    },
+}

@@ -17,6 +17,7 @@ import SdideBar from "./components/SideBar";
 import Users from "./pages/Users";
 import Activity from "./pages/Activity";
 import Help from "./pages/Help";
+import HelpPage from "./pages/HelpPage";
 import ToolsTech from "./pages/ToolsTech";
 import Clients from "./pages/Clients";
 import Consultants from "./pages/Consultants";
@@ -204,6 +205,26 @@ function App() {
           <SdideBar />
           <div className="root-column">
             <Help />
+            <Footer />
+          </div>
+        </div>
+      </Route>
+      <Route path="/helpPage">
+        <Header />
+        <div className="root-container">
+          <SdideBar />
+          <div className="root-column">
+            <HelpPage />
+            <Footer />
+          </div>
+        </div>
+      </Route>
+      <Route path="/helpPage:module">
+        <Header />
+        <div className="root-container">
+          <SdideBar />
+          <div className="root-column">
+            <HelpPage />
             <Footer />
           </div>
         </div>

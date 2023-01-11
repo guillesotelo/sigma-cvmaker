@@ -764,6 +764,7 @@
     margin: 1vw 0;
     font-size: .8vw;
     text-align: center;
+    font-weight: normal;
 }
 
 .report-list-title {
@@ -790,6 +791,7 @@
     padding: 1vw;
     margin: 2vw;
     transition: .3s;
+    position: relative;
 }
 
 .report-title {
@@ -811,6 +813,7 @@
 
 .report-card:hover .report-description {
     height: fit-content;
+    min-height: 6vw;
 }
 
 .report-card:hover {
@@ -1313,7 +1316,7 @@
 /* --- Help ---  */
 .help-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: flex-start;
     padding: 1vw;
     margin: 1vw 1vw 2vw 1vw;
@@ -1321,6 +1324,83 @@
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     background-color: #fff;
     min-height: 73vh;
+}
+
+.help-search-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 2vw;
+}
+
+.help-search-title {
+    font-size: 1.3vw;
+    font-weight: normal;
+}
+
+.help-module-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    margin-top: 2vw;
+}
+
+.help-module-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.help-module-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 2vw;
+}
+
+.help-module-title {
+    font-size: 1.2vw;
+    margin: 0 0 .5vw .3vw;
+}
+
+.help-module-page {
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    align-items: center;
+}
+
+.help-page-svg {
+    height: 22px;
+    margin-right: .5vw;
+    transition: .3s;
+    filter: invert(0%) sepia(2%) saturate(6%) hue-rotate(170deg) brightness(91%) contrast(101%);
+}
+
+.help-module-page:hover .help-page-svg {
+    filter: invert(67%) sepia(85%) saturate(1118%) hue-rotate(342deg) brightness(98%) contrast(83%);
+}
+
+.help-module-page:hover .help-module-link {
+    color: #E59A2F;
+}
+
+.help-module-link {
+    font-size: 1vw;
+    font-weight: normal;
+    transition: .3s;
+    margin: .4vw 0;
+}
+
+.help-page-title {
+    font-size: 1.2vw;
+    margin: 0 0 1vw 0;
+}
+
+.help-page-description{
+    font-weight: normal;
+    margin: .1vw 1vw
 }
 
 /* --- Tools & Tech ---  */

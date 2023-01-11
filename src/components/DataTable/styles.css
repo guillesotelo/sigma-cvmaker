@@ -46,7 +46,6 @@
     text-align: left;
     color: #6b7280;
     transition: .3s;
-    cursor: pointer;
 }
 
 .data-table-header:hover {

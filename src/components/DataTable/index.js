@@ -85,10 +85,11 @@ export default function DataTable(props) {
                         <h4
                             key={i}
                             className='data-table-header'
-                            onClick={() => orderBy(header)}
+                            onClick={() => header.value !== 'icons' && header.value !== 'data' && orderBy(header)}
                             style={{
                                 width: sizes ? sizes[i] : `${100 / tableHeaders.length}%`,
-                                textDecoration: Object.keys(ordered).includes(header.name) && 'none'
+                                textDecoration: Object.keys(ordered).includes(header.name) || header.value === 'icons' || header.value === 'data' && 'none',
+                                cursor: header.value !== 'icons' && header.value !== 'data' ? 'pointer' : 'default'
                             }}>
                             {header.name} {Object.keys(ordered).includes(header.name) ? ordered[header.name] ? `▼` : `▲` : ''}
                         </h4>

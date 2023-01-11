@@ -36,11 +36,11 @@ export default function Home() {
     <div className='home-container'>
       <div className='home-welcome'>
         <h1 className='home-welcome-title'>Welcome to Sigma CV Maker</h1>
-        <p className='home-welcome-text'>Here you can create, review and edit CVs, as well as manage user data within the app.</p>
+        <p className='home-welcome-text'>Here you can create, review and edit CVs, as well as manage all the data involved in the process.</p>
         <p className='home-welcome-text'>Select an action to start</p>
         <p className='home-welcome-comment'>NOTE: This application is currently in a <b>Beta Stage</b>.
           This means that new features are currently being added and some things may change without notice.
-          <br />If you run into a problem, you can submit a report and help us fix it as soon as possible. Check the ( ! ) sign for this.</p>
+          <br />If you run into a problem while using the app, you can submit a report and help us fix it as soon as possible. To do this, click on the bug icon.</p>
       </div>
       <div className='home-tooltip-container' style={tooltipStyle}>
         <h4 className='home-tooltip'>{tooltip || ''}</h4>

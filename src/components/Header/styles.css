@@ -18,7 +18,7 @@
 }
 
 .header-logo:hover {
-    filter: invert(79%) sepia(13%) saturate(5839%) hue-rotate(339deg) brightness(96%) contrast(87%);
+    filter: invert(30%) sepia(13%) saturate(5839%) hue-rotate(339deg) brightness(96%) contrast(87%);
     color: #E59A2F;
 }
 
@@ -55,14 +55,19 @@
     transition: 0.3s;
 }
 
+.header-right-icons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .error-icon {
-    height: 35px;
-    width: auto;
+    height: 28px;
     cursor: pointer;
-    margin: 0 2vw;
-    filter: invert(25%) sepia(4%) saturate(0%) hue-rotate(151deg) brightness(103%) contrast(78%);
+    opacity: .5;
+    transform: rotate(35deg);
+    margin: 0;
     transition: .3s;
-    opacity: .8;
 }
 
 .error-icon:hover {
@@ -87,6 +92,7 @@
     cursor: pointer;
     transition: .3s;
     border: 1px solid transparent;
+    margin-left: 1.5vw;
 }
 
 .header-profile-image:hover {
