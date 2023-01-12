@@ -711,8 +711,8 @@ export default function Resume(props) {
                                             <View key={i} style={{
                                                 ...styles.skillItem,
                                                 borderBottom: i < skills.length - 2 && '1px solid gray',
-                                                paddingBottom: (fontSize.skills || fontSize.skills === 0) && i < skills.length - 2 ? `${fontSize.skills}vw` : i < skills.length - 2 ? '1vw' : null,
-                                                margin: fontSize.skills || fontSize.skills === 0 ? `0 2vw ${fontSize.skills / 2}vw 0` : '0 2vw .4vw 0'
+                                                paddingBottom: (fontSize.skills || fontSize.skills === 0) && i < skills.length - 2 ? `${fontSize.skills / 1.4}vw` : i < skills.length - 2 ? '.7vw' : 0,
+                                                margin: fontSize.skills || fontSize.skills === 0 ? `0 2vw ${fontSize.skills / 1.4}vw 0` : '0 2vw .7vw 0'
                                             }}>
                                                 <Text style={{
                                                     ...styles.skillName,

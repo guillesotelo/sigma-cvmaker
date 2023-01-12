@@ -374,7 +374,7 @@ export default function ItemDropdown(props) {
                         : null
                     )}
                 </div>
-                <h4 onClick={() => setEditSkills(true)} className='section-item-remove'>Edit Skills</h4>
+                <h4 onClick={() => setEditSkills(true)} className='section-item-remove'>{itemsArr.length > 1 && itemsArr[0].name ? 'Edit Skills' : 'Add Skills'}</h4>
             </div>
     }
 

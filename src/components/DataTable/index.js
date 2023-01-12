@@ -55,12 +55,20 @@ export default function DataTable(props) {
                     if (new Date(a[header.value]).getTime() < new Date(b[header.value]).getTime()) return -1
                     if (new Date(a[header.value]).getTime() > new Date(b[header.value]).getTime()) return 1
                 }
+                if (header.value === 'size') {
+                    if (Number(a[header.value]) > Number(b[header.value])) return -1
+                    if (Number(a[header.value]) < Number(b[header.value])) return 1
+                }
                 if (a[header.value] > b[header.value]) return -1
                 if (a[header.value] < b[header.value]) return 1
             } else {
                 if (header.value === 'createdAt' || header.value === 'updatedAt') {
                     if (new Date(a[header.value]).getTime() > new Date(b[header.value]).getTime()) return -1
                     if (new Date(a[header.value]).getTime() < new Date(b[header.value]).getTime()) return 1
+                }
+                if (header.value === 'size') {
+                    if (Number(a[header.value]) < Number(b[header.value])) return -1
+                    if (Number(a[header.value]) > Number(b[header.value])) return 1
                 }
                 if (a[header.value] < b[header.value]) return -1
                 if (a[header.value] > b[header.value]) return 1

@@ -24,6 +24,14 @@ export default function Dropdown(props) {
         placeholder
     } = props
 
+    useEffect(() => {
+        window.addEventListener('mouseup', e => {
+            if (e.target && e.target.className) {
+                if (e.target.className !== 'dropdown-option') setOpenDrop(false)
+            } else setOpenDrop(false)
+        })
+    }, [])
+
     const hideItem = item => {
         if (item) {
             const _hidden = [...hidden]
@@ -37,7 +45,7 @@ export default function Dropdown(props) {
     }
 
     return (
-        <div className='dropdown-container' style={{ ...style, width: size ? size : '10vw' }}>
+        <div className='dropdown-container' style={{ ...style, width: size ? size : '10vw' }} tabIndex="0">
             {label ?
                 <h4 className='dropdown-label' style={{
                     opacity: hidden && hidden.includes(label) && '.2',
