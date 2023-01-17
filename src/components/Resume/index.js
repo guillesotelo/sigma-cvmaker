@@ -118,14 +118,16 @@ export default function Resume(props) {
             setRes(parsedData)
             const clients = parsedData.experience.map(exp => { if (exp.company) return exp.company })
             const _logos = companyLogos && Object.keys(companyLogos).length ? []
-                : await Promise.all(clients.map(async client => {
+                : clients.length ? await Promise.all(clients.map(async client => {
                     const image = await dispatch(getClientLogo(client)).then(data => data.payload)
-                    return {
-                        ...image,
-                        image: image.data,
-                        style: image.style ? JSON.parse(image.style) : {}
+                    if (image && image.data) {
+                        return {
+                            ...image,
+                            image: image.data,
+                            style: image.style ? JSON.parse(image.style) : {}
+                        }
                     }
-                }))
+                })) : []
 
             let clientLogos = {}
             if (_logos.length) {
@@ -141,13 +143,13 @@ export default function Resume(props) {
             const logos = companyLogos && Object.keys(companyLogos).length ? companyLogos : clientLogos
 
             if (profilePic) {
-                const imageStyles = profilePreview ? profilePreview.style : profilePic.style && JSON.parse(profilePic.style) || {}
+                const imageStyles = profilePreview ? profilePreview.style : profilePic.style ? JSON.parse(profilePic.style) : {}
                 if (imageStyles) setProfileStyle(imageStyles)
                 if (imageStyles.filter) setProfileImage(await applyFiltersToImage(profilePic.data, imageStyles.filter))
                 else setProfileImage(profilePic.data)
             }
             if (signature) {
-                const signatureStyles = signaturePreview ? signaturePreview.style : signature.style && JSON.parse(signature.style) || {}
+                const signatureStyles = signaturePreview?.style ? signaturePreview.style : signature.style ? JSON.parse(signature.style) : {}
                 if (signatureStyles.filter) setSignatureCanvas(await applyFiltersToImage(signature.data, signatureStyles.filter))
                 else setSignatureCanvas(signature.data)
             }

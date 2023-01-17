@@ -25,7 +25,6 @@ import FontIcon from '../icons/fontsize-icon.svg'
 import PaddingIcon from '../icons/padding-icon.svg'
 import SignaturePad from 'react-signature-canvas'
 import Resume from '../components/Resume'
-import { promises } from 'nodemailer/lib/xoauth2'
 import { MoonLoader } from 'react-spinners'
 
 export default function NewCV() {
@@ -61,7 +60,7 @@ export default function NewCV() {
     const [paddingDrop, setPaddingDrop] = useState(false)
     const [fontSize, setFontSize] = useState({})
     const [padding, setPadding] = useState({})
-    const [signatureCanvas, setSignatureCanvas] = useState({})
+    const [signatureCanvas, setSignatureCanvas] = useState({ style: {} })
     const [masterModal, setMasterModal] = useState(false)
     const [previewModal, setPreviewModal] = useState(false)
     const dispatch = useDispatch()
@@ -431,7 +430,7 @@ export default function NewCV() {
     }
 
     return (
-        loading ? <div style={{ alignSelf: 'center', display: 'flex', marginTop: '20vw' }}><MoonLoader color='#E59A2F' /></div>
+        loading && !previewModal ? <div style={{ alignSelf: 'center', display: 'flex', marginTop: '20vw' }}><MoonLoader color='#E59A2F' /></div>
             :
             <div className='new-resume-container'>
                 {previewModal ?

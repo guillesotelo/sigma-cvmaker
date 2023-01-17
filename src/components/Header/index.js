@@ -12,8 +12,8 @@ import SigmaIso from '../../assets/logos/sigma_connectivity_iso.png'
 import SearchBar from '../SearchBar'
 import './styles.css'
 
-export default function Header() {
-  const [search, setSearch] = useState([])
+export default function Header({ setSearch }) {
+  const [words, setWords] = useState([])
   const [profilePic, setProfilePic] = useState({})
 
   const dispatch = useDispatch()
@@ -40,13 +40,16 @@ export default function Header() {
     if (e.key === 'Enter') {
       triggerSearch()
     } else {
-      const words = e.target.value ? e.target.value.split(' ') : []
-      setSearch(words)
+      const _words = e.target.value ? e.target.value.split(' ') : []
+      setWords(_words)
     }
   }
 
   const triggerSearch = () => {
-    if (search.length) history.push(`/elastic?search=${search.join(',')}`)
+    if (words.length) {
+      setSearch(words)
+      history.push('/search')
+    }
   }
 
   const getPreview = async email => {

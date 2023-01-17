@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useState } from "react";
 import { Switch, Route } from "react-router-dom";
 import './pages/styles/index.css'
 import 'react-toastify/dist/ReactToastify.css';
@@ -25,6 +25,7 @@ import Statistics from "./pages/Statistics";
 import Search from "./pages/Search";
 
 function App() {
+  const [search, setSearch] = useState([])
   return (
     <Switch>
       <Route path="/login">
@@ -40,7 +41,7 @@ function App() {
         </div>
       </Route>
       <Route exact path="/">
-        <Header />
+      <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -50,7 +51,7 @@ function App() {
         </div>
       </Route>
       <Route path="/my-cvs">
-        <Header />
+      <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -60,7 +61,7 @@ function App() {
         </div>
       </Route>
       <Route path="/cvs">
-        <Header />
+      <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -70,7 +71,7 @@ function App() {
         </div>
       </Route>
       <Route path="/new-cv">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -80,7 +81,7 @@ function App() {
         </div>
       </Route>
       <Route path="/new-cv:edit">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -89,28 +90,18 @@ function App() {
           </div>
         </div>
       </Route>
-      <Route path="/elastic">
-        <Header />
+      <Route path="/search">
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
-            <Search />
-            <Footer />
-          </div>
-        </div>
-      </Route>
-      <Route path="/elastic:search">
-        <Header />
-        <div className="root-container">
-          <SdideBar />
-          <div className="root-column">
-            <Search />
+            <Search search={search} />
             <Footer />
           </div>
         </div>
       </Route>
       <Route path="/report">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -120,7 +111,7 @@ function App() {
         </div>
       </Route>
       <Route path="/account">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -130,7 +121,7 @@ function App() {
         </div>
       </Route>
       <Route path="/consultants">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -140,7 +131,7 @@ function App() {
         </div>
       </Route>
       <Route path="/clients">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -150,7 +141,7 @@ function App() {
         </div>
       </Route>
       <Route path="/tools-and-tech">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -160,7 +151,7 @@ function App() {
         </div>
       </Route>
       <Route path="/activity">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -170,7 +161,7 @@ function App() {
         </div>
       </Route>
       <Route path="/statistics">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -180,7 +171,7 @@ function App() {
         </div>
       </Route>
       <Route path="/users">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -190,7 +181,7 @@ function App() {
         </div>
       </Route>
       <Route path="/settings">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -200,7 +191,7 @@ function App() {
         </div>
       </Route>
       <Route path="/help">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -210,7 +201,7 @@ function App() {
         </div>
       </Route>
       <Route path="/helpPage">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -220,7 +211,7 @@ function App() {
         </div>
       </Route>
       <Route path="/helpPage:module">
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">
@@ -230,7 +221,7 @@ function App() {
         </div>
       </Route>
       <Route>
-        <Header />
+         <Header setSearch={setSearch} />
         <div className="root-container">
           <SdideBar />
           <div className="root-column">

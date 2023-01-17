@@ -14,8 +14,7 @@ import {
 } from '../constants/tableHeaders'
 import DataTable from '../components/DataTable'
 
-export default function Search() {
-    const [words, setWords] = useState([])
+export default function Search({ search }) {
     const [loading, setLoading] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [selectedCV, setSelectedCV] = useState(false)
@@ -39,14 +38,11 @@ export default function Search() {
             localStorage.clear()
             return history.push('/login')
         }
-
-        const search = new URLSearchParams(document.location.search).get('search')
-        if (search) setWords(search.split(','))
     }, [])
 
     useEffect(() => {
-        if (words.length) getData()
-    }, [words])
+        if (search.length) getData()
+    }, [search])
 
     const getData = async () => {
         try {
@@ -91,12 +87,14 @@ export default function Search() {
     const filterData = data => {
         if (data && data.length) {
             const filtered = data.filter(item => {
-                const string = JSON.stringify(item)
-                let matches = true
-                words.forEach(word => {
-                    if (!string.toLowerCase().includes(word.toLowerCase())) matches = false
-                })
-                if (matches) return item
+                if (!item.removed) {
+                    const string = JSON.stringify({ ...item, data: item.size ? '' : item.data || '' })
+                    let matches = true
+                    search.forEach(word => {
+                        if (!string.toLowerCase().includes(word.toLowerCase())) matches = false
+                    })
+                    if (matches) return item
+                }
             })
             return filtered
         }
@@ -105,74 +103,83 @@ export default function Search() {
     return (
         <div className='elastic-search-container'>
             <div className='elastic-search-section'>
-                <h4 className='page-title'>Results for: <span className='elastic-words'>"{words.join(' ')}"</span></h4>
+                <h4 className='page-title'>Results for: <span className='elastic-words'>"{search.join(' ')}"</span></h4>
                 <div className='elastic-table-container'>
-                    <DataTable
-                        title='Users'
-                        subtitle=''
-                        tableData={users}
-                        setTableData={setUsers}
-                        tableHeaders={userHeaders}
-                        loading={loading}
-                        item={selectedUser}
-                        setItem={setSelectedUser}
-                        isEdit={isEdit}
-                        setIsEdit={setIsEdit}
-                        maxRows={4}
-                        style={{ width: 'unset' }}
-                    />
-                    <DataTable
-                        title='CVs'
-                        subtitle=''
-                        tableData={cvs}
-                        setTableData={setCVs}                        tableHeaders={cvHeaders}
-                        loading={loading}
-                        item={selectedCV}
-                        setItem={setSelectedCV}
-                        isEdit={isEdit}
-                        setIsEdit={setIsEdit}
-                        maxRows={4}
-                        style={{ width: 'unset' }}
-                    />
-                    <DataTable
-                        title='Images'
-                        subtitle=''
-                        tableData={images}
-                        setTableData={setImages}                        tableHeaders={imageHeaders}
-                        loading={loading}
-                        item={selectedImage}
-                        setItem={setSelectedImage}
-                        isEdit={isEdit}
-                        setIsEdit={setIsEdit}
-                        maxRows={4}
-                        style={{ width: 'unset' }}
-                    />
-                    <DataTable
-                        title='App Data'
-                        subtitle=''
-                        tableData={appDatas}
-                        setTableData={setAppDatas}                        tableHeaders={appDataHeaders}
-                        loading={loading}
-                        item={selectedData}
-                        setItem={setSelectedData}
-                        isEdit={isEdit}
-                        setIsEdit={setIsEdit}
-                        maxRows={4}
-                        style={{ width: 'unset' }}
-                    />
-                    <DataTable
-                        title='Logs'
-                        subtitle=''
-                        tableData={logs}
-                        setTableData={setLogs}                        tableHeaders={logHeaders}
-                        loading={loading}
-                        item={selectedLog}
-                        setItem={setSelectedLog}
-                        isEdit={isEdit}
-                        setIsEdit={setIsEdit}
-                        maxRows={4}
-                        style={{ width: 'unset' }}
-                    />
+                    {users.length ?
+                        <DataTable
+                            title='Users'
+                            subtitle=''
+                            tableData={users}
+                            setTableData={setUsers}
+                            tableHeaders={userHeaders}
+                            loading={loading}
+                            item={selectedUser}
+                            setItem={setSelectedUser}
+                            isEdit={isEdit}
+                            setIsEdit={setIsEdit}
+                            maxRows={4}
+                            style={{ width: 'unset' }}
+                        /> : ''}
+                    {cvs.length ?
+                        <DataTable
+                            title='CVs'
+                            subtitle=''
+                            tableData={cvs}
+                            setTableData={setCVs} 
+                            tableHeaders={cvHeaders}
+                            loading={loading}
+                            item={selectedCV}
+                            setItem={setSelectedCV}
+                            isEdit={isEdit}
+                            setIsEdit={setIsEdit}
+                            maxRows={4}
+                            style={{ width: 'unset' }}
+                        /> : ''}
+                    {images.length ?
+                        <DataTable
+                            title='Images'
+                            subtitle=''
+                            tableData={images}
+                            setTableData={setImages} 
+                            tableHeaders={imageHeaders}
+                            loading={loading}
+                            item={selectedImage}
+                            setItem={setSelectedImage}
+                            isEdit={isEdit}
+                            setIsEdit={setIsEdit}
+                            maxRows={4}
+                            style={{ width: 'unset' }}
+                        /> : ''}
+                    {appDatas.length ?
+                        <DataTable
+                            title='App Data'
+                            subtitle=''
+                            tableData={appDatas}
+                            setTableData={setAppDatas} 
+                            tableHeaders={appDataHeaders}
+                            loading={loading}
+                            item={selectedData}
+                            setItem={setSelectedData}
+                            isEdit={isEdit}
+                            setIsEdit={setIsEdit}
+                            maxRows={4}
+                            style={{ width: 'unset' }}
+                        /> : ''}
+                    {logs.length ?
+                        <DataTable
+                            title='Logs'
+                            subtitle=''
+                            tableData={logs}
+                            setTableData={setLogs} 
+                            tableHeaders={logHeaders}
+                            loading={loading}
+                            item={selectedLog}
+                            setItem={setSelectedLog}
+                            isEdit={isEdit}
+                            setIsEdit={setIsEdit}
+                            maxRows={4}
+                            style={{ width: 'unset' }}
+                        /> : ''}
                 </div>
             </div>
         </div>
