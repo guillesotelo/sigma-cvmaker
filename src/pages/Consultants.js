@@ -258,14 +258,14 @@ export default function Consultants() {
                                         <img
                                             src={profilePic.image}
                                             style={profilePic.style}
-                                            className='profile-image'
+                                            className='account-profile-image'
                                             onClick={() => document.getElementById('image').click()}
                                             loading='lazy'
                                         />
                                         : <img
                                             src={ProfileIcon}
                                             style={profilePic.style}
-                                            className='profile-image-svg'
+                                            className='account-profile-image-svg'
                                             onClick={() => document.getElementById('image').click()}
                                         />}
                                     <InputField
@@ -384,14 +384,14 @@ export default function Consultants() {
                                             <img
                                                 src={profilePic.image}
                                                 style={profilePic.style}
-                                                className='profile-image'
+                                                className='account-profile-image'
                                                 onClick={() => document.getElementById('image').click()}
                                                 loading='lazy'
                                             />
                                             : <img
                                                 src={ProfileIcon}
                                                 style={profilePic.style}
-                                                className='profile-image-svg'
+                                                className='account-profile-image-svg'
                                                 onClick={() => document.getElementById('image').click()}
                                             />}
                                         <InputField

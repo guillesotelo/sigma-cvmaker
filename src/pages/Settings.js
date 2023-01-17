@@ -449,8 +449,8 @@ export default function Settings() {
             key={i}
             className={tab === tabName ? 'settings-tab-selected' : 'settings-tab'}
             onClick={() => setTab(tabName)}
-            style={{ borderLeft: i !== 0 && '1px solid #E2E2E2', borderRight: i !== tabs.length -1 && '1px solid #E2E2E2' }}
-            >
+            style={{ borderLeft: i !== 0 && '1px solid #E2E2E2', borderRight: i !== tabs.length - 1 && '1px solid #E2E2E2' }}
+          >
             {tabName}
           </h4>)}
       </div>
@@ -535,7 +535,7 @@ export default function Settings() {
                   <DataTable
                     title='Skills'
                     subtitle='Here is a list of all skills in the system'
-                    maxRows={9}
+                    maxRows={5}
                     tableData={skills}
                     setTableData={setSkills}
                     tableHeaders={skillHeaders}
@@ -610,7 +610,7 @@ export default function Settings() {
                     <DataTable
                       title='Buzzwords'
                       subtitle='Here is a list of all buzzwords in the system'
-                      maxRows={9}
+                      maxRows={5}
                       tableData={buzzwords}
                       setTableData={setBuzzwords}
                       tableHeaders={buzzwordHeaders}
@@ -699,20 +699,20 @@ export default function Settings() {
                           setData({})
                         }}
                         color={APP_COLORS.GREEN}
-                        disabled={itemEdit}
+                        disabled={isNew}
                       />
-                      {selectedItem !== -1 ?
-                        <CTAButton
-                          label='Delete'
-                          handleClick={() => setRemoveModal(true)}
-                          color={APP_COLORS.RED}
-                        /> : ''}
+                      <CTAButton
+                        label='Delete'
+                        handleClick={() => setRemoveModal(true)}
+                        color={APP_COLORS.RED}
+                        disabled={(isNew && !isEdit) || selectedItem === -1}
+                      />
                     </div>
                     <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
                       <DataTable
                         title='Images'
                         subtitle='Here is a list of all images in the system'
-                        maxRows={9}
+                        maxRows={5}
                         tableData={images}
                         setTableData={setImages}
                         tableHeaders={imageHeaders}
@@ -921,7 +921,7 @@ export default function Settings() {
                         <DataTable
                           title='Trash'
                           subtitle={`Here is a list of all removed ${data.module ? data.module.toLowerCase() : 'items'} in the system`}
-                          maxRows={9}
+                          maxRows={5}
                           tableData={trash}
                           setTableData={setTrash}
                           tableHeaders={trashHeaders}

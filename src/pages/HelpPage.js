@@ -28,7 +28,7 @@ export default function Help() {
             <div className='help-container'>
                 <h1 className='help-page-title'>{HELP[page].title}</h1>
                 {HELP[page].description ? HELP[page].description.split('\n').map(description => <h4 className='help-page-description'>{description}</h4>)
-                    : <h4 className='help-page-description'>*Working in progress 🤓*</h4>}
+                    : <h4 className='help-page-description'>*Work in progress 🤓*</h4>}
             </div>
             : ''
     )
