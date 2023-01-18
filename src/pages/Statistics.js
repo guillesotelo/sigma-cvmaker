@@ -5,7 +5,7 @@ import { MoonLoader } from 'react-spinners'
 import BarChart from '../components/BarChart'
 import PieChart from '../components/PieChart'
 import PolarChart from '../components/PolarChart'
-import { PALETTE } from '../constants/app'
+import { CHART_PALETTE } from '../constants/app'
 import { getAppData } from '../store/reducers/appData'
 import { getImages } from '../store/reducers/image'
 import { getResumes } from '../store/reducers/resume'
@@ -63,8 +63,8 @@ export default function Statistics() {
     }, [logs])
 
     const setChartsData = async () => {
-        const colorPattern = logs.map(_ => randomColors(PALETTE)[0])
-        const countPattern = countLabels.map(_ => randomColors(PALETTE)[0])
+        const colorPattern = logs.map(_ => randomColors(CHART_PALETTE)[0])
+        const countPattern = countLabels.map(_ => randomColors(CHART_PALETTE)[0])
 
         setLogsModule({
             labels: modules,

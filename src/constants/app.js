@@ -1,4 +1,4 @@
-export const VERSION = 'v1.8.2 (beta)'
+export const VERSION = 'v1.8.3 (beta)'
 
 export const APP_COLORS = {
     YELLOW: '#E59A2F',
@@ -11,7 +11,7 @@ export const APP_COLORS = {
     MURREY: '#6D0E00'
 }
 
-export const PALETTE = [
+export const CHART_PALETTE = [
     '#80ced7',
     '#63c7b2',
     '#8e6c88',
@@ -36,7 +36,6 @@ export const PALETTE = [
     '#DFB2F4',
     '#79ADDC',
     '#FCF5C7',
-    '#FF3864',
     '#CC978E',
     '#519872',
     '#3B5249',
