@@ -79,7 +79,7 @@ export default function Help() {
                         </div>
                         <div className='help-module-page'>
                             <img src={PageIcon} className='help-page-svg' />
-                            <h4 className='help-module-link' onClick={() => history.push(`/helpPage?module=new-consultant`)}>Creating a new Consultant</h4>
+                            <h4 className='help-module-link' onClick={() => history.push(`/helpPage?module=restore-items`)}>Restore a deleted item</h4>
                         </div>
                     </div>
                     <div className='help-module-section'>
@@ -96,7 +96,7 @@ export default function Help() {
                 </div>
                 <div className='help-module-col'>
                     <div className='help-module-section'>
-                        <h4 className='help-module-title'>Image Management</h4>
+                        <h4 className='help-module-title'>Images Module</h4>
                         <div className='help-module-page'>
                             <img src={PageIcon} className='help-page-svg' />
                             <h4 className='help-module-link' onClick={() => history.push(`/helpPage?module=new-image`)}>Upload a new image</h4>
@@ -124,7 +124,7 @@ export default function Help() {
                 </div>
                 <div className='help-module-col'>
                     <div className='help-module-section'>
-                        <h4 className='help-module-title'>User Management</h4>
+                        <h4 className='help-module-title'>Users Module</h4>
                         <div className='help-module-page'>
                             <img src={PageIcon} className='help-page-svg' />
                             <h4 className='help-module-link' onClick={() => history.push(`/helpPage?module=new-account`)}>Create a new account (Manager or Consultant)</h4>
@@ -142,7 +142,7 @@ export default function Help() {
                         <h4 className='help-module-title'>Contact Information</h4>
                         <div className='help-module-page'>
                             <img src={PageIcon} className='help-page-svg' />
-                            <h4 className='help-module-link' onClick={() => history.push(`/helpPage?module=hr-info`)}>HR Coordinator</h4>
+                            <h4 className='help-module-link' onClick={() => history.push(`/helpPage?module=hr-info`)}>HR References</h4>
                         </div>
                         <div className='help-module-page'>
                             <img src={PageIcon} className='help-page-svg' />
