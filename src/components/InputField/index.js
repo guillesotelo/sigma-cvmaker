@@ -38,7 +38,7 @@ export default function InputField(props) {
     useEffect(() => {
         if (value && options && options.length) {
             const matches = options.filter(op => op.toLowerCase().includes(value.toLowerCase()) && op)
-            if (matches && focus) {
+            if (matches && matches.length && focus) {
                 setShowDropDown(true)
                 setSuggestions([...new Set(matches)])
             } else setShowDropDown(false)

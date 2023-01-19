@@ -107,7 +107,7 @@ export default function Clients() {
 
             if (exists) {
                 saved = await dispatch(updateAppData({
-                    ...user,
+                    user,
                     type: 'clients',
                     data: JSON.stringify(updatedclients),
                     clientName: data.name,
@@ -116,7 +116,7 @@ export default function Clients() {
                 })).then(data => data.payload)
             } else {
                 saved = await dispatch(saveAppData({
-                    ...user,
+                    user,
                     type: 'clients',
                     data: JSON.stringify(updatedclients),
                     clientName: data.name,

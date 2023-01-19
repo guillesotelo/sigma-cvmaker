@@ -89,7 +89,7 @@ export default function Activity() {
                     setItem={setSelectedLog}
                     isEdit={isEdit}
                     setIsEdit={setIsEdit}
-                    maxRows={9}
+                    maxRows={8}
                     style={{ width: '97.5%' }}
                 />
             </div>

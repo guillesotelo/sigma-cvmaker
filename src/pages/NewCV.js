@@ -26,6 +26,7 @@ import PaddingIcon from '../icons/padding-icon.svg'
 import SignaturePad from 'react-signature-canvas'
 import Resume from '../components/Resume'
 import { MoonLoader } from 'react-spinners'
+import { getOneAppData, updateAppData } from '../store/reducers/appData'
 
 export default function NewCV() {
     const [data, setData] = useState({})
@@ -337,6 +338,8 @@ export default function NewCV() {
                     resumeData.clients = experience.map(exp => { if (exp && exp.company) return exp.company })
                 }
 
+                await saveOtherData(resumeData)
+
                 if (!isEdit && saveAsNew && data.type === 'Master') {
                     const exists = await dispatch(getCVByType({ type: 'Master', email: data.email.toLowerCase() })).then(data => data.payload)
                     if (exists) {
@@ -375,6 +378,30 @@ export default function NewCV() {
             setLoading(false)
             console.error(err)
             return toast.error('Error saving Resume. Please try again later')
+        }
+    }
+
+    const saveOtherData = async cvData => {
+        try {
+            if (cvData.skills && cvData.skills.length) {
+                const DBSkills = await dispatch(getOneAppData({ type: 'skills' })).then(data => data.payload)
+                const existingNames = DBSkills && DBSkills.length ? DBSkills.map(skill => skill.name) : []
+                const parsedSkills = cvData.skills.map(skill => {
+                    if (skill.name && !existingNames.includes(skill.name)) {
+                        return {
+                            name: skill.name,
+                            field: 'CV Skill'
+                        }
+                    }
+                })
+                await dispatch(updateAppData({
+                    user,
+                    type: 'skills',
+                    data: JSON.stringify([...DBSkills, ...parsedSkills])
+                })).then(data => data.payload)
+            }
+        } catch (err) {
+            console.error(err)
         }
     }
 

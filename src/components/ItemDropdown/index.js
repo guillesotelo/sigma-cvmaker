@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import Dropdown from '../Dropdown';
@@ -7,12 +8,22 @@ import ShwoIcon from '../../icons/show-icon.svg'
 import EditIcon from '../../icons/edit-icon.svg'
 import TrashCan from '../../icons/trash-icon.svg'
 import './styles.css'
+import { getAppData } from '../../store/reducers/appData';
+import InputField from '../InputField';
 
 export default function ItemDropdown(props) {
     const [dragging, setDragging] = useState(false)
     const [editSkills, setEditSkills] = useState(false)
     const [editItem, setEditItem] = useState({})
     const [selected, setSelected] = useState(-1)
+    const [appData, setAppData] = useState([])
+    const [skills, setSkills] = useState([])
+    const [showDropDown, setShowDropDown] = useState(false)
+    const [dropValue, setDropValue] = useState('')
+    const [focus, setFocus] = useState(false)
+    const [suggestions, setSuggestions] = useState([])
+    const dispatch = useDispatch()
+    const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
 
     const {
         label,
@@ -27,6 +38,15 @@ export default function ItemDropdown(props) {
     } = props
 
     useEffect(() => {
+        pullAppData()
+    }, [])
+
+    useEffect(() => {
+        if (!editItem.name) setShowDropDown(false)
+        checkSuggestions(editItem.name)
+    }, [editItem.name])
+
+    useEffect(() => {
         renderItems(items)
         if (items.length) {
             const lastItem = items[items.length - 1]
@@ -34,16 +54,49 @@ export default function ItemDropdown(props) {
         }
     }, [items])
 
+    useEffect(() => {
+        if (appData.length) {
+            let _skills = []
+            appData.forEach(data => {
+                if (data.type === 'skills') _skills = JSON.parse(data.data) || []
+            })
+            if (_skills.length) setSkills(_skills.map(skill => { if (skill.name) return skill.name }))
+        }
+    }, [appData])
+
+    const pullAppData = async () => {
+        try {
+            const _appData = await dispatch(getAppData({ email: user.email })).then(data => data.payload)
+            if (_appData) setAppData(_appData)
+        } catch (err) { console.error(err) }
+    }
+
     const handleChange = (type, newValue, index) => {
         let newItemsArr = items
-        if (type === 'name') newItemsArr[index] = { ...newItemsArr[index], name: newValue }
+        if (type === 'name') {
+            if (!newValue) setShowDropDown(false)
+            newItemsArr[index] = { ...newItemsArr[index], name: newValue }
+            checkSuggestions(newValue)
+        }
         if (type === 'option') newItemsArr[index] = { ...newItemsArr[index], option: newValue }
         setItems(newItemsArr)
+    }
+
+    const checkSuggestions = value => {
+        if (value && skills && skills.length) {
+            const matches = skills.filter(skill => skill.toLowerCase().includes(value.toLowerCase()) && skill)
+            if (matches && matches.length && focus) {
+                setShowDropDown(true)
+                setSuggestions([...new Set(matches)])
+            } else setShowDropDown(false)
+        } else setShowDropDown(false)
+        if (dropValue === value) setShowDropDown(false)
     }
 
     const addNewItem = () => {
         if (items[items.length - 1].name) {
             setItems(items.concat({ name: '' }))
+            setDropValue('')
         }
     }
 
@@ -97,7 +150,7 @@ export default function ItemDropdown(props) {
                 <Droppable droppableId="droppable">
                     {(provided, _) =>
                         <div {...provided.droppableProps} ref={provided.innerRef}>
-                            {itemsArr.map((item, i, fullArr) =>
+                            {itemsArr.map((item, i) =>
                                 selected === i ?
                                     <div key={i} className='item-dropdown-row'>
                                         <>
@@ -140,7 +193,7 @@ export default function ItemDropdown(props) {
                                     </div>
                                     :
                                     <div key={i} className='item-dropdown-row'>
-                                        {item.name && fullArr.length > 1 ?
+                                        {item.name && itemsArr.length > 1 ?
                                             <Draggable key={i} draggableId={String(i)} index={i}>
                                                 {(provided, snapshot) => (
                                                     <div ref={provided.innerRef}
@@ -238,20 +291,35 @@ export default function ItemDropdown(props) {
                     <Droppable droppableId="droppable">
                         {(provided, _) =>
                             <div {...provided.droppableProps} ref={provided.innerRef}>
-                                {itemsArr.map((item, i, fullArr) =>
+                                {itemsArr.map((item, i) =>
                                     selected === i ?
                                         <div key={i} className='skill-edit-row'>
-                                            <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
-                                                <input
-                                                    className='item-dropdown-name'
-                                                    autoComplete={item.autoComplete || null}
-                                                    onChange={e => setEditItem({ ...editItem, name: e.target.value })}
-                                                    placeholder={placeholder || ''}
-                                                    type={type || 'text'}
-                                                    style={style || null}
-                                                    value={editItem.name || ''}
-                                                />
-                                            </GrammarlyEditorPlugin>
+                                            <div className='item-dropdown-suggestions'>
+                                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
+                                                    <input
+                                                        className='item-dropdown-name'
+                                                        autoComplete={item.autoComplete || null}
+                                                        onChange={e => setEditItem({ ...editItem, name: e.target.value })}
+                                                        placeholder={placeholder || ''}
+                                                        type={type || 'text'}
+                                                        style={style || null}
+                                                        value={editItem.name || ''}
+                                                    />
+                                                </GrammarlyEditorPlugin>
+                                                {showDropDown ?
+                                                    <div className='input-dropdown-options' style={{ width: '9vw' }}>
+                                                        {suggestions.map((suggestion, j) =>
+                                                            <h4
+                                                                key={j}
+                                                                className='dropdown-option'
+                                                                style={{ borderTop: j === 0 && 'none', width: 'inherit' }}
+                                                                onClick={() => {
+                                                                    setEditItem({ ...editItem, name: suggestion })
+                                                                    setShowDropDown(false)
+                                                                }}>{suggestion}</h4>
+                                                        )}
+                                                    </div> : ''}
+                                            </div>
                                             <Dropdown
                                                 label=''
                                                 name='option'
@@ -261,6 +329,7 @@ export default function ItemDropdown(props) {
                                                 index={i}
                                                 style={{ margin: '0 .5vw' }}
                                                 size='10vw'
+                                                value={item.option}
                                             />
                                             <h4 onClick={() => {
                                                 if (editItem.name) {
@@ -277,7 +346,7 @@ export default function ItemDropdown(props) {
                                         </div>
                                         :
                                         <div key={i} className='item-dropdown-row'>
-                                            {item.name && fullArr.length > 1 ?
+                                            {item.name && itemsArr[i + 1] && itemsArr.length > 1 ?
                                                 <Draggable key={i} draggableId={String(i)} index={i}>
                                                     {(provided, snapshot) => (
                                                         <div ref={provided.innerRef}
@@ -319,20 +388,38 @@ export default function ItemDropdown(props) {
                                                         </div>
                                                     )}
                                                 </Draggable>
-
                                                 :
                                                 !dragging && selected === -1 ?
-                                                    <>
+                                                    <div className='item-dropdown-suggestions'>
                                                         <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID}>
                                                             <input
                                                                 className='item-dropdown-name'
                                                                 autoComplete={item.autoComplete || null}
-                                                                onChange={e => handleChange('name', e.target.value, i)}
+                                                                onChange={e => {
+                                                                    handleChange('name', e.target.value, i)
+                                                                    setDropValue(e.target.value)
+                                                                }}
                                                                 placeholder={placeholder || ''}
                                                                 type={type || 'text'}
                                                                 style={style || null}
+                                                                onFocus={() => setFocus(true)}
+                                                                value={dropValue}
                                                             />
                                                         </GrammarlyEditorPlugin>
+                                                        {showDropDown ?
+                                                            <div className='input-dropdown-options' style={{ width: '9vw' }}>
+                                                                {suggestions.map((suggestion, j) =>
+                                                                    <h4
+                                                                        key={j}
+                                                                        className='dropdown-option'
+                                                                        style={{ borderTop: j === 0 && 'none', width: 'inherit' }}
+                                                                        onClick={() => {
+                                                                            handleChange('name', suggestion, i)
+                                                                            setDropValue(suggestion)
+                                                                            setShowDropDown(false)
+                                                                        }}>{suggestion}</h4>
+                                                                )}
+                                                            </div> : ''}
                                                         <Dropdown
                                                             label=''
                                                             name='option'
@@ -342,9 +429,10 @@ export default function ItemDropdown(props) {
                                                             index={i}
                                                             style={{ margin: '0 .5vw' }}
                                                             size='12vw'
+                                                            value={item.option}
                                                         />
                                                         <h4 onClick={() => addNewItem()} className='item-dropdown-new'>✓</h4>
-                                                    </>
+                                                    </div>
                                                     :
                                                     ''
                                             }

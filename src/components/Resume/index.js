@@ -136,14 +136,14 @@ export default function Resume(props) {
                 })
             }
 
-            const profilePic = profilePreview ? { data: profilePreview.image, style: profilePreview.style }
+            const profilePic = profilePreview?.image ? { data: profilePreview.image, style: profilePreview.style }
                 : await dispatch(getImageByType({ email: resumeData.email, type: 'Profile' })).then(data => data.payload)
-            const signature = signaturePreview ? { data: signaturePreview.image, style: signaturePreview.style }
+            const signature = signaturePreview?.image ? { data: signaturePreview.image, style: signaturePreview.style }
                 : await dispatch(getImageByType({ email: resumeData.email, type: 'Signature' })).then(data => data.payload)
             const logos = companyLogos && Object.keys(companyLogos).length ? companyLogos : clientLogos
 
             if (profilePic) {
-                const imageStyles = profilePreview ? profilePreview.style : profilePic.style ? JSON.parse(profilePic.style) : {}
+                const imageStyles = profilePreview?.style ? profilePreview.style : profilePic.style ? JSON.parse(profilePic.style) : {}
                 if (imageStyles) setProfileStyle(imageStyles)
                 if (imageStyles.filter) setProfileImage(await applyFiltersToImage(profilePic.data, imageStyles.filter))
                 else setProfileImage(profilePic.data)

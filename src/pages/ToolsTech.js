@@ -75,13 +75,13 @@ export default function ToolsTech() {
             const exists = await dispatch(getOneAppData({ type: 'tools' })).then(data => data.payload)
             if (exists) {
                 saved = await dispatch(updateAppData({
-                    ...user,
+                    user,
                     type: 'tools',
                     data: JSON.stringify(updatedTools)
                 })).then(data => data.payload)
             } else {
                 saved = await dispatch(saveAppData({
-                    ...user,
+                    user,
                     type: 'tools',
                     data: JSON.stringify(updatedTools)
                 })).then(data => data.payload)

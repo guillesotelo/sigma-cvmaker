@@ -56,6 +56,12 @@
     border: 1px solid #E4C69C;
 }
 
+.item-dropdown-suggestions {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+
 .item-dropdown-select {
     border: 1px solid #e5e5e5;
     background-color: #e5e5e5;
@@ -202,4 +208,5 @@
     flex-direction: row;
     align-items: center;
     margin: .3vw 0;
+    position: relative;
 }
