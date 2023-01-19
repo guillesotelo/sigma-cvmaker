@@ -68,7 +68,6 @@
     border-bottom-left-radius: 0.5vw;
     border-top: none;
     margin-top: 2vw;
-    width: inherit;
     width: 10vw;
     padding: 0 .5vw;
     z-index: 2;
@@ -89,7 +88,6 @@
     transition: .3s;
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow: hidden;
 }
 
 .dropdown-option:hover {

@@ -329,7 +329,6 @@ export default function ItemDropdown(props) {
                                                 index={i}
                                                 style={{ margin: '0 .5vw' }}
                                                 size='10vw'
-                                                value={item.option}
                                             />
                                             <h4 onClick={() => {
                                                 if (editItem.name) {
@@ -429,7 +428,6 @@ export default function ItemDropdown(props) {
                                                             index={i}
                                                             style={{ margin: '0 .5vw' }}
                                                             size='12vw'
-                                                            value={item.option}
                                                         />
                                                         <h4 onClick={() => addNewItem()} className='item-dropdown-new'>✓</h4>
                                                     </div>

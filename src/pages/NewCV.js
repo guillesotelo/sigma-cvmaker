@@ -385,19 +385,21 @@ export default function NewCV() {
         try {
             if (cvData.skills && cvData.skills.length) {
                 const DBSkills = await dispatch(getOneAppData({ type: 'skills' })).then(data => data.payload)
-                const existingNames = DBSkills && DBSkills.length ? DBSkills.map(skill => skill.name) : []
-                const parsedSkills = cvData.skills.map(skill => {
-                    if (skill.name && !existingNames.includes(skill.name)) {
-                        return {
+                const parsedDBSkills = DBSkills?.data ? JSON.parse(DBSkills.data) : []
+                const existingNames = parsedDBSkills.map(skill => skill.name)
+                let parsedSkills = []
+                cvData.skills.forEach(skill => {
+                    if (skill && skill.name && !existingNames.includes(skill.name)) {
+                        parsedSkills.push({
                             name: skill.name,
                             field: 'CV Skill'
-                        }
+                        })
                     }
                 })
                 await dispatch(updateAppData({
-                    user,
+                    user: { ...user },
                     type: 'skills',
-                    data: JSON.stringify([...DBSkills, ...parsedSkills])
+                    data: JSON.stringify(parsedDBSkills.concat(parsedSkills))
                 })).then(data => data.payload)
             }
         } catch (err) {
