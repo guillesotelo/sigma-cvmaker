@@ -28,6 +28,10 @@ export default function Users() {
     const [isEdit, setIsEdit] = useState(false)
     const [isNew, setIsNew] = useState(false)
     const [selectedUser, setSelectedUser] = useState(-1)
+    const [scale, setScale] = useState(1)
+    const [translateX, setTranslateX] = useState(0)
+    const [translateY, setTranslateY] = useState(0)
+    const [rotate, setRotate] = useState(0)
     const [contrast, setContrast] = useState(100)
     const [brightness, setBrightness] = useState(100)
     const [grayscale, setGrayscale] = useState(0)
@@ -61,13 +65,18 @@ export default function Users() {
         setProfilePic({
             ...profilePic,
             style: {
+                transform: `scale(${scale}) translate(${translateX}%, ${translateY}%) rotate(${rotate}deg)`,
                 filter: `brightness(${brightness}%) contrast(${contrast}%) grayscale(${grayscale}%)`,
+                s: scale,
+                x: translateX,
+                y: translateY,
+                r: rotate,
                 brightness,
                 contrast,
                 grayscale
             }
         })
-    }, [contrast, brightness, grayscale])
+    }, [scale, translateX, translateY, rotate, contrast, brightness, grayscale])
 
     useEffect(() => {
         if (selectedUser > -1) {
@@ -94,6 +103,10 @@ export default function Users() {
                 setProfilePic({ image: image.data, style: image.style ? JSON.parse(image.style) : {} })
                 if (image.style) {
                     const imageStyles = JSON.parse(image.style)
+                    setTranslateX(imageStyles.x || 0)
+                    setTranslateY(imageStyles.y || 0)
+                    setScale(imageStyles.s || 1)
+                    setRotate(imageStyles.r || 0)
                     setBrightness(imageStyles.brightness >= 0 ? imageStyles.brightness : 100)
                     setContrast(imageStyles.contrast >= 0 ? imageStyles.contrast : 100)
                     setGrayscale(imageStyles.grayscale || 0)
@@ -255,13 +268,15 @@ export default function Users() {
                     <div className='users-image-section'>
                         <div className='users-image-input'>
                             {profilePic.image ?
-                                <img
-                                    src={profilePic.image}
-                                    style={profilePic.style}
-                                    className='account-profile-image'
-                                    onClick={() => document.getElementById('image').click()}
-                                    loading='lazy'
-                                />
+                                <div className='profile-image-cover'>
+                                    <img
+                                        src={profilePic.image}
+                                        style={profilePic.style}
+                                        className='profile-image'
+                                        onClick={() => document.getElementById('image').click()}
+                                        loading='lazy'
+                                    />
+                                </div>
                                 : <img
                                     src={ProfileIcon}
                                     style={profilePic.style}
@@ -281,6 +296,43 @@ export default function Users() {
                         </div>
                         {profilePic.image ?
                             <div className='color-users'>
+                                <Slider
+                                    label='Position X'
+                                    sign='%'
+                                    value={translateX}
+                                    setValue={setTranslateX}
+                                    setIsEdit={setIsEdit}
+                                    min={-100}
+                                    max={100}
+                                />
+                                <Slider
+                                    label='Position Y'
+                                    sign='%'
+                                    value={translateY}
+                                    setValue={setTranslateY}
+                                    setIsEdit={setIsEdit}
+                                    min={-100}
+                                    max={100}
+                                />
+                                <Slider
+                                    label='Scale'
+                                    sign=''
+                                    value={scale}
+                                    setValue={setScale}
+                                    setIsEdit={setIsEdit}
+                                    min={0}
+                                    max={3}
+                                    step={0.01}
+                                />
+                                <Slider
+                                    label='Rotate'
+                                    sign='°'
+                                    value={rotate}
+                                    setValue={setRotate}
+                                    setIsEdit={setIsEdit}
+                                    min={0}
+                                    max={360}
+                                />
                                 <Slider
                                     value={contrast}
                                     setValue={setContrast}

@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
-import DataTable from '../components/DataTable'
-import CTAButton from '../components/CTAButton'
-import InputField from '../components/InputField'
-import SwitchBTN from '../components/SwitchBTN'
-import Slider from '../components/Slider'
-import { toast } from 'react-toastify'
-import { APP_COLORS } from '../constants/app'
-import SearchBar from '../components/SearchBar'
-import PageIcon from '../icons/page-icon.svg'
 import { HELP } from '../constants/help'
 
 export default function HelpPage() {
@@ -17,6 +8,15 @@ export default function HelpPage() {
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
     const history = useHistory()
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (!user || !user.email) return history.push('/login')
+
+        if (user.app && user.app !== 'cvmaker') {
+            localStorage.clear()
+            return history.push('/login')
+        }
+    }, [])
 
     useEffect(() => {
         const module = new URLSearchParams(document.location.search).get('module')
