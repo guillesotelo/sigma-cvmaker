@@ -111,9 +111,9 @@ export default function DataTable(props) {
                         {tableData.map((row, i) => i < maxItems &&
                             <div
                                 key={i}
-                                className='data-table-row'
+                                className={item === i ? 'data-table-row-selected' : 'data-table-row'}
                                 style={{
-                                    backgroundColor: item === i ? '#E4C69C' : i % 2 === 0 ? 'white' : '#F9FAFB',
+                                    backgroundColor: item === i ? '#d4e1f6' : i % 2 === 0 ? 'white' : '#F9FAFB',
                                     marginBottom: i === tableData.length - 1 && '3vw'
                                 }}
                             >

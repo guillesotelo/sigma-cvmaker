@@ -62,7 +62,7 @@
 }
 
 .error-icon {
-    height: 28px;
+    height: 20px;
     cursor: pointer;
     opacity: .5;
     transform: rotate(35deg);

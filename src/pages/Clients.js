@@ -225,7 +225,7 @@ export default function Clients() {
                         setIsEdit={setClientsEdit}
                     />
                     {clientsEdit ?
-                        <div className='settings-select-section'>
+                        <div className='client-select-section'>
                             <div className='client-details'>
                                 {clientLogo.logoImage ?
                                     <img
@@ -317,7 +317,7 @@ export default function Clients() {
                                     value={data.business || ''}
                                 />
                             </div>
-                            <div className='settings-skill-btns'>
+                            <div className='client-details-btns'>
                                 <CTAButton
                                     label='Discard'
                                     handleClick={() => {

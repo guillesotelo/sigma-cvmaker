@@ -51,7 +51,15 @@ export default function SdideBar() {
 
     return (
         <div className='sidebar-container'>
-            {loading ? <div style={{ alignSelf: 'center', display: 'flex', marginTop: '5vw' }}><MoonLoader color='#E59A2F' /></div>
+            {loading ?
+                <>
+                    <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.5vw', marginBottom: '.5vw' }}>
+                        {Array.from({ length: 7 }).map((_, i) => <h4 className='sidebar-loading-block'></h4>)}
+                    </div>
+                    <div className='sidebar-section'>
+                        {Array.from({ length: 3 }).map((_, i) => <h4 className='sidebar-loading-block'></h4>)}
+                    </div>
+                </>
                 :
                 <>
                     <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.5vw', marginBottom: '.5vw' }}>

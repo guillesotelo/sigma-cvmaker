@@ -102,9 +102,10 @@ const getImageByEmail = async data => {
 
 const getImageByEmailAndType = async data => {
     try {
-        const image = await axios.get(`${API_URL}/api/image/getByType`, { params: { name: data.name, email: data.email, type: data.type } })
+        const { name, email, type } = data || {}
+        const image = await axios.get(`${API_URL}/api/image/getByType`, { params: { name, email, type } })
         return image.data
-    } catch (err) { console.log(err) }
+    } catch (err) { return null }
 }
 
 const getAllImages = async () => {

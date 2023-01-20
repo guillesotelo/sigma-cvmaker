@@ -588,7 +588,7 @@ export default function Resume(props) {
                     <View style={{ ...styles.rowContainer, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.15 * padding.personalInfo}vw 0` : '3vw 0' }} wrap={false}>
                         <View style={styles.column1}>
                             <View style={styles.profilePicCover}>
-                                <Image style={styles.profilePic} src={profileImage} />
+                                {checkHidden('profile') ? null : <Image style={styles.profilePic} src={profileImage} />}
                             </View>
                             <View style={{ ...styles.infoView1, padding: padding.personalInfo || padding.personalInfo === 0 ? `${.05 * padding.personalInfo}vw 0` : '1vw 0' }}>
                                 {checkHidden('Name') ? null : <Text style={styles.infoItem}>Name</Text>}

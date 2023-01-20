@@ -36,14 +36,18 @@ export default function InputField(props) {
     } = props
 
     useEffect(() => {
-        if (value && options && options.length) {
-            const matches = options.filter(op => op.toLowerCase().includes(value.toLowerCase()) && op)
-            if (matches && matches.length && focus) {
-                setShowDropDown(true)
-                setSuggestions([...new Set(matches)])
+        let isMounted = true
+        if (isMounted) {
+            if (value && options && options.length) {
+                const matches = options.filter(op => op.toLowerCase().includes(value.toLowerCase()) && op)
+                if (matches && matches.length && focus) {
+                    setShowDropDown(true)
+                    setSuggestions([...new Set(matches)])
+                } else setShowDropDown(false)
             } else setShowDropDown(false)
-        } else setShowDropDown(false)
-        if (dropValue === value) setShowDropDown(false)
+            if (dropValue === value) setShowDropDown(false)
+        }
+        return () => { isMounted = false }
     }, [value])
 
     const handleChange = (newValue) => {

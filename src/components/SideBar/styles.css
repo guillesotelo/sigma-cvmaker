@@ -13,6 +13,7 @@
 .sidebar-section {
     width: 100%;
     /* padding: 0 0 .5vw 0; */
+    overflow: hidden;
 }
 
 .sidebar-module {
@@ -74,4 +75,23 @@
     bottom: 0;
     position: absolute;
     color: #939393;
+}
+
+.sidebar-loading-block {
+    display: flex;
+    flex-direction: row;
+    margin: 1vw .8vw;
+    padding: .3vw .5vw;
+    background: #eee;
+    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+    border-radius: 5px;
+    background-size: 200% 100%;
+    animation: 1s loading linear infinite;
+    height: 1.2vw;
+}
+
+@keyframes loading {
+    to {
+        background-position-x: -200%;
+    }
 }

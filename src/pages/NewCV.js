@@ -312,7 +312,10 @@ export default function NewCV() {
                 resumeData.footer_location = data.footer_location || ''
 
                 const strData = JSON.stringify(resumeData)
-                resumeData.data = strData
+                if (strData !== resumeData.data) {
+                    resumeData.data = strData
+                } else delete resumeData.data
+
                 resumeData.note = data.note || `${user.username ? `Created by ${user.username}` : ''}`
                 resumeData.type = data.type || 'Master'
                 resumeData.username = `${data.name}${data.middlename ? ' ' + data.middlename : ''} ${data.surname || ''}`
@@ -383,6 +386,7 @@ export default function NewCV() {
 
     const saveOtherData = async cvData => {
         try {
+            //Save new Skills to DB
             if (cvData.skills && cvData.skills.length) {
                 const DBSkills = await dispatch(getOneAppData({ type: 'skills' })).then(data => data.payload)
                 const parsedDBSkills = DBSkills?.data ? JSON.parse(DBSkills.data) : []
@@ -400,6 +404,30 @@ export default function NewCV() {
                     user: { ...user },
                     type: 'skills',
                     data: JSON.stringify(parsedDBSkills.concat(parsedSkills))
+                })).then(data => data.payload)
+            }
+
+            //Save new Clients to DB
+            if (cvData.experience && cvData.experience.length) {
+                const DBClients = await dispatch(getOneAppData({ type: 'clients' })).then(data => data.payload)
+                const parsedDBClients = DBClients?.data ? JSON.parse(DBClients.data) : []
+                const existingCompanies = parsedDBClients.map(client => client.name)
+                let parsedClients = []
+                cvData.experience.forEach(exp => {
+                    if (exp && exp.company && !existingCompanies.includes(exp.company)) {
+                        parsedClients.push({
+                            name: exp.company,
+                            email: cvData.email || '',
+                            type: 'CV Client',
+                            location: cvData.location || '',
+                            contact: cvData.username || ''
+                        })
+                    }
+                })
+                await dispatch(updateAppData({
+                    user: { ...user },
+                    type: 'clients',
+                    data: JSON.stringify(parsedDBClients.concat(parsedClients))
                 })).then(data => data.payload)
             }
         } catch (err) {
@@ -512,7 +540,7 @@ export default function NewCV() {
                                     <div className='profile-image-cover'>
                                         <img
                                             src={profilePic.image}
-                                            style={profilePic.style}
+                                            style={{ ...profilePic.style, opacity: hiddenItems.includes('profile') && '.15' }}
                                             className='profile-image'
                                             onClick={() => document.getElementById('image').click()}
                                             loading='lazy'
@@ -579,6 +607,23 @@ export default function NewCV() {
                                                 min={0}
                                                 max={100}
                                             />
+                                            {hiddenItems.includes('profile') ?
+                                                <img
+                                                    src={ShwoIcon}
+                                                    className='hide-icon-profile'
+                                                    onClick={() => setHiddenItems(hiddenItems.filter(item => item !== 'profile'))}
+                                                />
+                                                :
+                                                <img
+                                                    src={HideIcon}
+                                                    className='hide-icon-profile'
+                                                    onClick={() => {
+                                                        const _hidden = [...hiddenItems]
+                                                        _hidden.push('profile')
+                                                        setHiddenItems(_hidden)
+                                                    }}
+                                                />
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -737,7 +782,7 @@ export default function NewCV() {
                                     <h4 className='signature-canvas-label'>Sign by hand</h4>
                                     {hiddenItems.includes('signature') ? '' :
                                         <div className='signature-canvas-row'>
-                                            <SignaturePad ref={sigCanvas} penColor='#3b3b3b' canvasProps={{ className: 'resume-signature-canvas', dotSize: 1 }} />
+                                            <SignaturePad ref={sigCanvas} penColor='#3b3b3b' canvasProps={{ className: 'resume-signature-canvas' }} />
                                             <div className='signature-canvas-btns'>
                                                 <button onClick={clearSignature}>Clear</button>
                                                 <button onClick={saveSignature}>Save</button>

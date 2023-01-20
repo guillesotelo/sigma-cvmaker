@@ -35,6 +35,7 @@ import {
   userHeaders,
   cvHeaders
 } from '../constants/tableHeaders'
+import { applyFiltersToImage } from '../helpers/image'
 
 export default function Settings() {
   const [tab, setTab] = useState('user')
@@ -140,6 +141,9 @@ export default function Settings() {
   }, [appData])
 
   useEffect(() => {
+    setSelectedItem(-1)
+    setItemEdit(false)
+    setIsNew(false)
     setIsEdit(false)
     if (tab === 'CV Logo' && !cvLogo.cvImage) getCVLogo()
     else if (tab === 'Skills' || tab === 'Buzzwords' && !appData.length) pullAppData()
@@ -741,6 +745,20 @@ export default function Settings() {
                                 className='profile-image-svg'
                                 onClick={() => document.getElementById('image').click()}
                               />}
+                            {imageData.image ?
+                              <CTAButton
+                                label='Download'
+                                handleClick={() => {
+                                  let a = document.createElement('a')
+                                  a.href = imageData.image
+                                  a.download = `${data.name || data.email} - ${data.type}.png`
+                                  a.click()
+                                }}
+                                color={APP_COLORS.GREEN}
+                                loading={loading}
+                                style={{ transform: 'scale(.8)' }}
+                              />
+                              : ''}
                             <div className='settings-details-settings'>
                               {imageData.type === 'Profile' ?
                                 <div>

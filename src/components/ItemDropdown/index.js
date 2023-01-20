@@ -38,7 +38,9 @@ export default function ItemDropdown(props) {
     } = props
 
     useEffect(() => {
-        pullAppData()
+        let isMounted = true
+        pullAppData(isMounted)
+        return () => { isMounted = false }
     }, [])
 
     useEffect(() => {
@@ -64,10 +66,10 @@ export default function ItemDropdown(props) {
         }
     }, [appData])
 
-    const pullAppData = async () => {
+    const pullAppData = async (isMounted) => {
         try {
             const _appData = await dispatch(getAppData({ email: user.email })).then(data => data.payload)
-            if (_appData) setAppData(_appData)
+            if (_appData && isMounted) setAppData(_appData)
         } catch (err) { console.error(err) }
     }
 

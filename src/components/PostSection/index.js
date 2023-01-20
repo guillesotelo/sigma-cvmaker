@@ -33,6 +33,7 @@ export default function PostSection(props) {
     const [editTool, setEditTool] = useState(null)
     const [selectedTool, setSelectedTool] = useState(-1)
     const dispatch = useDispatch()
+    const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
 
     const {
         label,
@@ -48,8 +49,7 @@ export default function PostSection(props) {
     } = props
 
     useEffect(() => {
-        const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
-        pullAppData(localUser.email)
+        pullAppData(user.email)
         fetchClientLogos()
     }, [])
 
@@ -97,10 +97,10 @@ export default function PostSection(props) {
         } catch (err) { console.error(err) }
     }
 
-    const pullAppData = async email => {
+    const pullAppData = async (email) => {
         try {
             const _appData = await dispatch(getAppData({ email })).then(data => data.payload)
-            if (_appData) setAppData(_appData)
+            setAppData(_appData)
         } catch (err) { console.error(err) }
     }
 

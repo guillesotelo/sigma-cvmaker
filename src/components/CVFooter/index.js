@@ -30,7 +30,7 @@ export default function CVFooter(props) {
             <h4 className='cv-footer-label'>Contact:</h4>
             <InputField
               label=''
-              value={data.footer_contact}
+              value={data.footer_contact || ''}
               type='text'
               name='footer_contact'
               placeholder='Manager Full Name'
@@ -42,7 +42,7 @@ export default function CVFooter(props) {
             <h4 className='cv-footer-label'>Email:</h4>
             <InputField
               label=''
-              value={data.footer_email}
+              value={data.footer_email || ''}
               type='text'
               name='footer_email'
               placeholder='manager.email@sigma.se'
