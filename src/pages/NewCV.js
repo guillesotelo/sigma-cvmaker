@@ -310,6 +310,7 @@ export default function NewCV() {
                 resumeData.footer_email = data.footer_email || ''
                 resumeData.footer_phone = data.footer_phone || ''
                 resumeData.footer_location = data.footer_location || ''
+                delete resumeData.data
 
                 const strData = JSON.stringify(resumeData)
                 if (strData !== resumeData.data) {
@@ -323,7 +324,7 @@ export default function NewCV() {
                 resumeData.managerEmail = data.footer_email || ''
                 resumeData.email = data.email ? data.email.toLowerCase() : ''
                 resumeData.user = user
-
+                
                 const managerUpdated = await dispatch(updateUserData({
                     user,
                     email: data.email ? data.email.toLowerCase() : '',
