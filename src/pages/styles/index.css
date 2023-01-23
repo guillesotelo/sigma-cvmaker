@@ -996,7 +996,7 @@
 }
 
 .settings-tab:hover {
-    opacity: .5;
+    background: linear-gradient(180deg, #eff6ff 0%, #fff 80%);
 }
 
 .settings-tab-selected {
