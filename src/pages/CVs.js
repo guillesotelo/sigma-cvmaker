@@ -23,7 +23,7 @@ export default function CVs({ showAll }) {
     const [isPdf, setIsPdf] = useState(false)
     const [download, setDownload] = useState(false)
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
-    const { isManager } = useSelector(state => state.user && state.user.userPermissions || {})
+    const { isManager } = user
     const dispatch = useDispatch()
     const history = useHistory()
 
