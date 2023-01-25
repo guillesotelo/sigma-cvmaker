@@ -14,7 +14,7 @@ export default function Home() {
 
     if (!localUser || !localUser.email) return history.push('/login')
 
-    if (localUser.app && localUser.app !== 'cvmaker') {
+    if (!localUser.token || (localUser.app && localUser.app !== 'cvmaker')) {
       localStorage.clear()
       return history.push('/login')
     }
@@ -23,7 +23,7 @@ export default function Home() {
       const login = new Date(localUser.login).getTime()
       const now = new Date().getTime()
 
-      if (now - login > 2592000000) {
+      if (now - login > 2506000000) {
         localStorage.clear()
         return history.push('/login')
       }

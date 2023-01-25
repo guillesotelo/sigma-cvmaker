@@ -2,9 +2,7 @@ import axios from 'axios';
 
 const API_URL = process.env.NODE_ENV === 'development' ? '' : process.env.REACT_APP_URL
 const { token } = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {}
-
 const headers = { authorization: `Bearer ${token}` }
-
 
 const loginUser = async data => {
     try {
