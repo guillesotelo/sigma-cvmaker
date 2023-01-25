@@ -850,9 +850,30 @@
 .account-details {
     box-shadow: 2px 2px 10px lightgray;
     border-radius: .5vw;
-    padding: 1.5vw 1vw;
+    padding: 1vw;
     margin: 2vw 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-width: 35vw;
 }
+
+.account-info {
+    
+}
+
+.account-profile-image-cover {
+    width: 180px;
+    height: 180px;
+    margin: 1vw 0;
+    align-self: center;
+    transition: .3s;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    transform: scale(.7);
+}
+
 
 .account-item {
     display: flex;
@@ -863,7 +884,7 @@
 .account-item-name {
     margin: .5vw;
     font-size: 1vw;
-    width: 10vw;
+    width: 6vw;
     text-align: right;
 }
 
@@ -878,8 +899,9 @@
 .account-btns {
     display: flex;
     flex-direction: row;
-    margin-top: 2vw;
-    gap: 2vw;
+    margin-top: 1vw;
+    justify-content: space-between;
+    min-width: 37vw;
 }
 
 .account-update-details {

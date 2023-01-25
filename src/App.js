@@ -13,7 +13,7 @@ import Report from "./pages/Report";
 import Footer from "./components/Footer";
 import Account from "./pages/Account";
 import Settings from "./pages/Settings";
-import SdideBar from "./components/SideBar";
+import SideBar from "./components/SideBar";
 import Users from "./pages/Users";
 import Activity from "./pages/Activity";
 import Help from "./pages/Help";
@@ -33,7 +33,7 @@ function App() {
       </Route>
       <Route path="/register">
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Register />
             <Footer />
@@ -43,7 +43,7 @@ function App() {
       <Route exact path="/">
       <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Home />
             <Footer />
@@ -53,7 +53,7 @@ function App() {
       <Route path="/my-cvs">
       <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <CVs />
             <Footer />
@@ -63,7 +63,7 @@ function App() {
       <Route path="/cvs">
       <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <CVs showAll={true} />
             <Footer />
@@ -73,7 +73,7 @@ function App() {
       <Route path="/new-cv">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <NewCV />
             <Footer />
@@ -83,7 +83,7 @@ function App() {
       <Route path="/new-cv:edit">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <NewCV />
             <Footer />
@@ -93,7 +93,7 @@ function App() {
       <Route path="/search">
         <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Search search={search} />
             <Footer />
@@ -103,7 +103,7 @@ function App() {
       <Route path="/report">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Report />
             <Footer />
@@ -113,7 +113,7 @@ function App() {
       <Route path="/account">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Account />
             <Footer />
@@ -123,7 +123,7 @@ function App() {
       <Route path="/consultants">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Consultants />
             <Footer />
@@ -133,7 +133,7 @@ function App() {
       <Route path="/clients">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Clients />
             <Footer />
@@ -143,7 +143,7 @@ function App() {
       <Route path="/tools-and-tech">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <ToolsTech />
             <Footer />
@@ -153,7 +153,7 @@ function App() {
       <Route path="/activity">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Activity />
             <Footer />
@@ -163,7 +163,7 @@ function App() {
       <Route path="/statistics">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Statistics />
             <Footer />
@@ -173,7 +173,7 @@ function App() {
       <Route path="/users">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Users />
             <Footer />
@@ -183,7 +183,7 @@ function App() {
       <Route path="/settings">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Settings />
             <Footer />
@@ -193,7 +193,7 @@ function App() {
       <Route path="/help">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Help />
             <Footer />
@@ -203,7 +203,7 @@ function App() {
       <Route path="/helpPage">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <HelpPage />
             <Footer />
@@ -213,7 +213,7 @@ function App() {
       <Route path="/helpPage:module">
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <HelpPage />
             <Footer />
@@ -223,7 +223,7 @@ function App() {
       <Route>
          <Header setSearch={setSearch} />
         <div className="root-container">
-          <SdideBar />
+          <SideBar />
           <div className="root-column">
             <Home />
             <Footer />

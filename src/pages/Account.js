@@ -121,19 +121,30 @@ export default function Account() {
     <div className='account-container'>
       <h1 className='page-title' style={{ filter: updateDetails || updatePass ? 'blur(10px)' : '' }}>My Account</h1>
       <div className='account-details' style={{ filter: updateDetails || updatePass ? 'blur(10px)' : '' }}>
-        <div className='account-item'>
-          <h4 className='account-item-name'>Full Name</h4>
-          <h4 className='account-item-value'>{user.username}</h4>
-        </div>
-        <div className='account-item'>
-          <h4 className='account-item-name'>Email</h4>
-          <h4 className='account-item-value'>{user.email}</h4>
-        </div>
-        {user.isManager ?
-          <div className='account-item'>
-            <h4 className='account-item-name'>Manager</h4>
-            <h4 className='account-item-value'>{user.isManager ? 'Yes' : ''}</h4>
+        {profilePic.image ?
+          <div className='account-profile-image-cover'>
+            <img
+              src={profilePic.image}
+              style={profilePic.style}
+              className='profile-image'
+              loading='lazy'
+            />
           </div> : ''}
+        <div className='account-info'>
+          <div className='account-item'>
+            <h4 className='account-item-name'>Full Name</h4>
+            <h4 className='account-item-value'>{user.username}</h4>
+          </div>
+          <div className='account-item'>
+            <h4 className='account-item-name'>Email</h4>
+            <h4 className='account-item-value'>{user.email}</h4>
+          </div>
+          {user.isManager ?
+            <div className='account-item'>
+              <h4 className='account-item-name'>Manager</h4>
+              <h4 className='account-item-value'>{user.isManager ? 'Yes' : ''}</h4>
+            </div> : ''}
+        </div>
       </div>
       <div className='account-btns' style={{ filter: updateDetails || updatePass ? 'blur(10px)' : '' }}>
         <CTAButton
@@ -257,10 +268,6 @@ export default function Account() {
           </div>
         </div>
         : ''}
-
-      <h4 className='account-note' style={{ filter: updateDetails || updatePass ? 'blur(10px)' : '' }}>
-        If you need to change your permissions, you must ask your manager or HR manager to do so.
-      </h4>
     </div>
   )
 }
