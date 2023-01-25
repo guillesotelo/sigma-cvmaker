@@ -755,7 +755,6 @@ export default function Settings() {
                                   a.click()
                                 }}
                                 color={APP_COLORS.GREEN}
-                                loading={loading}
                                 style={{ transform: 'scale(.8)' }}
                               />
                               : ''}

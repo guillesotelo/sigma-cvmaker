@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_URL = process.env.NODE_ENV === 'development' ? '' : process.env.REACT_APP_URL
-const { token } = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {}
+let { token } = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {}
 const headers = { authorization: `Bearer ${token}` }
 
 const loginUser = async data => {
@@ -13,6 +13,7 @@ const loginUser = async data => {
             app: 'cvmaker',
             login: new Date()
         }))
+        token = user.token
         return user
     } catch (error) { console.log(error) }
 }
