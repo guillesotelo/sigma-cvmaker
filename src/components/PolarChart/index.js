@@ -25,7 +25,7 @@ export default function PolarChart(props) {
     }
 
     const isMobile = navigator.userAgentData && navigator.userAgentData.mobile
-    const chartHeight = isMobile ? 350 : size ? size : 500
+    const chartHeight = isMobile ? 350 : size ? size : '30vw'
 
     return (
         <div className='polarchart-container'>

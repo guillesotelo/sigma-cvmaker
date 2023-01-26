@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom'
 import { getAppData } from '../store/reducers/appData'
 import { getImages } from '../store/reducers/image'
 import { getResumes } from '../store/reducers/resume'
-import { getLogs, getUsers } from '../store/reducers/user'
+import { getLogs } from '../store/reducers/log'
+import { getUsers } from '../store/reducers/user'
 import {
     cvHeaders,
     imageHeaders,

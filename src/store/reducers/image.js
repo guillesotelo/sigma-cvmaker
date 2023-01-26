@@ -7,7 +7,7 @@ import {
     getCompanyLogo,
     getImageByEmailAndType,
     getAllCompanyLogos
-} from "../services/reduxServices";
+} from "../services/image";
 
 const initialState = {
     images: null,

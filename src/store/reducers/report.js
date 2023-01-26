@@ -3,7 +3,7 @@ import {
     getReports,
     createReport,
     updateReportData
-} from "../services/reduxServices";
+} from "../services/report";
 
 const initialState = {
     report: null,

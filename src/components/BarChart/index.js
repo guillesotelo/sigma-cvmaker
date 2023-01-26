@@ -30,8 +30,8 @@ export default function BarChart(props) {
 
     const isMobile = navigator.userAgentData && navigator.userAgentData.mobile
 
-    const barHeight = isMobile ? 350 : size ? size : 400
-    const barWidth = isMobile ? window.outerWidth * 0.9 : size ? size * 1.25 : 500
+    const barHeight = isMobile ? 350 : size ? size : '30vw'
+    const barWidth = isMobile ? window.outerWidth * 0.9 : size ? size * 1.25 : '40vw'
 
     return (
         <div className='barchart-container' style={{ width: barWidth, height: barHeight }}>

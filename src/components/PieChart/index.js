@@ -25,8 +25,7 @@ export default function PieChart(props) {
     }
 
     const isMobile = navigator.userAgentData && navigator.userAgentData.mobile
-
-    const chartHeight = isMobile ? 350 : size ? size : 400
+    const chartHeight = isMobile ? 350 : size ? size : '30vw'
 
     return (
         <div className='piechart-container'>

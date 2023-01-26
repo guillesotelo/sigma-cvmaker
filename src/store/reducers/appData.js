@@ -7,7 +7,7 @@ import {
     getRemovedItems,
     restoreItemfromTrash,
     permanentlyRemove
-} from "../services/reduxServices";
+} from "../services/appData";
 
 const initialState = {
     appData: null,

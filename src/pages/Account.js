@@ -32,11 +32,9 @@ export default function Account() {
 
   useEffect(() => {
     if (data.managerName) {
-      let managerEmail = ''
       allManagers.forEach(manager => {
-        if (manager.username === data.managerName) managerEmail = manager.email
+        if (manager.username === data.managerName) updateData('managerEmail', manager.email)
       })
-      updateData('managerEmail', managerEmail)
     }
   }, [data.managerName])
 
@@ -66,8 +64,8 @@ export default function Account() {
         })).then(data => data.payload)
 
         if (updated) {
-          setData({ ...data, ...updated.data })
-          localStorage.setItem('user', JSON.stringify(updated.data))
+          setData({ ...data, ...updated })
+          localStorage.setItem('user', JSON.stringify(updated))
           toast.success('User data saved successfully')
         }
         else toast.error('Error saving changes')
