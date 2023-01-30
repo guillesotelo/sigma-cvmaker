@@ -79,6 +79,7 @@ export default function Users() {
     }, [scale, translateX, translateY, rotate, contrast, brightness, grayscale])
 
     useEffect(() => {
+        setData({ ...data, password: '' })
         if (selectedUser > -1) {
             setData({ ...data, ...users[selectedUser] })
             getPreview(users[selectedUser].email)
@@ -158,10 +159,12 @@ export default function Users() {
             setLoading(false)
             setIsEdit(false)
             setIsNew(false)
+            setData({})
         } catch (err) {
             setLoading(false)
             setIsEdit(false)
             setIsNew(false)
+            setData({})
             toast.error('Error saving changes')
         }
     }
@@ -188,9 +191,11 @@ export default function Users() {
             setRemoveModal(false)
             setLoading(false)
             getAllUsers()
+            setData({})
         } catch (err) {
             setLoading(false)
             setRemoveModal(false)
+            setData({})
             console.error(err)
             toast.error('Error removing user')
         }

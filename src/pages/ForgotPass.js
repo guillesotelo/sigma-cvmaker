@@ -1,49 +1,43 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import { APP_COLORS } from '../constants/app'
-import { logIn } from '../store/reducers/user'
 import MoonLoader from "react-spinners/MoonLoader"
+import { sendEmailResetPass } from '../store/reducers/user'
 
-export default function Login() {
+export default function ForgotPass() {
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(false)
 
     const dispatch = useDispatch()
     const history = useHistory()
 
-    useEffect(() => {
-        const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
-        if (user && user.email) history.push('/')
-    })
-
     const updateData = (key, value) => {
         setData({ ...data, [key]: value })
     }
 
-    const loginUser = async () => {
+    const resetPassword = async () => {
         try {
             setLoading(true)
-            const logged = await dispatch(logIn(data)).then(data => data.payload)
+            const reset = await dispatch(sendEmailResetPass(data)).then(data => data.payload)
 
-            if (logged && logged.username) {
-                setData({ ...data, password: '', email: '' })
+            if (reset) {
                 setLoading(false)
-                toast.success(`Welcome back, ${logged.username.split(' ')[0]}!`)
-                setTimeout(() => history.push('/'), 2000)
+                toast.success(`Please check your email for login instructions`)
+                setTimeout(() => history.push('/login'), 2000)
             } else {
-                setData({ ...data, password: '', email: '' })
+                setData({ ...data, email: '' })
                 setLoading(false)
-                return toast.error('Error logging in')
+                return toast.error('Error checking email')
             }
         } catch (err) {
-            setData({ ...data, password: '', email: '' })
+            setData({ ...data, email: '' })
             setLoading(false)
             console.error(err)
-            return toast.error('Error logging in')
+            return toast.error('Error checking email')
         }
     }
 
@@ -57,7 +51,6 @@ export default function Login() {
                         className='login-logo'
                         loading='lazy'
                     />
-                    {/* <h4 className='login-text'>CV</h4> */}
                 </div>
                 {loading ?
                     <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#E59A2F' /></div>
@@ -69,27 +62,16 @@ export default function Login() {
                             name='email'
                             placeholder='user@email.com'
                             updateData={updateData}
-                            style={{ width: '95%' }}
-                            noGrammar={true}
-                        />
-                        <InputField
-                            label='Password'
-                            type='password'
-                            name='password'
-                            updateData={updateData}
-                            style={{ width: '92%', marginBottom: '1vw' }}
+                            style={{ width: '95%', marginBottom: '1vw' }}
                             noGrammar={true}
                         />
                         <CTAButton
-                            label='Login'
+                            label='Reset Password'
                             size='100%'
                             color={APP_COLORS.GREEN}
-                            handleClick={loginUser}
-                            disabled={!data.email || !data.email.includes('.') || !data.email.includes('@') || !data.password}
+                            handleClick={resetPassword}
+                            disabled={!data.email || !data.email.includes('.') || !data.email.includes('@')}
                         />
-                        <h4 className='forgot-pass-link' onClick={() => history.push('/forgotPassword')}>
-                            I forgot my password
-                        </h4>
                     </div>
                 }
             </div>

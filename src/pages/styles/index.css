@@ -70,6 +70,11 @@
     filter: invert(18%) sepia(39%) saturate(9%) hue-rotate(326deg) brightness(30%) contrast(92%);
 }
 
+.login-fill {
+    display: flex;
+    flex-direction: column;
+}
+
 .login-text {
     margin: 1vw 0 0 0;
     color: #8a8a8a;
@@ -80,11 +85,12 @@
 }
 
 .forgot-pass-link {
-    color: rgb(77, 77, 196);
+    color: #4d4dc4;
     font-size: .8vw;
-    margin-bottom: 2vw;
+    margin: 1vw 0 0 0;
     cursor: pointer;
     transition: .3s;
+    font-weight: normal;
 }
 
 .forgot-pass-link:hover {

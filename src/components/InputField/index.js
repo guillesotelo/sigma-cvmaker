@@ -32,7 +32,8 @@ export default function InputField(props) {
         hidden,
         setHidden,
         fontSize,
-        id
+        id,
+        noGrammar
     } = props
 
     useEffect(() => {
@@ -126,7 +127,7 @@ export default function InputField(props) {
                     {label || ''}
                 </h4> : ''}
             {type === 'textarea' ?
-                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: style && style.width || "100%", position: 'relative' }}>
+                <GrammarlyEditorPlugin clientId={noGrammar ? '' : process.env.REACT_APP_GRAMMAR_CID} style={{ width: style && style.width || "100%", position: 'relative' }}>
                     <textarea
                         className='inputfield-textarea'
                         onChange={handleChange}
@@ -171,7 +172,7 @@ export default function InputField(props) {
                     :
                     type === 'text' ?
                         <div className='inputfield-dropdown' style={style}>
-                            <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%", textAlign: 'left' }}>
+                            <GrammarlyEditorPlugin clientId={noGrammar ? '' : process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%", textAlign: 'left' }}>
                                 <input
                                     className='inputfield-field'
                                     autoComplete={autoComplete}

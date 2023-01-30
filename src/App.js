@@ -23,6 +23,8 @@ import Clients from "./pages/Clients";
 import Consultants from "./pages/Consultants";
 import Statistics from "./pages/Statistics";
 import Search from "./pages/Search";
+import ForgotPass from "./pages/ForgotPass";
+import ResetPass from "./pages/ResetPass";
 
 function App() {
   const [search, setSearch] = useState([])
@@ -30,6 +32,15 @@ function App() {
     <Switch>
       <Route path="/login">
         <Login />
+      </Route>
+      <Route path="/forgotPassword">
+        <ForgotPass />
+      </Route>
+      <Route path="/changePass">
+        <ResetPass />
+      </Route>
+      <Route path="/changePass:userEmail">
+        <ResetPass />
       </Route>
       <Route path="/register">
         <div className="root-container">
