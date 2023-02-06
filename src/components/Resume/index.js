@@ -468,13 +468,13 @@ export default function Resume(props) {
         experienceCol1: {
             flexDirection: 'column',
             marginHorizontal: '2vw',
-            width: '20%',
+            width: '24%',
             alignItems: 'flex-start'
         },
         experienceCol2: {
             flexDirection: 'column',
-            width: '74%',
-            marginLeft: '8.5vw',
+            width: '68%',
+            marginLeft: '3.5vw',
             alignSelf: 'flex-end'
         },
         experienceTitleRow: {
