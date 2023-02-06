@@ -27,7 +27,7 @@ export default function ForgotPass() {
             if (reset) {
                 setLoading(false)
                 toast.success(`Please check your email for login instructions`)
-                setTimeout(() => history.push('/login'), 2000)
+                setTimeout(() => history.push('/login'), 4000)
             } else {
                 setData({ ...data, email: '' })
                 setLoading(false)
@@ -43,7 +43,7 @@ export default function ForgotPass() {
 
     return (
         <div className='login-container'>
-            <ToastContainer autoClose={2000} />
+            <ToastContainer autoClose={4000} />
             <div className='login-box'>
                 <div className='login-image'>
                     <img
@@ -71,6 +71,13 @@ export default function ForgotPass() {
                             color={APP_COLORS.GREEN}
                             handleClick={resetPassword}
                             disabled={!data.email || !data.email.includes('.') || !data.email.includes('@')}
+                        />
+                        <h4 style={{ margin: '.4vw 0' }}></h4>
+                        <CTAButton
+                            label='Go back'
+                            size='100%'
+                            color={APP_COLORS.GRAY}
+                            handleClick={() => history.push('/login')}
                         />
                     </div>
                 }

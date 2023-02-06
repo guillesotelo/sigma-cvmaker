@@ -410,7 +410,7 @@ export default function Users() {
                         />
                         <InputField
                             label='Login Password'
-                            type='text'
+                            type='password'
                             name='password'
                             updateData={updateData}
                             placeholder='Write new password'
@@ -548,7 +548,7 @@ export default function Users() {
                             />
                             <InputField
                                 label='Login Password'
-                                type='text'
+                                type='password'
                                 name='password'
                                 updateData={updateData}
                                 value={data.password || data.password === '' ? data.password : generatePass()}

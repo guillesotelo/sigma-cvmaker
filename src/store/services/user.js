@@ -60,14 +60,14 @@ const getManagers = async data => {
 const resetPassordByEmail = async data => {
     try {
         const user = await axios.post(`${API_URL}/api/user/resetByEmail`, data)
-        return user
+        return user.data
     } catch (err) { console.log(err) }
 }
 
 const changePass = async data => {
     try {
         const user = await axios.post(`${API_URL}/api/user/changePass`, data, getConfig())
-        return user
+        return user.data
     } catch (err) { console.log(err) }
 }
 

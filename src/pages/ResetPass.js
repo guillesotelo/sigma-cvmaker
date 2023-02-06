@@ -19,9 +19,13 @@ export default function ResetPass() {
 
     useEffect(() => {
         const userEmail = new URLSearchParams(document.location.search).get('userEmail')
-        if (!userEmail) history.push('/login')
+        if (!userEmail) return history.push('/login')
         setData({ userEmail })
     }, [])
+
+    useEffect(() => {
+        if (!data.userEmail) history.push('/login')
+    }, [data.userEmail])
 
     const updateData = (key, value) => {
         setData({ ...data, [key]: value })

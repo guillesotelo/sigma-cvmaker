@@ -214,7 +214,7 @@ export default function Resume(props) {
         const asPdf = pdf()
         asPdf.updateContainer(<ResumePDF />)
         const blob = await asPdf.toBlob()
-        saveAs(blob, `${fullName} - ${res.type}.pdf`)
+        saveAs(blob, `${fullName} - ${res.role}.pdf`)
         onDownloadPDF()
     }
 
@@ -340,7 +340,7 @@ export default function Resume(props) {
             textAlign: 'left'
         },
         infoView2: {
-            margin: '0 0 0 10vw',
+            margin: '0 0 0 9vw',
             textAlign: 'left'
         },
         infoView3: {
@@ -468,13 +468,17 @@ export default function Resume(props) {
         experienceCol1: {
             flexDirection: 'column',
             marginHorizontal: '2vw',
-            width: '16%',
+            width: '20%',
             alignItems: 'flex-start'
         },
         experienceCol2: {
             flexDirection: 'column',
             width: '74%',
+            marginLeft: '8.5vw',
             alignSelf: 'flex-end'
+        },
+        experienceTitleRow: {
+            flexDirection: 'column',
         },
         experiencePeriod: {
             fontSize: '1.6vw',
@@ -565,7 +569,7 @@ export default function Resume(props) {
             maxHeight: 40,
             maxWidth: 60,
             objectFit: 'contain',
-            margin: '2vw 0',
+            margin: '2vw 0'
         }
     })
 
@@ -736,70 +740,143 @@ export default function Resume(props) {
                                 <View style={styles.infoView1}>
                                     {res.experience ? res.experience.map((exp, i) =>
                                         Object.keys(exp).length > 1 && !checkHiddenPost(i, false) ?
-                                            <View key={i} style={{
-                                                ...styles.experienceRow,
-                                                borderTop: i === 0 ? '1px solid gray' : '1px solid #AAAAAA',
-                                                padding: padding.experience || padding.experience === 0 ? `${.1 * padding.experience}vw 0` : '3vw 0'
-                                            }} wrap={false}>
-                                                {i === 0 ? <Text style={styles.sectionTitle2}>EXPERIENCE</Text> : <Text style={styles.sectionTitle}></Text>}
-                                                <View style={styles.experienceCol1}>
-                                                    {checkHiddenPost(i, exp.period) ? null :
-                                                        <Text style={{
-                                                            ...styles.experiencePeriod,
-                                                            fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
-                                                        }}>{exp.period || ''}</Text>}
-                                                    {getImage(i) && getImage(i).image ? <Image style={styles.clientLogo} src={getImage(i).image} /> : null}
-                                                </View>
-                                                <View style={styles.experienceCol2}>
-                                                    {checkHiddenPost(i, exp.company) ? null :
-                                                        <Text style={{
-                                                            ...styles.experienceCompany,
-                                                            fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.8}vw` : '1.8vw'
-                                                        }}>{exp.company || ''}</Text>}
-                                                    {checkHiddenPost(i, exp.role) ? null :
-                                                        <Text style={{
-                                                            ...styles.experienceRole,
-                                                            fontWeight: !exp.company && 'bold',
-                                                            fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.7}vw` : '1.7vw'
-                                                        }}>{exp.role || ''}</Text>}
-                                                    {checkHiddenPost(i, exp.description) ? null :
-                                                        <Text style={{
-                                                            ...styles.experienceDescription,
-                                                            fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw',
-                                                            marginTop: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience}vw` : '1vw'
-                                                        }}>{exp.description || ''}</Text>}
-                                                    <View>
-                                                        <Text style={{
-                                                            ...styles.experienceResponsibilities,
-                                                            fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw',
-                                                            marginTop: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience * 2}vw` : '2vw'
-                                                        }}>Key responsibilities:</Text>
-                                                        {exp.bullets.map((resp, j) => resp.value && !res.hidden ?
-                                                            <Text key={j} style={{
-                                                                ...styles.experienceResponsibility,
-                                                                fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
-                                                            }}>• {resp.value}</Text>
-                                                            : null)}
+                                            i == 0 ?
+                                                <View key={i} style={{
+                                                    ...styles.experienceRow,
+                                                    flexDirection: 'column',
+                                                    borderTop: i === 0 ? '1px solid gray' : '1px solid #AAAAAA',
+                                                    padding: padding.experience || padding.experience === 0 ? `${.1 * padding.experience}vw 0` : '3vw 0'
+                                                }} wrap={false}>
+                                                    <Text style={{
+                                                        ...
+                                                        styles.sectionTitle2,
+                                                        marginBottom: '2vw'
+                                                    }}>EXPERIENCE</Text>
+                                                    <View key={i} style={styles.experienceRow} wrap={false}>
+                                                        <View style={styles.experienceCol1}>
+                                                            {checkHiddenPost(i, exp.period) ? null :
+                                                                <Text style={{
+                                                                    ...styles.experiencePeriod,
+                                                                    fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
+                                                                }}>{exp.period || ''}</Text>}
+                                                            {getImage(i) && getImage(i).image ? <Image style={styles.clientLogo} src={getImage(i).image} /> : null}
+                                                        </View>
+                                                        <View style={styles.experienceCol2}>
+                                                            {checkHiddenPost(i, exp.company) ? null :
+                                                                <Text style={{
+                                                                    ...styles.experienceCompany,
+                                                                    fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.8}vw` : '1.8vw'
+                                                                }}>{exp.company || ''}</Text>}
+                                                            {checkHiddenPost(i, exp.role) ? null :
+                                                                <Text style={{
+                                                                    ...styles.experienceRole,
+                                                                    fontWeight: !exp.company && 'bold',
+                                                                    fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.7}vw` : '1.7vw'
+                                                                }}>{exp.role || ''}</Text>}
+                                                            {checkHiddenPost(i, exp.description) ? null :
+                                                                <Text style={{
+                                                                    ...styles.experienceDescription,
+                                                                    fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw',
+                                                                    marginTop: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience}vw` : '1vw'
+                                                                }}>{exp.description || ''}</Text>}
+                                                            <View>
+                                                                <Text style={{
+                                                                    ...styles.experienceResponsibilities,
+                                                                    fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw',
+                                                                    marginTop: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience * 2}vw` : '2vw'
+                                                                }}>Key responsibilities:</Text>
+                                                                {exp.bullets.map((resp, j) => resp.value && !res.hidden ?
+                                                                    <Text key={j} style={{
+                                                                        ...styles.experienceResponsibility,
+                                                                        fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
+                                                                    }}>• {resp.value}</Text>
+                                                                    : null)}
+                                                            </View>
+                                                            {exp.technologies && Array.isArray(exp.technologies) && exp.technologies[0] ?
+                                                                <View>
+                                                                    <Text style={{
+                                                                        ...styles.experienceResponsibilities,
+                                                                        fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
+                                                                    }}>Tools & Tech:</Text>
+                                                                    <View style={styles.experienceTechList}>
+                                                                        {exp.technologies.map((tech, j) => tech && !checkHiddenPost(i, tech) ?
+                                                                            <Text key={j} style={{
+                                                                                ...styles.experienceTech,
+                                                                                fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.7}vw` : '1.7vw',
+                                                                                margin: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience / 2.5}vw` : '.4vw',
+                                                                            }}>{tech}</Text>
+                                                                            : null)}
+                                                                    </View>
+                                                                </View>
+                                                                : null}
+                                                        </View>
                                                     </View>
-                                                    {exp.technologies && Array.isArray(exp.technologies) && exp.technologies[0] ?
+                                                </View>
+                                                :
+                                                <View key={i} style={{
+                                                    ...styles.experienceRow,
+                                                    // flexDirection: i === 0 ? 'column' : 'row',
+                                                    borderTop: i === 0 ? '1px solid gray' : '1px solid #AAAAAA',
+                                                    padding: padding.experience || padding.experience === 0 ? `${.1 * padding.experience}vw 0` : '3vw 0'
+                                                }} wrap={false}>
+                                                    <View style={styles.experienceCol1}>
+                                                        {checkHiddenPost(i, exp.period) ? null :
+                                                            <Text style={{
+                                                                ...styles.experiencePeriod,
+                                                                fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
+                                                            }}>{exp.period || ''}</Text>}
+                                                        {getImage(i) && getImage(i).image ? <Image style={styles.clientLogo} src={getImage(i).image} /> : null}
+                                                    </View>
+                                                    <View style={styles.experienceCol2}>
+                                                        {checkHiddenPost(i, exp.company) ? null :
+                                                            <Text style={{
+                                                                ...styles.experienceCompany,
+                                                                fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.8}vw` : '1.8vw'
+                                                            }}>{exp.company || ''}</Text>}
+                                                        {checkHiddenPost(i, exp.role) ? null :
+                                                            <Text style={{
+                                                                ...styles.experienceRole,
+                                                                fontWeight: !exp.company && 'bold',
+                                                                fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.7}vw` : '1.7vw'
+                                                            }}>{exp.role || ''}</Text>}
+                                                        {checkHiddenPost(i, exp.description) ? null :
+                                                            <Text style={{
+                                                                ...styles.experienceDescription,
+                                                                fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw',
+                                                                marginTop: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience}vw` : '1vw'
+                                                            }}>{exp.description || ''}</Text>}
                                                         <View>
                                                             <Text style={{
                                                                 ...styles.experienceResponsibilities,
-                                                                fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
-                                                            }}>Tools & Tech:</Text>
-                                                            <View style={styles.experienceTechList}>
-                                                                {exp.technologies.map((tech, j) => tech && !checkHiddenPost(i, tech) ?
-                                                                    <Text key={j} style={{
-                                                                        ...styles.experienceTech,
-                                                                        fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.7}vw` : '1.7vw',
-                                                                        margin: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience / 2.5}vw` : '.4vw',
-                                                                    }}>{tech}</Text>
-                                                                    : null)}
-                                                            </View>
+                                                                fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw',
+                                                                marginTop: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience * 2}vw` : '2vw'
+                                                            }}>Key responsibilities:</Text>
+                                                            {exp.bullets.map((resp, j) => resp.value && !res.hidden ?
+                                                                <Text key={j} style={{
+                                                                    ...styles.experienceResponsibility,
+                                                                    fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
+                                                                }}>• {resp.value}</Text>
+                                                                : null)}
                                                         </View>
-                                                        : null}
+                                                        {exp.technologies && Array.isArray(exp.technologies) && exp.technologies[0] ?
+                                                            <View>
+                                                                <Text style={{
+                                                                    ...styles.experienceResponsibilities,
+                                                                    fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.6}vw` : '1.6vw'
+                                                                }}>Tools & Tech:</Text>
+                                                                <View style={styles.experienceTechList}>
+                                                                    {exp.technologies.map((tech, j) => tech && !checkHiddenPost(i, tech) ?
+                                                                        <Text key={j} style={{
+                                                                            ...styles.experienceTech,
+                                                                            fontSize: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience + fontSize.experience * 0.7}vw` : '1.7vw',
+                                                                            margin: fontSize.experience || fontSize.experience === 0 ? `${fontSize.experience / 2.5}vw` : '.4vw',
+                                                                        }}>{tech}</Text>
+                                                                        : null)}
+                                                                </View>
+                                                            </View>
+                                                            : null}
+                                                    </View>
                                                 </View>
-                                            </View>
                                             : null
                                     ) : null}
                                 </View>

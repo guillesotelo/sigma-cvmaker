@@ -85,15 +85,16 @@
 }
 
 .forgot-pass-link {
-    color: #4d4dc4;
+    color: #4d4d5e;
     font-size: .8vw;
-    margin: 1vw 0 0 0;
+    margin: 1.5vw 0 0 0;
     cursor: pointer;
     transition: .3s;
     font-weight: normal;
 }
 
 .forgot-pass-link:hover {
+    color: #4e4ef1;
     text-decoration: underline;
 }
 
