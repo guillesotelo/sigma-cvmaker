@@ -27,7 +27,7 @@ export default function ForgotPass() {
             if (reset) {
                 setLoading(false)
                 toast.success(`Please check your email for login instructions`)
-                setTimeout(() => history.push('/login'), 4000)
+                setTimeout(() => history.push('/'), 4000)
             } else {
                 setData({ ...data, email: '' })
                 setLoading(false)
@@ -77,7 +77,7 @@ export default function ForgotPass() {
                             label='Go back'
                             size='100%'
                             color={APP_COLORS.GRAY}
-                            handleClick={() => history.push('/login')}
+                            handleClick={() => history.push('/')}
                         />
                     </div>
                 }

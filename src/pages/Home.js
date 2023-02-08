@@ -21,7 +21,7 @@ export default function Home() {
 
       if (now - login > 2506000000) {
         localStorage.clear()
-        return history.push('/login')
+        return history.push('/')
       }
     }
   }, [])

@@ -30,7 +30,7 @@ export default function CVs({ showAll }) {
 
     useEffect(() => {
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
-        if (!localUser || !localUser.email) history.push('/login')
+        if (!localUser || !localUser.email) history.push('/')
 
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' || e.key === 'Esc') onCloseModal()

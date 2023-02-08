@@ -60,7 +60,7 @@ export default function Resume(props) {
 
     useEffect(() => {
         const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
-        if (!user || !user.email) history.push('/login')
+        if (!user || !user.email) history.push('/')
         getFonts()
         getResumeData()
         getCVLogo()

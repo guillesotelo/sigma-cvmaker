@@ -76,7 +76,7 @@ export default function NewCV() {
     // console.log("data", data)
 
     useEffect(() => {
-        if (!user || !user.email) history.push('/login')
+        if (!user || !user.email) history.push('/')
         getAllResumes(true)
         getCVLogo()
         getManagers()

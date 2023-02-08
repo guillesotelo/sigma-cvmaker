@@ -34,11 +34,11 @@ export default function Search({ search }) {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (!user || !user.email) return history.push('/login')
+        if (!user || !user.email) return history.push('/')
 
         if (user.app && user.app !== 'cvmaker') {
             localStorage.clear()
-            return history.push('/login')
+            return history.push('/')
         }
     }, [])
 

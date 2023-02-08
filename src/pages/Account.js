@@ -24,7 +24,7 @@ export default function Account() {
   const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || {}
 
   useEffect(() => {
-    if (!user || !user.email) history.push('/login')
+    if (!user || !user.email) history.push('/')
     setData({ ...data, ...user })
     getPreview(user.email)
     getManagers()
@@ -110,7 +110,7 @@ export default function Account() {
       const loggedOut = await dispatch(logOut(user)).then(data => data.payload)
       if (loggedOut) {
         toast.success('See you later!')
-        setTimeout(() => history.push('/login'), 1500)
+        setTimeout(() => history.push('/'), 1500)
       }
     } catch (err) { return toast.error('An error has occurred') }
   }

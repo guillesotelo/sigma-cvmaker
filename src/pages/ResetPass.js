@@ -19,12 +19,12 @@ export default function ResetPass() {
 
     useEffect(() => {
         const userEmail = new URLSearchParams(document.location.search).get('userEmail')
-        if (!userEmail) return history.push('/login')
+        if (!userEmail) return history.push('/')
         setData({ userEmail })
     }, [])
 
     useEffect(() => {
-        if (!data.userEmail) history.push('/login')
+        if (!data.userEmail) history.push('/')
     }, [data.userEmail])
 
     const updateData = (key, value) => {
@@ -39,7 +39,7 @@ export default function ResetPass() {
             if (updated) {
                 setLoading(false)
                 toast.success(`Password updated successfully`)
-                setTimeout(() => history.push('/login'), 2000)
+                setTimeout(() => history.push('/'), 2000)
             } else {
                 setData({})
                 setLoading(false)
