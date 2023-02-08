@@ -11,9 +11,9 @@ const initialState = {
 export const saveLog = createAsyncThunk('CREATE_LOG', createLog)
 export const getLogs = createAsyncThunk('GET_ALL_LOGS', getAllLogs)
 
-const reportReducer = createReducer(initialState, {
+const logReducer = createReducer(initialState, {
     [saveLog.fulfilled]: (state, action) => { return { ...state, log: action.payload } },
     [getLogs.fulfilled]: (state, action) => { return { ...state, logs: action.payload } }
 });
 
-export default reportReducer;
+export default logReducer;

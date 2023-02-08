@@ -5,6 +5,7 @@ import resumeReducer from "./reducers/resume"
 import reportReducer from "./reducers/report"
 import appDataReducer from "./reducers/appData"
 import imageReducer from "./reducers/image"
+import logReducer from "./reducers/log"
 
 const logs = process.env.NODE_ENV === '!development' ? logger : []
 
@@ -18,7 +19,8 @@ const store = configureStore({
         resume: resumeReducer,
         report: reportReducer,
         appData: appDataReducer,
-        image: imageReducer
+        image: imageReducer,
+        log: logReducer
     }
 })
 

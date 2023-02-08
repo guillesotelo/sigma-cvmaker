@@ -79,9 +79,9 @@ export default function Users() {
     }, [scale, translateX, translateY, rotate, contrast, brightness, grayscale])
 
     useEffect(() => {
-        setData({ ...data, password: '' })
+        setData({})
         if (selectedUser > -1) {
-            setData({ ...data, ...users[selectedUser] })
+            setData({ ...users[selectedUser] })
             getPreview(users[selectedUser].email)
         }
     }, [selectedUser])
@@ -159,12 +159,10 @@ export default function Users() {
             setLoading(false)
             setIsEdit(false)
             setIsNew(false)
-            setData({})
         } catch (err) {
             setLoading(false)
             setIsEdit(false)
             setIsNew(false)
-            setData({})
             toast.error('Error saving changes')
         }
     }
