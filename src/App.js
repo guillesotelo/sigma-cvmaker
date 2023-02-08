@@ -25,11 +25,15 @@ import Statistics from "./pages/Statistics";
 import Search from "./pages/Search";
 import ForgotPass from "./pages/ForgotPass";
 import ResetPass from "./pages/ResetPass";
+import Landing from "./pages/Landing";
 
 function App() {
   const [search, setSearch] = useState([])
   return (
     <Switch>
+      <Route exact path="/">
+        <Landing />
+      </Route>
       <Route path="/login">
         <Login />
       </Route>
@@ -51,8 +55,8 @@ function App() {
           </div>
         </div>
       </Route>
-      <Route exact path="/">
-      <Header setSearch={setSearch} />
+      <Route path="/home">
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -62,7 +66,7 @@ function App() {
         </div>
       </Route>
       <Route path="/my-cvs">
-      <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -72,7 +76,7 @@ function App() {
         </div>
       </Route>
       <Route path="/cvs">
-      <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -82,7 +86,7 @@ function App() {
         </div>
       </Route>
       <Route path="/new-cv">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -92,7 +96,7 @@ function App() {
         </div>
       </Route>
       <Route path="/new-cv:edit">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -112,7 +116,7 @@ function App() {
         </div>
       </Route>
       <Route path="/report">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -122,7 +126,7 @@ function App() {
         </div>
       </Route>
       <Route path="/account">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -132,7 +136,7 @@ function App() {
         </div>
       </Route>
       <Route path="/consultants">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -142,7 +146,7 @@ function App() {
         </div>
       </Route>
       <Route path="/clients">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -152,7 +156,7 @@ function App() {
         </div>
       </Route>
       <Route path="/tools-and-tech">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -162,7 +166,7 @@ function App() {
         </div>
       </Route>
       <Route path="/activity">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -172,7 +176,7 @@ function App() {
         </div>
       </Route>
       <Route path="/statistics">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -182,7 +186,7 @@ function App() {
         </div>
       </Route>
       <Route path="/users">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -192,7 +196,7 @@ function App() {
         </div>
       </Route>
       <Route path="/settings">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -202,7 +206,7 @@ function App() {
         </div>
       </Route>
       <Route path="/help">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -212,7 +216,7 @@ function App() {
         </div>
       </Route>
       <Route path="/helpPage">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -222,7 +226,7 @@ function App() {
         </div>
       </Route>
       <Route path="/helpPage:module">
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">
@@ -232,7 +236,7 @@ function App() {
         </div>
       </Route>
       <Route>
-         <Header setSearch={setSearch} />
+        <Header setSearch={setSearch} />
         <div className="root-container">
           <SideBar />
           <div className="root-column">

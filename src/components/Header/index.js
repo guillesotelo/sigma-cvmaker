@@ -22,7 +22,7 @@ export default function Header({ setSearch }) {
   const user = JSON.parse(localStorage.getItem('user'))
 
   useEffect(() => {
-    if (!user || !user.email) return history.push('/login')
+    if (!user || !user.email) return history.push('/')
     getPreview(user.email)
   }, [])
 
@@ -31,7 +31,7 @@ export default function Header({ setSearch }) {
       const loggedOut = await dispatch(logOut()).then(data => data.payload)
       if (loggedOut) {
         toast.success('See you later!')
-        setTimeout(() => history.push('/login'), 1500)
+        setTimeout(() => history.push('/'), 1500)
       }
     } catch (err) { return toast.error('An error has occurred') }
   }
@@ -69,7 +69,7 @@ export default function Header({ setSearch }) {
       <ToastContainer autoClose={1500} />
       <div className='header-container'>
         <div className='header-logo-search'>
-          <img src={SigmaIso} className='header-logo' onClick={() => history.push('/')} loading='lazy' />
+          <img src={SigmaIso} className='header-logo' onClick={() => history.push('/home')} loading='lazy' />
           {/* <div className='header-logo-container' onClick={() => history.push('/')}> */}
           {/* <h4 className='header-text'>CV Maker</h4> */}
           {/* </div> */}

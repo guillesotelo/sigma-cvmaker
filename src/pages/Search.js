@@ -14,6 +14,7 @@ import {
     logHeaders
 } from '../constants/tableHeaders'
 import DataTable from '../components/DataTable'
+import { PuffLoader } from 'react-spinners'
 
 export default function Search({ search }) {
     const [loading, setLoading] = useState(false)
@@ -43,6 +44,7 @@ export default function Search({ search }) {
 
     useEffect(() => {
         if (search.length) getData()
+        else history.push('/home')
     }, [search])
 
     const getData = async () => {
@@ -105,83 +107,86 @@ export default function Search({ search }) {
         <div className='elastic-search-container'>
             <div className='elastic-search-section'>
                 <h4 className='page-title'>Results for: <span className='elastic-words'>"{search.join(' ')}"</span></h4>
-                <div className='elastic-table-container'>
-                    {users.length ?
-                        <DataTable
-                            title='Users'
-                            subtitle=''
-                            tableData={users}
-                            setTableData={setUsers}
-                            tableHeaders={userHeaders}
-                            loading={loading}
-                            item={selectedUser}
-                            setItem={setSelectedUser}
-                            isEdit={isEdit}
-                            setIsEdit={setIsEdit}
-                            maxRows={4}
-                            style={{ width: 'unset' }}
-                        /> : ''}
-                    {cvs.length ?
-                        <DataTable
-                            title='CVs'
-                            subtitle=''
-                            tableData={cvs}
-                            setTableData={setCVs} 
-                            tableHeaders={cvHeaders}
-                            loading={loading}
-                            item={selectedCV}
-                            setItem={setSelectedCV}
-                            isEdit={isEdit}
-                            setIsEdit={setIsEdit}
-                            maxRows={4}
-                            style={{ width: 'unset' }}
-                        /> : ''}
-                    {images.length ?
-                        <DataTable
-                            title='Images'
-                            subtitle=''
-                            tableData={images}
-                            setTableData={setImages} 
-                            tableHeaders={imageHeaders}
-                            loading={loading}
-                            item={selectedImage}
-                            setItem={setSelectedImage}
-                            isEdit={isEdit}
-                            setIsEdit={setIsEdit}
-                            maxRows={4}
-                            style={{ width: 'unset' }}
-                        /> : ''}
-                    {appDatas.length ?
-                        <DataTable
-                            title='App Data'
-                            subtitle=''
-                            tableData={appDatas}
-                            setTableData={setAppDatas} 
-                            tableHeaders={appDataHeaders}
-                            loading={loading}
-                            item={selectedData}
-                            setItem={setSelectedData}
-                            isEdit={isEdit}
-                            setIsEdit={setIsEdit}
-                            maxRows={4}
-                            style={{ width: 'unset' }}
-                        /> : ''}
-                    {logs.length ?
-                        <DataTable
-                            title='Logs'
-                            subtitle=''
-                            tableData={logs}
-                            setTableData={setLogs} 
-                            tableHeaders={logHeaders}
-                            loading={loading}
-                            item={selectedLog}
-                            setItem={setSelectedLog}
-                            isEdit={isEdit}
-                            setIsEdit={setIsEdit}
-                            maxRows={4}
-                            style={{ width: 'unset' }}
-                        /> : ''}
-                </div>
+                {loading ? <div style={{ alignSelf: 'center', display: 'flex', marginTop: '5vw' }}><PuffLoader size='10vw' color='#E59A2F' /></div>
+                    :
+                    <div className='elastic-table-container'>
+                        {users.length ?
+                            <DataTable
+                                title='Users'
+                                subtitle=''
+                                tableData={users}
+                                setTableData={setUsers}
+                                tableHeaders={userHeaders}
+                                loading={loading}
+                                item={selectedUser}
+                                setItem={setSelectedUser}
+                                isEdit={isEdit}
+                                setIsEdit={setIsEdit}
+                                maxRows={4}
+                                style={{ width: 'unset' }}
+                            /> : ''}
+                        {cvs.length ?
+                            <DataTable
+                                title='CVs'
+                                subtitle=''
+                                tableData={cvs}
+                                setTableData={setCVs}
+                                tableHeaders={cvHeaders}
+                                loading={loading}
+                                item={selectedCV}
+                                setItem={setSelectedCV}
+                                isEdit={isEdit}
+                                setIsEdit={setIsEdit}
+                                maxRows={4}
+                                style={{ width: 'unset' }}
+                            /> : ''}
+                        {images.length ?
+                            <DataTable
+                                title='Images'
+                                subtitle=''
+                                tableData={images}
+                                setTableData={setImages}
+                                tableHeaders={imageHeaders}
+                                loading={loading}
+                                item={selectedImage}
+                                setItem={setSelectedImage}
+                                isEdit={isEdit}
+                                setIsEdit={setIsEdit}
+                                maxRows={4}
+                                style={{ width: 'unset' }}
+                            /> : ''}
+                        {appDatas.length ?
+                            <DataTable
+                                title='App Data'
+                                subtitle=''
+                                tableData={appDatas}
+                                setTableData={setAppDatas}
+                                tableHeaders={appDataHeaders}
+                                loading={loading}
+                                item={selectedData}
+                                setItem={setSelectedData}
+                                isEdit={isEdit}
+                                setIsEdit={setIsEdit}
+                                maxRows={4}
+                                style={{ width: 'unset' }}
+                            /> : ''}
+                        {logs.length ?
+                            <DataTable
+                                title='Logs'
+                                subtitle=''
+                                tableData={logs}
+                                setTableData={setLogs}
+                                tableHeaders={logHeaders}
+                                loading={loading}
+                                item={selectedLog}
+                                setItem={setSelectedLog}
+                                isEdit={isEdit}
+                                setIsEdit={setIsEdit}
+                                maxRows={4}
+                                style={{ width: 'unset' }}
+                            /> : ''}
+                    </div>
+                }
             </div>
         </div>
     )

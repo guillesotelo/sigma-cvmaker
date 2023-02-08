@@ -17,7 +17,7 @@ export default function Login() {
 
     useEffect(() => {
         const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
-        if (user && user.email) history.push('/')
+        if (user && user.email && user.token) history.push('/home')
     })
 
     const updateData = (key, value) => {
@@ -33,7 +33,7 @@ export default function Login() {
                 setData({ ...data, password: '', email: '' })
                 setLoading(false)
                 toast.success(`Welcome back, ${logged.username.split(' ')[0]}!`)
-                setTimeout(() => history.push('/'), 2000)
+                setTimeout(() => history.push('/home'), 2000)
             } else {
                 setData({ ...data, password: '', email: '' })
                 setLoading(false)

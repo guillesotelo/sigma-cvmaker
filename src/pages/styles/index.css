@@ -865,9 +865,7 @@
     min-width: 35vw;
 }
 
-.account-info {
-    
-}
+.account-info {}
 
 .account-profile-image-cover {
     width: 180px;
@@ -1601,4 +1599,57 @@
     flex-direction: column;
     width: 100%;
     margin: 1vw 0;
+}
+
+/* ---- Landing ----  */
+.landing-container {
+    /* height: 100vh; */
+    display: flex;
+    flex-direction: column;
+    /* overflow-y: hidden; */
+    margin: 0;
+    height: 100%; 
+    width: 100%;
+    overflow: hidden;
+    position: fixed;
+}
+
+.landing-header {
+    /* height: 20vw; */
+}
+
+.landing-wallpaper {
+    height: 100vh;
+    object-fit: cover;
+}
+
+.landing-image {
+    height: 100vh;
+}
+
+.landing-login {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100vh;
+}
+
+.landing-login-box {
+    background-color: white;
+    height: 100%;
+    text-align: center;
+    margin: 0;
+    box-shadow: 5px 6px 15px gray;
+    gap: 2vw;
+    position: relative;
+}
+
+.landing-version {
+    font-size: 1vw;
+    font-weight: normal;
+    color: #a6a6a6;
+    position: absolute;
+    bottom: 0;
+    align-self: center;
+    margin-bottom: 8vw;
 }

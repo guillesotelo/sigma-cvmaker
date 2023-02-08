@@ -8,11 +8,11 @@ export default function Home() {
   const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
 
   useEffect(() => {
-    if (!localUser || !localUser.email) return history.push('/login')
+    if (!localUser || !localUser.email) return history.push('/')
 
     if (!localUser.token || (localUser.app && localUser.app !== 'cvmaker')) {
       localStorage.clear()
-      return history.push('/login')
+      return history.push('/')
     }
 
     if (localUser.login) {
