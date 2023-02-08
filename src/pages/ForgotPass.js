@@ -42,45 +42,50 @@ export default function ForgotPass() {
     }
 
     return (
-        <div className='login-container'>
-            <ToastContainer autoClose={4000} />
-            <div className='login-box'>
-                <div className='login-image'>
-                    <img
-                        src='https://images.squarespace-cdn.com/content/v1/5b07d207b27e39fe2cf2070c/1536149156741-FR68IVVJ8Q362PWO3FSC/Sigma_connectivity_footer-logo.png'
-                        className='login-logo'
-                        loading='lazy'
-                    />
-                </div>
-                {loading ?
-                    <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#E59A2F' /></div>
-                    :
-                    <div className='login-fill'>
-                        <InputField
-                            label='Email'
-                            type='text'
-                            name='email'
-                            placeholder='user@email.com'
-                            updateData={updateData}
-                            style={{ width: '95%', marginBottom: '1vw' }}
-                            noGrammar={true}
-                        />
-                        <CTAButton
-                            label='Reset Password'
-                            size='100%'
-                            color={APP_COLORS.GREEN}
-                            handleClick={resetPassword}
-                            disabled={!data.email || !data.email.includes('.') || !data.email.includes('@')}
-                        />
-                        <h4 style={{ margin: '.4vw 0' }}></h4>
-                        <CTAButton
-                            label='Go back'
-                            size='100%'
-                            color={APP_COLORS.GRAY}
-                            handleClick={() => history.push('/')}
+        <div className='landing-container'>
+            <div className='landing-wallpaper'>
+                <img className='landing-image' src='https://i.postimg.cc/Pqz0B7RF/smartmockups-ldvjxl5u.jpg' alt='Dashboard Image' />
+            </div>
+            <div className='landing-login'>
+                <ToastContainer autoClose={4000} />
+                <div className='login-box landing-login-box'>
+                    <div className='login-image'>
+                        <img
+                            src='https://images.squarespace-cdn.com/content/v1/5b07d207b27e39fe2cf2070c/1536149156741-FR68IVVJ8Q362PWO3FSC/Sigma_connectivity_footer-logo.png'
+                            className='login-logo'
+                            loading='lazy'
                         />
                     </div>
-                }
+                    {loading ?
+                        <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#E59A2F' /></div>
+                        :
+                        <div className='login-fill'>
+                            <InputField
+                                label='Email'
+                                type='text'
+                                name='email'
+                                placeholder='user@email.com'
+                                updateData={updateData}
+                                style={{ width: '95%', marginBottom: '1vw' }}
+                                noGrammar={true}
+                            />
+                            <CTAButton
+                                label='Reset Password'
+                                size='100%'
+                                color={APP_COLORS.GREEN}
+                                handleClick={resetPassword}
+                                disabled={!data.email || !data.email.includes('.') || !data.email.includes('@')}
+                            />
+                            <h4 style={{ margin: '.4vw 0' }}></h4>
+                            <CTAButton
+                                label='Go back'
+                                size='100%'
+                                color={APP_COLORS.GRAY}
+                                handleClick={() => history.push('/')}
+                            />
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     )
