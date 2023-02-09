@@ -175,7 +175,15 @@ export default function Users() {
     const checkData = () => {
         if (!data.username || !data.username.includes(' ') || !data.email || !data.email.includes('@') || !data.email.includes('.')) return false
         if (data.manager && (!data.manager.includes('@') || !data.manager.includes('.'))) return false
-        // if (!data.password || !data.password2) return false
+        if (data.password || data.password2) {
+
+        }
+        if (data.password || data.password2) {
+            if (data.password && !data.password2) return false
+            if (!data.password && data.password2) return false
+            if (data.password !== data.password2) return false
+            if (data.password.length < 4) return false
+        }
         return true
     }
 
@@ -407,11 +415,18 @@ export default function Users() {
                             value={data.location || ''}
                         />
                         <InputField
-                            label='Login Password'
-                            type='password'
+                            label='Update Password'
+                            type='text'
                             name='password'
                             updateData={updateData}
                             placeholder='Write new password'
+                            style={{ color: 'rgb(71, 71, 71)', marginBottom: '1vw' }}
+                        />
+                        <InputField
+                            label='Repeat new Password'
+                            type='text'
+                            name='password2'
+                            updateData={updateData}
                             style={{ color: 'rgb(71, 71, 71)', marginBottom: '1vw' }}
                         />
                         <SwitchBTN
@@ -546,10 +561,18 @@ export default function Users() {
                             />
                             <InputField
                                 label='Login Password'
-                                type='password'
+                                type='text'
                                 name='password'
                                 updateData={updateData}
                                 value={data.password || data.password === '' ? data.password : generatePass()}
+                                style={{ color: 'rgb(71, 71, 71)', marginBottom: '1vw' }}
+                            />
+                            <InputField
+                                label='Repeat Password'
+                                type='text'
+                                name='password2'
+                                updateData={updateData}
+                                value={data.password2 || ''}
                                 style={{ color: 'rgb(71, 71, 71)', marginBottom: '1vw' }}
                             />
                             <SwitchBTN
