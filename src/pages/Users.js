@@ -151,6 +151,7 @@ export default function Users() {
                     else toast.error('Error saving changes')
                 }
                 getAllUsers()
+                getManagers()
             } else {
                 setLoading(false)
                 return toast.error('Check the fields')
@@ -435,6 +436,13 @@ export default function Users() {
                             onChangeSw={() => updateData('isManager', !data.isManager)}
                             style={{ transform: 'scale(0.75)', width: '100%', margin: '1.5vw 0' }}
                         />
+                        {isEdit ?
+                            <SwitchBTN
+                                label='Send Email?'
+                                sw={data.sendEmail || false}
+                                onChangeSw={() => updateData('sendEmail', !data.sendEmail)}
+                                style={{ transform: 'scale(0.75)', width: '100%', margin: '1.5vw 0' }}
+                            /> : ''}
                     </div>
                     <div className='users-btns'>
                         {isEdit ?
@@ -565,7 +573,7 @@ export default function Users() {
                                 name='password'
                                 updateData={updateData}
                                 value={data.password || data.password === '' ? data.password : generatePass()}
-                                style={{ color: 'rgb(71, 71, 71)', marginBottom: '1vw' }}
+                                style={{ color: 'rgb(71, 71, 71)' }}
                             />
                             <InputField
                                 label='Repeat Password'
@@ -579,8 +587,15 @@ export default function Users() {
                                 label='Is Manager?'
                                 sw={data.isManager || false}
                                 onChangeSw={() => updateData('isManager', !data.isManager)}
-                                style={{ transform: 'scale(0.75)', width: '100%', margin: '1.5vw 0' }}
+                                style={{ transform: 'scale(0.75)', width: '100%', margin: '.5vw' }}
                             />
+                            {isEdit ?
+                                <SwitchBTN
+                                    label='Send Email?'
+                                    sw={data.sendEmail || false}
+                                    onChangeSw={() => updateData('sendEmail', !data.sendEmail)}
+                                    style={{ transform: 'scale(0.75)', width: '100%', margin: '.5vw' }}
+                                /> : ''}
                         </div>
                         <div className='users-btns'>
                             {isEdit ?

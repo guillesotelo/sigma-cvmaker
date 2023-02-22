@@ -171,55 +171,106 @@ export default function InputField(props) {
                     />
                     :
                     type === 'text' ?
-                        <div className='inputfield-dropdown' style={style}>
-                            <GrammarlyEditorPlugin clientId={noGrammar ? '' : process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%", textAlign: 'left' }}>
-                                <input
-                                    className='inputfield-field'
-                                    autoComplete={autoComplete}
-                                    onChange={handleChange}
-                                    placeholder={placeholder || ''}
-                                    type={type || 'text'}
-                                    style={{
-                                        opacity: hidden && hidden.includes(label) && '.2',
-                                        fontSize: fontSize ? `${fontSize}vw` : '.9vw',
-                                        padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
-                                    }}
-                                    value={value}
-                                    onFocus={() => setFocus(true)}
-                                />
-                            </GrammarlyEditorPlugin>
-                            {hidden && hidden.includes(label) ?
-                                <img
-                                    src={ShwoIcon}
-                                    className='hide-icon'
-                                    onClick={() => showItem(label)}
-                                />
-                                : hidden ?
-                                    <img
-                                        src={HideIcon}
-                                        className='hide-icon'
-                                        onClick={() => hideItem(label)}
+                        noGrammar ?
+                            <div className='inputfield-dropdown' style={style}>
+                                <div style={{ width: "100%", textAlign: 'left' }}>
+                                    <input
+                                        className='inputfield-field'
+                                        autoComplete={autoComplete}
+                                        onChange={handleChange}
+                                        placeholder={placeholder || ''}
+                                        type={type || 'text'}
+                                        style={{
+                                            opacity: hidden && hidden.includes(label) && '.2',
+                                            fontSize: fontSize ? `${fontSize}vw` : '.9vw',
+                                            padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
+                                        }}
+                                        value={value}
+                                        onFocus={() => setFocus(true)}
                                     />
-                                    : ''
-                            }
-                            {showDropDown ?
-                                <div className='input-dropdown-options' style={{ width: style.width || '100%' }}>
-                                    {suggestions.map((suggestion, i) =>
-                                        <h4
-                                            key={i}
-                                            className='dropdown-option'
-                                            style={{
-                                                borderTop: i === 0 && 'none',
-                                                fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.8vw'
-                                            }}
-                                            onClick={() => {
-                                                updateData(name, suggestion)
-                                                setDropValue(suggestion)
-                                                setShowDropDown(false)
-                                            }}>{suggestion}</h4>
-                                    )}
-                                </div> : ''}
-                        </div>
+                                </div>
+                                {hidden && hidden.includes(label) ?
+                                    <img
+                                        src={ShwoIcon}
+                                        className='hide-icon'
+                                        onClick={() => showItem(label)}
+                                    />
+                                    : hidden ?
+                                        <img
+                                            src={HideIcon}
+                                            className='hide-icon'
+                                            onClick={() => hideItem(label)}
+                                        />
+                                        : ''
+                                }
+                                {showDropDown ?
+                                    <div className='input-dropdown-options' style={{ width: style.width || '100%' }}>
+                                        {suggestions.map((suggestion, i) =>
+                                            <h4
+                                                key={i}
+                                                className='dropdown-option'
+                                                style={{
+                                                    borderTop: i === 0 && 'none',
+                                                    fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.8vw'
+                                                }}
+                                                onClick={() => {
+                                                    updateData(name, suggestion)
+                                                    setDropValue(suggestion)
+                                                    setShowDropDown(false)
+                                                }}>{suggestion}</h4>
+                                        )}
+                                    </div> : ''}
+                            </div>
+                            :
+                            <div className='inputfield-dropdown' style={style}>
+                                <GrammarlyEditorPlugin clientId={noGrammar ? '' : process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%", textAlign: 'left' }}>
+                                    <input
+                                        className='inputfield-field'
+                                        autoComplete={autoComplete}
+                                        onChange={handleChange}
+                                        placeholder={placeholder || ''}
+                                        type={type || 'text'}
+                                        style={{
+                                            opacity: hidden && hidden.includes(label) && '.2',
+                                            fontSize: fontSize ? `${fontSize}vw` : '.9vw',
+                                            padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
+                                        }}
+                                        value={value}
+                                        onFocus={() => setFocus(true)}
+                                    />
+                                </GrammarlyEditorPlugin>
+                                {hidden && hidden.includes(label) ?
+                                    <img
+                                        src={ShwoIcon}
+                                        className='hide-icon'
+                                        onClick={() => showItem(label)}
+                                    />
+                                    : hidden ?
+                                        <img
+                                            src={HideIcon}
+                                            className='hide-icon'
+                                            onClick={() => hideItem(label)}
+                                        />
+                                        : ''
+                                }
+                                {showDropDown ?
+                                    <div className='input-dropdown-options' style={{ width: style.width || '100%' }}>
+                                        {suggestions.map((suggestion, i) =>
+                                            <h4
+                                                key={i}
+                                                className='dropdown-option'
+                                                style={{
+                                                    borderTop: i === 0 && 'none',
+                                                    fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.8vw'
+                                                }}
+                                                onClick={() => {
+                                                    updateData(name, suggestion)
+                                                    setDropValue(suggestion)
+                                                    setShowDropDown(false)
+                                                }}>{suggestion}</h4>
+                                        )}
+                                    </div> : ''}
+                            </div>
                         :
                         <input
                             className='inputfield-field'

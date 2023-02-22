@@ -919,6 +919,8 @@
     text-align: center;
     z-index: 1;
     background-color: white;
+    transform: scale(.9);
+    margin-top: -2vw;
 }
 
 .account-update-pass {
@@ -1608,7 +1610,7 @@
     flex-direction: column;
     /* overflow-y: hidden; */
     margin: 0;
-    height: 100%; 
+    height: 100%;
     width: 100%;
     overflow: hidden;
     position: fixed;
@@ -1621,6 +1623,9 @@
 .landing-wallpaper {
     height: 100vh;
     object-fit: cover;
+    transition: 2s;
+    animation: fade-in 1s ease-in-out;
+    animation-fill-mode: forwards;
 }
 
 .landing-image {
@@ -1632,6 +1637,9 @@
     right: 0;
     top: 0;
     height: 100vh;
+    transition: 2s;
+    animation: move-x 1s ease-in-out;
+    animation-fill-mode: forwards;
 }
 
 .landing-login-box {
@@ -1652,4 +1660,24 @@
     bottom: 0;
     align-self: center;
     margin-bottom: 8vw;
+}
+
+@keyframes move-x {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0
+    }
+
+    100% {
+        opacity: 1
+    }
 }

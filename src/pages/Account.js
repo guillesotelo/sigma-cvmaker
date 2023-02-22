@@ -213,6 +213,22 @@ export default function Account() {
             updateData={updateData}
             size='24vw'
           />
+          <InputField
+            label='Phone'
+            type='text'
+            name='phone'
+            updateData={updateData}
+            style={{ color: 'rgb(71, 71, 71)' }}
+            value={data.phone || ''}
+          />
+          <InputField
+            label='Location'
+            type='text'
+            name='location'
+            updateData={updateData}
+            style={{ color: 'rgb(71, 71, 71)' }}
+            value={data.location || ''}
+          />
           <div className='account-update-btns'>
             <CTAButton
               label='Cancel'
