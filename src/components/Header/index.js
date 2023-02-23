@@ -40,7 +40,7 @@ export default function Header({ setSearch }) {
     if (e.key === 'Enter') {
       triggerSearch()
     } else {
-      const _words = e.target.value ? e.target.value.split(' ') : []
+      const _words = e.target.value && e.target.value !== ' ' ? e.target.value.split(' ') : []
       setWords(_words)
     }
   }

@@ -60,7 +60,7 @@ export default function Search({ search }) {
             setUsers(filterData(users))
             setCVs(filterData(cvs))
             setImages(filterData(images))
-            setAppDatas(filterData(appDatas))
+            setAppDatas(filterAppData(appDatas))
             setLogs(filterData(logs))
             setLoading(false)
         } catch (err) {
@@ -101,6 +101,32 @@ export default function Search({ search }) {
             })
             return filtered
         }
+    }
+
+    const filterAppData = data => {
+        let filtered = []
+        if (data && data.length) {
+            data.forEach(item => {
+                if (!item.removed) {
+                    const appData = JSON.parse(item.data) || []
+                    appData.forEach(subItem => {
+                        const string = JSON.stringify(subItem)
+                        let matches = true
+                        search.forEach(word => {
+                            if (!string.toLowerCase().includes(word.toLowerCase())) matches = false
+                        })
+                        if (matches) filtered.push({
+                            ...item,
+                            ...subItem,
+                            module: item.type,
+                            itemType: subItem.type || '',
+                            data: null
+                        })
+                    })
+                }
+            })
+        }
+        return filtered
     }
 
     return (

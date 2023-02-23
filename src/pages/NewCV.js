@@ -192,10 +192,15 @@ export default function NewCV() {
 
     const getCVLogo = async () => {
         try {
+            setLoading(true)
             const logo = await dispatch(getLogo({ type: 'CV Logo' })).then(data => data.payload)
             if (logo) setcvLogo(logo.data)
             else setcvLogo({})
-        } catch (err) { console.error(err) }
+            setLoading(false)
+        } catch (err) {
+            console.error(err)
+            setLoading(false)
+        }
     }
 
     const updateData = (key, value) => {
@@ -324,7 +329,7 @@ export default function NewCV() {
                 resumeData.managerEmail = data.footer_email || ''
                 resumeData.email = data.email ? data.email.toLowerCase() : ''
                 resumeData.user = user
-                
+
                 const managerUpdated = await dispatch(updateUserData({
                     user,
                     email: data.email ? data.email.toLowerCase() : '',

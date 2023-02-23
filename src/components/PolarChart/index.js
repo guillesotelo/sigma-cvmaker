@@ -14,7 +14,7 @@ export default function PolarChart(props) {
         // maintainAspectRatio: false,
         plugins: {
             legend: {
-                display: false
+                // display: false
             },
             // tooltip: {
             //     callbacks: {
