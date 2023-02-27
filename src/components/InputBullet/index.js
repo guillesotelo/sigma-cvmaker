@@ -127,6 +127,7 @@ export default function InputBullet(props) {
                                                 placeholder={valuePlaceholder || ''}
                                                 type='text'
                                                 value={editItem.value || ''}
+                                                style={{ width: '15vw' }}
                                             />
                                         </GrammarlyEditorPlugin>
                                         <h4 onClick={() => {

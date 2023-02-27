@@ -87,7 +87,7 @@ export default function Resume(props) {
 
     useEffect(() => {
         if (res.skills && Array.isArray(res.skills)) {
-            const filtered = res.skills.filter(skill => skill.name && !skill.hiddden)
+            const filtered = res.skills.filter(skill => skill.name && !skill.hidden)
             setSkills(filtered)
         }
     }, [res.skills])

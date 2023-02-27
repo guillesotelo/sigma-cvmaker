@@ -304,7 +304,7 @@ export default function ItemDropdown(props) {
                                                         onChange={e => setEditItem({ ...editItem, name: e.target.value })}
                                                         placeholder={placeholder || ''}
                                                         type={type || 'text'}
-                                                        style={style || null}
+                                                        style={{ ...style, height: '1.2vw' }}
                                                         value={editItem.name || ''}
                                                     />
                                                 </GrammarlyEditorPlugin>
@@ -402,7 +402,7 @@ export default function ItemDropdown(props) {
                                                                 }}
                                                                 placeholder={placeholder || ''}
                                                                 type={type || 'text'}
-                                                                style={style || null}
+                                                                style={{ ...style, height: '1.2vw' }}
                                                                 onFocus={() => setFocus(true)}
                                                                 value={dropValue}
                                                             />

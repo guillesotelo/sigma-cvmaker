@@ -99,7 +99,10 @@ export default function NewCV() {
                 s: scale,
                 x: translateX,
                 y: translateY,
-                r: rotate
+                r: rotate,
+                brightness,
+                contrast,
+                grayscale,
             }
         })
     }, [scale, translateX, translateY, rotate, contrast, brightness, grayscale])
@@ -464,6 +467,7 @@ export default function NewCV() {
     const setCVPreview = () => {
         const resumeData = { ...data }
 
+        resumeData.date = new Date()
         resumeData.languages = languages
         resumeData.skills = skills
         resumeData.education = education
