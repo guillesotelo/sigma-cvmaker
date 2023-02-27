@@ -68,7 +68,6 @@ export default function Report() {
 
     return (
         <div className='report-container'>
-            <ToastContainer autoClose={2000} />
             <div className='report-box'>
                 <div className='report-image'>
                     <h4 className='report-title'>Report a problem</h4>

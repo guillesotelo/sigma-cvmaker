@@ -1,0 +1,192 @@
+Date : 2023-02-27 09:28:57
+Directory : /Users/guillermo/Documents/projects/sigma/cvmaker
+Total : 128 files,  65559 codes, 124 comments, 1194 blanks, all 66877 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          3 |     50,264 |          0 |          2 |     50,266 |
+| JavaScript |         66 |     11,117 |         32 |        633 |     11,782 |
+| CSS        |         24 |      3,486 |         77 |        521 |      4,084 |
+| XML        |         33 |        611 |         15 |         29 |        655 |
+| HTML       |          2 |         81 |          0 |          9 |         90 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                     | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                        |        128 |     65,559 |        124 |      1,194 |     66,877 |
+| . (Files)                                                                                |          3 |     50,245 |          0 |          3 |     50,248 |
+| public                                                                                   |          4 |        141 |          3 |         14 |        158 |
+| src                                                                                      |        121 |     15,173 |        121 |      1,177 |     16,471 |
+| src (Files)                                                                              |          5 |        309 |          0 |         12 |        321 |
+| src/components                                                                           |         42 |      6,056 |         73 |        514 |      6,643 |
+| src/components/ActionCard                                                                |          2 |         39 |          2 |          7 |         48 |
+| src/components/BarChart                                                                  |          2 |         48 |          4 |          9 |         61 |
+| src/components/Bullet                                                                    |          2 |        465 |          1 |         37 |        503 |
+| src/components/CTAButton                                                                 |          2 |        178 |          1 |         27 |        206 |
+| src/components/CVFooter                                                                  |          2 |        118 |          0 |         10 |        128 |
+| src/components/CVHeader                                                                  |          2 |         60 |          0 |         11 |         71 |
+| src/components/DataTable                                                                 |          2 |        312 |          4 |         31 |        347 |
+| src/components/Dropdown                                                                  |          2 |        249 |          4 |         21 |        274 |
+| src/components/Footer                                                                    |          2 |         83 |          7 |          9 |         99 |
+| src/components/Header                                                                    |          2 |        192 |          2 |         26 |        220 |
+| src/components/InputBullet                                                               |          2 |        252 |          0 |         16 |        268 |
+| src/components/InputField                                                                |          2 |        394 |          3 |         30 |        427 |
+| src/components/ItemDropdown                                                              |          2 |        638 |          3 |         47 |        688 |
+| src/components/PieChart                                                                  |          2 |         38 |         10 |          6 |         54 |
+| src/components/PolarChart                                                                |          2 |         38 |         11 |          6 |         55 |
+| src/components/PostSection                                                               |          2 |      1,448 |         10 |        113 |      1,571 |
+| src/components/Resume                                                                    |          2 |        980 |          1 |         44 |      1,025 |
+| src/components/SearchBar                                                                 |          2 |         66 |          3 |          9 |         78 |
+| src/components/SideBar                                                                   |          2 |        222 |          6 |         28 |        256 |
+| src/components/Slider                                                                    |          2 |        109 |          1 |         13 |        123 |
+| src/components/SwitchBTN                                                                 |          2 |        127 |          0 |         14 |        141 |
+| src/constants                                                                            |          4 |        375 |          0 |         10 |        385 |
+| src/helpers                                                                              |          1 |         15 |          0 |          3 |         18 |
+| src/icons                                                                                |         33 |        611 |         15 |         29 |        655 |
+| src/pages                                                                                |         22 |      7,298 |         33 |        534 |      7,865 |
+| src/pages (Files)                                                                        |         21 |      5,868 |          7 |        307 |      6,182 |
+| src/pages/styles                                                                         |          1 |      1,430 |         26 |        227 |      1,683 |
+| src/store                                                                                |         14 |        509 |          0 |         75 |        584 |
+| src/store (Files)                                                                        |          1 |         24 |          0 |          3 |         27 |
+| src/store/reducers                                                                       |          6 |        171 |          0 |         24 |        195 |
+| src/store/services                                                                       |          7 |        314 |          0 |         48 |        362 |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                 | language   | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /Users/guillermo/Documents/projects/sigma/cvmaker/config-overrides.js                    | JavaScript |          8 |          0 |          1 |          9 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/package-lock.json                      | JSON       |     50,141 |          0 |          1 |     50,142 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/package.json                           | JSON       |         96 |          0 |          1 |         97 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/public/index.html                      | HTML       |         33 |          0 |          3 |         36 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/public/manifest.json                   | JSON       |         27 |          0 |          0 |         27 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/public/offline.html                    | HTML       |         48 |          0 |          6 |         54 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/public/serviceWorker.js                | JavaScript |         33 |          3 |          5 |         41 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/App.css                            | CSS        |          6 |          0 |          1 |          7 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/App.js                             | JavaScript |        250 |          0 |          3 |        253 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/ActionCard/index.js     | JavaScript |         18 |          0 |          4 |         22 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/ActionCard/styles.css   | CSS        |         21 |          2 |          3 |         26 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/BarChart/index.js       | JavaScript |         36 |          0 |          7 |         43 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/BarChart/styles.css     | CSS        |         12 |          4 |          2 |         18 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/Bullet/index.js         | JavaScript |        320 |          0 |         18 |        338 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/Bullet/styles.css       | CSS        |        145 |          1 |         19 |        165 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/CTAButton/index.js      | JavaScript |         42 |          0 |          5 |         47 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/CTAButton/styles.css    | CSS        |        136 |          1 |         22 |        159 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/CVFooter/index.js       | JavaScript |         80 |          0 |          4 |         84 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/CVFooter/styles.css     | CSS        |         38 |          0 |          6 |         44 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/CVHeader/index.js       | JavaScript |         20 |          0 |          5 |         25 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/CVHeader/styles.css     | CSS        |         40 |          0 |          6 |         46 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/DataTable/index.js      | JavaScript |        173 |          0 |          6 |        179 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/DataTable/styles.css    | CSS        |        139 |          4 |         25 |        168 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/Dropdown/index.js       | JavaScript |        116 |          0 |          6 |        122 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/Dropdown/styles.css     | CSS        |        133 |          4 |         15 |        152 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/Footer/index.js         | JavaScript |         24 |          7 |          2 |         33 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/Footer/styles.css       | CSS        |         59 |          0 |          7 |         66 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/Header/index.js         | JavaScript |         98 |          0 |         10 |        108 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/Header/styles.css       | CSS        |         94 |          2 |         16 |        112 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/InputBullet/index.js    | JavaScript |        216 |          0 |         13 |        229 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/InputBullet/styles.css  | CSS        |         36 |          0 |          3 |         39 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/InputField/index.js     | JavaScript |        281 |          0 |         12 |        293 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/InputField/styles.css   | CSS        |        113 |          3 |         18 |        134 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/ItemDropdown/index.js   | JavaScript |        454 |          0 |         22 |        476 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/ItemDropdown/styles.css | CSS        |        184 |          3 |         25 |        212 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/PieChart/index.js       | JavaScript |         24 |          7 |          5 |         36 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/PieChart/styles.css     | CSS        |         14 |          3 |          1 |         18 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/PolarChart/index.js     | JavaScript |         24 |          7 |          5 |         36 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/PolarChart/styles.css   | CSS        |         14 |          4 |          1 |         19 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/PostSection/index.js    | JavaScript |        937 |          0 |         38 |        975 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/PostSection/styles.css  | CSS        |        511 |         10 |         75 |        596 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/Resume/index.js         | JavaScript |        922 |          1 |         37 |        960 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/Resume/styles.css       | CSS        |         58 |          0 |          7 |         65 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/SearchBar/index.js      | JavaScript |         26 |          0 |          3 |         29 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/SearchBar/styles.css    | CSS        |         40 |          3 |          6 |         49 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/SideBar/index.js        | JavaScript |        143 |          0 |         16 |        159 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/SideBar/styles.css      | CSS        |         79 |          6 |         12 |         97 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/Slider/index.js         | JavaScript |         55 |          0 |          2 |         57 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/Slider/styles.css       | CSS        |         54 |          1 |         11 |         66 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/SwitchBTN/index.js      | JavaScript |         19 |          0 |          4 |         23 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/components/SwitchBTN/styles.css    | CSS        |        108 |          0 |         10 |        118 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/constants/app.js                   | JavaScript |         53 |          0 |          2 |         55 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/constants/help.js                  | JavaScript |        132 |          0 |          0 |        132 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/constants/tableHeaders.js          | JavaScript |        182 |          0 |          8 |        190 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/constants/tooltips.js              | JavaScript |          8 |          0 |          0 |          8 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/helpers/image.js                   | JavaScript |         15 |          0 |          3 |         18 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/activity-icon.svg            | XML        |          6 |          0 |          0 |          6 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/archive-icon.svg             | XML        |          7 |          1 |          1 |          9 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/bug-icon.svg                 | XML        |          6 |          1 |          5 |         12 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/chart-pie.svg                | XML        |          7 |          0 |          5 |         12 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/chevron-down.svg             | XML        |          3 |          0 |          1 |          4 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/close-icon.svg               | XML        |          1 |          0 |          0 |          1 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/cog.svg                      | XML        |          3 |          0 |          1 |          4 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/cv-icon.svg                  | XML        |         15 |          1 |          0 |         16 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/down-icon.svg                | XML        |          4 |          0 |          1 |          5 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/download-icon.svg            | XML        |         75 |          1 |          1 |         77 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/drop-photo.svg               | XML        |          1 |          0 |          0 |          1 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/edit-icon.svg                | XML        |         80 |          1 |          1 |         82 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/error-icon.svg               | XML        |          1 |          0 |          0 |          1 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/fontsize-icon.svg            | XML        |          1 |          1 |          0 |          2 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/handshake-icon.svg           | XML        |          2 |          0 |          0 |          2 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/hide-icon.svg                | XML        |          5 |          0 |          0 |          5 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/image-placeholder.svg        | XML        |         51 |          1 |          1 |         53 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/logout-icon.svg              | XML        |         44 |          1 |          1 |         46 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/margin-icon.svg              | XML        |          1 |          1 |          0 |          2 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/minus-icon.svg               | XML        |         37 |          1 |          1 |         39 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/padding-icon.svg             | XML        |          8 |          1 |          1 |         10 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/page-icon.svg                | XML        |          2 |          0 |          0 |          2 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/plus-icon.svg                | XML        |         46 |          1 |          1 |         48 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/profile-icon.svg             | XML        |         84 |          1 |          1 |         86 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/question-mark-circle.svg     | XML        |          3 |          0 |          1 |          4 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/search-icon.svg              | XML        |          3 |          0 |          1 |          4 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/show-icon.svg                | XML        |          5 |          0 |          0 |          5 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/tools-icon.svg               | XML        |          6 |          0 |          0 |          6 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/trash-icon.svg               | XML        |         51 |          1 |          1 |         53 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/up-icon.svg                  | XML        |          4 |          0 |          1 |          5 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/user-group.svg               | XML        |          3 |          0 |          1 |          4 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/user-icon.svg                | XML        |         43 |          1 |          1 |         45 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/icons/users.svg                    | XML        |          3 |          0 |          1 |          4 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/index.css                          | CSS        |         22 |          0 |          3 |         25 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/index.js                           | JavaScript |         19 |          0 |          3 |         22 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Account.js                   | JavaScript |        273 |          0 |         15 |        288 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Activity.js                  | JavaScript |         89 |          0 |          9 |         98 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/CVMaker.js                   | JavaScript |          6 |          0 |          2 |          8 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/CVs.js                       | JavaScript |        191 |          0 |         15 |        206 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Clients.js                   | JavaScript |        330 |          0 |         18 |        348 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Consultants.js               | JavaScript |        548 |          1 |         17 |        566 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/ForgotPass.js                | JavaScript |         86 |          0 |          7 |         93 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Help.js                      | JavaScript |        156 |          1 |          7 |        164 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/HelpPage.js                  | JavaScript |         42 |          0 |          5 |         47 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Home.js                      | JavaScript |         35 |          0 |          7 |         42 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Landing.js                   | JavaScript |         97 |          0 |          8 |        105 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Login.js                     | JavaScript |         91 |          0 |          8 |         99 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/NewCV.js                     | JavaScript |      1,458 |          5 |         51 |      1,514 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Register.js                  | JavaScript |        133 |          0 |          9 |        142 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Report.js                    | JavaScript |        123 |          0 |         10 |        133 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/ResetPass.js                 | JavaScript |         97 |          0 |         11 |        108 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Search.js                    | JavaScript |        208 |          0 |         11 |        219 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Settings.js                  | JavaScript |        915 |          0 |         45 |        960 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Statistics.js                | JavaScript |        154 |          0 |         17 |        171 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/ToolsTech.js                 | JavaScript |        231 |          0 |         14 |        245 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/Users.js                     | JavaScript |        605 |          0 |         21 |        626 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/pages/styles/index.css             | CSS        |      1,430 |         26 |        227 |      1,683 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/reportWebVitals.js                 | JavaScript |         12 |          0 |          2 |         14 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/index.js                     | JavaScript |         24 |          0 |          3 |         27 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/reducers/appData.js          | JavaScript |         30 |          0 |          4 |         34 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/reducers/image.js            | JavaScript |         30 |          0 |          4 |         34 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/reducers/log.js              | JavaScript |         15 |          0 |          4 |         19 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/reducers/report.js           | JavaScript |         18 |          0 |          4 |         22 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/reducers/resume.js           | JavaScript |         36 |          0 |          4 |         40 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/reducers/user.js             | JavaScript |         42 |          0 |          4 |         46 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/services/appData.js          | JavaScript |         53 |          0 |          8 |         61 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/services/config.js           | JavaScript |          9 |          0 |          2 |         11 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/services/image.js            | JavaScript |         54 |          0 |          8 |         62 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/services/log.js              | JavaScript |         18 |          0 |          4 |         22 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/services/report.js           | JavaScript |         25 |          0 |          4 |         29 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/services/resume.js           | JavaScript |         67 |          0 |         10 |         77 |
+| /Users/guillermo/Documents/projects/sigma/cvmaker/src/store/services/user.js             | JavaScript |         88 |          0 |         12 |        100 |
+| Total                                                                                    |            |     65,559 |        124 |      1,194 |     66,877 |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

@@ -66,7 +66,7 @@ export default function Header({ setSearch }) {
 
   return (
     <>
-      <ToastContainer autoClose={1500} />
+      <ToastContainer autoClose={2500} />
       <div className='header-container'>
         <div className='header-logo-search'>
           <img src={SigmaIso} className='header-logo' onClick={() => history.push('/home')} loading='lazy' />

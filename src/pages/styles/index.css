@@ -294,7 +294,7 @@
     background-color: #fff;
     min-height: 73vh;
     position: relative;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .new-resume-fill {
