@@ -277,6 +277,50 @@
     filter: invert(12%) sepia(90%) saturate(2046%) hue-rotate(353deg) brightness(94%) contrast(111%);
 }
 
+.public-cv-modal {
+    font-weight: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.public-cv-text  {
+    font-weight: normal;
+    margin: .6vw;
+}
+
+.public-cv-link-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1vw;
+}
+
+.public-cv-link {
+    color: rgb(29, 29, 129);
+    text-decoration: none;
+    transition: .3s;
+    cursor: pointer;
+    font-size: .9vw;
+}
+
+.public-cv-link:hover {
+    opacity: .8;
+}
+
+.public-cv-copy {
+    height: 1.5vw;
+    margin-left: 1vw;
+    transition: .3s;
+    cursor: pointer;
+}
+
+.public-cv-copy:hover {
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(70%) contrast(80%);
+}
+
 /* --- NEW CV ---  */
 .new-resume-container {
     display: flex;
@@ -459,6 +503,7 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 2vw;
+    gap: 1vw;
 }
 
 .hide-section-icon {

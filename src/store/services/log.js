@@ -16,7 +16,16 @@ const createLog = async data => {
     } catch (err) { console.log(err) }
 }
 
+const createPublicLog = async data => {
+    try {
+        const log = await axios.post(`${API_URL}/api/public/createLog`, data)
+        return log.data
+    } catch (err) { console.log(err) }
+}
+
+
 export {
     getAllLogs,
-    createLog
+    createLog,
+    createPublicLog
 }

@@ -9,6 +9,14 @@ const getImageByEmailAndType = async data => {
     } catch (err) { return null }
 }
 
+const getPublicImageByType = async data => {
+    try {
+        const { name, email, type } = data || {}
+        const image = await axios.get(`${API_URL}/api/public/getImageByType`, { params: { name, email, type } })
+        return image.data
+    } catch (err) { return null }
+}
+
 const getAllImages = async () => {
     try {
         const images = await axios.get(`${API_URL}/api/image/getAll`, getConfig())
@@ -22,6 +30,14 @@ const getCompanyLogo = async client => {
         return logos.data
     } catch (err) { console.log(err) }
 }
+
+const getPublicLogo = async client => {
+    try {
+        const logos = await axios.get(`${API_URL}/api/public/getClientLogo`, { params: { client } })
+        return logos.data
+    } catch (err) { console.log(err) }
+}
+
 
 const getAllCompanyLogos = async client => {
     try {
@@ -53,10 +69,12 @@ const removeImage = async data => {
 
 export {
     getImageByEmailAndType,
+    getPublicImageByType,
     getAllImages,
     saveImage,
     updateImage,
     removeImage,
     getCompanyLogo,
+    getPublicLogo,
     getAllCompanyLogos
 }

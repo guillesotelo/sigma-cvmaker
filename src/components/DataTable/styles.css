@@ -156,6 +156,10 @@
     transition: .3s;
 }
 
+.share-icon {
+    transform: scale(1.2);
+}
+
 .data-table-icon:hover {
     filter: invert(75%) sepia(39%) saturate(3237%) brightness(70%) contrast(80%);
 }

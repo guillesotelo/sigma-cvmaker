@@ -6,11 +6,13 @@ import CTAButton from '../components/CTAButton'
 import InputField from '../components/InputField'
 import { APP_COLORS } from '../constants/app'
 import Resume from '../components/Resume'
-import { getResumes, removeResume } from '../store/reducers/resume'
+import { getResumes, makeCVPublic, removeResume } from '../store/reducers/resume'
 import { saveLog } from '../store/reducers/log'
 import SearchBar from '../components/SearchBar'
 import DataTable from '../components/DataTable'
 import { cvHeaders } from '../constants/tableHeaders'
+import CopyIcon from '../icons/copy-icon.svg'
+import Dropdown from '../components/Dropdown'
 
 export default function CVs({ showAll }) {
     const [resumes, setResumes] = useState([])
@@ -23,10 +25,13 @@ export default function CVs({ showAll }) {
     const [loading, setLoading] = useState(true)
     const [isPdf, setIsPdf] = useState(false)
     const [download, setDownload] = useState(false)
+    const [publishCV, setPublishCV] = useState({})
+    const [publicTime, setPublicTime] = useState(0)
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
     const { isManager } = user
     const dispatch = useDispatch()
     const history = useHistory()
+    const REACT_APP_CV_URL = process.env.REACT_APP_CV_URL || 'https://sigma-cvmaker.vercel.app'
 
     useEffect(() => {
         const localUser = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
@@ -88,6 +93,33 @@ export default function CVs({ showAll }) {
         }
     }
 
+    const handlePublishCV = async () => {
+        try {
+            setLoading(true)
+            const published = await dispatch(makeCVPublic({
+                ...publishCV,
+                publicTime: publicTime === 'Unpublish' ? 0 : publicTime
+            })).then(data => data.payload)
+
+            if (published) {
+                if (publicTime === 'Unpublish') toast.success(`The CV has been unpublished`)
+                else {
+                    navigator.clipboard.writeText(`${REACT_APP_CV_URL}/view?id=${publishCV._id}`)
+                    toast.success(`The CV has been published for ${publicTime} days`)
+                    toast.success('Link copied to clipboard!')
+                }
+            } else toast.error('Error publishing CV. Try again later')
+
+            setPublishCV({})
+            setPublicTime(0)
+            getAllResumes(showAll)
+            return setLoading(false)
+        } catch (err) {
+            console.error(err)
+            setLoading(false)
+        }
+    }
+
     const handleSearch = e => {
         if (e.key === 'Enter') {
             triggerSearch()
@@ -135,17 +167,39 @@ export default function CVs({ showAll }) {
         }
     }
 
+    const calculateExpiration = cv => {
+        let expired = true
+        if (cv.published && cv.publicTime) {
+            const now = new Date().getTime()
+            const published = new Date(cv.published).getTime()
+            const publicDays = cv.publicTime
+            if (now - published < publicDays * 8.64E7) expired = false
+        }
+        return expired
+    }
+
+    const checkExpirationDays = cv => {
+        let days = 0
+        if (cv.published && cv.publicTime) {
+            const now = new Date().getTime()
+            const published = new Date(cv.published).getTime()
+            const publicDays = cv.publicTime
+            days = publicDays - ((now - published) / 8.64E7)
+        }
+        return days.toFixed(0)
+    }
+
     return (
         <div className='my-resumes-container'>
             <SearchBar
                 handleChange={e => handleSearch(e)}
                 placeholder='Search by words or text...'
-                style={{ filter: openModal && 'blur(10px)', width: '20vw' }}
+                style={{ filter: (openModal || publishCV.username) && 'blur(10px)', width: '20vw' }}
                 onKeyPress={handleSearch}
                 triggerSearch={triggerSearch}
                 setData={setResumeData}
             />
-            <div className='resumes-list' style={{ filter: openModal && 'blur(10px)' }}>
+            <div className='resumes-list' style={{ filter: (openModal || publishCV.username) && 'blur(10px)' }}>
                 <DataTable
                     title={`CV's`}
                     subtitle={`Here is a list of all CV's in the system`}
@@ -161,6 +215,7 @@ export default function CVs({ showAll }) {
                     setIsEdit={setIsEdit}
                     setResumeData={setResumeData}
                     setOpenModal={setOpenModal}
+                    setPublishCV={setPublishCV}
                     setIsPdf={setIsPdf}
                     setDownload={setDownload}
                     modalView={true}
@@ -200,6 +255,53 @@ export default function CVs({ showAll }) {
                         />
                     </div>
                 </div> : ''}
+            {publishCV.username ?
+                <div className='remove-modal'>
+                    {publishCV.published ?
+                        <div className='public-cv-modal'>
+                            {calculateExpiration(publishCV) ?
+                                <>
+                                    <h4 style={{ color: 'red' }} className='public-cv-text'>{publishCV.username}'s CV link has expired</h4>
+                                    <h4 className='public-cv-text'>If you want, you can update its public expiration starting today:</h4>
+                                </>
+                                :
+                                <>
+                                    <h4 className='public-cv-text'>{publishCV.username}'s CV has already been published</h4>
+                                    <h4 className='public-cv-text'>Time remaining: <b>{checkExpirationDays(publishCV)} days</b></h4>
+                                </>
+                            }
+                            <Dropdown
+                                label='Public time (days)'
+                                name='publicTime'
+                                options={['Unpublish', 1, 5, 10, 15, 20, 30, 45, 60, 90, 365]}
+                                value={publicTime || publishCV.publicTime}
+                                updateData={(_, option) => setPublicTime(option)}
+                                size='8vw'
+                                style={{ alignSelf: 'center' }}
+                            />
+                            <div className='public-cv-link-row'>
+                                <a className='public-cv-link' href={`${REACT_APP_CV_URL}/view?id=${publishCV._id}`} target='_blank'>{`${REACT_APP_CV_URL}/view?id=${publishCV._id}`}</a>
+                                <img src={CopyIcon} onClick={() => {
+                                    navigator.clipboard.writeText(`${REACT_APP_CV_URL}/view?id=${publishCV._id}`)
+                                    toast.success('Link to public CV copied!')
+                                }} className='public-cv-copy' />
+                            </div>
+                        </div>
+                        : <h4 style={{ textAlign: 'center', fontWeight: 'normal' }}>Publish <br />{publishCV.username}'s CV?</h4>}
+                    <div className='remove-modal-btns'>
+                        <CTAButton
+                            label='Cancel'
+                            handleClick={() => setPublishCV({})}
+                            color={APP_COLORS.GRAY}
+                        />
+                        <CTAButton
+                            label='Confirm'
+                            handleClick={handlePublishCV}
+                            color={APP_COLORS.MURREY}
+                        />
+                    </div>
+                </div>
+                : ''}
         </div>
     )
 }

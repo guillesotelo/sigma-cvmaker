@@ -26,6 +26,7 @@ import Search from "./pages/Search";
 import ForgotPass from "./pages/ForgotPass";
 import ResetPass from "./pages/ResetPass";
 import Landing from "./pages/Landing";
+import PublicCV from "./components/PublicCV";
 
 function App() {
   const [search, setSearch] = useState([])
@@ -104,6 +105,12 @@ function App() {
             <Footer />
           </div>
         </div>
+      </Route>
+      <Route path="/view">
+        <PublicCV />
+      </Route>
+      <Route path="/view:id">
+        <PublicCV />
       </Route>
       <Route path="/search">
         <Header setSearch={setSearch} />

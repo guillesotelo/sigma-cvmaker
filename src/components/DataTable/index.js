@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import EditIcon from '../../icons/edit-icon.svg'
 import TrashCan from '../../icons/trash-icon.svg'
 import DownloadIcon from '../../icons/download-icon.svg'
+import PublishIcon from '../../icons/share-icon.svg'
 import MoonLoader from "react-spinners/MoonLoader"
 import './styles.css'
 
@@ -24,6 +25,7 @@ export default function DataTable(props) {
         setResumeData,
         setOpenModal,
         setDownload,
+        setPublishCV,
         setIsPdf,
         modalView,
         style
@@ -138,6 +140,7 @@ export default function DataTable(props) {
                                                     setResumeData(row)
                                                     setDownload(true)
                                                 }} />
+                                                <img src={PublishIcon} onClick={() => setPublishCV(row)} className='data-table-icon share-icon' />
                                             </div>
                                             :
                                             <h4

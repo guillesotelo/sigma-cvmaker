@@ -15,6 +15,20 @@ const getResumeById = async _id => {
     } catch (err) { console.log(err) }
 }
 
+const getPublicCVById = async _id => {
+    try {
+        const resume = await axios.get(`${API_URL}/api/public/getById`, { params: { _id } })
+        return resume.data
+    } catch (err) { console.log(err) }
+}
+
+const publishCV = async data => {
+    try {
+        const resume = await axios.post(`${API_URL}/api/resume/publish`, data, getConfig())
+        return resume.data
+    } catch (err) { console.log(err) }
+}
+
 const getResumeByEmail = async data => {
     try {
         const resumes = await axios.get(`${API_URL}/api/resume/myResume`, { params: data, headers: getHeaders() })
@@ -57,6 +71,13 @@ const getCVLogo = async data => {
     } catch (err) { console.log(err) }
 }
 
+const getPublicCVHeaderLogo = async data => {
+    try {
+        const image = await axios.get(`${API_URL}/api/public/getCVLogo`, { params: { type: data.type }, headers: getHeaders() })
+        return image.data
+    } catch (err) { console.log(err) }
+}
+
 const saveCVLogo = async data => {
     try {
         const image = await axios.post(`${API_URL}/api/resume/saveCVLogo`, data, getConfig())
@@ -67,9 +88,12 @@ const saveCVLogo = async data => {
 export {
     getAllResumes,
     getResumeById,
+    getPublicCVById,
+    publishCV,
     getResumeByEmail,
     getCVTypeByEmail,
     getCVLogo,
+    getPublicCVHeaderLogo,
     saveCVLogo,
     createResume,
     updateResume,
