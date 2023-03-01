@@ -23,6 +23,8 @@ import DownloadIcon from '../../icons/download-icon.svg'
 import { MoonLoader } from 'react-spinners'
 import { getPublicImage, getPublicClientLogo } from '../../store/reducers/image'
 import { saveLog, savePublicLog } from '../../store/reducers/log'
+import SigmaIso from '../../assets/logos/sigma_connectivity_iso.png'
+import Tooltip from '../Tooltip'
 
 export default function PublicCV() {
     const [res, setRes] = useState({})
@@ -94,11 +96,22 @@ export default function PublicCV() {
                 textAlign: 'center',
                 fontWeight: 'normal',
                 height: '100vh',
-                marginTop: '30vh',
-                color: 'white'
+                marginTop: '25vh',
+                color: 'white',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
             }}>
+                <img src={SigmaIso} alt='Sigma Logo' style={{ height: '4vw', margin: '2vw' }} />
                 <h2>The CV you are trying to access no longer exists or the link has expired.
                     <br />Ask the HR Manager for access permissions.</h2>
+                <h5 style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    marginBottom: '2VW',
+                    alignSelf: 'center',
+                    fontWeight: 'normal'
+                }}>Sigma © 2023</h5>
             </div>
         )
     }
@@ -964,12 +977,14 @@ export default function PublicCV() {
                                 }}>
                                     {onDownloadPDF ?
                                         <>
-                                            <img
-                                                src={DownloadIcon}
-                                                className='pdf-download-svg'
-                                                onClick={downloadPDF}
-                                                style={{ margin: '1vw 3vw', height: '2vw' }}
-                                            />
+                                            <Tooltip tooltip='Download PDF'>
+                                                <img
+                                                    src={DownloadIcon}
+                                                    className='pdf-download-svg'
+                                                    onClick={downloadPDF}
+                                                    style={{ margin: '1vw 3vw', height: '2vw' }}
+                                                />
+                                            </Tooltip>
                                         </>
                                         : ''}
                                 </div>

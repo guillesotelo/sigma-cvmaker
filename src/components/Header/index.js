@@ -11,6 +11,7 @@ import BugIcon from '../../icons/bug-icon.svg'
 import SigmaIso from '../../assets/logos/sigma_connectivity_iso.png'
 import SearchBar from '../SearchBar'
 import './styles.css'
+import Tooltip from '../Tooltip'
 
 export default function Header({ setSearch }) {
   const [words, setWords] = useState([])
@@ -83,20 +84,28 @@ export default function Header({ setSearch }) {
         </div>
         {user && user.email ?
           <div className='header-right-icons'>
-            <img src={BugIcon} className='error-icon' onClick={() => history.push('/report')} />
+            <Tooltip tooltip='Report a problem' inline={true}>
+              <img src={BugIcon} className='error-icon' onClick={() => history.push('/report')} />
+            </Tooltip>
             {/* <img src={LogoutIcon} className='logout-icon' onClick={logOutUser} /> */}
             {profilePic.image ?
-              <img
-                src={profilePic.image}
-                className='header-profile-image'
-                onClick={() => history.push('account')}
-                loading='lazy'
-              />
-              : <img
-                src={ProfileIcon}
-                className='header-profile-svg'
-                onClick={() => history.push('account')}
-              />}
+              <Tooltip tooltip='Account' inline={true}>
+                <img
+                  src={profilePic.image}
+                  className='header-profile-image'
+                  onClick={() => history.push('account')}
+                  loading='lazy'
+                />
+              </Tooltip>
+              :
+              <Tooltip tooltip='Account' inline={true}>
+                <img
+                  src={ProfileIcon}
+                  className='header-profile-svg'
+                  onClick={() => history.push('account')}
+                />
+              </Tooltip>
+            }
           </div>
           :
           <></>

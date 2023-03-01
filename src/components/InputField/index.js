@@ -6,6 +6,7 @@ import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import HideIcon from '../../icons/hide-icon.svg'
 import ShwoIcon from '../../icons/show-icon.svg'
 import './styles.css'
+import Tooltip from '../Tooltip';
 
 export default function InputField(props) {
     const [showDropDown, setShowDropDown] = useState(false)
@@ -144,17 +145,21 @@ export default function InputField(props) {
                         value={value}
                     />
                     {hidden && hidden.includes(label) ?
-                        <img
-                            src={ShwoIcon}
-                            className='hide-icon-textarea'
-                            onClick={() => showItem(label)}
-                        />
-                        : hidden ?
+                        <Tooltip tooltip='Show'>
                             <img
-                                src={HideIcon}
+                                src={ShwoIcon}
                                 className='hide-icon-textarea'
-                                onClick={() => hideItem(label)}
+                                onClick={() => showItem(label)}
                             />
+                        </Tooltip>
+                        : hidden ?
+                            <Tooltip tooltip='Hide'>
+                                <img
+                                    src={HideIcon}
+                                    className='hide-icon-textarea'
+                                    onClick={() => hideItem(label)}
+                                />
+                            </Tooltip>
                             : ''
                     }
                 </GrammarlyEditorPlugin>
@@ -190,17 +195,21 @@ export default function InputField(props) {
                                     />
                                 </div>
                                 {hidden && hidden.includes(label) ?
-                                    <img
-                                        src={ShwoIcon}
-                                        className='hide-icon'
-                                        onClick={() => showItem(label)}
-                                    />
-                                    : hidden ?
+                                    <Tooltip tooltip='Show'>
                                         <img
-                                            src={HideIcon}
+                                            src={ShwoIcon}
                                             className='hide-icon'
-                                            onClick={() => hideItem(label)}
+                                            onClick={() => showItem(label)}
                                         />
+                                    </Tooltip>
+                                    : hidden ?
+                                        <Tooltip tooltip='Hide'>
+                                            <img
+                                                src={HideIcon}
+                                                className='hide-icon'
+                                                onClick={() => hideItem(label)}
+                                            />
+                                        </Tooltip>
                                         : ''
                                 }
                                 {showDropDown ?
@@ -240,17 +249,21 @@ export default function InputField(props) {
                                     />
                                 </GrammarlyEditorPlugin>
                                 {hidden && hidden.includes(label) ?
-                                    <img
-                                        src={ShwoIcon}
-                                        className='hide-icon'
-                                        onClick={() => showItem(label)}
-                                    />
-                                    : hidden ?
+                                    <Tooltip tooltip='Show'>
                                         <img
-                                            src={HideIcon}
+                                            src={ShwoIcon}
                                             className='hide-icon'
-                                            onClick={() => hideItem(label)}
+                                            onClick={() => showItem(label)}
                                         />
+                                    </Tooltip>
+                                    : hidden ?
+                                        <Tooltip tooltip='Hide'>
+                                            <img
+                                                src={HideIcon}
+                                                className='hide-icon'
+                                                onClick={() => hideItem(label)}
+                                            />
+                                        </Tooltip>
                                         : ''
                                 }
                                 {showDropDown ?

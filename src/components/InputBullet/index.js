@@ -6,6 +6,7 @@ import ShwoIcon from '../../icons/show-icon.svg'
 import EditIcon from '../../icons/edit-icon.svg'
 import TrashCan from '../../icons/trash-icon.svg'
 import './styles.css'
+import Tooltip from '../Tooltip';
 
 export default function InputBullet(props) {
     const [dragging, setDragging] = useState(false)
@@ -161,32 +162,40 @@ export default function InputBullet(props) {
                                                     className='bullet-row draggable' key={i}>
                                                     <h4 className='bullet' style={{ opacity: item.hidden && '.2', fontSize: fontSize ? `${fontSize}vw` : '.8vw' }}>{item.bullet}</h4>
                                                     <h4 className='bullet-text' style={{ opacity: item.hidden && '.2', fontSize: fontSize ? `${fontSize}vw` : '.8vw' }}>{item.value}</h4>
-                                                    <img
-                                                        src={EditIcon}
-                                                        className='hide-icon-item edit-icon-item'
-                                                        onClick={() => {
-                                                            setSelected(i)
-                                                            setEditItem(item)
-                                                        }}
-                                                    />
+                                                    <Tooltip tooltip='Edit'>
+                                                        <img
+                                                            src={EditIcon}
+                                                            className='hide-icon-item edit-icon-item'
+                                                            onClick={() => {
+                                                                setSelected(i)
+                                                                setEditItem(item)
+                                                            }}
+                                                        />
+                                                    </Tooltip>
                                                     {item.hidden ?
-                                                        <img
-                                                            src={ShwoIcon}
-                                                            className='hide-icon-item'
-                                                            onClick={() => showItem(i)}
-                                                        />
+                                                        <Tooltip tooltip='Show'>
+                                                            <img
+                                                                src={ShwoIcon}
+                                                                className='hide-icon-item'
+                                                                onClick={() => showItem(i)}
+                                                            />
+                                                        </Tooltip>
                                                         :
-                                                        <img
-                                                            src={HideIcon}
-                                                            className='hide-icon-item'
-                                                            onClick={() => hideItem(i)}
-                                                        />
+                                                        <Tooltip tooltip='Hide'>
+                                                            <img
+                                                                src={HideIcon}
+                                                                className='hide-icon-item'
+                                                                onClick={() => hideItem(i)}
+                                                            />
+                                                        </Tooltip>
                                                     }
-                                                    <img
-                                                        src={TrashCan}
-                                                        className='hide-icon-item'
-                                                        onClick={() => removeItem(i)}
-                                                    />
+                                                    <Tooltip tooltip='Remove'>
+                                                        <img
+                                                            src={TrashCan}
+                                                            className='hide-icon-item'
+                                                            onClick={() => removeItem(i)}
+                                                        />
+                                                    </Tooltip>
                                                 </div>
                                             )}
                                         </Draggable>

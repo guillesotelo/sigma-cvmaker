@@ -1,5 +1,6 @@
 import React from 'react'
 import SearchIcon from '../../icons/search-icon.svg'
+import Tooltip from '../Tooltip'
 import './styles.css'
 
 export default function SearchBar(props) {
@@ -15,7 +16,9 @@ export default function SearchBar(props) {
 
     return (
         <div className='search-bar-container' style={style || null}>
-            <img src={SearchIcon} className='search-icon' onClick={triggerSearch}/>
+            <Tooltip tooltip='Search' inline={true}>
+                <img src={SearchIcon} className='search-icon' onClick={triggerSearch} />
+            </Tooltip>
             <input
                 className='search-input'
                 onChange={handleChange}

@@ -26,6 +26,7 @@ import EditIcon from '../../icons/edit-icon.svg'
 import CloseIcon from '../../icons/close-icon.svg'
 import { MoonLoader } from 'react-spinners'
 import { getImageByType, getClientLogo } from '../../store/reducers/image'
+import Tooltip from '../Tooltip'
 
 export default function Resume(props) {
     const {
@@ -941,13 +942,22 @@ export default function Resume(props) {
                         <>
                             <div className='pdf-header-btns'>
                                 {onDownloadPDF ?
-                                    <img
-                                        src={DownloadIcon}
-                                        className='pdf-download-svg'
-                                        onClick={downloadPDF}
-                                    /> : ''}
-                                {onEdit ? <img src={EditIcon} className='pdf-edit-svg' onClick={onEdit} /> : ''}
-                                <img src={CloseIcon} className='pdf-close-svg' onClick={onClose} />
+                                    <Tooltip tooltip='Download' inline={true}>
+                                        <img
+                                            src={DownloadIcon}
+                                            className='pdf-download-svg'
+                                            onClick={downloadPDF}
+                                        />
+                                    </Tooltip>
+                                    : ''}
+                                {onEdit ?
+                                    <Tooltip tooltip='Edit' inline={true}>
+                                        <img src={EditIcon} className='pdf-edit-svg' onClick={onEdit} />
+                                    </Tooltip>
+                                    : ''}
+                                <Tooltip tooltip='Close' inline={true}>
+                                    <img src={CloseIcon} className='pdf-close-svg' onClick={onClose} />
+                                </Tooltip>
                             </div>
                             {Object.keys(res).length ? <PDFView /> : ''}
                         </>

@@ -9,6 +9,7 @@ import { APP_COLORS } from '../constants/app'
 import { updateUserData, logOut, getAllManagers } from '../store/reducers/user'
 import { getImageByType } from '../store/reducers/image'
 import Dropdown from '../components/Dropdown'
+import Tooltip from '../components/Tooltip'
 
 export default function Account() {
 
@@ -167,19 +168,25 @@ export default function Account() {
       {updateDetails ?
         <div className='account-update-details'>
           {profilePic.image ?
-            <img
-              src={profilePic.image}
-              style={profilePic.style}
-              className='account-profile-image'
-              onClick={() => document.getElementById('image').click()}
-              loading='lazy'
-            />
-            : <img
-              src={ProfileIcon}
-              style={profilePic.style}
-              className='account-profile-image-svg'
-              onClick={() => document.getElementById('image').click()}
-            />}
+            <Tooltip tooltip='Change image'>
+              <img
+                src={profilePic.image}
+                style={profilePic.style}
+                className='account-profile-image'
+                onClick={() => document.getElementById('image').click()}
+                loading='lazy'
+              />
+            </Tooltip>
+            :
+            <Tooltip tooltip='Upload image'>
+              <img
+                src={ProfileIcon}
+                style={profilePic.style}
+                className='account-profile-image-svg'
+                onClick={() => document.getElementById('image').click()}
+              />
+            </Tooltip>
+          }
           <InputField
             label=''
             type='file'

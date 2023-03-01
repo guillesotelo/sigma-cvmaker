@@ -70,6 +70,10 @@ export const cvHeaders = [
     value: 'note'
   },
   {
+    name: 'PUBLISHED',
+    value: 'published'
+  },
+  {
     name: 'TYPE',
     value: 'type'
   }

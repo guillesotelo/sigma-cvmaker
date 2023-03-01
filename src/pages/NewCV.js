@@ -27,6 +27,7 @@ import SignaturePad from 'react-signature-canvas'
 import Resume from '../components/Resume'
 import { MoonLoader } from 'react-spinners'
 import { getOneAppData, updateAppData } from '../store/reducers/appData'
+import Tooltip from '../components/Tooltip'
 
 export default function NewCV() {
     const [data, setData] = useState({})
@@ -547,15 +548,17 @@ export default function NewCV() {
                         <>
                             {profilePic.image ?
                                 <div className='profile-image-section'>
-                                    <div className='profile-image-cover'>
-                                        <img
-                                            src={profilePic.image}
-                                            style={{ ...profilePic.style, opacity: hiddenItems.includes('profile') && '.15' }}
-                                            className='profile-image'
-                                            onClick={() => document.getElementById('image').click()}
-                                            loading='lazy'
-                                        />
-                                    </div>
+                                    <Tooltip tooltip='Change image'>
+                                        <div className='profile-image-cover'>
+                                            <img
+                                                src={profilePic.image}
+                                                style={{ ...profilePic.style, opacity: hiddenItems.includes('profile') && '.15' }}
+                                                className='profile-image'
+                                                onClick={() => document.getElementById('image').click()}
+                                                loading='lazy'
+                                            />
+                                        </div>
+                                    </Tooltip>
                                     <div className='profile-image-settings'>
                                         <div>
                                             <Slider
@@ -618,31 +621,38 @@ export default function NewCV() {
                                                 max={100}
                                             />
                                             {hiddenItems.includes('profile') ?
-                                                <img
-                                                    src={ShwoIcon}
-                                                    className='hide-icon-profile'
-                                                    onClick={() => setHiddenItems(hiddenItems.filter(item => item !== 'profile'))}
-                                                />
+                                                <Tooltip tooltip='Show'>
+                                                    <img
+                                                        src={ShwoIcon}
+                                                        className='hide-icon-profile'
+                                                        onClick={() => setHiddenItems(hiddenItems.filter(item => item !== 'profile'))}
+                                                    />
+                                                </Tooltip>
                                                 :
-                                                <img
-                                                    src={HideIcon}
-                                                    className='hide-icon-profile'
-                                                    onClick={() => {
-                                                        const _hidden = [...hiddenItems]
-                                                        _hidden.push('profile')
-                                                        setHiddenItems(_hidden)
-                                                    }}
-                                                />
+                                                <Tooltip tooltip='Hide'>
+                                                    <img
+                                                        src={HideIcon}
+                                                        className='hide-icon-profile'
+                                                        onClick={() => {
+                                                            const _hidden = [...hiddenItems]
+                                                            _hidden.push('profile')
+                                                            setHiddenItems(_hidden)
+                                                        }}
+                                                    />
+                                                </Tooltip>
                                             }
                                         </div>
                                     </div>
                                 </div>
                                 :
-                                <img
-                                    src={ProfileIcon}
-                                    className='profile-image-svg'
-                                    onClick={() => document.getElementById('image').click()}
-                                />}
+                                <Tooltip tooltip='Upload image'>
+                                    <img
+                                        src={ProfileIcon}
+                                        className='profile-image-svg'
+                                        onClick={() => document.getElementById('image').click()}
+                                    />
+                                </Tooltip>
+                            }
                             <InputField
                                 label=''
                                 type='file'
@@ -811,34 +821,41 @@ export default function NewCV() {
                                 style={{ color: 'rgb(71, 71, 71)' }}
                             />
                             {hiddenItems.includes('signature') ?
-                                <img
-                                    src={ShwoIcon}
-                                    className='hide-icon-signature'
-                                    onClick={() => setHiddenItems(hiddenItems.filter(item => item !== 'signature'))}
-                                />
+                                <Tooltip tooltip='Show'>
+                                    <img
+                                        src={ShwoIcon}
+                                        className='hide-icon-signature'
+                                        onClick={() => setHiddenItems(hiddenItems.filter(item => item !== 'signature'))}
+                                    />
+                                </Tooltip>
                                 :
-                                <img
-                                    src={HideIcon}
-                                    className='hide-icon-signature'
-                                    onClick={() => {
-                                        const _hidden = [...hiddenItems]
-                                        _hidden.push('signature')
-                                        setHiddenItems(_hidden)
-                                    }}
-                                />
+                                <Tooltip tooltip='Hide'>
+                                    <img
+                                        src={HideIcon}
+                                        className='hide-icon-signature'
+                                        onClick={() => {
+                                            const _hidden = [...hiddenItems]
+                                            _hidden.push('signature')
+                                            setHiddenItems(_hidden)
+                                        }}
+                                    />
+                                </Tooltip>
                             }
                         </div>
                         <div className='section-settings' style={{ marginTop: '2vw' }}>
                             <>
                                 {!paddingDrop ?
-                                    <img
-                                        src={FontIcon}
-                                        className='section-settings-icon'
-                                        onClick={() => {
-                                            setPaddingDrop(false)
-                                            setFontDrop(!fontDrop)
-                                        }}
-                                    /> : ''}
+                                    <Tooltip tooltip='Change font'>
+                                        <img
+                                            src={FontIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setPaddingDrop(false)
+                                                setFontDrop(!fontDrop)
+                                            }}
+                                        />
+                                    </Tooltip>
+                                    : ''}
                                 {fontDrop ?
                                     <Slider
                                         label=''
@@ -856,14 +873,17 @@ export default function NewCV() {
                             </>
                             <>
                                 {!fontDrop ?
-                                    <img
-                                        src={PaddingIcon}
-                                        className='section-settings-icon'
-                                        onClick={() => {
-                                            setFontDrop(false)
-                                            setPaddingDrop(!paddingDrop)
-                                        }}
-                                    /> : ''}
+                                    <Tooltip tooltip='Change margin'>
+                                        <img
+                                            src={PaddingIcon}
+                                            className='section-settings-icon'
+                                            onClick={() => {
+                                                setFontDrop(false)
+                                                setPaddingDrop(!paddingDrop)
+                                            }}
+                                        />
+                                    </Tooltip>
+                                    : ''}
                                 {paddingDrop ?
                                     <Slider
                                         label=''
@@ -894,14 +914,17 @@ export default function NewCV() {
                                 <div className='section-settings'>
                                     <>
                                         {!paddingDrop ?
-                                            <img
-                                                src={FontIcon}
-                                                className='section-settings-icon'
-                                                onClick={() => {
-                                                    setPaddingDrop(false)
-                                                    setFontDrop(!fontDrop)
-                                                }}
-                                            /> : ''}
+                                            <Tooltip tooltip='Change font'>
+                                                <img
+                                                    src={FontIcon}
+                                                    className='section-settings-icon'
+                                                    onClick={() => {
+                                                        setPaddingDrop(false)
+                                                        setFontDrop(!fontDrop)
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            : ''}
                                         {fontDrop ?
                                             <Slider
                                                 label=''
@@ -919,14 +942,17 @@ export default function NewCV() {
                                     </>
                                     <>
                                         {!fontDrop ?
-                                            <img
-                                                src={PaddingIcon}
-                                                className='section-settings-icon'
-                                                onClick={() => {
-                                                    setFontDrop(false)
-                                                    setPaddingDrop(!paddingDrop)
-                                                }}
-                                            /> : ''}
+                                            <Tooltip tooltip='Change margin'>
+                                                <img
+                                                    src={PaddingIcon}
+                                                    className='section-settings-icon'
+                                                    onClick={() => {
+                                                        setFontDrop(false)
+                                                        setPaddingDrop(!paddingDrop)
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            : ''}
                                         {paddingDrop ?
                                             <Slider
                                                 label=''
@@ -967,7 +993,8 @@ export default function NewCV() {
                                 src={MinusIcon}
                                 className='hide-section-icon'
                                 onClick={() => setHiddenSections({ ...hiddenSections, expertise: 'true' })}
-                            />}
+                            />
+                        }
                     </div>
                 </div>
 
@@ -983,14 +1010,17 @@ export default function NewCV() {
                                 <div className='section-settings'>
                                     <>
                                         {!paddingDrop ?
-                                            <img
-                                                src={FontIcon}
-                                                className='section-settings-icon'
-                                                onClick={() => {
-                                                    setPaddingDrop(false)
-                                                    setFontDrop(!fontDrop)
-                                                }}
-                                            /> : ''}
+                                            <Tooltip tooltip='Change font'>
+                                                <img
+                                                    src={FontIcon}
+                                                    className='section-settings-icon'
+                                                    onClick={() => {
+                                                        setPaddingDrop(false)
+                                                        setFontDrop(!fontDrop)
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            : ''}
                                         {fontDrop ?
                                             <Slider
                                                 label=''
@@ -1008,14 +1038,17 @@ export default function NewCV() {
                                     </>
                                     <>
                                         {!fontDrop ?
-                                            <img
-                                                src={PaddingIcon}
-                                                className='section-settings-icon'
-                                                onClick={() => {
-                                                    setFontDrop(false)
-                                                    setPaddingDrop(!paddingDrop)
-                                                }}
-                                            /> : ''}
+                                            <Tooltip tooltip='Change margin'>
+                                                <img
+                                                    src={PaddingIcon}
+                                                    className='section-settings-icon'
+                                                    onClick={() => {
+                                                        setFontDrop(false)
+                                                        setPaddingDrop(!paddingDrop)
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            : ''}
                                         {paddingDrop ?
                                             <Slider
                                                 label=''
@@ -1056,7 +1089,8 @@ export default function NewCV() {
                                 src={MinusIcon}
                                 className='hide-section-icon'
                                 onClick={() => setHiddenSections({ ...hiddenSections, education: 'true' })}
-                            />}
+                            />
+                        }
                     </div>
                 </div>
 
@@ -1072,14 +1106,17 @@ export default function NewCV() {
                                 <div className='section-settings'>
                                     <>
                                         {!paddingDrop ?
-                                            <img
-                                                src={FontIcon}
-                                                className='section-settings-icon'
-                                                onClick={() => {
-                                                    setPaddingDrop(false)
-                                                    setFontDrop(!fontDrop)
-                                                }}
-                                            /> : ''}
+                                            <Tooltip tooltip='Change font'>
+                                                <img
+                                                    src={FontIcon}
+                                                    className='section-settings-icon'
+                                                    onClick={() => {
+                                                        setPaddingDrop(false)
+                                                        setFontDrop(!fontDrop)
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            : ''}
                                         {fontDrop ?
                                             <Slider
                                                 label=''
@@ -1097,14 +1134,17 @@ export default function NewCV() {
                                     </>
                                     <>
                                         {!fontDrop ?
-                                            <img
-                                                src={PaddingIcon}
-                                                className='section-settings-icon'
-                                                onClick={() => {
-                                                    setFontDrop(false)
-                                                    setPaddingDrop(!paddingDrop)
-                                                }}
-                                            /> : ''}
+                                            <Tooltip tooltip='Change margin'>
+                                                <img
+                                                    src={PaddingIcon}
+                                                    className='section-settings-icon'
+                                                    onClick={() => {
+                                                        setFontDrop(false)
+                                                        setPaddingDrop(!paddingDrop)
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            : ''}
                                         {paddingDrop ?
                                             <Slider
                                                 label=''
@@ -1145,7 +1185,8 @@ export default function NewCV() {
                                 src={MinusIcon}
                                 className='hide-section-icon'
                                 onClick={() => setHiddenSections({ ...hiddenSections, certifications: 'true' })}
-                            />}
+                            />
+                        }
                     </div>
                 </div>
 
@@ -1161,14 +1202,17 @@ export default function NewCV() {
                                 <div className='section-settings'>
                                     <>
                                         {!paddingDrop ?
-                                            <img
-                                                src={FontIcon}
-                                                className='section-settings-icon'
-                                                onClick={() => {
-                                                    setPaddingDrop(false)
-                                                    setFontDrop(!fontDrop)
-                                                }}
-                                            /> : ''}
+                                            <Tooltip tooltip='Change font'>
+                                                <img
+                                                    src={FontIcon}
+                                                    className='section-settings-icon'
+                                                    onClick={() => {
+                                                        setPaddingDrop(false)
+                                                        setFontDrop(!fontDrop)
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            : ''}
                                         {fontDrop ?
                                             <Slider
                                                 label=''
@@ -1186,14 +1230,17 @@ export default function NewCV() {
                                     </>
                                     <>
                                         {!fontDrop ?
-                                            <img
-                                                src={PaddingIcon}
-                                                className='section-settings-icon'
-                                                onClick={() => {
-                                                    setFontDrop(false)
-                                                    setPaddingDrop(!paddingDrop)
-                                                }}
-                                            /> : ''}
+                                            <Tooltip tooltip='Change margin'>
+                                                <img
+                                                    src={PaddingIcon}
+                                                    className='section-settings-icon'
+                                                    onClick={() => {
+                                                        setFontDrop(false)
+                                                        setPaddingDrop(!paddingDrop)
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            : ''}
                                         {paddingDrop ?
                                             <Slider
                                                 label=''
@@ -1234,7 +1281,8 @@ export default function NewCV() {
                                 src={MinusIcon}
                                 className='hide-section-icon'
                                 onClick={() => setHiddenSections({ ...hiddenSections, skills: 'true' })}
-                            />}
+                            />
+                        }
                     </div>
                 </div>
 
@@ -1250,14 +1298,17 @@ export default function NewCV() {
                                 <div className='section-settings'>
                                     <>
                                         {!paddingDrop ?
-                                            <img
-                                                src={FontIcon}
-                                                className='section-settings-icon'
-                                                onClick={() => {
-                                                    setPaddingDrop(false)
-                                                    setFontDrop(!fontDrop)
-                                                }}
-                                            /> : ''}
+                                            <Tooltip tooltip='Change font'>
+                                                <img
+                                                    src={FontIcon}
+                                                    className='section-settings-icon'
+                                                    onClick={() => {
+                                                        setPaddingDrop(false)
+                                                        setFontDrop(!fontDrop)
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            : ''}
                                         {fontDrop ?
                                             <Slider
                                                 label=''
@@ -1275,14 +1326,17 @@ export default function NewCV() {
                                     </>
                                     <>
                                         {!fontDrop ?
-                                            <img
-                                                src={PaddingIcon}
-                                                className='section-settings-icon'
-                                                onClick={() => {
-                                                    setFontDrop(false)
-                                                    setPaddingDrop(!paddingDrop)
-                                                }}
-                                            /> : ''}
+                                            <Tooltip tooltip='Change margin'>
+                                                <img
+                                                    src={PaddingIcon}
+                                                    className='section-settings-icon'
+                                                    onClick={() => {
+                                                        setFontDrop(false)
+                                                        setPaddingDrop(!paddingDrop)
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            : ''}
                                         {paddingDrop ?
                                             <Slider
                                                 label=''
@@ -1326,7 +1380,8 @@ export default function NewCV() {
                                 src={MinusIcon}
                                 className='hide-section-icon'
                                 onClick={() => setHiddenSections({ ...hiddenSections, experience: 'true' })}
-                            />}
+                            />
+                        }
                     </div>
                 </div>
 
@@ -1342,14 +1397,17 @@ export default function NewCV() {
                                 <div className='section-settings'>
                                     <>
                                         {!paddingDrop ?
-                                            <img
-                                                src={FontIcon}
-                                                className='section-settings-icon'
-                                                onClick={() => {
-                                                    setPaddingDrop(false)
-                                                    setFontDrop(!fontDrop)
-                                                }}
-                                            /> : ''}
+                                            <Tooltip tooltip='Change font'>
+                                                <img
+                                                    src={FontIcon}
+                                                    className='section-settings-icon'
+                                                    onClick={() => {
+                                                        setPaddingDrop(false)
+                                                        setFontDrop(!fontDrop)
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            : ''}
                                         {fontDrop ?
                                             <Slider
                                                 label=''
@@ -1367,14 +1425,17 @@ export default function NewCV() {
                                     </>
                                     <>
                                         {!fontDrop ?
-                                            <img
-                                                src={PaddingIcon}
-                                                className='section-settings-icon'
-                                                onClick={() => {
-                                                    setFontDrop(false)
-                                                    setPaddingDrop(!paddingDrop)
-                                                }}
-                                            /> : ''}
+                                            <Tooltip tooltip='Change margin'>
+                                                <img
+                                                    src={PaddingIcon}
+                                                    className='section-settings-icon'
+                                                    onClick={() => {
+                                                        setFontDrop(false)
+                                                        setPaddingDrop(!paddingDrop)
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            : ''}
                                         {paddingDrop ?
                                             <Slider
                                                 label=''
@@ -1416,7 +1477,8 @@ export default function NewCV() {
                                 src={MinusIcon}
                                 className='hide-section-icon'
                                 onClick={() => setHiddenSections({ ...hiddenSections, tools: 'true' })}
-                            />}
+                            />
+                        }
                     </div>
                 </div>
 

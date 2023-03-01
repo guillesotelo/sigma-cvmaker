@@ -12,6 +12,7 @@ import { APP_COLORS } from '../constants/app'
 import { getAppData, getOneAppData, saveAppData, updateAppData } from '../store/reducers/appData'
 import { getImageByType } from '../store/reducers/image'
 import { clientsHeaders } from '../constants/tableHeaders'
+import Tooltip from '../components/Tooltip'
 
 export default function Clients() {
     const [data, setData] = useState({})
@@ -228,19 +229,25 @@ export default function Clients() {
                         <div className='client-select-section'>
                             <div className='client-details'>
                                 {clientLogo.logoImage ?
-                                    <img
-                                        src={clientLogo.logoImage}
-                                        style={clientLogo.style}
-                                        className='client-logo-image'
-                                        onClick={() => document.getElementById('logoImage').click()}
-                                        loading='lazy'
-                                    />
-                                    : <img
-                                        src={ImagePlaceholder}
-                                        style={clientLogo.style}
-                                        className='client-logo-svg'
-                                        onClick={() => document.getElementById('logoImage').click()}
-                                    />}
+                                    <Tooltip tooltip='Change image'>
+                                        <img
+                                            src={clientLogo.logoImage}
+                                            style={clientLogo.style}
+                                            className='client-logo-image'
+                                            onClick={() => document.getElementById('logoImage').click()}
+                                            loading='lazy'
+                                        />
+                                    </Tooltip>
+                                    :
+                                    <Tooltip tooltip='Upload image'>
+                                        <img
+                                            src={ImagePlaceholder}
+                                            style={clientLogo.style}
+                                            className='client-logo-svg'
+                                            onClick={() => document.getElementById('logoImage').click()}
+                                        />
+                                    </Tooltip>
+                                }
                                 <InputField
                                     label=''
                                     type='file'

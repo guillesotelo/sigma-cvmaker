@@ -36,6 +36,7 @@ import {
   cvHeaders
 } from '../constants/tableHeaders'
 import { applyFiltersToImage } from '../helpers/image'
+import Tooltip from '../components/Tooltip'
 
 export default function Settings() {
   const [tab, setTab] = useState('user')
@@ -470,17 +471,23 @@ export default function Settings() {
                   <div className='settings-logo-btns'>
                     <div className='settings-logo-input'>
                       {cvLogo.cvImage ?
-                        <img
-                          src={cvLogo.cvImage}
-                          className='settings-cv-logo'
-                          onClick={() => document.getElementById('cvImage').click()}
-                          loading='lazy'
-                        />
-                        : <img
-                          src={DropPhoto}
-                          className='settings-cv-logo-svg'
-                          onClick={() => document.getElementById('cvImage').click()}
-                        />}
+                        <Tooltip tooltip='Change logo'>
+                          <img
+                            src={cvLogo.cvImage}
+                            className='settings-cv-logo'
+                            onClick={() => document.getElementById('cvImage').click()}
+                            loading='lazy'
+                          />
+                        </Tooltip>
+                        :
+                        <Tooltip tooltip='Upload logo'>
+                          <img
+                            src={DropPhoto}
+                            className='settings-cv-logo-svg'
+                            onClick={() => document.getElementById('cvImage').click()}
+                          />
+                        </Tooltip>
+                      }
                       <InputField
                         label=''
                         type='file'
@@ -730,21 +737,26 @@ export default function Settings() {
                         <div className='settings-select-section'>
                           <div className='settings-details'>
                             {imageData.image ?
-                              <div className={imageData.type === 'Profile' ? 'profile-image-cover' : ''}>
-                                <img
-                                  src={imageData.image}
-                                  style={imageData.style}
-                                  className={imageData.type === 'Profile' ? 'profile-image' : 'settings-image'}
-                                  onClick={() => document.getElementById('image').click()}
-                                  loading='lazy'
-                                />
-                              </div>
+                              <Tooltip tooltip='Change image'>
+                                <div className={imageData.type === 'Profile' ? 'profile-image-cover' : ''}>
+                                  <img
+                                    src={imageData.image}
+                                    style={imageData.style}
+                                    className={imageData.type === 'Profile' ? 'profile-image' : 'settings-image'}
+                                    onClick={() => document.getElementById('image').click()}
+                                    loading='lazy'
+                                  />
+                                </div>
+                              </Tooltip>
                               :
-                              <img
-                                src={DropPhoto}
-                                className='profile-image-svg'
-                                onClick={() => document.getElementById('image').click()}
-                              />}
+                              <Tooltip tooltip='Upload image'>
+                                <img
+                                  src={DropPhoto}
+                                  className='profile-image-svg'
+                                  onClick={() => document.getElementById('image').click()}
+                                />
+                              </Tooltip>
+                            }
                             {imageData.image ?
                               <CTAButton
                                 label='Download'

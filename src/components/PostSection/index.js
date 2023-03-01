@@ -14,6 +14,7 @@ import TrashCan from '../../icons/trash-icon.svg'
 import ImagePlaceholder from '../../icons/image-placeholder.svg'
 import './styles.css'
 import InputField from '../InputField'
+import Tooltip from '../Tooltip'
 
 export default function PostSection(props) {
     const [data, setData] = useState({})
@@ -291,32 +292,40 @@ export default function PostSection(props) {
                             <div className='bullet-row' key={subindex}>
                                 <h4 className='bullet' style={{ opacity: item.hidden && '.3' }}>●</h4>
                                 <h4 className='bullet-text' style={{ opacity: item.hidden && '.3' }}>{item.value || ''}</h4>
-                                <img
-                                    src={EditIcon}
-                                    className='hide-icon-item edit-icon-item'
-                                    onClick={() => {
-                                        setSelectedItem(subindex)
-                                        setEditItem(item)
-                                    }}
-                                />
+                                <Tooltip tooltip='Edit'>
+                                    <img
+                                        src={EditIcon}
+                                        className='hide-icon-item edit-icon-item'
+                                        onClick={() => {
+                                            setSelectedItem(subindex)
+                                            setEditItem(item)
+                                        }}
+                                    />
+                                </Tooltip>
                                 {item.hidden ?
-                                    <img
-                                        src={ShwoIcon}
-                                        className='hide-icon-item'
-                                        onClick={() => showBullet(index, subindex)}
-                                    />
+                                    <Tooltip tooltip='Show'>
+                                        <img
+                                            src={ShwoIcon}
+                                            className='hide-icon-item'
+                                            onClick={() => showBullet(index, subindex)}
+                                        />
+                                    </Tooltip>
                                     :
-                                    <img
-                                        src={HideIcon}
-                                        className='hide-icon-item'
-                                        onClick={() => hideBullet(index, subindex)}
-                                    />
+                                    <Tooltip tooltip='Hide'>
+                                        <img
+                                            src={HideIcon}
+                                            className='hide-icon-item'
+                                            onClick={() => hideBullet(index, subindex)}
+                                        />
+                                    </Tooltip>
                                 }
-                                <img
-                                    src={TrashCan}
-                                    className='hide-icon-item'
-                                    onClick={() => removeBullet(index, subindex)}
-                                />
+                                <Tooltip tooltip='Remove'>
+                                    <img
+                                        src={TrashCan}
+                                        className='hide-icon-item'
+                                        onClick={() => removeBullet(index, subindex)}
+                                    />
+                                </Tooltip>
                             </div>
                             :
                             selectedItem === -1 ?
@@ -420,13 +429,15 @@ export default function PostSection(props) {
                     {logo.image ?
                         <div className='post-col-dif2'>
                             <div className='post-logo-placeholder'>
-                                <img
-                                    src={logo.image}
-                                    style={logo.style}
-                                    className='post-client-logo-edit'
-                                    onClick={() => document.getElementById('client-logo').click()}
-                                    loading='lazy'
-                                />
+                                <Tooltip tooltip='Change logo'>
+                                    <img
+                                        src={logo.image}
+                                        style={logo.style}
+                                        className='post-client-logo-edit'
+                                        onClick={() => document.getElementById('client-logo').click()}
+                                        loading='lazy'
+                                    />
+                                </Tooltip>
                                 <Dropdown
                                     label='Select client'
                                     name='clientSelected'
@@ -441,12 +452,14 @@ export default function PostSection(props) {
                         :
                         <div className='post-col-dif2'>
                             <div className='post-logo-placeholder'>
-                                <img
-                                    src={ImagePlaceholder}
-                                    className='client-logo-svg'
-                                    onClick={() => document.getElementById('client-logo').click()}
-                                    loading='lazy'
-                                />
+                                <Tooltip tooltip='Upload logo'>
+                                    <img
+                                        src={ImagePlaceholder}
+                                        className='client-logo-svg'
+                                        onClick={() => document.getElementById('client-logo').click()}
+                                        loading='lazy'
+                                    />
+                                </Tooltip>
                                 <h4 className='post-company-logo'>Company Logo</h4>
                                 <Dropdown
                                     label='Select client'
@@ -473,17 +486,21 @@ export default function PostSection(props) {
                                     style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') && '.3' }}
                                 />
                                 {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Period') ?
-                                    <img
-                                        src={ShwoIcon}
-                                        className='hide-icon-post'
-                                        onClick={() => showItem(selectedIndex, 'Period')}
-                                    />
+                                    <Tooltip tooltip='Show'>
+                                        <img
+                                            src={ShwoIcon}
+                                            className='hide-icon-post'
+                                            onClick={() => showItem(selectedIndex, 'Period')}
+                                        />
+                                    </Tooltip>
                                     :
-                                    <img
-                                        src={HideIcon}
-                                        className='hide-icon-post'
-                                        onClick={() => hideItem(selectedIndex, 'Period')}
-                                    />
+                                    <Tooltip tooltip='Hide'>
+                                        <img
+                                            src={HideIcon}
+                                            className='hide-icon-post'
+                                            onClick={() => hideItem(selectedIndex, 'Period')}
+                                        />
+                                    </Tooltip>
                                 }
                             </div>
                         </GrammarlyEditorPlugin>
@@ -499,17 +516,21 @@ export default function PostSection(props) {
                                     style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') && '.3' }}
                                 />
                                 {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Company name') ?
-                                    <img
-                                        src={ShwoIcon}
-                                        className='hide-icon-post'
-                                        onClick={() => showItem(selectedIndex, 'Company name')}
-                                    />
+                                    <Tooltip tooltip='Show'>
+                                        <img
+                                            src={ShwoIcon}
+                                            className='hide-icon-post'
+                                            onClick={() => showItem(selectedIndex, 'Company name')}
+                                        />
+                                    </Tooltip>
                                     :
-                                    <img
-                                        src={HideIcon}
-                                        className='hide-icon-post'
-                                        onClick={() => hideItem(selectedIndex, 'Company name')}
-                                    />
+                                    <Tooltip tooltip='Hide'>
+                                        <img
+                                            src={HideIcon}
+                                            className='hide-icon-post'
+                                            onClick={() => hideItem(selectedIndex, 'Company name')}
+                                        />
+                                    </Tooltip>
                                 }
                             </div>
                         </GrammarlyEditorPlugin>
@@ -525,17 +546,21 @@ export default function PostSection(props) {
                                     style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') && '.3' }}
                                 />
                                 {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Role title') ?
-                                    <img
-                                        src={ShwoIcon}
-                                        className='hide-icon-post'
-                                        onClick={() => showItem(selectedIndex, 'Role title')}
-                                    />
+                                    <Tooltip tooltip='Show'>
+                                        <img
+                                            src={ShwoIcon}
+                                            className='hide-icon-post'
+                                            onClick={() => showItem(selectedIndex, 'Role title')}
+                                        />
+                                    </Tooltip>
                                     :
-                                    <img
-                                        src={HideIcon}
-                                        className='hide-icon-post'
-                                        onClick={() => hideItem(selectedIndex, 'Role title')}
-                                    />
+                                    <Tooltip tooltip='Hide'>
+                                        <img
+                                            src={HideIcon}
+                                            className='hide-icon-post'
+                                            onClick={() => hideItem(selectedIndex, 'Role title')}
+                                        />
+                                    </Tooltip>
                                 }
                             </div>
                         </GrammarlyEditorPlugin>
@@ -557,17 +582,21 @@ export default function PostSection(props) {
                                 style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Job / Tasks description') && '.3' }}
                             />
                             {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes('Job / Tasks description') ?
-                                <img
-                                    src={ShwoIcon}
-                                    className='hide-icon-post-textarea'
-                                    onClick={() => showItem(selectedIndex, 'Job / Tasks description')}
-                                />
+                                <Tooltip tooltip='Show'>
+                                    <img
+                                        src={ShwoIcon}
+                                        className='hide-icon-post-textarea'
+                                        onClick={() => showItem(selectedIndex, 'Job / Tasks description')}
+                                    />
+                                </Tooltip>
                                 :
-                                <img
-                                    src={HideIcon}
-                                    className='hide-icon-post-textarea'
-                                    onClick={() => hideItem(selectedIndex, 'Job / Tasks description')}
-                                />
+                                <Tooltip tooltip='Hide'>
+                                    <img
+                                        src={HideIcon}
+                                        className='hide-icon-post-textarea'
+                                        onClick={() => hideItem(selectedIndex, 'Job / Tasks description')}
+                                    />
+                                </Tooltip>
                             }
                         </div>
                     </GrammarlyEditorPlugin>
@@ -660,32 +689,40 @@ export default function PostSection(props) {
                                         :
                                         <div key={i} className='post-tool-div' style={{ backgroundColor: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '#fafafa' }}>
                                             <h4 className='post-tool' style={{ opacity: hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) && '.3' }}>{tool}</h4>
-                                            <img
-                                                src={EditIcon}
-                                                className='hide-icon-tool'
-                                                onClick={() => {
-                                                    setSelectedTool(i)
-                                                    setEditTool(tool)
-                                                }}
-                                            />
+                                            <Tooltip tooltip='Edit'>
+                                                <img
+                                                    src={EditIcon}
+                                                    className='hide-icon-tool'
+                                                    onClick={() => {
+                                                        setSelectedTool(i)
+                                                        setEditTool(tool)
+                                                    }}
+                                                />
+                                            </Tooltip>
                                             {hidden.postSection[selectedIndex] && hidden.postSection[selectedIndex].includes(tool) ?
-                                                <img
-                                                    src={ShwoIcon}
-                                                    className='hide-icon-tool'
-                                                    onClick={() => showItem(selectedIndex, tool)}
-                                                />
+                                                <Tooltip tooltip='Show'>
+                                                    <img
+                                                        src={ShwoIcon}
+                                                        className='hide-icon-tool'
+                                                        onClick={() => showItem(selectedIndex, tool)}
+                                                    />
+                                                </Tooltip>
                                                 :
-                                                <img
-                                                    src={HideIcon}
-                                                    className='hide-icon-tool'
-                                                    onClick={() => hideItem(selectedIndex, tool)}
-                                                />
+                                                <Tooltip tooltip='Hide'>
+                                                    <img
+                                                        src={HideIcon}
+                                                        className='hide-icon-tool'
+                                                        onClick={() => hideItem(selectedIndex, tool)}
+                                                    />
+                                                </Tooltip>
                                             }
-                                            <img
-                                                src={TrashCan}
-                                                className='hide-icon-tool'
-                                                onClick={() => removeTech(i)}
-                                            />
+                                            <Tooltip tooltip='Remove'>
+                                                <img
+                                                    src={TrashCan}
+                                                    className='hide-icon-tool'
+                                                    onClick={() => removeTech(i)}
+                                                />
+                                            </Tooltip>
                                         </div>
                                 )}
                             </div> : ''}
@@ -757,30 +794,39 @@ export default function PostSection(props) {
                                 </div>
                                 <div className='post-control-btns'>
                                     {!checkHiddenPost(i) ?
-                                        <img
-                                            src={UpIcon}
-                                            className='post-control-icon'
-                                            onClick={() => moveSection(i, i - 1)}
-                                        />
+                                        <Tooltip tooltip='Move up'>
+                                            <img
+                                                src={UpIcon}
+                                                className='post-control-icon'
+                                                onClick={() => moveSection(i, i - 1)}
+                                            />
+                                        </Tooltip>
                                         : ''}
                                     {checkHiddenPost(i) ?
-                                        <img
-                                            src={ShwoIcon}
-                                            className='post-control-icon'
-                                            onClick={() => showPostSection(i)}
-                                        />
+                                        <Tooltip tooltip='Show'>
+                                            <img
+                                                src={ShwoIcon}
+                                                className='post-control-icon'
+                                                onClick={() => showPostSection(i)}
+                                            />
+                                        </Tooltip>
                                         :
-                                        <img
-                                            src={HideIcon}
-                                            className='post-control-icon'
-                                            onClick={() => hidePostSection(i)}
-                                        />}
+                                        <Tooltip tooltip='Hide'>
+                                            <img
+                                                src={HideIcon}
+                                                className='post-control-icon'
+                                                onClick={() => hidePostSection(i)}
+                                            />
+                                        </Tooltip>
+                                    }
                                     {!checkHiddenPost(i) ?
-                                        <img
-                                            src={DownIcon}
-                                            className='post-control-icon'
-                                            onClick={() => moveSection(i, i + 1)}
-                                        />
+                                        <Tooltip tooltip='Move down'>
+                                            <img
+                                                src={DownIcon}
+                                                className='post-control-icon'
+                                                onClick={() => moveSection(i, i + 1)}
+                                            />
+                                        </Tooltip>
                                         : ''}
                                 </div>
                             </div>
@@ -812,13 +858,15 @@ export default function PostSection(props) {
                                 {logo.image ?
                                     <div className='post-col-dif2'>
                                         <div className='post-logo-placeholder'>
-                                            <img
-                                                src={logo.image}
-                                                style={logo.style}
-                                                className='post-client-logo-new'
-                                                onClick={() => document.getElementById('client-logo').click()}
-                                                loading='lazy'
-                                            />
+                                            <Tooltip tooltip='Upload logo'>
+                                                <img
+                                                    src={logo.image}
+                                                    style={logo.style}
+                                                    className='post-client-logo-new'
+                                                    onClick={() => document.getElementById('client-logo').click()}
+                                                    loading='lazy'
+                                                />
+                                            </Tooltip>
                                             <Dropdown
                                                 label='Select client'
                                                 name='clientSelected'
@@ -833,12 +881,14 @@ export default function PostSection(props) {
                                     :
                                     <div className='post-col-dif2'>
                                         <div className='post-logo-placeholder'>
-                                            <img
-                                                src={ImagePlaceholder}
-                                                className='client-logo-svg'
-                                                onClick={() => document.getElementById('client-logo').click()}
-                                                loading='lazy'
-                                            />
+                                            <Tooltip tooltip='Upload logo'>
+                                                <img
+                                                    src={ImagePlaceholder}
+                                                    className='client-logo-svg'
+                                                    onClick={() => document.getElementById('client-logo').click()}
+                                                    loading='lazy'
+                                                />
+                                            </Tooltip>
                                             <h4 className='post-company-logo'>Company Logo</h4>
                                             <Dropdown
                                                 label='Select client'
@@ -943,24 +993,30 @@ export default function PostSection(props) {
                                                     <h4 className='post-tool' style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.3' }}>{tec}</h4>
                                                     {/* <h4 className='post-remove-tool' style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.3' }} onClick={() => removeTech(i)}>X</h4> */}
                                                     {hidden.postSection[i] && hidden.postSection[i].includes(tec) ?
-                                                        <img
-                                                            src={ShwoIcon}
-                                                            className='hide-icon-tool'
-                                                            onClick={() => showItem(i, tec)}
-                                                        />
+                                                        <Tooltip tooltip='Show'>
+                                                            <img
+                                                                src={ShwoIcon}
+                                                                className='hide-icon-tool'
+                                                                onClick={() => showItem(i, tec)}
+                                                            />
+                                                        </Tooltip>
                                                         :
-                                                        <img
-                                                            src={HideIcon}
-                                                            className='hide-icon-tool'
-                                                            onClick={() => hideItem(i, tec)}
-                                                        />
+                                                        <Tooltip tooltip='Hide'>
+                                                            <img
+                                                                src={HideIcon}
+                                                                className='hide-icon-tool'
+                                                                onClick={() => hideItem(i, tec)}
+                                                            />
+                                                        </Tooltip>
                                                     }
-                                                    <img
-                                                        src={TrashCan}
-                                                        className='hide-icon-tool'
-                                                        onClick={() => removeTech(i)}
-                                                        style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.3' }}
-                                                    />
+                                                    <Tooltip tooltip='Remove'>
+                                                        <img
+                                                            src={TrashCan}
+                                                            className='hide-icon-tool'
+                                                            onClick={() => removeTech(i)}
+                                                            style={{ opacity: hidden.postSection[i] && hidden.postSection[i].includes(tec) && '.3' }}
+                                                        />
+                                                    </Tooltip>
                                                 </div>
                                             )}
                                         </div> : ''}
@@ -968,7 +1024,8 @@ export default function PostSection(props) {
                             </div>
                             <h4 onClick={() => addNewItem()} className='section-item-new'>Add experience</h4>
                         </div>
-                ) : ''}
-        </div>
+                ) : ''
+            }
+        </div >
 
 }

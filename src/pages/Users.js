@@ -19,6 +19,7 @@ import { getImageByType } from '../store/reducers/image'
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../constants/app'
 import { userHeaders } from '../constants/tableHeaders'
+import Tooltip from '../components/Tooltip'
 
 export default function Users() {
     const [tab, setTab] = useState('user')
@@ -280,21 +281,27 @@ export default function Users() {
                     <div className='users-image-section'>
                         <div className='users-image-input'>
                             {profilePic.image ?
-                                <div className='profile-image-cover'>
+                                <Tooltip tooltip='Change image'>
+                                    <div className='profile-image-cover'>
+                                        <img
+                                            src={profilePic.image}
+                                            style={profilePic.style}
+                                            className='profile-image'
+                                            onClick={() => document.getElementById('image').click()}
+                                            loading='lazy'
+                                        />
+                                    </div>
+                                </Tooltip>
+                                :
+                                <Tooltip tooltip='Upload image'>
                                     <img
-                                        src={profilePic.image}
+                                        src={ProfileIcon}
                                         style={profilePic.style}
-                                        className='profile-image'
+                                        className='account-profile-image-svg'
                                         onClick={() => document.getElementById('image').click()}
-                                        loading='lazy'
                                     />
-                                </div>
-                                : <img
-                                    src={ProfileIcon}
-                                    style={profilePic.style}
-                                    className='account-profile-image-svg'
-                                    onClick={() => document.getElementById('image').click()}
-                                />}
+                                </Tooltip>
+                            }
                             <InputField
                                 label=''
                                 type='file'
@@ -471,19 +478,25 @@ export default function Users() {
                         <div className='users-image-section'>
                             <div className='users-image-input'>
                                 {profilePic.image ?
-                                    <img
-                                        src={profilePic.image}
-                                        style={profilePic.style}
-                                        className='account-profile-image'
-                                        onClick={() => document.getElementById('image').click()}
-                                        loading='lazy'
-                                    />
-                                    : <img
-                                        src={ProfileIcon}
-                                        style={profilePic.style}
-                                        className='account-profile-image-svg'
-                                        onClick={() => document.getElementById('image').click()}
-                                    />}
+                                    <Tooltip tooltip='Change image'>
+                                        <img
+                                            src={profilePic.image}
+                                            style={profilePic.style}
+                                            className='account-profile-image'
+                                            onClick={() => document.getElementById('image').click()}
+                                            loading='lazy'
+                                        />
+                                    </Tooltip>
+                                    :
+                                    <Tooltip tooltip='Upload image'>
+                                        <img
+                                            src={ProfileIcon}
+                                            style={profilePic.style}
+                                            className='account-profile-image-svg'
+                                            onClick={() => document.getElementById('image').click()}
+                                        />
+                                    </Tooltip>
+                                }
                                 <InputField
                                     label=''
                                     type='file'

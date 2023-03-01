@@ -299,7 +299,7 @@
 }
 
 .public-cv-link {
-    color: rgb(29, 29, 129);
+    color: #1818b7;
     text-decoration: none;
     transition: .3s;
     cursor: pointer;
@@ -307,7 +307,7 @@
 }
 
 .public-cv-link:hover {
-    opacity: .8;
+    opacity: .6;
 }
 
 .public-cv-copy {

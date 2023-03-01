@@ -13,6 +13,7 @@ import DataTable from '../components/DataTable'
 import { cvHeaders } from '../constants/tableHeaders'
 import CopyIcon from '../icons/copy-icon.svg'
 import Dropdown from '../components/Dropdown'
+import Tooltip from '../components/Tooltip'
 
 export default function CVs({ showAll }) {
     const [resumes, setResumes] = useState([])
@@ -98,7 +99,8 @@ export default function CVs({ showAll }) {
             setLoading(true)
             const published = await dispatch(makeCVPublic({
                 ...publishCV,
-                publicTime: publicTime === 'Unpublish' ? 0 : publicTime
+                publicTime: publicTime === 'Unpublish' ? 0 : publicTime,
+                user
             })).then(data => data.payload)
 
             if (published) {
@@ -266,7 +268,7 @@ export default function CVs({ showAll }) {
                                 </>
                                 :
                                 <>
-                                    <h4 className='public-cv-text'>{publishCV.username}'s CV has already been published</h4>
+                                    <h4 style={{ color: 'green' }} className='public-cv-text'>{publishCV.username}'s CV has already been published</h4>
                                     <h4 className='public-cv-text'>Time remaining: <b>{checkExpirationDays(publishCV)} days</b></h4>
                                 </>
                             }
@@ -274,17 +276,20 @@ export default function CVs({ showAll }) {
                                 label='Public time (days)'
                                 name='publicTime'
                                 options={['Unpublish', 1, 5, 10, 15, 20, 30, 45, 60, 90, 365]}
-                                value={publicTime || publishCV.publicTime}
+                                value={calculateExpiration(publishCV) ? (publicTime || publishCV.publicTime) : ''}
                                 updateData={(_, option) => setPublicTime(option)}
                                 size='8vw'
                                 style={{ alignSelf: 'center' }}
                             />
                             <div className='public-cv-link-row'>
                                 <a className='public-cv-link' href={`${REACT_APP_CV_URL}/view?id=${publishCV._id}`} target='_blank'>{`${REACT_APP_CV_URL}/view?id=${publishCV._id}`}</a>
-                                <img src={CopyIcon} onClick={() => {
-                                    navigator.clipboard.writeText(`${REACT_APP_CV_URL}/view?id=${publishCV._id}`)
-                                    toast.success('Link to public CV copied!')
-                                }} className='public-cv-copy' />
+                                <Tooltip tooltip='Copy link'>
+                                    <img src={CopyIcon} onClick={() => {
+                                        navigator.clipboard.writeText(`${REACT_APP_CV_URL}/view?id=${publishCV._id}`)
+                                        toast.success('Link copied to clipboard!')
+                                    }} className='public-cv-copy' />
+                                </Tooltip>
+
                             </div>
                         </div>
                         : <h4 style={{ textAlign: 'center', fontWeight: 'normal' }}>Publish <br />{publishCV.username}'s CV?</h4>}
@@ -295,7 +300,7 @@ export default function CVs({ showAll }) {
                             color={APP_COLORS.GRAY}
                         />
                         <CTAButton
-                            label='Confirm'
+                            label={publishCV.published ? 'Update' : `Confirm`}
                             handleClick={handlePublishCV}
                             color={APP_COLORS.MURREY}
                         />

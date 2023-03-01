@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import HideIcon from '../../icons/hide-icon.svg'
 import ShwoIcon from '../../icons/show-icon.svg'
+import Tooltip from '../Tooltip'
 import './styles.css'
 
 export default function Dropdown(props) {
@@ -70,17 +71,21 @@ export default function Dropdown(props) {
                         {value ? value : selected ? selected : placeholder ? placeholder : 'Select'}
                     </h4>
                     {hidden && label && hidden.includes(label) ?
-                        <img
-                            src={ShwoIcon}
-                            className='hide-icon-dropdown'
-                            onClick={() => showItem(label)}
-                        />
-                        : hidden && label ?
+                        <Tooltip tooltip='Show'>
                             <img
-                                src={HideIcon}
+                                src={ShwoIcon}
                                 className='hide-icon-dropdown'
-                                onClick={() => hideItem(label)}
+                                onClick={() => showItem(label)}
                             />
+                        </Tooltip>
+                        : hidden && label ?
+                            <Tooltip tooltip='Hide'>
+                                <img
+                                    src={HideIcon}
+                                    className='hide-icon-dropdown'
+                                    onClick={() => hideItem(label)}
+                                />
+                            </Tooltip>
                             : ''}
                     < h4 className='dropdown-chevron' style={{
                         opacity: hidden && hidden.includes(label) && '.2',

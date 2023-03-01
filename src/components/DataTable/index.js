@@ -6,6 +6,7 @@ import DownloadIcon from '../../icons/download-icon.svg'
 import PublishIcon from '../../icons/share-icon.svg'
 import MoonLoader from "react-spinners/MoonLoader"
 import './styles.css'
+import Tooltip from '../Tooltip'
 
 export default function DataTable(props) {
     const {
@@ -83,6 +84,29 @@ export default function DataTable(props) {
         setIsEdit(false)
     }
 
+
+    const calculateExpiration = cv => {
+        let expired = true
+        if (cv.published && cv.publicTime) {
+            const now = new Date().getTime()
+            const published = new Date(cv.published).getTime()
+            const publicDays = cv.publicTime
+            if (now - published < publicDays * 8.64E7) expired = false
+        }
+        return expired
+    }
+
+    const checkExpirationDays = cv => {
+        let days = 0
+        if (cv.published && cv.publicTime) {
+            const now = new Date().getTime()
+            const published = new Date(cv.published).getTime()
+            const publicDays = cv.publicTime
+            days = publicDays - ((now - published) / 8.64E7)
+        }
+        return days.toFixed(0)
+    }
+
     return (
         <div className='data-table-container' style={style}>
             <div className='data-table-titles'>
@@ -128,25 +152,36 @@ export default function DataTable(props) {
                                         header.value === 'icons' ?
                                             <div key={j} className='data-table-icons' style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}>
                                                 {/* <img src={DownloadIcon} className='resume-icon' /> */}
-                                                <img src={EditIcon} className='data-table-icon' onClick={() => history.push(`/new-cv?edit=${row._id}`)} />
-                                                <img src={TrashCan} onClick={() => {
-                                                    setResumeData(row)
-                                                    setOpenModal(true)
-                                                }} className='data-table-icon' />
-                                                <img src={DownloadIcon} className='data-table-icon' onClick={() => {
-                                                    setLoading(true)
-                                                    setOpenModal(true)
-                                                    setIsPdf(true)
-                                                    setResumeData(row)
-                                                    setDownload(true)
-                                                }} />
-                                                <img src={PublishIcon} onClick={() => setPublishCV(row)} className='data-table-icon share-icon' />
+                                                <Tooltip tooltip='Edit'>
+                                                    <img src={EditIcon} className='data-table-icon' onClick={() => history.push(`/new-cv?edit=${row._id}`)} />
+                                                </Tooltip>
+                                                <Tooltip tooltip='Remove'>
+                                                    <img src={TrashCan} onClick={() => {
+                                                        setResumeData(row)
+                                                        setOpenModal(true)
+                                                    }} className='data-table-icon' />
+                                                </Tooltip>
+                                                <Tooltip tooltip='Download'>
+                                                    <img src={DownloadIcon} className='data-table-icon' onClick={() => {
+                                                        setLoading(true)
+                                                        setOpenModal(true)
+                                                        setIsPdf(true)
+                                                        setResumeData(row)
+                                                        setDownload(true)
+                                                    }} />
+                                                </Tooltip>
+                                                <Tooltip tooltip='Publish'>
+                                                    <img src={PublishIcon} onClick={() => setPublishCV(row)} className='data-table-icon share-icon' />
+                                                </Tooltip>
                                             </div>
                                             :
                                             <h4
                                                 key={j}
                                                 className={`data-table-row-item data-table-row-${header.value}`}
-                                                style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}
+                                                style={{
+                                                    width: sizes ? sizes[i] : `${100 / tableHeaders.length}%`,
+                                                    color: header.value === 'published' && row.published ? calculateExpiration(row) ? 'red' : 'green' : ''
+                                                }}
                                                 onClick={() => {
                                                     if (modalView) {
                                                         setLoading(true)
@@ -158,12 +193,13 @@ export default function DataTable(props) {
                                             >
                                                 {header.value === 'createdAt' || header.value === 'updatedAt' ? `${new Date(row[header.value]).toDateString()} ${new Date(row[header.value]).toLocaleTimeString()}` :
                                                     header.value === 'size' ? row[header.value] > 100000 ? `${(row[header.value] * 0.000001).toFixed(2)} MB` : `${(row[header.value] * 0.001).toFixed(2)} KB` :
-                                                        header.value === 'isManager' || header.value === 'isAdmin' ?
-                                                            row[header.value] ? 'Yes' : 'No'
-                                                            :
-                                                            row[header.value] ? String(row[header.value])
+                                                        header.value === 'published' ? row.published ? calculateExpiration(row) ? 'Expired' : `${checkExpirationDays(row)} days left` : 'No' :
+                                                            header.value === 'isManager' || header.value === 'isAdmin' ?
+                                                                row[header.value] ? 'Yes' : 'No'
                                                                 :
-                                                                '--'}
+                                                                row[header.value] ? String(row[header.value])
+                                                                    :
+                                                                    '--'}
                                             </h4>
                                 )}
                             </div>
