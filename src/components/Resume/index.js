@@ -12,7 +12,7 @@ import ReactPDF, {
     Font,
     pdf
 } from '@react-pdf/renderer'
-import SigmaLogo from '../../assets/logos/sigma.png'
+import { Document as PDFDoc } from 'react-pdf'
 import RobotoRegular from '../../assets/fonts/Roboto-Regular.ttf'
 import RobotoBold from '../../assets/fonts/Roboto-Bold.ttf'
 import RobotoItalic from '../../assets/fonts/Roboto-Italic.ttf'
@@ -40,7 +40,8 @@ export default function Resume(props) {
         setLoading,
         profilePreview,
         signaturePreview,
-        companyLogos
+        companyLogos,
+        importedPdf
     } = props
 
     const [data, setData] = useState(resumeData)
@@ -220,11 +221,14 @@ export default function Resume(props) {
     }
 
     const PDFView = () => {
-        return (
+        return importedPdf?.pdf ?
+            <PDFDoc file={importedPdf.pdf}>
+                <Page />
+            </PDFDoc>
+            :
             <PDFViewer style={styles.PDFContainer} showToolbar={false}>
                 <ResumePDF />
             </PDFViewer >
-        )
     }
 
     const getFonts = () => {

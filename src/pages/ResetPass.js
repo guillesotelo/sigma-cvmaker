@@ -11,7 +11,6 @@ import { changePassword } from '../store/reducers/user'
 export default function ResetPass() {
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(false)
-    const [resetEmail, setResetEmail] = useState('')
 
     const dispatch = useDispatch()
     const history = useHistory()
@@ -22,10 +21,6 @@ export default function ResetPass() {
         if (!userEmail) return history.push('/')
         setData({ userEmail })
     }, [])
-
-    useEffect(() => {
-        if (!data.userEmail) history.push('/')
-    }, [data.userEmail])
 
     const updateData = (key, value) => {
         setData({ ...data, [key]: value })
@@ -61,46 +56,50 @@ export default function ResetPass() {
     }
 
     return (
-        <div className='login-container'>
-            <ToastContainer autoClose={2000} />
-            <div className='login-box'>
-                <div className='login-image'>
-                    <img
-                        src='https://images.squarespace-cdn.com/content/v1/5b07d207b27e39fe2cf2070c/1536149156741-FR68IVVJ8Q362PWO3FSC/Sigma_connectivity_footer-logo.png'
-                        className='login-logo'
-                        loading='lazy'
-                    />
-                    {/* <h4 className='login-text'>CV</h4> */}
-                </div>
-                {loading ?
-                    <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#E59A2F' /></div>
-                    :
-                    <div className='login-fill'>
-                        <InputField
-                            label='New password'
-                            type='password'
-                            name='password'
-                            updateData={updateData}
-                            style={{ width: '92%' }}
-                            noGrammar={true}
-                        />
-                        <InputField
-                            label='Re-enter password'
-                            type='password'
-                            name='password2'
-                            updateData={updateData}
-                            style={{ width: '92%', marginBottom: '1vw' }}
-                            noGrammar={true}
-                        />
-                        <CTAButton
-                            label='Update Password'
-                            size='100%'
-                            color={APP_COLORS.GREEN}
-                            handleClick={updatePassword}
-                            disabled={!checkData()}
+        <div className='landing-container'>
+            <div className='landing-wallpaper'>
+                <img className='landing-image' src='https://i.postimg.cc/Pqz0B7RF/smartmockups-ldvjxl5u.jpg' alt='Dashboard Image' />
+            </div>
+            <div className='landing-login'>
+                <ToastContainer autoClose={4000} />
+                <div className='login-box landing-login-box'>
+                    <div className='login-image'>
+                        <img
+                            src='https://sigmait.pl/wp-content/uploads/2021/12/sigma-logo-black.png'
+                            className='login-logo'
+                            loading='lazy'
                         />
                     </div>
-                }
+                    {loading ?
+                        <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#E59A2F' /></div>
+                        :
+                        <div className='login-fill'>
+                            <InputField
+                                label='New password'
+                                type='password'
+                                name='password'
+                                updateData={updateData}
+                                style={{ width: '92%' }}
+                                noGrammar={true}
+                            />
+                            <InputField
+                                label='Re-enter password'
+                                type='password'
+                                name='password2'
+                                updateData={updateData}
+                                style={{ width: '92%', marginBottom: '1vw' }}
+                                noGrammar={true}
+                            />
+                            <CTAButton
+                                label='Update Password'
+                                size='100%'
+                                color={APP_COLORS.GREEN}
+                                handleClick={updatePassword}
+                                disabled={!checkData()}
+                            />
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     )

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
@@ -65,6 +65,8 @@ export default function NewCV() {
     const [signatureCanvas, setSignatureCanvas] = useState({ style: {} })
     const [masterModal, setMasterModal] = useState(false)
     const [previewModal, setPreviewModal] = useState(false)
+    const [importPDF, setImportPDF] = useState(false)
+    const [importedPDF, setImportedPDF] = useState({})
     const dispatch = useDispatch()
     const history = useHistory()
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || {}
@@ -75,13 +77,20 @@ export default function NewCV() {
     const sigCanvas = useRef({})
 
     // console.log("data", data)
+    console.log("importedPDF", importedPDF)
+    console.log("importedPDF Size", (new TextEncoder().encode(importedPDF.pdf || ' ')).length + ' Bytes')
 
     useEffect(() => {
         if (!user || !user.email) history.push('/')
         getAllResumes(true)
         getCVLogo()
         getManagers()
+
     }, [])
+
+    useLayoutEffect(() => {
+        trackScrolling()
+    })
 
     useEffect(() => {
         if (allResumes.length) {
@@ -130,6 +139,16 @@ export default function NewCV() {
             }
         }
     }, [data.manager])
+
+    const trackScrolling = () => {
+        document.addEventListener('scroll', () => {
+            const container = document.querySelector('.new-resume-container')
+            const actionButtons = document.querySelector('.new-resume-btns')
+            if (container?.getBoundingClientRect().bottom <= window.innerHeight) {
+                actionButtons.style.transform = 'translateY(0)'
+            }
+        })
+    }
 
     const getAllResumes = async getAll => {
         if (user && user.email) {
@@ -321,10 +340,11 @@ export default function NewCV() {
                 resumeData.footer_location = data.footer_location || ''
                 delete resumeData.data
 
+                if (importPDF.pdf) resumeData.pdfData = importPDF
+
                 const strData = JSON.stringify(resumeData)
-                if (strData !== resumeData.data) {
-                    resumeData.data = strData
-                } else delete resumeData.data
+                if (strData !== resumeData.data) resumeData.data = strData
+                else delete resumeData.data
 
                 resumeData.note = data.note || `${user.username ? `Created by ${user.username}` : ''}`
                 resumeData.type = data.type || 'Master'
@@ -351,7 +371,7 @@ export default function NewCV() {
                     resumeData.clients = experience.map(exp => { if (exp && exp.company) return exp.company })
                 }
 
-                await saveOtherData(resumeData)
+                await saveNewAppData(resumeData)
 
                 if (!isEdit && saveAsNew && data.type === 'Master') {
                     const exists = await dispatch(getCVByType({ type: 'Master', email: data.email.toLowerCase() })).then(data => data.payload)
@@ -366,7 +386,7 @@ export default function NewCV() {
                 if (isEdit && !saveAsNew) saved = await dispatch(editResume(resumeData)).then(data => data.payload)
                 else {
                     delete resumeData._id
-                    saved = await dispatch(saveResume({ ...resumeData, type: 'Variant' })).then(data => data.payload)
+                    saved = await dispatch(saveResume(resumeData)).then(data => data.payload)
                 }
 
                 if (saved) {
@@ -394,7 +414,7 @@ export default function NewCV() {
         }
     }
 
-    const saveOtherData = async cvData => {
+    const saveNewAppData = async cvData => {
         try {
             //Save new Skills to DB
             if (cvData.skills && cvData.skills.length) {
@@ -532,17 +552,112 @@ export default function NewCV() {
                             />
                         </div>
                     </div> : ''}
-                <div className='resume-type-banner' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}>
+                {importPDF ?
+                    <div className='import-modal' style={{ marginTop: importedPDF.pdf && '-2vw' }}>
+                        <InputField
+                            label=''
+                            type='pdf'
+                            name='pdf'
+                            filename='pdf'
+                            pdf={importedPDF}
+                            setPDF={setImportedPDF}
+                            style={{ color: 'rgb(71, 71, 71)' }}
+                        />
+                        <h4 className='import-pdf-title'>Import PDF CV</h4>
+                        {importedPDF.name ? <h4 className='import-pdf-name'>{importedPDF.name}</h4> : ''}
+                        {importedPDF.pdf ?
+                            <div className='import-pdf-fill'>
+                                <h4 className='import-pdf-fill-text'>Plase fill in the Consultant's data:</h4>
+                                <InputField
+                                    label='Name'
+                                    type='text'
+                                    name='name'
+                                    updateData={updateData}
+                                    style={{ color: 'rgb(71, 71, 71)' }}
+                                    value={data.name || ''}
+                                    placeholder='Anna'
+                                />
+                                <InputField
+                                    label='Middle Name'
+                                    type='text'
+                                    name='middlename'
+                                    updateData={updateData}
+                                    style={{ color: 'rgb(71, 71, 71)' }}
+                                    value={data.middlename || ''}
+                                    placeholder='Grabielle'
+                                />
+                                <InputField
+                                    label='Surname'
+                                    type='text'
+                                    name='surname'
+                                    updateData={updateData}
+                                    style={{ color: 'rgb(71, 71, 71)' }}
+                                    value={data.surname || ''}
+                                    placeholder='Kessler'
+                                />
+                                <InputField
+                                    label='Role / Title'
+                                    type='text'
+                                    name='role'
+                                    updateData={updateData}
+                                    style={{ color: 'rgb(71, 71, 71)' }}
+                                    value={data.role || ''}
+                                    placeholder='Android Developer'
+                                />
+                                <InputField
+                                    label='Email'
+                                    type='text'
+                                    name='email'
+                                    updateData={updateData}
+                                    placeholder='consultant.name@sigma.se'
+                                    style={{ color: 'rgb(71, 71, 71)' }}
+                                    value={data.email || ''}
+                                />
+                                <Dropdown
+                                    label='Consultant Manager'
+                                    name='manager'
+                                    options={managers}
+                                    value={data.manager}
+                                    updateData={updateData}
+                                    size='98%'
+                                />
+                                <Dropdown
+                                    label='CV Type'
+                                    name='type'
+                                    options={typeOptions}
+                                    value={data.type}
+                                    updateData={updateData}
+                                    size='98%'
+                                />
+                            </div> : ''}
+                        <div className='import-modal-btns'>
+                            <button onClick={() => document.getElementById('pdf').click()}>Import PDF</button>
+                            <CTAButton
+                                label='Cancel'
+                                handleClick={() => {
+                                    setImportedPDF({})
+                                    setImportPDF(false)
+                                }}
+                                color={APP_COLORS.GRAY}
+                            />
+                            <CTAButton
+                                label='Upload'
+                                handleClick={() => onSaveResume(false)}
+                                color={APP_COLORS.GREEN}
+                            />
+                        </div>
+                    </div> : ''}
+                <div className='resume-type-banner' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}>
                     {Array.from({ length: 100 }).map((_, i) =>
                         <h4 key={i} className='resume-type-text' style={{ color: data.type && data.type === 'Master' ? '#fff3e4' : '#f1f3ff' }}>{data.type ? data.type.toUpperCase() : ''}</h4>
                     )}
                 </div>
-                <CVHeader data={data} cvLogo={cvLogo} style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }} />
-                <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
+                <CVHeader data={data} cvLogo={cvLogo} style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }} />
+                <div className='separator' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}></div>
                 <div className='new-resume-fill' style={{
                     border: 'none',
                     padding: (padding.personalInfo || padding.personalInfo === 0) && !hiddenSections.personalInfo ? `${.1 * padding.personalInfo}vw 0` : '2vw 0',
-                    filter: masterModal || previewModal ? 'blur(10px)' : 'none'
+                    filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none'
                 }}>
                     <div className='resume-fill-col1'>
                         <>
@@ -655,7 +770,7 @@ export default function NewCV() {
                             }
                             <InputField
                                 label=''
-                                type='file'
+                                type='image'
                                 name='image'
                                 filename='image'
                                 image={profilePic}
@@ -812,7 +927,7 @@ export default function NewCV() {
                                 </div>}
                             <InputField
                                 label=''
-                                type='file'
+                                type='image'
                                 name='image'
                                 filename='image'
                                 id='signature'
@@ -902,10 +1017,10 @@ export default function NewCV() {
                     </div>
                 </div>
 
-                <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
+                <div className='separator' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}></div>
                 <div className='new-resume-fill' style={{
                     padding: (padding.expertise || padding.expertise === 0) && !hiddenSections.expertise ? `${.1 * padding.expertise}vw 0` : '2vw 0',
-                    filter: masterModal || previewModal ? 'blur(10px)' : 'none'
+                    filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none'
                 }}>
                     <div className='resume-fill-col1'>
                         {hiddenSections.expertise ? '' :
@@ -998,10 +1113,10 @@ export default function NewCV() {
                     </div>
                 </div>
 
-                <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
+                <div className='separator' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}></div>
                 <div className='new-resume-fill' style={{
                     padding: (padding.education || padding.education === 0) && !hiddenSections.education ? `${.1 * padding.education}vw 0` : '2vw 0',
-                    filter: masterModal || previewModal ? 'blur(10px)' : 'none'
+                    filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none'
                 }}>
                     <div className='resume-fill-col1'>
                         {hiddenSections.education ? '' :
@@ -1094,10 +1209,10 @@ export default function NewCV() {
                     </div>
                 </div>
 
-                <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
+                <div className='separator' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}></div>
                 <div className='new-resume-fill' style={{
                     padding: (padding.certifications || padding.certifications === 0) && !hiddenSections.certifications ? `${.1 * padding.certifications}vw 0` : '2vw 0',
-                    filter: masterModal || previewModal ? 'blur(10px)' : 'none'
+                    filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none'
                 }}>
                     <div className='resume-fill-col1'>
                         {hiddenSections.certifications ? '' :
@@ -1190,10 +1305,10 @@ export default function NewCV() {
                     </div>
                 </div>
 
-                <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
+                <div className='separator' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}></div>
                 <div className='new-resume-fill' style={{
                     padding: (padding.skills || padding.skills === 0) && !hiddenSections.skills ? `${.1 * padding.skills}vw 0` : '2vw 0',
-                    filter: masterModal || previewModal ? 'blur(10px)' : 'none'
+                    filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none'
                 }}>
                     <div className='resume-fill-col1'>
                         {hiddenSections.skills ? '' :
@@ -1286,10 +1401,10 @@ export default function NewCV() {
                     </div>
                 </div>
 
-                <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
+                <div className='separator' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}></div>
                 <div className='new-resume-fill' style={{
                     padding: (padding.experience || padding.experience === 0) && !hiddenSections.experience ? `${.1 * padding.experience}vw 0` : '2vw 0',
-                    filter: masterModal || previewModal ? 'blur(10px)' : 'none'
+                    filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none'
                 }}>
                     <div className='resume-fill-col1-dif'>
                         {hiddenSections.experience ? '' :
@@ -1385,10 +1500,10 @@ export default function NewCV() {
                     </div>
                 </div>
 
-                <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
+                <div className='separator' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}></div>
                 <div className='new-resume-fill' style={{
                     padding: (padding.tools || padding.tools === 0) && !hiddenSections.tools ? `${.1 * padding.tools}vw 0` : '2vw 0',
-                    filter: masterModal || previewModal ? 'blur(10px)' : 'none'
+                    filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none'
                 }}>
                     <div className='resume-fill-col1'>
                         {hiddenSections.tools ? '' :
@@ -1485,8 +1600,8 @@ export default function NewCV() {
                 {
                     user.isManager &&
                     <>
-                        <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
-                        <div className='resume-fill-internal' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}>
+                        <div className='separator' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}></div>
+                        <div className='resume-fill-internal' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}>
                             <div className='resume-fill-col1'>
                                 <h2 className='section-title'>FOOTER</h2>
                             </div>
@@ -1498,8 +1613,8 @@ export default function NewCV() {
                                 manager={data.manager}
                             />
                         </div>
-                        <div className='separator' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}></div>
-                        <div className='resume-fill-internal' style={{ filter: masterModal || previewModal ? 'blur(10px)' : 'none' }}>
+                        <div className='separator' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}></div>
+                        <div className='resume-fill-internal' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}>
                             <div className='resume-fill-col1'>
                                 <h2 className='section-title'>METADATA</h2>
                                 <h2 className='section-title'>(internal use)</h2>
@@ -1555,6 +1670,15 @@ export default function NewCV() {
                             }}
                             loading={loading}
                         />
+                        {!isEdit ?
+                            <CTAButton
+                                label='Import PDF'
+                                color={APP_COLORS.YELLOW}
+                                style={{ color: 'black' }}
+                                handleClick={() => setImportPDF(true)}
+                                loading={loading}
+                            />
+                            : ''}
                         <CTAButton
                             label={isEdit ? 'Update' : 'Save'}
                             color={APP_COLORS.GREEN}

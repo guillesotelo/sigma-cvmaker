@@ -152,16 +152,16 @@ export default function DataTable(props) {
                                         header.value === 'icons' ?
                                             <div key={j} className='data-table-icons' style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}>
                                                 {/* <img src={DownloadIcon} className='resume-icon' /> */}
-                                                <Tooltip tooltip='Edit'>
+                                                <Tooltip tooltip='Edit' style={{ marginRight: '.5vw' }}>
                                                     <img src={EditIcon} className='data-table-icon' onClick={() => history.push(`/new-cv?edit=${row._id}`)} />
                                                 </Tooltip>
-                                                <Tooltip tooltip='Remove'>
+                                                <Tooltip tooltip='Remove' style={{ marginRight: '.5vw' }}>
                                                     <img src={TrashCan} onClick={() => {
                                                         setResumeData(row)
                                                         setOpenModal(true)
                                                     }} className='data-table-icon' />
                                                 </Tooltip>
-                                                <Tooltip tooltip='Download'>
+                                                <Tooltip tooltip='Download' style={{ marginRight: '.5vw' }}>
                                                     <img src={DownloadIcon} className='data-table-icon' onClick={() => {
                                                         setLoading(true)
                                                         setOpenModal(true)
@@ -170,7 +170,7 @@ export default function DataTable(props) {
                                                         setDownload(true)
                                                     }} />
                                                 </Tooltip>
-                                                <Tooltip tooltip='Publish'>
+                                                <Tooltip tooltip='Publish' style={{ marginRight: '.5vw' }}>
                                                     <img src={PublishIcon} onClick={() => setPublishCV(row)} className='data-table-icon share-icon' />
                                                 </Tooltip>
                                             </div>

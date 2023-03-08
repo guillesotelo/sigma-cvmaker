@@ -490,7 +490,7 @@ export default function Settings() {
                       }
                       <InputField
                         label=''
-                        type='file'
+                        type='image'
                         name='cvImage'
                         filename='cvImage'
                         image={cvLogo}
@@ -841,7 +841,7 @@ export default function Settings() {
                             </div>
                             <InputField
                               label=''
-                              type='file'
+                              type='image'
                               name='image'
                               filename='image'
                               image={imageData}

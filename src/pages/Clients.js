@@ -250,7 +250,7 @@ export default function Clients() {
                                 }
                                 <InputField
                                     label=''
-                                    type='file'
+                                    type='image'
                                     name='logoImage'
                                     filename='logoImage'
                                     image={clientLogo}

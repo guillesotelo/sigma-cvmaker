@@ -292,7 +292,7 @@ export default function Consultants() {
                                     }
                                     <InputField
                                         label=''
-                                        type='file'
+                                        type='image'
                                         name='image'
                                         filename='image'
                                         image={profilePic}
@@ -461,7 +461,7 @@ export default function Consultants() {
                                         }
                                         <InputField
                                             label=''
-                                            type='file'
+                                            type='image'
                                             name='image'
                                             filename='image'
                                             image={profilePic}

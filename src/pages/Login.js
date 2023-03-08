@@ -53,7 +53,7 @@ export default function Login() {
             <div className='login-box'>
                 <div className='login-image'>
                     <img
-                        src='https://images.squarespace-cdn.com/content/v1/5b07d207b27e39fe2cf2070c/1536149156741-FR68IVVJ8Q362PWO3FSC/Sigma_connectivity_footer-logo.png'
+                        src='https://sigmait.pl/wp-content/uploads/2021/12/sigma-logo-black.png'
                         className='login-logo'
                         loading='lazy'
                     />

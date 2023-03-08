@@ -189,7 +189,7 @@ export default function Account() {
           }
           <InputField
             label=''
-            type='file'
+            type='image'
             name='image'
             filename='image'
             image={profilePic}

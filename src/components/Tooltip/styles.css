@@ -17,6 +17,7 @@ p#tooltip-text {
     border-radius: .5vw;
     cursor: default;
     text-align: center;
+    width: max-content;
 }
 
 p#tooltip-text:before {
@@ -42,6 +43,7 @@ p#tooltip-text-inline {
     border-radius: .5vw;
     cursor: default;
     text-align: center;
+    width: max-content;
 }
 
 p#tooltip-text-inline:before {

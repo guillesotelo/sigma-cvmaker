@@ -200,10 +200,12 @@ export default function Users() {
             setLoading(false)
             getAllUsers()
             setData({})
+            setProfilePic({})
         } catch (err) {
             setLoading(false)
             setRemoveModal(false)
             setData({})
+            setProfilePic({})
             console.error(err)
             toast.error('Error removing user')
         }
@@ -304,7 +306,7 @@ export default function Users() {
                             }
                             <InputField
                                 label=''
-                                type='file'
+                                type='image'
                                 name='image'
                                 filename='image'
                                 image={profilePic}
@@ -499,7 +501,7 @@ export default function Users() {
                                 }
                                 <InputField
                                     label=''
-                                    type='file'
+                                    type='image'
                                     name='image'
                                     filename='image'
                                     image={profilePic}

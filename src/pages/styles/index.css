@@ -81,7 +81,7 @@
 }
 
 .login-image {
-    margin: 0 0 3vw 0;
+    margin: 2vw 0;
 }
 
 .forgot-pass-link {
@@ -285,7 +285,7 @@
     justify-content: center;
 }
 
-.public-cv-text  {
+.public-cv-text {
     font-weight: normal;
     margin: .6vw;
 }
@@ -470,7 +470,7 @@
     position: fixed;
     background-color: white;
     border-top-left-radius: 2vw;
-    border: 1px solid lightgray;
+    box-shadow: 1px -11px 32px -12px #bdbdbd;
     border-top-right-radius: 2vw;
     bottom: 0;
     padding: 1vw 0;
@@ -517,6 +517,52 @@
     line-height: 1.5vw;
     filter: brightness(0%) contrast(0%);
     transition: .3s;
+}
+
+.import-modal {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    padding: 0 2vw 2vw 2vw;
+    Background-color: white;
+    border-radius: 0.5vw;
+    box-shadow: 2px 2px 10px lightgray;
+    margin-top: 10vw;
+    align-self: center;
+    z-index: 1;
+    transform: scale(.9);
+}
+
+.import-pdf-title {
+    font-size: 1.5vw;
+    font-weight: normal;
+    margin: 0 0 .5vw 0;
+}
+
+.import-pdf-name {
+    font-size: 1vw;
+    /* font-weight: normal; */
+    margin: .5vw 0;
+    color: #E59A2F;
+}
+
+.import-pdf-fill {
+}
+
+.import-pdf-fill-text {
+    font-size: 1vw;
+    font-weight: normal;
+    margin: .7vw 0;
+    text-align: left;
+}
+
+.import-modal-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2vw;
+    gap: 1vw;
 }
 
 .no-top {

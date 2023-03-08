@@ -79,7 +79,7 @@ export default function PostSection(props) {
     }, [data.clientSelected])
 
     useEffect(() => {
-        if (appData.length) {
+        if (appData?.length) {
             let _tools = []
             appData.forEach(data => {
                 if (data.type === 'tools') _tools = JSON.parse(data.data) || []
@@ -418,7 +418,7 @@ export default function PostSection(props) {
                 <div className='post-col-logo-input'>
                     <InputField
                         label=''
-                        type='file'
+                        type='image'
                         name='image'
                         filename='image'
                         id='client-logo'
@@ -847,7 +847,7 @@ export default function PostSection(props) {
                             <div className='post-col-logo-input'>
                                 <InputField
                                     label=''
-                                    type='file'
+                                    type='image'
                                     name='image'
                                     filename='image'
                                     id='client-logo'

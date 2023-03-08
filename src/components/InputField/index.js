@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import imageCompression from 'browser-image-compression';
+import { PDFDocument, StandardFonts } from 'pdf-lib';
 import { toast } from 'react-toastify'
 import { APP_COLORS } from '../../constants/app'
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
@@ -27,6 +28,8 @@ export default function InputField(props) {
         rows,
         filename,
         image,
+        pdf,
+        setPDF,
         setImage,
         setIsEdit,
         options,
@@ -84,15 +87,26 @@ export default function InputField(props) {
         try {
             const file = e.target.files[0]
             if (file) {
-                const compressOptions = {
-                    maxSizeMB: 0.3,
-                    maxWidthOrHeight: 300,
-                    useWebWorker: true
-                }
-                const compressedFile = await imageCompression(file, compressOptions)
+                if (type === 'image') {
+                    const compressOptions = {
+                        maxSizeMB: 0.3,
+                        maxWidthOrHeight: 300,
+                        useWebWorker: true
+                    }
 
-                const base64 = await convertToBase64(compressedFile)
-                setImage({ ...image, [filename]: base64 })
+                    const compressedFile = await imageCompression(file, compressOptions)
+                    const base64 = await convertToBase64(compressedFile)
+                    setImage({ ...image, [filename]: base64 })
+
+                } else if (type === 'pdf') {
+                    const base64 = await convertToBase64(file)
+                    setPDF({
+                        ...pdf,
+                        [filename]: base64,
+                        size: file.size || 0,
+                        filename: file.name || 'SigmaCV.pdf'
+                    })
+                }
                 if (setIsEdit) setIsEdit(true)
             }
         } catch (err) {
@@ -164,7 +178,7 @@ export default function InputField(props) {
                     }
                 </GrammarlyEditorPlugin>
                 :
-                type === 'file' ?
+                type === 'image' ?
                     <input
                         type="file"
                         label="Image"
@@ -175,129 +189,140 @@ export default function InputField(props) {
                         id={id || filename}
                     />
                     :
-                    type === 'text' ?
-                        noGrammar ?
-                            <div className='inputfield-dropdown' style={style}>
-                                <div style={{ width: "100%", textAlign: 'left' }}>
-                                    <input
-                                        className='inputfield-field'
-                                        autoComplete={autoComplete}
-                                        onChange={handleChange}
-                                        placeholder={placeholder || ''}
-                                        type={type || 'text'}
-                                        style={{
-                                            opacity: hidden && hidden.includes(label) && '.2',
-                                            fontSize: fontSize ? `${fontSize}vw` : '.9vw',
-                                            padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
-                                        }}
-                                        value={value}
-                                        onFocus={() => setFocus(true)}
-                                    />
-                                </div>
-                                {hidden && hidden.includes(label) ?
-                                    <Tooltip tooltip='Show'>
-                                        <img
-                                            src={ShwoIcon}
-                                            className='hide-icon'
-                                            onClick={() => showItem(label)}
-                                        />
-                                    </Tooltip>
-                                    : hidden ?
-                                        <Tooltip tooltip='Hide'>
-                                            <img
-                                                src={HideIcon}
-                                                className='hide-icon'
-                                                onClick={() => hideItem(label)}
-                                            />
-                                        </Tooltip>
-                                        : ''
-                                }
-                                {showDropDown ?
-                                    <div className='input-dropdown-options' style={{ width: style.width || '100%' }}>
-                                        {suggestions.map((suggestion, i) =>
-                                            <h4
-                                                key={i}
-                                                className='dropdown-option'
-                                                style={{
-                                                    borderTop: i === 0 && 'none',
-                                                    fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.8vw'
-                                                }}
-                                                onClick={() => {
-                                                    updateData(name, suggestion)
-                                                    setDropValue(suggestion)
-                                                    setShowDropDown(false)
-                                                }}>{suggestion}</h4>
-                                        )}
-                                    </div> : ''}
-                            </div>
-                            :
-                            <div className='inputfield-dropdown' style={style}>
-                                <GrammarlyEditorPlugin clientId={noGrammar ? '' : process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%", textAlign: 'left' }}>
-                                    <input
-                                        className='inputfield-field'
-                                        autoComplete={autoComplete}
-                                        onChange={handleChange}
-                                        placeholder={placeholder || ''}
-                                        type={type || 'text'}
-                                        style={{
-                                            opacity: hidden && hidden.includes(label) && '.2',
-                                            fontSize: fontSize ? `${fontSize}vw` : '.9vw',
-                                            padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
-                                        }}
-                                        value={value}
-                                        onFocus={() => setFocus(true)}
-                                    />
-                                </GrammarlyEditorPlugin>
-                                {hidden && hidden.includes(label) ?
-                                    <Tooltip tooltip='Show'>
-                                        <img
-                                            src={ShwoIcon}
-                                            className='hide-icon'
-                                            onClick={() => showItem(label)}
-                                        />
-                                    </Tooltip>
-                                    : hidden ?
-                                        <Tooltip tooltip='Hide'>
-                                            <img
-                                                src={HideIcon}
-                                                className='hide-icon'
-                                                onClick={() => hideItem(label)}
-                                            />
-                                        </Tooltip>
-                                        : ''
-                                }
-                                {showDropDown ?
-                                    <div className='input-dropdown-options' style={{ width: style.width || '100%' }}>
-                                        {suggestions.map((suggestion, i) =>
-                                            <h4
-                                                key={i}
-                                                className='dropdown-option'
-                                                style={{
-                                                    borderTop: i === 0 && 'none',
-                                                    fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.8vw'
-                                                }}
-                                                onClick={() => {
-                                                    updateData(name, suggestion)
-                                                    setDropValue(suggestion)
-                                                    setShowDropDown(false)
-                                                }}>{suggestion}</h4>
-                                        )}
-                                    </div> : ''}
-                            </div>
-                        :
+                    type === 'pdf' ?
                         <input
-                            className='inputfield-field'
-                            autoComplete={autoComplete}
-                            onChange={handleChange}
-                            placeholder={placeholder || ''}
-                            type={type || 'text'}
-                            style={{
-                                ...style,
-                                fontSize: fontSize ? `${fontSize}vw` : '.9vw',
-                                padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
-                            }}
-                            value={value}
+                            type="file"
+                            label="PDF"
+                            name={filename || 'file'}
+                            accept=".pdf"
+                            onChange={(e) => uploadFile(e)}
+                            style={{ height: 0, width: 0 }}
+                            id={id || filename}
                         />
+                        :
+                        type === 'text' ?
+                            noGrammar ?
+                                <div className='inputfield-dropdown' style={style}>
+                                    <div style={{ width: "100%", textAlign: 'left' }}>
+                                        <input
+                                            className='inputfield-field'
+                                            autoComplete={autoComplete}
+                                            onChange={handleChange}
+                                            placeholder={placeholder || ''}
+                                            type={type || 'text'}
+                                            style={{
+                                                opacity: hidden && hidden.includes(label) && '.2',
+                                                fontSize: fontSize ? `${fontSize}vw` : '.9vw',
+                                                padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
+                                            }}
+                                            value={value}
+                                            onFocus={() => setFocus(true)}
+                                        />
+                                    </div>
+                                    {hidden && hidden.includes(label) ?
+                                        <Tooltip tooltip='Show'>
+                                            <img
+                                                src={ShwoIcon}
+                                                className='hide-icon'
+                                                onClick={() => showItem(label)}
+                                            />
+                                        </Tooltip>
+                                        : hidden ?
+                                            <Tooltip tooltip='Hide'>
+                                                <img
+                                                    src={HideIcon}
+                                                    className='hide-icon'
+                                                    onClick={() => hideItem(label)}
+                                                />
+                                            </Tooltip>
+                                            : ''
+                                    }
+                                    {showDropDown ?
+                                        <div className='input-dropdown-options' style={{ width: style.width || '100%' }}>
+                                            {suggestions.map((suggestion, i) =>
+                                                <h4
+                                                    key={i}
+                                                    className='dropdown-option'
+                                                    style={{
+                                                        borderTop: i === 0 && 'none',
+                                                        fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.8vw'
+                                                    }}
+                                                    onClick={() => {
+                                                        updateData(name, suggestion)
+                                                        setDropValue(suggestion)
+                                                        setShowDropDown(false)
+                                                    }}>{suggestion}</h4>
+                                            )}
+                                        </div> : ''}
+                                </div>
+                                :
+                                <div className='inputfield-dropdown' style={style}>
+                                    <GrammarlyEditorPlugin clientId={noGrammar ? '' : process.env.REACT_APP_GRAMMAR_CID} style={{ width: "100%", textAlign: 'left' }}>
+                                        <input
+                                            className='inputfield-field'
+                                            autoComplete={autoComplete}
+                                            onChange={handleChange}
+                                            placeholder={placeholder || ''}
+                                            type={type || 'text'}
+                                            style={{
+                                                opacity: hidden && hidden.includes(label) && '.2',
+                                                fontSize: fontSize ? `${fontSize}vw` : '.9vw',
+                                                padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
+                                            }}
+                                            value={value}
+                                            onFocus={() => setFocus(true)}
+                                        />
+                                    </GrammarlyEditorPlugin>
+                                    {hidden && hidden.includes(label) ?
+                                        <Tooltip tooltip='Show'>
+                                            <img
+                                                src={ShwoIcon}
+                                                className='hide-icon'
+                                                onClick={() => showItem(label)}
+                                            />
+                                        </Tooltip>
+                                        : hidden ?
+                                            <Tooltip tooltip='Hide'>
+                                                <img
+                                                    src={HideIcon}
+                                                    className='hide-icon'
+                                                    onClick={() => hideItem(label)}
+                                                />
+                                            </Tooltip>
+                                            : ''
+                                    }
+                                    {showDropDown ?
+                                        <div className='input-dropdown-options' style={{ width: style.width || '100%' }}>
+                                            {suggestions.map((suggestion, i) =>
+                                                <h4
+                                                    key={i}
+                                                    className='dropdown-option'
+                                                    style={{
+                                                        borderTop: i === 0 && 'none',
+                                                        fontSize: fontSize ? `${fontSize - fontSize * 0.1}vw` : '.8vw'
+                                                    }}
+                                                    onClick={() => {
+                                                        updateData(name, suggestion)
+                                                        setDropValue(suggestion)
+                                                        setShowDropDown(false)
+                                                    }}>{suggestion}</h4>
+                                            )}
+                                        </div> : ''}
+                                </div>
+                            :
+                            <input
+                                className='inputfield-field'
+                                autoComplete={autoComplete}
+                                onChange={handleChange}
+                                placeholder={placeholder || ''}
+                                type={type || 'text'}
+                                style={{
+                                    ...style,
+                                    fontSize: fontSize ? `${fontSize}vw` : '.9vw',
+                                    padding: fontSize ? `${fontSize / 2}vw` : '.5vw'
+                                }}
+                                value={value}
+                            />
 
             }
         </div>

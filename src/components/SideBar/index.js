@@ -41,7 +41,7 @@ export default function SideBar() {
         try {
             setLoading(true)
             const permissions = await dispatch(getUserPermission({ email: user.email })).then(data => data.payload)
-            if (permissions) setIsManager(permissions.isManager)
+            if (permissions) setIsManager(permissions.isManager || permissions.isAdmin || false)
             setLoading(false)
         } catch (err) {
             console.error(err)
