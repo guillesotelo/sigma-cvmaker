@@ -27,7 +27,7 @@ export default function CVs({ showAll }) {
     const [isPdf, setIsPdf] = useState(false)
     const [download, setDownload] = useState(false)
     const [publishCV, setPublishCV] = useState({})
-    const [publicTime, setPublicTime] = useState(0)
+    const [publicTime, setPublicTime] = useState(30)
     const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
     const { isManager } = user
     const dispatch = useDispatch()
@@ -106,14 +106,14 @@ export default function CVs({ showAll }) {
             if (published) {
                 if (publicTime === 'Unpublish') toast.success(`The CV has been unpublished`)
                 else {
-                    navigator.clipboard.writeText(`${REACT_APP_CV_URL}/view?id=${publishCV._id}`)
+                    navigator.clipboard.writeText(`${REACT_APP_CV_URL}/view?id=${publishCV._id}&isPdf=${publishCV.isPdf}`)
                     toast.success(`The CV has been published for ${publicTime} days`)
                     toast.success('Link copied to clipboard!')
                 }
             } else toast.error('Error publishing CV. Try again later')
 
             setPublishCV({})
-            setPublicTime(0)
+            setPublicTime(30)
             getAllResumes(showAll)
             return setLoading(false)
         } catch (err) {
@@ -282,10 +282,10 @@ export default function CVs({ showAll }) {
                                 style={{ alignSelf: 'center' }}
                             />
                             <div className='public-cv-link-row'>
-                                <a className='public-cv-link' href={`${REACT_APP_CV_URL}/view?id=${publishCV._id}`} target='_blank'>{`${REACT_APP_CV_URL}/view?id=${publishCV._id}`}</a>
+                                <a className='public-cv-link' href={`${REACT_APP_CV_URL}/view?id=${publishCV._id}`} target='_blank'>{`${REACT_APP_CV_URL}/view?id=${publishCV._id}&isPdf=${publishCV.isPdf}`}</a>
                                 <Tooltip tooltip='Copy link'>
                                     <img src={CopyIcon} onClick={() => {
-                                        navigator.clipboard.writeText(`${REACT_APP_CV_URL}/view?id=${publishCV._id}`)
+                                        navigator.clipboard.writeText(`${REACT_APP_CV_URL}/view?id=${publishCV._id}&isPdf=${publishCV.isPdf}`)
                                         toast.success('Link copied to clipboard!')
                                     }} className='public-cv-copy' />
                                 </Tooltip>

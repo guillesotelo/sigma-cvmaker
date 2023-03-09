@@ -859,7 +859,7 @@ export default function Settings() {
                             />
                             {imageData.type === 'Profile' || imageData.type === 'Signature' || data.email ?
                               <InputField
-                                label='Email'
+                                label='Linked Email'
                                 type='text'
                                 name='email'
                                 placeholder='full.name@sigma.se'
@@ -868,7 +868,7 @@ export default function Settings() {
                                 value={data.email || ''}
                               /> : ''}
                             <Dropdown
-                              label='Type'
+                              label='Image type'
                               name='type'
                               options={imageTypes}
                               value={data.type}

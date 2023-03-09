@@ -28,6 +28,7 @@ import Resume from '../components/Resume'
 import { MoonLoader } from 'react-spinners'
 import { getOneAppData, updateAppData } from '../store/reducers/appData'
 import Tooltip from '../components/Tooltip'
+import PdfIcon from '../icons/pdf-icon.svg'
 
 export default function NewCV() {
     const [data, setData] = useState({})
@@ -174,7 +175,7 @@ export default function NewCV() {
     const setEditData = async edit => {
         try {
             setLoading(true)
-            const cv = await getCVById(edit)
+            const cv = await getCVById(edit, false)
             if (allResumes && allResumes.length) {
                 allResumes.forEach(resume => {
                     if (resume._id === edit) {
@@ -206,7 +207,7 @@ export default function NewCV() {
         }
     }
 
-    const getCVById = async id => {
+    const getCVById = async (id, isPdf) => {
         try {
             const cv = await dispatch(getResume(id)).then(data => data.payload)
             return cv
@@ -293,27 +294,27 @@ export default function NewCV() {
         })
     }
 
-    const checkCVData = () => {
+    const checkCVData = (info) => {
         let check = true
         if (!data.name || !data.surname) {
             check = false
-            toast.error('Please add a Name and Surname')
+            if (info) toast.error('Please add a Name and Surname')
         }
         if (!data.email || !data.email.includes('@') || !data.email.includes('.')) {
             check = false
-            toast.error('Please add a valid Email')
+            if (info) toast.error('Please add a valid Email')
         }
         if (!data.role) {
             check = false
-            toast.error('Please add a Role / Title')
+            if (info) toast.error('Please add a Role / Title')
         }
         if (!data.type) {
             check = false
-            toast.error('Please select CV Type')
+            if (info) toast.error('Please select CV Type')
         }
         if (!data.footer_contact || !data.footer_email) {
             check = false
-            toast.error('Please add Manager Contact Info')
+            if (info) toast.error('Please add Manager Contact Info')
         }
         return check
     }
@@ -321,7 +322,7 @@ export default function NewCV() {
     const onSaveResume = async saveAsNew => {
         try {
             setLoading(true)
-            if (checkCVData()) {
+            if (checkCVData(true)) {
                 const resumeData = { ...data }
 
                 resumeData.languages = languages
@@ -340,12 +341,12 @@ export default function NewCV() {
                 resumeData.footer_location = data.footer_location || ''
                 delete resumeData.data
 
-                if (importPDF.pdf) resumeData.pdfData = importPDF
 
                 const strData = JSON.stringify(resumeData)
                 if (strData !== resumeData.data) resumeData.data = strData
                 else delete resumeData.data
 
+                resumeData.pdfData = importedPDF
                 resumeData.note = data.note || `${user.username ? `Created by ${user.username}` : ''}`
                 resumeData.type = data.type || 'Master'
                 resumeData.username = `${data.name}${data.middlename ? ' ' + data.middlename : ''} ${data.surname || ''}`
@@ -399,7 +400,7 @@ export default function NewCV() {
                     else {
                         toast.success('Resume saved successfully!')
                         if (managerUpdated) toast.success('Consultant Manager assigned to consultant')
-                        return setTimeout(() => history.goBack(), 2000)
+                        return setTimeout(() => history.push('/cvs'), 2000)
                     }
                 } else {
                     setLoading(false)
@@ -564,7 +565,7 @@ export default function NewCV() {
                             style={{ color: 'rgb(71, 71, 71)' }}
                         />
                         <h4 className='import-pdf-title'>Import PDF CV</h4>
-                        {importedPDF.name ? <h4 className='import-pdf-name'>{importedPDF.name}</h4> : ''}
+                        {importedPDF.filename ? <h4 className='import-pdf-name'>{importedPDF.filename}</h4> : ''}
                         {importedPDF.pdf ?
                             <div className='import-pdf-fill'>
                                 <h4 className='import-pdf-fill-text'>Plase fill in the Consultant's data:</h4>
@@ -619,19 +620,43 @@ export default function NewCV() {
                                     options={managers}
                                     value={data.manager}
                                     updateData={updateData}
-                                    size='98%'
+                                    size='27vw'
                                 />
-                                <Dropdown
-                                    label='CV Type'
-                                    name='type'
-                                    options={typeOptions}
-                                    value={data.type}
-                                    updateData={updateData}
-                                    size='98%'
-                                />
-                            </div> : ''}
+                            </div>
+                            :
+                            <img
+                                src={PdfIcon}
+                                className='pdf-placeholder-svg'
+                                onClick={() => document.getElementById('pdf').click()}
+                                onDragOver={e => {
+                                    e.preventDefault()
+                                    document.querySelector('.pdf-placeholder-svg').classList.add('dragging')
+                                }}
+                                onDragEnter={e => {
+                                    e.preventDefault()
+                                    document.querySelector('.pdf-placeholder-svg').classList.add('dragging-over')
+                                }}
+                                onDragLeave={e => {
+                                    e.preventDefault()
+                                    document.querySelector('.pdf-placeholder-svg').classList.remove('dragging')
+                                    document.querySelector('.pdf-placeholder-svg').classList.remove('dragging-over')
+                                }}
+                                onDrop={e => {
+                                    e.preventDefault()
+                                    if (e.dataTransfer.files[0]) {
+                                        const dataTransfer = new DataTransfer()
+                                        const inputFile = document.getElementById('pdf')
+                                        dataTransfer.items.add(e.dataTransfer.files[0]);
+                                        inputFile.files = dataTransfer.files
+
+                                        const evt = new Event('change', { bubbles: true })
+                                        inputFile.dispatchEvent(evt)
+                                        updateData('type', 'PDF')
+                                    }
+                                }}
+                            />
+                        }
                         <div className='import-modal-btns'>
-                            <button onClick={() => document.getElementById('pdf').click()}>Import PDF</button>
                             <CTAButton
                                 label='Cancel'
                                 handleClick={() => {
@@ -644,6 +669,7 @@ export default function NewCV() {
                                 label='Upload'
                                 handleClick={() => onSaveResume(false)}
                                 color={APP_COLORS.GREEN}
+                                disabled={!checkCVData(false)}
                             />
                         </div>
                     </div> : ''}
@@ -1663,7 +1689,7 @@ export default function NewCV() {
                             color={APP_COLORS.YELLOW}
                             style={{ color: 'black' }}
                             handleClick={() => {
-                                if (checkCVData()) {
+                                if (checkCVData(true)) {
                                     setCVPreview()
                                     setTimeout(() => setPreviewModal(true), 200)
                                 }

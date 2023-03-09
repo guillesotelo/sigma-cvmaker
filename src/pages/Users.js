@@ -430,7 +430,7 @@ export default function Users() {
                             name='password'
                             updateData={updateData}
                             placeholder='Write new password'
-                            style={{ color: 'rgb(71, 71, 71)', marginBottom: '1vw' }}
+                            style={{ color: 'rgb(71, 71, 71)' }}
                         />
                         <InputField
                             label='Repeat new Password'

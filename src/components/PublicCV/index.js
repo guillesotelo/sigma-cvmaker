@@ -39,13 +39,16 @@ export default function PublicCV() {
     const [download, setDownload] = useState(false)
     const [loading, setLoading] = useState(false)
     const [cvExpired, setCVExpired] = useState(false)
+    const [isPdfCv, setIsPdfCv] = useState(false)
     const dispatch = useDispatch()
     const history = useHistory()
     const fullName = `${res.name || ''}${res.middlename ? ` ${res.middlename} ` : ' '}${res.surname || ''}`
 
     useEffect(() => {
         const id = new URLSearchParams(document.location.search).get('id')
+        const isPdf = new URLSearchParams(document.location.search).get('isPdf')
 
+        setIsPdfCv(isPdf)
         if (!id) return setCVExpired(true)
 
         getFonts()
@@ -130,8 +133,8 @@ export default function PublicCV() {
     }
 
 
-    const getResumeById = async id => {
-        const cvData = await dispatch(getPublicCV(id)).then(data => data.payload)
+    const getResumeById = async (_id, isPdf) => {
+        let cvData = await dispatch(getPublicCV({ _id, isPdf })).then(data => data.payload)
         return cvData || {}
     }
 
@@ -143,7 +146,7 @@ export default function PublicCV() {
     const getResumeData = async id => {
         try {
             setLoading(true)
-            const cv = await getResumeById(id)
+            const cv = await getResumeById(id, isPdfCv)
 
             if (cv && cv.published) {
                 if (calculateExpiration(cv)) {
@@ -156,40 +159,43 @@ export default function PublicCV() {
             const cvData = { ...cv, ...parsedData }
 
             setRes(cvData)
-            const clients = parsedData.experience.map(exp => { if (exp.company) return exp.company })
-            const _logos = clients.length ? await Promise.all(clients.map(async client => {
-                const image = await dispatch(getPublicClientLogo(client)).then(data => data.payload)
-                if (image && image.data) {
-                    return {
-                        ...image,
-                        image: image.data,
-                        style: image.style ? JSON.parse(image.style) : {}
+
+            if (!isPdfCv) {
+                const clients = parsedData.experience.map(exp => { if (exp.company) return exp.company })
+                const _logos = clients.length ? await Promise.all(clients.map(async client => {
+                    const image = await dispatch(getPublicClientLogo(client)).then(data => data.payload)
+                    if (image && image.data) {
+                        return {
+                            ...image,
+                            image: image.data,
+                            style: image.style ? JSON.parse(image.style) : {}
+                        }
                     }
+                })) : []
+
+                let logos = {}
+                if (_logos.length) {
+                    _logos.forEach((logo, i) => {
+                        logos[i] = logo
+                    })
                 }
-            })) : []
 
-            let logos = {}
-            if (_logos.length) {
-                _logos.forEach((logo, i) => {
-                    logos[i] = logo
-                })
-            }
+                const profilePic = await dispatch(getPublicImage({ email: cvData.email, type: 'Profile' })).then(data => data.payload)
+                const signature = await dispatch(getPublicImage({ email: cvData.email, type: 'Signature' })).then(data => data.payload)
 
-            const profilePic = await dispatch(getPublicImage({ email: cvData.email, type: 'Profile' })).then(data => data.payload)
-            const signature = await dispatch(getPublicImage({ email: cvData.email, type: 'Signature' })).then(data => data.payload)
-
-            if (profilePic) {
-                const imageStyles = profilePic.style ? JSON.parse(profilePic.style) : {}
-                if (imageStyles) setProfileStyle(imageStyles)
-                if (imageStyles.filter) setProfileImage(await applyFiltersToImage(profilePic.data, imageStyles.filter))
-                else setProfileImage(profilePic.data)
+                if (profilePic) {
+                    const imageStyles = profilePic.style ? JSON.parse(profilePic.style) : {}
+                    if (imageStyles) setProfileStyle(imageStyles)
+                    if (imageStyles.filter) setProfileImage(await applyFiltersToImage(profilePic.data, imageStyles.filter))
+                    else setProfileImage(profilePic.data)
+                }
+                if (signature) {
+                    const signatureStyles = signature.style ? JSON.parse(signature.style) : {}
+                    if (signatureStyles.filter) setSignatureCanvas(await applyFiltersToImage(signature.data, signatureStyles.filter))
+                    else setSignatureCanvas(signature.data)
+                }
+                if (logos) setClientLogos(logos)
             }
-            if (signature) {
-                const signatureStyles = signature.style ? JSON.parse(signature.style) : {}
-                if (signatureStyles.filter) setSignatureCanvas(await applyFiltersToImage(signature.data, signatureStyles.filter))
-                else setSignatureCanvas(signature.data)
-            }
-            if (logos) setClientLogos(logos)
 
             setLoading(false)
         } catch (err) {
@@ -969,7 +975,7 @@ export default function PublicCV() {
                 {cvExpired ? noCVMessage()
                     : loading ?
                         <div style={{ alignSelf: 'center', display: 'flex', marginTop: '20vw' }}><MoonLoader color='#E59A2F' /></div>
-                        : res && res.name ?
+                        : res?.name || res?.filename ?
                             <>
                                 <div className='pdf-header-btns' style={{
                                     position: 'absolute',
@@ -988,7 +994,7 @@ export default function PublicCV() {
                                         </>
                                         : ''}
                                 </div>
-                                {Object.keys(res).length ? <PDFView /> : ''}
+                                {Object.keys(res).length || res.pdf ? <PDFView /> : ''}
                             </>
                             : ''}
             </div>

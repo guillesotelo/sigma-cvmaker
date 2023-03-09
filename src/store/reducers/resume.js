@@ -9,6 +9,7 @@ import {
   getPublicCVHeaderLogo,
   saveCVLogo,
   getResumeById,
+  getResumePdfById,
   getPublicCVById,
   publishCV,
   getCVTypeByEmail
@@ -21,6 +22,7 @@ const initialState = {
 export const getResumes = createAsyncThunk('GET_RESUMES', getAllResumes)
 export const getMyResume = createAsyncThunk('GET_MY_RESUME', getResumeByEmail)
 export const getResume = createAsyncThunk('GET_RESUME_BY_ID', getResumeById)
+export const getResumePdf = createAsyncThunk('GET_RESUME_PDF_BY_ID', getResumePdfById)
 export const getPublicCV = createAsyncThunk('GET_PUBLIC_RESUME_BY_ID', getPublicCVById)
 export const makeCVPublic = createAsyncThunk('MAKE_CV_PUBLIC', publishCV)
 export const saveResume = createAsyncThunk('SAVE_RESUME', createResume)
@@ -35,6 +37,7 @@ const resumeReducer = createReducer(initialState, {
   [getResumes.fulfilled]: (state, action) => { return { ...state, allResumes: action.payload } },
   [getMyResume.fulfilled]: (state, action) => { return { ...state, myResume: action.payload } },
   [getResume.fulfilled]: (state, action) => { return { ...state, resume: action.payload } },
+  [getResumePdf.fulfilled]: (state, action) => { return { ...state, resumePdf: action.payload } },
   [getPublicCV.fulfilled]: (state, action) => { return { ...state, publicCV: action.payload } },
   [makeCVPublic.fulfilled]: (state, action) => { return { ...state, publishedCV: action.payload } },
   [saveResume.fulfilled]: (state, action) => { return { ...state, saved: action.payload } },

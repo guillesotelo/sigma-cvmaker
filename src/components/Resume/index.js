@@ -12,14 +12,14 @@ import ReactPDF, {
     Font,
     pdf
 } from '@react-pdf/renderer'
-import { Document as PDFDoc } from 'react-pdf'
+import { Document as PDFDoc, pdfjs, Page as PDFPage } from 'react-pdf'
 import RobotoRegular from '../../assets/fonts/Roboto-Regular.ttf'
 import RobotoBold from '../../assets/fonts/Roboto-Bold.ttf'
 import RobotoItalic from '../../assets/fonts/Roboto-Italic.ttf'
 import GreatVibes from '../../assets/fonts/GreatVibes-Regular.ttf'
 import { applyFiltersToImage } from '../../helpers/image'
 import './styles.css'
-import { getLogo, getResume } from '../../store/reducers/resume'
+import { getLogo, getResume, getResumePdf } from '../../store/reducers/resume'
 import { saveAs } from 'file-saver'
 import DownloadIcon from '../../icons/download-icon.svg'
 import EditIcon from '../../icons/edit-icon.svg'
@@ -27,6 +27,7 @@ import CloseIcon from '../../icons/close-icon.svg'
 import { MoonLoader } from 'react-spinners'
 import { getImageByType, getClientLogo } from '../../store/reducers/image'
 import Tooltip from '../Tooltip'
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 export default function Resume(props) {
     const {
@@ -40,8 +41,7 @@ export default function Resume(props) {
         setLoading,
         profilePreview,
         signaturePreview,
-        companyLogos,
-        importedPdf
+        companyLogos
     } = props
 
     const [data, setData] = useState(resumeData)
@@ -54,11 +54,13 @@ export default function Resume(props) {
     const [skills, setSkills] = useState([])
     const [fontSize, setFontSize] = useState({})
     const [padding, setPadding] = useState({})
-    const [numPages, setNumPages] = useState(null)
+    const [numPages, setNumPages] = useState(1)
     const [pageNumber, setPageNumber] = useState(1)
     const dispatch = useDispatch()
     const history = useHistory()
     const fullName = `${res.name || ''}${res.middlename ? ` ${res.middlename} ` : ' '}${res.surname || ''}`
+
+    console.log("res", res)
 
     useEffect(() => {
         const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null
@@ -99,9 +101,11 @@ export default function Resume(props) {
         return {}
     }
 
-    const getCVById = async id => {
+    const getCVById = async (id, isPdf) => {
         try {
-            const cv = await dispatch(getResume(id)).then(data => data.payload)
+            let cv = {}
+            if (isPdf) cv = await dispatch(getResumePdf(id)).then(data => data.payload)
+            else cv = await dispatch(getResume(id)).then(data => data.payload)
             return cv
         } catch (err) { console.error(err) }
     }
@@ -110,12 +114,18 @@ export default function Resume(props) {
         try {
             setLoading(true)
             let parsedData = {}
-            if (data.data) {
+            if (data.data && !data.isPdf) {
                 parsedData = JSON.parse(data.data || {})
             }
             else {
-                const cv = await getCVById(resumeData._id)
-                parsedData = JSON.parse(cv && cv.data || {})
+                if (data.isPdf) {
+                    const cv = await getCVById(resumeData._id, true)
+                    setRes(cv)
+                    return setLoading(false)
+                } else {
+                    const cv = await getCVById(resumeData._id, false)
+                    parsedData = JSON.parse(cv && cv.data || {})
+                }
             }
             setRes(parsedData)
             const clients = parsedData.experience.map(exp => { if (exp.company) return exp.company })
@@ -213,17 +223,27 @@ export default function Resume(props) {
     }
 
     const downloadPDF = async () => {
-        const asPdf = pdf()
-        asPdf.updateContainer(<ResumePDF />)
-        const blob = await asPdf.toBlob()
-        saveAs(blob, `${fullName} - ${res.role}.pdf`)
+        if (res.pdf) {
+            const downloadLink = document.createElement("a")
+            const fileName = res.filename || `${res.username || 'Sigma CV'}.pdf`
+            downloadLink.href = res.pdf
+            downloadLink.download = fileName
+            downloadLink.click()
+        } else {
+            const asPdf = pdf()
+            asPdf.updateContainer(<ResumePDF />)
+            const blob = await asPdf.toBlob()
+            saveAs(blob, `${fullName} - ${res.role}.pdf`)
+        }
         onDownloadPDF()
     }
 
     const PDFView = () => {
-        return importedPdf?.pdf ?
-            <PDFDoc file={importedPdf.pdf}>
-                <Page />
+        return res.pdf ?
+            <PDFDoc file={res.pdf} className='pdf-modal-imported' onLoadSuccess={({ numPages }) => {
+                setNumPages(numPages)
+            }}>
+                {Array.from({ length: numPages }).map((_, i) => <PDFPage key={i} pageNumber={i + 1} />)}
             </PDFDoc>
             :
             <PDFViewer style={styles.PDFContainer} showToolbar={false}>
@@ -942,7 +962,7 @@ export default function Resume(props) {
             <div className='view-resume-page'>
                 {loading ?
                     <div style={{ alignSelf: 'center', display: 'flex', marginTop: '20vw' }}><MoonLoader color='#E59A2F' /></div>
-                    : res && res.name ?
+                    : res?.name || res?.filename ?
                         <>
                             <div className='pdf-header-btns'>
                                 {onDownloadPDF ?
@@ -954,7 +974,7 @@ export default function Resume(props) {
                                         />
                                     </Tooltip>
                                     : ''}
-                                {onEdit ?
+                                {onEdit && !res.pdf ?
                                     <Tooltip tooltip='Edit' inline={true}>
                                         <img src={EditIcon} className='pdf-edit-svg' onClick={onEdit} />
                                     </Tooltip>
@@ -963,7 +983,7 @@ export default function Resume(props) {
                                     <img src={CloseIcon} className='pdf-close-svg' onClick={onClose} />
                                 </Tooltip>
                             </div>
-                            {Object.keys(res).length ? <PDFView /> : ''}
+                            {Object.keys(res).length || res.pdf ? <PDFView /> : ''}
                         </>
                         : ''}
             </div>

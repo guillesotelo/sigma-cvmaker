@@ -15,9 +15,16 @@ const getResumeById = async _id => {
     } catch (err) { console.log(err) }
 }
 
-const getPublicCVById = async _id => {
+const getResumePdfById = async _id => {
     try {
-        const resume = await axios.get(`${API_URL}/api/public/getById`, { params: { _id } })
+        const resumePdf = await axios.get(`${API_URL}/api/resume/getPdfById`, { params: { _id }, headers: getHeaders() })
+        return resumePdf.data
+    } catch (err) { console.log(err) }
+}
+
+const getPublicCVById = async ({ _id, isPdf }) => {
+    try {
+        const resume = await axios.get(`${API_URL}/api/public/getById`, { params: { _id, isPdf } })
         return resume.data
     } catch (err) { console.log(err) }
 }
@@ -88,6 +95,7 @@ const saveCVLogo = async data => {
 export {
     getAllResumes,
     getResumeById,
+    getResumePdfById,
     getPublicCVById,
     publishCV,
     getResumeByEmail,

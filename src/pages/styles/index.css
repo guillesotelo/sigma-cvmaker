@@ -534,16 +534,17 @@
     Background-color: white;
     border-radius: 0.5vw;
     box-shadow: 2px 2px 10px lightgray;
-    margin-top: 10vw;
+    margin-top: 4vw;
     align-self: center;
     z-index: 1;
     transform: scale(.9);
+    min-width: 20vw;
 }
 
 .import-pdf-title {
     font-size: 1.5vw;
     font-weight: normal;
-    margin: 0 0 .5vw 0;
+    margin: .5vw 0;
 }
 
 .import-pdf-name {
@@ -553,8 +554,7 @@
     color: #E59A2F;
 }
 
-.import-pdf-fill {
-}
+.import-pdf-fill {}
 
 .import-pdf-fill-text {
     font-size: 1vw;
@@ -570,6 +570,31 @@
     align-items: center;
     margin-top: 2vw;
     gap: 1vw;
+}
+
+.pdf-placeholder-svg {
+    width: 5vw;
+    transition: .3s;
+    cursor: pointer;
+    padding: 2.5vw;
+    border: 4px dashed black;
+    border-radius: 1vw;
+    align-self: center;
+    margin: 1vw;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.pdf-placeholder-svg:hover {
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
+}
+
+.dragging {
+    
+}
+
+.dragging-over {
+    filter: invert(75%) sepia(39%) saturate(3237%) brightness(80%) contrast(80%);
 }
 
 .no-top {
@@ -770,6 +795,13 @@
     position: absolute;
     top: 0;
     margin: 1vw;
+}
+
+.pdf-modal-imported {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto;
 }
 
 .close-modal {

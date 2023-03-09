@@ -153,7 +153,7 @@ export default function DataTable(props) {
                                             <div key={j} className='data-table-icons' style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}>
                                                 {/* <img src={DownloadIcon} className='resume-icon' /> */}
                                                 <Tooltip tooltip='Edit' style={{ marginRight: '.5vw' }}>
-                                                    <img src={EditIcon} className='data-table-icon' onClick={() => history.push(`/new-cv?edit=${row._id}`)} />
+                                                    {row.isPdf ? '' : <img src={EditIcon} className='data-table-icon' onClick={() => history.push(`/new-cv?edit=${row._id}`)} />}
                                                 </Tooltip>
                                                 <Tooltip tooltip='Remove' style={{ marginRight: '.5vw' }}>
                                                     <img src={TrashCan} onClick={() => {
