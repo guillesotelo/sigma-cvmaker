@@ -60,6 +60,7 @@ export default function ForgotPass() {
                         <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#E59A2F' /></div>
                         :
                         <div className='login-fill'>
+                            <h4 className='login-title'>Update password with your email</h4>
                             <InputField
                                 label='Email'
                                 type='text'

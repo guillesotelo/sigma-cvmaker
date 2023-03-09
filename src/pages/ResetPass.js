@@ -74,6 +74,7 @@ export default function ResetPass() {
                         <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#E59A2F' /></div>
                         :
                         <div className='login-fill'>
+                            <h4 className='login-title'>Update your password</h4>
                             <InputField
                                 label='New password'
                                 type='password'

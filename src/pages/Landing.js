@@ -61,7 +61,6 @@ export default function Landing() {
                                 className='login-logo'
                                 loading='lazy'
                             />
-                            {/* <h4 className='login-text'>CV</h4> */}
                         </div>
                         {loading ?
                             <div style={{ alignSelf: 'center', display: 'flex' }}><MoonLoader color='#E59A2F' /></div>

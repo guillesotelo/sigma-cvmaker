@@ -80,6 +80,13 @@
     color: #8a8a8a;
 }
 
+.login-title {
+    margin: 0 0 2vw 0;
+    font-size: .9vw;
+    font-weight: normal;
+    color: #8a8a8a;
+}
+
 .login-image {
     margin: 2vw 0;
 }

@@ -125,7 +125,7 @@ export default function Users() {
             setLoading(true)
             const _users = await dispatch(getUsers(user)).then(data => data.payload)
             if (_users && Array.isArray(_users)) {
-                const nonRemoved = _users.filter(user => !user.removed)
+                const nonRemoved = _users.filter(user => !user.removed && !user.hidden)
                 setUsers(nonRemoved)
             }
             setLoading(false)
