@@ -36,13 +36,13 @@
     cursor: pointer;
     border-top-left-radius: .5vw;
     border-top-right-radius: .5vw;
-    border-bottom: 1px solid #E4E7EB;
-    background-color: #F9FAFB;
+    border-bottom: 1px solid #f3f5f7;
+    background-color: #ecf0f3;
 }
 
 .data-table-header {
     margin: 0;
-    padding-right: .3vw;
+    padding-right: .3vw; 
     text-align: left;
     color: #6b7280;
     transition: .3s;

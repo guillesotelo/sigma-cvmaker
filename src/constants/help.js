@@ -1,3 +1,6 @@
+import privacy from '../assets/illustrations/privacy-policy.svg'
+import gdpr from '../assets/illustrations/gdpr.svg'
+
 export const HELP = {
     'new-cv': {
         title: 'Creating a new CV',
@@ -128,5 +131,72 @@ export const HELP = {
         description: '<b>Guillermo Sotelo</b> \n guillermo.sotelo@sigma.se \n +46761274862',
         link: '',
         images: []
+    },
+    'gdpr': {
+        title: 'GDPR Compliance Statement',
+        description: `Sigma Connectivity takes the privacy and security of personal data seriously. Our application, which stores resumes of employees, is fully compliant with the General Data Protection Regulation (GDPR).
+
+        \n\n\n<b>Consent</b>
+        
+        \n\nWe obtain explicit and informed consent from individuals before storing their resumes. This is done through a consent form or a privacy notice that clearly explains the purpose and extent of data processing. The consent form or privacy notice will inform individuals about the categories of personal data we collect, the purposes for which we process the data, and the legal basis for the processing. We also inform individuals about their right to withdraw their consent at any time.
+        
+        \n\n\n<b>Security Measures</b>
+        
+        \n\nWe implement appropriate technical and organizational measures to ensure the security of personal data. This includes measures such as access control, encryption, and data backup. We have implemented access controls to ensure that only authorized individuals have access to personal data. We also use encryption to protect personal data during transmission and storage. In addition, we have established data backup procedures to ensure that personal data is not lost due to a system failure or other unforeseen circumstances.
+        
+        \n\n\n<b>Data Retention</b>
+        
+        \n\nWe store the resumes of employees for the duration of their employment only. Once the employment relationship ends, we securely delete or destroy the personal data. We also provide public links to the resumes only when necessary to present to clients, and these links have a maximum duration of 30 days, unless otherwise stated. We have established a data retention policy that outlines how long personal data will be retained and for what purposes. The retention period will be determined based on the purpose of the processing and any legal or contractual obligations that require us to retain the data.
+        
+        \n\n\n<b>Data Subject Rights</b>
+        
+        \n\nIndividuals have the right to access, correct, or erase their personal data. Our application provides these rights to individuals, and we have procedures in place to ensure that these requests are processed in a timely and efficient manner. We will respond to requests for access, correction, or erasure of personal data within 30 days of receiving the request. In addition, individuals have the right to object to the processing of their personal data and to restrict the processing of their personal data under certain circumstances.
+        
+        \n\n\n<b>Data Processing Agreement</b>
+        
+        \n\nIf we use a third-party service provider to store or process personal data, we have a data processing agreement in place with the service provider. The agreement ensures that the service provider is also compliant with GDPR. The agreement will include provisions that require the service provider to implement appropriate technical and organizational measures to ensure the security of personal data and to comply with the data subject rights.
+        
+        \n\n\n<b>Employee Training</b>
+        
+        \n\nOur employees who have access to personal data are trained on GDPR compliance and understand their responsibilities when handling personal data. We provide regular training to our employees to ensure that they are aware of the GDPR requirements and to ensure that they are using our application in a manner that is consistent with GDPR.
+        
+        \n\nWe are committed to maintaining the highest standards of data protection and privacy. If you have any questions or concerns about our GDPR compliance, please contact us at through the Help Center.`,
+        link: '',
+        images: [gdpr]
+    },
+    'privacy-policy': {
+        title: 'Privacy Policy',
+        description: `
+        Sigma Connectivity ("us", "we", or "our") operates the Sigma CV application (the "Application"). This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Application and the choices you have associated with that data.
+
+        \n\n\n<b>Information Collection and Use</b>
+
+        \n\nWe collect personal data that you voluntarily provide to us, such as resumes, when you use our Application. We use this data to provide you with the services and features of our Application.
+
+        \n\nWe do not sell or rent personal data to third parties. We may share personal data with our service providers who help us provide the services and features of our Application. We require our service providers to protect personal data in accordance with our privacy and security standards and applicable law.
+
+        \n\nWe may also disclose personal data if required by law or if we believe that such disclosure is necessary to comply with a legal obligation, protect our rights or property, or protect the safety of our users or others.
+
+        \n\n\n<b>Data Retention</b>
+
+        \n\nWe store personal data for the duration of the employment relationship only. Once the employment relationship ends, we securely delete or destroy the personal data. We also provide public links to the resumes only when necessary to present to clients, and these links have a maximum duration of 30 days.
+
+        \n\n\n<b>Security</b>
+        
+        \n\nWe implement appropriate technical and organizational measures to ensure the security of personal data. This includes measures such as access control, encryption, and data backup. We have implemented access controls to ensure that only authorized individuals have access to personal data. We also use encryption to protect personal data during transmission and storage. In addition, we have established data backup procedures to ensure that personal data is not lost due to a system failure or other unforeseen circumstances.
+
+        \n\n\n<b>Your Rights</b>
+
+        \n\nYou have the right to access, correct, or erase your personal data. You may also object to the processing of your personal data or request that we restrict the processing of your personal data under certain circumstances. To exercise your rights, please contact us through the Help Center. We will respond to requests for access, correction, or erasure of personal data within 30 days of receiving the request.
+
+        \n\n\n<b>Changes to This Privacy Policy</b>
+
+        \n\nWe may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
+
+        \n\n\n<b>Contact Us</b>
+
+        \n\nIf you have any questions or concerns about this Privacy Policy, please contact us through the Help Center.`,
+        link: '',
+        images: [privacy]
     },
 }

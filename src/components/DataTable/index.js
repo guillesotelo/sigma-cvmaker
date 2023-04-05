@@ -139,7 +139,7 @@ export default function DataTable(props) {
                                 key={i}
                                 className={item === i ? 'data-table-row-selected' : 'data-table-row'}
                                 style={{
-                                    backgroundColor: item === i ? '#d4e1f6' : i % 2 === 0 ? 'white' : '#F9FAFB',
+                                    backgroundColor: item === i ? '#d4e1f6' : i % 2 === 0 ? 'white' : '#f5f5f5',
                                     marginBottom: i === tableData.length - 1 && '3vw'
                                 }}
                             >

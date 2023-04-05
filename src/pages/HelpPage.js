@@ -38,7 +38,7 @@ export default function HelpPage() {
                             key={i}
                             src={image}
                             className='help-page-image'
-                            alt='Create CV Image'
+                            alt='Help Image'
                         />) : ''}
                 </div>
             </div>

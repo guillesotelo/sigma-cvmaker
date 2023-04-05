@@ -146,8 +146,17 @@ export default function Help() {
                             <h4 className='help-module-link' onClick={() => history.push(`/helpPage?module=what-to-know-consultant-data`)}>What to know when updating consultant data</h4>
                         </div> : ''}
                     </div> : ''}
-                    {modules.includes('hr-info') || modules.includes('development-info') ? <div className='help-module-section'>
-                        <h4 className='help-module-title'>Contact Information</h4>
+                    {modules.includes('hr-info') || modules.includes('development-info') || modules.includes('gdpr') || modules.includes('privacy-policies')  ? <div className='help-module-section'>
+                        <h4 className='help-module-title'>Policies & Contact Information</h4>
+                        {modules.includes('privacy-policy') ? <div className='help-module-page'>
+                            <img src={PageIcon} className='help-page-svg' />
+                            <h4 className='help-module-link' onClick={() => history.push(`/helpPage?module=privacy-policy`)}>Privacy Policy</h4>
+                        </div> : ''}
+                        {modules.includes('gdpr') ? <div className='help-module-page'>
+                            <img src={PageIcon} className='help-page-svg' />
+                            <h4 className='help-module-link' onClick={() => history.push(`/helpPage?module=gdpr`)}>GDPR Compliance Statement</h4>
+                        </div> : ''}
+
                         {modules.includes('hr-info') ? <div className='help-module-page'>
                             <img src={PageIcon} className='help-page-svg' />
                             <h4 className='help-module-link' onClick={() => history.push(`/helpPage?module=hr-info`)}>HR References</h4>
