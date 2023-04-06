@@ -160,7 +160,8 @@ export const HELP = {
         
         \n\nOur employees who have access to personal data are trained on GDPR compliance and understand their responsibilities when handling personal data. We provide regular training to our employees to ensure that they are aware of the GDPR requirements and to ensure that they are using our application in a manner that is consistent with GDPR.
         
-        \n\nWe are committed to maintaining the highest standards of data protection and privacy. If you have any questions or concerns about our GDPR compliance, please contact us at through the Help Center.`,
+        \n\nWe are committed to maintaining the highest standards of data protection and privacy. If you have any questions or concerns about our GDPR compliance, please contact us at through the Help Center.
+        \n\n\nTo read more about the General Data Protection Regulation, <a href='https://gdpr-info.eu/'>visit the official website</a>.`,
         link: '',
         images: [gdpr]
     },

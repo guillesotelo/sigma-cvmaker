@@ -22,7 +22,6 @@ import { userHeaders } from '../constants/tableHeaders'
 import Tooltip from '../components/Tooltip'
 
 export default function Consultants() {
-    const [tab, setTab] = useState('user')
     const [users, setUsers] = useState([])
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(false)
@@ -243,12 +242,6 @@ export default function Consultants() {
                         color={APP_COLORS.GREEN}
                         disabled={isNew}
                     />
-                    {selectedUser !== -1 ?
-                        <CTAButton
-                            label='Delete'
-                            handleClick={() => setRemoveModal(true)}
-                            color={APP_COLORS.RED}
-                        /> : ''}
                 </div>
                 <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
                     <DataTable
@@ -257,12 +250,13 @@ export default function Consultants() {
                         maxRows={9}
                         tableData={users}
                         setTableData={setUsers}
-                        tableHeaders={userHeaders}
+                        tableHeaders={userHeaders.concat({ name: 'ACTIONS', value: 'icons' })}
                         loading={loading}
                         item={selectedUser}
                         setItem={setSelectedUser}
                         isEdit={userEdit}
                         setIsEdit={setUserEdit}
+                        handleDelete={() => setRemoveModal(true)}
                     />
                     {selectedUser !== -1 ?
                         <div className='users-select-section'>
@@ -414,7 +408,7 @@ export default function Consultants() {
                             <div className='users-btns'>
                                 {isEdit ?
                                     <CTAButton
-                                        label='Discard'
+                                        label='Cancel'
                                         handleClick={() => {
                                             setSelectedUser(-1)
                                             setIsEdit(false)
@@ -552,7 +546,7 @@ export default function Consultants() {
                                 </div>
                                 <div className='users-btns'>
                                     <CTAButton
-                                        label='Discard'
+                                        label='Cancel'
                                         handleClick={() => {
                                             setSelectedUser(-1)
                                             setIsEdit(false)

@@ -738,7 +738,7 @@ export default function PostSection(props) {
                         setLogo({})
                         updateData('clientSelected', '')
                     }}
-                        className='section-item-new'>Discard</h4>
+                        className='section-item-new'>Cancel</h4>
                     <h4 onClick={() => {
                         saveUpdatedItem()
                         setSelected(null)

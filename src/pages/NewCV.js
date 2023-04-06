@@ -1680,7 +1680,7 @@ export default function NewCV() {
                 {!previewModal && !masterModal ?
                     <div className='new-resume-btns'>
                         <CTAButton
-                            label='Discard'
+                            label='Cancel'
                             color={APP_COLORS.GRAY}
                             handleClick={() => history.push('/cvs')}
                         />

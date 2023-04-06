@@ -142,6 +142,7 @@ export default function Settings() {
   }, [appData])
 
   useEffect(() => {
+    setData({})
     setSelectedItem(-1)
     setItemEdit(false)
     setIsNew(false)
@@ -252,12 +253,12 @@ export default function Settings() {
       }
 
       if (!saved) toast.error('Error saving Skills')
-      else toast.success('Skills saved successfully')
+      else toast.success('Skills updated successfully')
 
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      toast.error('Error saving Skills')
+      toast.error('Error updating Skills')
       console.error(err)
     }
   }
@@ -282,12 +283,12 @@ export default function Settings() {
       }
 
       if (!saved) toast.error('Error saving Buzzword')
-      else toast.success('Buzzword saved successfully')
+      else toast.success('Buzzwords updated successfully')
 
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      toast.error('Error saving Buzzword')
+      toast.error('Error updating Buzzword')
       console.error(err)
     }
   }
@@ -446,6 +447,23 @@ export default function Settings() {
     }
   }
 
+  const removeAppData = () => {
+    if (tab === 'Buzzwords') {
+      const updated = buzzwords
+      updated.splice(selectedItem, 1)
+      saveBuzzwords(updated)
+    }
+    else if (tab === 'Skills') {
+      const updated = skills
+      updated.splice(selectedItem, 1)
+      saveSkills(updated)
+    }
+    setSelectedItem(-1)
+    setItemEdit(false)
+    setRemoveModal(false)
+    setData({})
+  }
+
   return (
     <div className='settings-container'>
       <div className='settings-tabs' style={{ filter: removeModal && 'blur(10px)' }}>
@@ -502,7 +520,7 @@ export default function Settings() {
                     <div className='settings-cvlogo-btns'>
                       {isEdit ?
                         <CTAButton
-                          label='Discard'
+                          label='Cancel'
                           handleClick={() => {
                             getCVLogo()
                             setIsEdit(false)
@@ -531,7 +549,25 @@ export default function Settings() {
             :
             tab === `Skills` ?
               <>
-                <div className='settings-new-skill-btn'>
+                {removeModal ?
+                  <div className='remove-modal'>
+                    <h4 style={{ textAlign: 'center' }}>Are you sure you want to delete <br />{skills[selectedItem].name}?</h4>
+                    <div className='remove-modal-btns'>
+                      <CTAButton
+                        label='Cancel'
+                        handleClick={() => {
+                          setRemoveModal(false)
+                        }}
+                        color={APP_COLORS.GRAY}
+                      />
+                      <CTAButton
+                        label='Delete'
+                        handleClick={removeAppData}
+                        color={APP_COLORS.RED}
+                      />
+                    </div>
+                  </div> : ''}
+                <div className='settings-new-skill-btn' style={{ filter: removeModal && 'blur(10px)' }}>
                   <CTAButton
                     label='New Skill'
                     handleClick={() => {
@@ -542,7 +578,7 @@ export default function Settings() {
                     disabled={itemEdit}
                   />
                 </div>
-                <div className='settings-skills-container'>
+                <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
                   <DataTable
                     title='Skills'
                     subtitle='Here is a list of all skills in the system'
@@ -555,6 +591,7 @@ export default function Settings() {
                     setItem={setSelectedItem}
                     isEdit={itemEdit}
                     setIsEdit={setItemEdit}
+                    handleDelete={() => setRemoveModal(true)}
                   />
                   {itemEdit ?
                     <div className='settings-select-section'>
@@ -580,7 +617,7 @@ export default function Settings() {
                       </div>
                       <div className='settings-skill-btns'>
                         <CTAButton
-                          label='Discard'
+                          label='Cancel'
                           handleClick={() => {
                             setSelectedItem(-1)
                             setItemEdit(false)
@@ -606,7 +643,25 @@ export default function Settings() {
               :
               tab === `Buzzwords` ?
                 <>
-                  <div className='settings-new-skill-btn'>
+                  {removeModal ?
+                    <div className='remove-modal'>
+                      <h4 style={{ textAlign: 'center' }}>Are you sure you want to delete <br />{buzzwords[selectedItem].name}?</h4>
+                      <div className='remove-modal-btns'>
+                        <CTAButton
+                          label='Cancel'
+                          handleClick={() => {
+                            setRemoveModal(false)
+                          }}
+                          color={APP_COLORS.GRAY}
+                        />
+                        <CTAButton
+                          label='Delete'
+                          handleClick={removeAppData}
+                          color={APP_COLORS.RED}
+                        />
+                      </div>
+                    </div> : ''}
+                  <div className='settings-new-skill-btn' style={{ filter: removeModal && 'blur(10px)' }}>
                     <CTAButton
                       label='New Buzzword'
                       handleClick={() => {
@@ -617,7 +672,7 @@ export default function Settings() {
                       disabled={itemEdit}
                     />
                   </div>
-                  <div className='settings-skills-container'>
+                  <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
                     <DataTable
                       title='Buzzwords'
                       subtitle='Here is a list of all buzzwords in the system'
@@ -630,6 +685,7 @@ export default function Settings() {
                       setItem={setSelectedItem}
                       isEdit={itemEdit}
                       setIsEdit={setItemEdit}
+                      handleDelete={() => setRemoveModal(true)}
                     />
                     {itemEdit ?
                       <div className='settings-select-section'>
@@ -655,7 +711,7 @@ export default function Settings() {
                         </div>
                         <div className='settings-skill-btns'>
                           <CTAButton
-                            label='Discard'
+                            label='Cancel'
                             handleClick={() => {
                               setSelectedItem(-1)
                               setItemEdit(false)
@@ -712,12 +768,6 @@ export default function Settings() {
                         color={APP_COLORS.GREEN}
                         disabled={isNew}
                       />
-                      <CTAButton
-                        label='Delete'
-                        handleClick={() => setRemoveModal(true)}
-                        color={APP_COLORS.RED}
-                        disabled={(isNew && !isEdit) || selectedItem === -1}
-                      />
                     </div>
                     <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
                       <DataTable
@@ -726,12 +776,13 @@ export default function Settings() {
                         maxRows={5}
                         tableData={images}
                         setTableData={setImages}
-                        tableHeaders={imageHeaders}
+                        tableHeaders={imageHeaders.concat({ name: 'ACTIONS', value: 'icons' })}
                         loading={loading}
                         item={selectedItem}
                         setItem={setSelectedItem}
                         isEdit={itemEdit}
                         setIsEdit={setItemEdit}
+                        handleDelete={() => setRemoveModal(true)}
                       />
                       {itemEdit ?
                         <div className='settings-select-section'>
@@ -878,7 +929,7 @@ export default function Settings() {
                           </div>
                           <div className='settings-skill-btns'>
                             <CTAButton
-                              label='Discard'
+                              label='Cancel'
                               handleClick={() => {
                                 setSelectedItem(-1)
                                 setItemEdit(false)
@@ -938,12 +989,6 @@ export default function Settings() {
                             color={APP_COLORS.GREEN}
                             disabled={selectedItem === -1}
                           />
-                          <CTAButton
-                            label='Delete'
-                            handleClick={() => setRemoveModal(true)}
-                            color={APP_COLORS.RED}
-                            disabled={selectedItem === -1}
-                          />
                         </div>
                       </div>
                       <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
@@ -953,12 +998,13 @@ export default function Settings() {
                           maxRows={5}
                           tableData={trash}
                           setTableData={setTrash}
-                          tableHeaders={trashHeaders}
+                          tableHeaders={trashHeaders.concat({ name: 'ACTIONS', value: 'icons' })}
                           loading={loading}
                           item={selectedItem}
                           setItem={setSelectedItem}
                           isEdit={itemEdit}
                           setIsEdit={setItemEdit}
+                          handleDelete={() => setRemoveModal(true)}
                         />
                       </div>
                     </>

@@ -127,7 +127,7 @@ export default function Clients() {
             }
 
             if (!saved) toast.error('Error saving Client')
-            else toast.success('Client Data saved successfully')
+            else toast.success('Clients updated successfully')
 
             setLoading(false)
             setIsNew(false)
@@ -136,7 +136,7 @@ export default function Clients() {
         } catch (err) {
             setRemoveModal(false)
             setLoading(false)
-            toast.error('Error saving Client Data')
+            toast.error('Error updating Clients')
             console.error(err)
         }
     }
@@ -203,13 +203,6 @@ export default function Clients() {
                         color={APP_COLORS.GREEN}
                         disabled={clientsEdit}
                     />
-                    {clientsEdit && !isNew ?
-                        <CTAButton
-                            label='Delete'
-                            handleClick={() => setRemoveModal(true)}
-                            color={APP_COLORS.RED}
-                            disabled={!clientsEdit}
-                        /> : ''}
                 </div>
                 <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
                     <DataTable
@@ -224,6 +217,7 @@ export default function Clients() {
                         setItem={setSelectedClient}
                         isEdit={clientsEdit}
                         setIsEdit={setClientsEdit}
+                        handleDelete={() => setRemoveModal(true)}
                     />
                     {clientsEdit ?
                         <div className='client-select-section'>
@@ -326,7 +320,7 @@ export default function Clients() {
                             </div>
                             <div className='client-details-btns'>
                                 <CTAButton
-                                    label='Discard'
+                                    label='Cancel'
                                     handleClick={() => {
                                         setSelectedClient(-1)
                                         setClientsEdit(false)

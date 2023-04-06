@@ -53,7 +53,7 @@ export default function SideBar() {
         <div className='sidebar-container'>
             {loading ?
                 <>
-                    <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.5vw', marginBottom: '.5vw' }}>
+                    <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.3vw', marginBottom: '.3vw' }}>
                         {Array.from({ length: 7 }).map((_, i) => <h4 key={i} className='sidebar-loading-block'></h4>)}
                     </div>
                     <div className='sidebar-section'>
@@ -62,7 +62,7 @@ export default function SideBar() {
                 </>
                 :
                 <>
-                    <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.5vw', marginBottom: '.5vw' }}>
+                    <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.3vw', marginBottom: '.3vw' }}>
                         <div className='sidebar-module' style={{ backgroundColor: getPage('/new-cv') && '#F3F4F6' }} onClick={() => !isEdit && history.push('/new-cv')}>
                             <div className='sidebar-col1'>
                                 <img src={CVIcon} className='sidebar-new-cv' style={{ filter: getPage('/new-cv') && filterClicked }} />
@@ -79,73 +79,78 @@ export default function SideBar() {
                                 <h4 className='sidebar-label'>{isManager ? `All CV's` : `My CV's`}</h4>
                             </div>
                         </div>
+                    </div>
 
-                        {isManager ?
+                    {isManager ?
+                        <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.3vw', marginBottom: '.3vw' }}>
                             <div className='sidebar-module' style={{ backgroundColor: getPage('/consultants') && '#F3F4F6' }} onClick={() => history.push('/consultants')}>
                                 <div className='sidebar-col1'>
                                     <img src={UsersIcon} className='sidebar-svg' style={{ filter: getPage('/consultants') && filterClicked }} />
                                     <h4 className='sidebar-label'>Consultants</h4>
                                 </div>
                                 {/* <img src={Chevron} className='sidebar-arrow' onClick={() => { }} /> */}
-                            </div> : ''}
+                            </div>
 
-                        {isManager ?
                             <div className='sidebar-module' style={{ backgroundColor: getPage('/clients') && '#F3F4F6' }} onClick={() => history.push('/clients')}>
                                 <div className='sidebar-col1'>
                                     <img src={HandShakeIcon} className='sidebar-svg' style={{ filter: getPage('/clients') && filterClicked }} />
                                     <h4 className='sidebar-label'>Clients</h4>
                                 </div>
                                 {/* <img src={Chevron} className='sidebar-arrow' onClick={() => { }} /> */}
-                            </div> : ''}
+                            </div>
 
-                        {isManager ?
                             <div className='sidebar-module' style={{ backgroundColor: getPage('/tools-and-tech') && '#F3F4F6' }} onClick={() => history.push('/tools-and-tech')}>
                                 <div className='sidebar-col1'>
                                     <img src={ToolsIcon} className='sidebar-svg' style={{ filter: getPage('/tools-and-tech') && filterClicked }} />
                                     <h4 className='sidebar-label'>Tools & Tech</h4>
                                 </div>
                                 {/* <img src={Chevron} className='sidebar-arrow' onClick={() => { }} /> */}
-                            </div> : ''}
+                            </div>
+                        </div>
+                        : ''}
 
-                        {isManager ?
+                    {isManager ?
+                        <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.3vw', marginBottom: '.3vw' }}>
                             <div className='sidebar-module' style={{ backgroundColor: getPage('/activity') && '#F3F4F6' }} onClick={() => history.push('/activity')}>
                                 <div className='sidebar-col1'>
                                     <img src={ActivityIcon} className='sidebar-svg' style={{ filter: getPage('/activity') && filterClicked }} />
                                     <h4 className='sidebar-label'>Activity</h4>
                                 </div>
-                            </div> : ''}
+                            </div>
 
-                        {isManager ?
                             <div className='sidebar-module' style={{ backgroundColor: getPage('/statistics') && '#F3F4F6' }} onClick={() => history.push('/statistics')}>
                                 <div className='sidebar-col1'>
                                     <img src={ChartPie} className='sidebar-svg' style={{ filter: getPage('/statistics') && filterClicked }} />
                                     <h4 className='sidebar-label'>Statistics</h4>
                                 </div>
-                            </div> : ''}
-                    </div>
+                            </div>
+                        </div>
+                        : ''}
 
                     <div className='sidebar-section'>
-                        {isManager ?
-                            <div className='sidebar-module' style={{ backgroundColor: getPage('/users') && '#F3F4F6' }} onClick={() => history.push('/users')}>
-                                <div className='sidebar-col1'>
-                                    <img src={UserGroup} className='sidebar-svg' style={{ filter: getPage('/users') && filterClicked }} />
-                                    <h4 className='sidebar-label'>Users</h4>
-                                </div>
-                                {/* <img src={Chevron} className='sidebar-arrow' onClick={() => { }} /> */}
-                            </div> : ''}
+                        <div className='sidebar-section'>
+                            {isManager ?
+                                <div className='sidebar-module' style={{ backgroundColor: getPage('/users') && '#F3F4F6' }} onClick={() => history.push('/users')}>
+                                    <div className='sidebar-col1'>
+                                        <img src={UserGroup} className='sidebar-svg' style={{ filter: getPage('/users') && filterClicked }} />
+                                        <h4 className='sidebar-label'>Users</h4>
+                                    </div>
+                                    {/* <img src={Chevron} className='sidebar-arrow' onClick={() => { }} /> */}
+                                </div> : ''}
 
-                        {isManager ?
-                            <div className='sidebar-module' style={{ backgroundColor: getPage('/settings') && '#F3F4F6' }} onClick={() => history.push('/settings')}>
-                                <div className='sidebar-col1'>
-                                    <img src={ConfIcon} className='sidebar-svg' style={{ filter: getPage('/settings') && filterClicked }} />
-                                    <h4 className='sidebar-label'>Settings</h4>
-                                </div>
-                            </div> : ''}
+                            {isManager ?
+                                <div className='sidebar-module' style={{ backgroundColor: getPage('/settings') && '#F3F4F6' }} onClick={() => history.push('/settings')}>
+                                    <div className='sidebar-col1'>
+                                        <img src={ConfIcon} className='sidebar-svg' style={{ filter: getPage('/settings') && filterClicked }} />
+                                        <h4 className='sidebar-label'>Settings</h4>
+                                    </div>
+                                </div> : ''}
 
-                        <div className='sidebar-module' style={{ backgroundColor: getPage('/help') && '#F3F4F6' }} onClick={() => history.push('/help')}>
-                            <div className='sidebar-col1'>
-                                <img src={QuestionIcon} className='sidebar-svg' style={{ filter: getPage('/help') && filterClicked }} />
-                                <h4 className='sidebar-label'>Help</h4>
+                            <div className='sidebar-module' style={{ backgroundColor: getPage('/help') && '#F3F4F6' }} onClick={() => history.push('/help')}>
+                                <div className='sidebar-col1'>
+                                    <img src={QuestionIcon} className='sidebar-svg' style={{ filter: getPage('/help') && filterClicked }} />
+                                    <h4 className='sidebar-label'>Help</h4>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -153,6 +158,6 @@ export default function SideBar() {
             }
 
             <h4 className='sidebar-version'>{VERSION}</h4>
-        </div>
+        </div >
     )
 }

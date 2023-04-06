@@ -129,7 +129,7 @@ export default function Register(props) {
           />
           <div style={{ margin: '.5vw' }} />
           <CTAButton
-            label='Discard'
+            label='Cancel'
             size='100%'
             color={APP_COLORS.GRAY}
             handleClick={() => setIsNew(false)}

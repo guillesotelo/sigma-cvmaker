@@ -29,7 +29,8 @@ export default function DataTable(props) {
         setPublishCV,
         setIsPdf,
         modalView,
-        style
+        style,
+        handleDelete
     } = props
 
     const [maxItems, setMaxItems] = useState(maxRows || 10)
@@ -152,27 +153,34 @@ export default function DataTable(props) {
                                         header.value === 'icons' ?
                                             <div key={j} className='data-table-icons' style={{ width: sizes ? sizes[i] : `${100 / tableHeaders.length}%` }}>
                                                 {/* <img src={DownloadIcon} className='resume-icon' /> */}
-                                                <Tooltip tooltip='Edit' style={{ marginRight: '.5vw' }}>
-                                                    {row.isPdf ? '' : <img src={EditIcon} className='data-table-icon' onClick={() => history.push(`/new-cv?edit=${row._id}`)} />}
-                                                </Tooltip>
+                                                {row.isPdf ? '' : setIsPdf ? 
+                                                    <Tooltip tooltip='Edit' style={{ marginRight: '.5vw' }}>
+                                                        <img src={EditIcon} className='data-table-icon' onClick={() => history.push(`/new-cv?edit=${row._id}`)} />
+                                                    </Tooltip> : ''}
                                                 <Tooltip tooltip='Remove' style={{ marginRight: '.5vw' }}>
                                                     <img src={TrashCan} onClick={() => {
+                                                        if(setItem && handleDelete) {
+                                                            setItem(i)
+                                                            return handleDelete()
+                                                        }
                                                         setResumeData(row)
                                                         setOpenModal(true)
                                                     }} className='data-table-icon' />
                                                 </Tooltip>
-                                                <Tooltip tooltip='Download' style={{ marginRight: '.5vw' }}>
-                                                    <img src={DownloadIcon} className='data-table-icon' onClick={() => {
-                                                        setLoading(true)
-                                                        setOpenModal(true)
-                                                        setIsPdf(true)
-                                                        setResumeData(row)
-                                                        setDownload(true)
-                                                    }} />
-                                                </Tooltip>
-                                                <Tooltip tooltip='Publish' style={{ marginRight: '.5vw' }}>
+                                                {setIsPdf ?
+                                                    <Tooltip tooltip='Download' style={{ marginRight: '.5vw' }}>
+                                                        <img src={DownloadIcon} className='data-table-icon' onClick={() => {
+                                                            setLoading(true)
+                                                            setOpenModal(true)
+                                                            setIsPdf(true)
+                                                            setResumeData(row)
+                                                            setDownload(true)
+                                                        }} />
+                                                    </Tooltip>
+                                                    : ''}
+                                                {setIsPdf ? <Tooltip tooltip='Publish' style={{ marginRight: '.5vw' }}>
                                                     <img src={PublishIcon} onClick={() => setPublishCV(row)} className='data-table-icon share-icon' />
-                                                </Tooltip>
+                                                </Tooltip> : ''}
                                             </div>
                                             :
                                             <h4

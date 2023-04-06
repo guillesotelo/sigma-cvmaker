@@ -88,14 +88,14 @@ export default function ToolsTech() {
             }
 
             if (!saved) toast.error('Error saving Tool')
-            else toast.success('Tool saved successfully')
+            else toast.success('Tools updated successfully')
 
             setIsNew(false)
             setLoading(false)
             setRemoveModal(false)
         } catch (err) {
             setLoading(false)
-            toast.error('Error saving Tool')
+            toast.error('Error updating Tools')
             console.error(err)
         }
     }
@@ -159,13 +159,6 @@ export default function ToolsTech() {
                         color={APP_COLORS.GREEN}
                         disabled={toolsEdit}
                     />
-                    {toolsEdit && !isNew ?
-                        <CTAButton
-                            label='Delete'
-                            handleClick={() => setRemoveModal(true)}
-                            color={APP_COLORS.RED}
-                            disabled={!toolsEdit}
-                        /> : ''}
                 </div>
                 <div className='settings-skills-container' style={{ filter: removeModal && 'blur(10px)' }}>
                     <DataTable
@@ -180,6 +173,7 @@ export default function ToolsTech() {
                         setItem={setSelectedTool}
                         isEdit={toolsEdit}
                         setIsEdit={setToolsEdit}
+                        handleDelete={() => setRemoveModal(true)}
                     />
                     {toolsEdit ?
                         <div className='settings-select-section'>
@@ -216,7 +210,7 @@ export default function ToolsTech() {
                             </div>
                             <div className='settings-skill-btns'>
                                 <CTAButton
-                                    label='Discard'
+                                    label='Cancel'
                                     handleClick={() => {
                                         setSelectedTool(-1)
                                         setToolsEdit(false)

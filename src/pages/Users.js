@@ -256,12 +256,6 @@ export default function Users() {
                         color={APP_COLORS.GREEN}
                         disabled={isNew}
                     />
-                    {selectedUser !== -1 ?
-                        <CTAButton
-                            label='Delete'
-                            handleClick={() => setRemoveModal(true)}
-                            color={APP_COLORS.RED}
-                        /> : ''}
                 </div>
                 <DataTable
                     title='Users'
@@ -269,14 +263,15 @@ export default function Users() {
                     maxRows={9}
                     tableData={users}
                     setTableData={setUsers}
-                    tableHeaders={userHeaders}
+                    tableHeaders={userHeaders.concat({ name: 'ACTIONS', value: 'icons' })}
                     loading={loading}
                     item={selectedUser}
                     setItem={setSelectedUser}
                     isEdit={userEdit}
                     setIsEdit={setUserEdit}
                     style={{ filter: removeModal && 'blur(10px)' }}
-                />
+                    handleDelete={() => setRemoveModal(true)}
+                    />
             </div>
             {selectedUser !== -1 ?
                 <div className='users-select-section' style={{ filter: removeModal && 'blur(10px)' }}>
@@ -456,7 +451,7 @@ export default function Users() {
                     <div className='users-btns'>
                         {isEdit ?
                             <CTAButton
-                                label='Discard'
+                                label='Cancel'
                                 handleClick={() => {
                                     setSelectedUser(-1)
                                     setIsEdit(false)
@@ -615,7 +610,7 @@ export default function Users() {
                         <div className='users-btns'>
                             {isEdit ?
                                 <CTAButton
-                                    label='Discard'
+                                    label='Cancel'
                                     handleClick={() => {
                                         setSelectedUser(-1)
                                         setIsEdit(false)

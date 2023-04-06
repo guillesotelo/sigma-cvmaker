@@ -130,6 +130,10 @@ export const clientsHeaders = [
   {
     name: 'BUSINESS',
     value: 'business'
+  },
+  {
+    name: 'ACTIONS',
+    value: 'icons'
   }
 ]
 
@@ -141,6 +145,14 @@ export const skillHeaders = [
   {
     name: 'FIELD',
     value: 'field'
+  },
+  {
+    name: 'BUSINESS',
+    value: 'business'
+  },
+  {
+    name: 'ACTIONS',
+    value: 'icons'
   }
 ]
 
@@ -152,6 +164,14 @@ export const buzzwordHeaders = [
   {
     name: 'TYPE',
     value: 'type'
+  },
+  {
+    name: 'BUSINESS',
+    value: 'business'
+  },
+  {
+    name: 'ACTIONS',
+    value: 'icons'
   }
 ]
 
@@ -167,6 +187,10 @@ export const toolsHeaders = [
   {
     name: 'FIELD',
     value: 'field'
+  },
+  {
+    name: 'ACTIONS',
+    value: 'icons'
   }
 ]
 
