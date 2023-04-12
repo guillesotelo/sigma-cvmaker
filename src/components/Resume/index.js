@@ -60,7 +60,7 @@ export default function Resume(props) {
     const history = useHistory()
     const fullName = `${res.name || ''}${res.middlename ? ` ${res.middlename} ` : ' '}${res.surname || ''}`
 
-    console.log("res", res)
+    // console.log("res", res)
 
     useEffect(() => {
         const user = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')) || null

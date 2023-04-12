@@ -78,8 +78,8 @@ export default function NewCV() {
     const sigCanvas = useRef({})
 
     // console.log("data", data)
-    console.log("importedPDF", importedPDF)
-    console.log("importedPDF Size", (new TextEncoder().encode(importedPDF.pdf || ' ')).length + ' Bytes')
+    // console.log("importedPDF", importedPDF)
+    // console.log("importedPDF Size", (new TextEncoder().encode(importedPDF.pdf || ' ')).length + ' Bytes')
 
     useEffect(() => {
         if (!user || !user.email) history.push('/')

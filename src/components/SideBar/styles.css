@@ -8,6 +8,7 @@
     border-right: 1px solid #E4E7EB;
     background-color: white;
     position: relative;
+    padding-top: .5vw;
 }
 
 .sidebar-section {
@@ -22,8 +23,8 @@
     align-items: center;
     justify-content: space-between;
     /* width: 100%; */
-    margin: .8vw .8vw;
-    padding: .3vw .5vw;
+    margin: .7vw .8vw;
+    padding: .2vw .5vw;
     border-radius: .8vw;
     cursor: pointer;
 }
@@ -74,7 +75,8 @@
     /* width: 30%; */
     bottom: 0;
     position: absolute;
-    color: #939393;
+    color: #acacac;
+    margin-bottom: 3vw;
 }
 
 .sidebar-loading-block {

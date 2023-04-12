@@ -413,7 +413,8 @@ export default function Settings() {
       const restored = await dispatch(restoreItemFromTrash({
         email: user.email,
         _id: trash[selectedItem]._id,
-        item: data.module
+        item: data.module,
+        isPdf: trash[selectedItem].isPdf || false
       })).then(data => data.payload)
 
       if (!restored) return toast.error('Error restoring item, try again lataer')
@@ -434,7 +435,8 @@ export default function Settings() {
       const removed = await dispatch(deletePermanently({
         email: user.email,
         _id: trash[selectedItem]._id,
-        item: data.module
+        item: data.module,
+        isPdf: trash[selectedItem].isPdf || false
       })).then(data => data.payload)
 
       if (!removed) return toast.error('Error removing item, try again lataer')

@@ -59,8 +59,9 @@ const updateResume = async data => {
 
 const deleteResume = async data => {
     try {
+        console.log('data', data)
         const deleted = await axios.post(`${API_URL}/api/resume/remove`, data, getConfig())
-        return deleted
+        return deleted.data
     } catch (err) { console.log(err) }
 }
 

@@ -53,7 +53,7 @@ export default function SideBar() {
         <div className='sidebar-container'>
             {loading ?
                 <>
-                    <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.3vw', marginBottom: '.3vw' }}>
+                    <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.2vw', marginBottom: '.2vw' }}>
                         {Array.from({ length: 7 }).map((_, i) => <h4 key={i} className='sidebar-loading-block'></h4>)}
                     </div>
                     <div className='sidebar-section'>
@@ -62,7 +62,7 @@ export default function SideBar() {
                 </>
                 :
                 <>
-                    <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.3vw', marginBottom: '.3vw' }}>
+                    <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.2vw', marginBottom: '.2vw' }}>
                         <div className='sidebar-module' style={{ backgroundColor: getPage('/new-cv') && '#F3F4F6' }} onClick={() => !isEdit && history.push('/new-cv')}>
                             <div className='sidebar-col1'>
                                 <img src={CVIcon} className='sidebar-new-cv' style={{ filter: getPage('/new-cv') && filterClicked }} />
@@ -82,7 +82,7 @@ export default function SideBar() {
                     </div>
 
                     {isManager ?
-                        <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.3vw', marginBottom: '.3vw' }}>
+                        <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.2vw', marginBottom: '.2vw' }}>
                             <div className='sidebar-module' style={{ backgroundColor: getPage('/consultants') && '#F3F4F6' }} onClick={() => history.push('/consultants')}>
                                 <div className='sidebar-col1'>
                                     <img src={UsersIcon} className='sidebar-svg' style={{ filter: getPage('/consultants') && filterClicked }} />
@@ -110,7 +110,7 @@ export default function SideBar() {
                         : ''}
 
                     {isManager ?
-                        <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.3vw', marginBottom: '.3vw' }}>
+                        <div className='sidebar-section' style={{ borderBottom: '1px solid #E4E7EB', paddingBottom: '.2vw', marginBottom: '.2vw' }}>
                             <div className='sidebar-module' style={{ backgroundColor: getPage('/activity') && '#F3F4F6' }} onClick={() => history.push('/activity')}>
                                 <div className='sidebar-col1'>
                                     <img src={ActivityIcon} className='sidebar-svg' style={{ filter: getPage('/activity') && filterClicked }} />
