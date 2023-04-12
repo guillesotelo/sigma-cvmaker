@@ -129,8 +129,8 @@ export default function InputField(props) {
     return (
         <div className='inputfield-container' style={{
             margin: fontSize ? `${fontSize / 2}vw 0` : '.5vw 0',
-            width: type === 'file' && 0,
-            height: type === 'file' && 0
+            width: type === 'file' || type === 'image' && 0,
+            height: type === 'file' || type === 'image' && 0
         }}>
             {label ?
                 <h4

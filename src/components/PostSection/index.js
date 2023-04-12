@@ -379,16 +379,34 @@ export default function PostSection(props) {
                     while (checkHiddenPost(toIndex + count) && toIndex + count < newArr.length - 1) count++
                     if (count !== 0 && Object.keys(newArr[toIndex + count]).length > 1) {
                         [newArr[fromIndex], newArr[toIndex + count]] = [newArr[toIndex + count], newArr[fromIndex]]
+                        const newImagesOrder = {
+                            ...images,
+                            [fromIndex]: images[toIndex + count],
+                            [toIndex + count]: images[fromIndex],
+                        }
+                        setImages(newImagesOrder)
                     }
                 } else if (toIndex < fromIndex && toIndex - 1 >= 0) {
                     let count = -1
                     while (checkHiddenPost(toIndex + count) && toIndex + count >= 0) count--
                     if (count !== 0 && newArr[toIndex + count]) {
                         [newArr[fromIndex], newArr[toIndex + count]] = [newArr[toIndex + count], newArr[fromIndex]]
+                        const newImagesOrder = {
+                            ...images,
+                            [fromIndex]: images[toIndex + count],
+                            [toIndex + count]: images[fromIndex],
+                        }
+                        setImages(newImagesOrder)
                     }
                 }
             } else {
                 [newArr[fromIndex], newArr[toIndex]] = [newArr[toIndex], newArr[fromIndex]]
+                const newImagesOrder = {
+                    ...images,
+                    [fromIndex]: images[toIndex],
+                    [toIndex]: images[fromIndex],
+                }
+                setImages(newImagesOrder)
             }
             setItems(newArr)
         }
@@ -756,7 +774,7 @@ export default function PostSection(props) {
             {items && items.length ?
                 items.map((item, i) =>
                     i < items.length - 1 && items.length > 1 ?
-                        <div className='post-column' key={i} style={experienceItem(i)}>
+                        <div className='post-column' key={i} style={{...experienceItem(i), marginTop: i === 0 && checkHiddenPost(i) && '2vw'}}>
                             <div className='post-row'>
                                 <div className='post-period-logo-div'>
                                     {hidden.postSection[i] && hidden.postSection[i].includes('Period') ?
@@ -765,10 +783,23 @@ export default function PostSection(props) {
                                     {getImage(i) ?
                                         <img
                                             src={getImage(i).image}
-                                            style={getImage(i).style}
+                                            style={{
+                                                ...getImage(i).style,
+                                                display: checkHiddenPost(i) && 'none'
+                                            }}
                                             className='post-client-logo-post'
                                             loading='lazy'
                                         /> : ''}
+                                    {checkHiddenPost(i)  ?
+                                        <h4 className='post-company'
+                                            style={{
+                                                fontSize: fontSize ? `${fontSize + fontSize * 0.2}vw` : '1.2vw',
+                                                filter: 'opacity(20%)',
+                                                position: 'absolute',
+                                                left: 0
+                                            }}>
+                                            {item.company}
+                                        </h4> : ''}
                                 </div>
                                 <div className='post-column' style={{ display: checkHiddenPost(i) && 'none' }}>
                                     {hidden.postSection[i] && hidden.postSection[i].includes('Company name') ? '' : <h4 className='post-company' style={{ fontSize: fontSize ? `${fontSize + fontSize * 0.2}vw` : '1.2vw' }}>{item.company}</h4>}

@@ -149,6 +149,7 @@
 .data-table-icons {
     display: flex;
     flex-direction: row;
+    transform: scale(1.4);
 }
 
 .data-table-icon {
