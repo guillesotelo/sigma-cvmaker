@@ -291,7 +291,7 @@ export default function Resume(props) {
         },
         headerContainer: {
             flexDirection: 'row',
-            padding: '2vw 0',
+            padding: '4vw 0 2vw 0',
             alignSelf: 'center',
             width: '90%',
             borderTop: '1px solid gray',
@@ -547,15 +547,16 @@ export default function Resume(props) {
         experienceTechList: {
             display: 'flex',
             flexDirection: 'row',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            padding: '.5vw 0'
         },
         experienceTech: {
             fontFamily: 'Roboto',
             fontSize: '1.7vw',
             backgroundColor: 'lightgray',
-            padding: '.3vw .7vw',
+            padding: '.4vw .8vw',
             borderRadius: '1vw',
-            margin: '.4vw'
+            margin: '.6vw'
         },
         footerCol: {
             flexDirection: 'column',
@@ -591,7 +592,7 @@ export default function Resume(props) {
             textDecoration: 'none'
         },
         clientLogo: {
-            maxHeight: 40,
+            maxHeight: 35,
             maxWidth: 60,
             objectFit: 'contain',
             margin: '2vw 0'
