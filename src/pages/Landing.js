@@ -7,6 +7,7 @@ import InputField from '../components/InputField'
 import { APP_COLORS, VERSION } from '../constants/app'
 import { logIn } from '../store/reducers/user'
 import MoonLoader from "react-spinners/MoonLoader"
+import LandingBg from '../assets/images/landing-bg.jpg'
 
 export default function Landing() {
     const [data, setData] = useState({})
@@ -50,7 +51,7 @@ export default function Landing() {
     return (
         <div className='landing-container'>
             <div className='landing-wallpaper'>
-                <img className='landing-image' src='https://i.postimg.cc/Pqz0B7RF/smartmockups-ldvjxl5u.jpg' alt='Dashboard Image' />
+                <img className='landing-image' src={LandingBg} alt='Dashboard Image' />
             </div>
             <div className='landing-login'>
                     <ToastContainer autoClose={2000} />
