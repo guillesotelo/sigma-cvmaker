@@ -114,7 +114,7 @@ export default function PublicCV() {
                     marginBottom: '2VW',
                     alignSelf: 'center',
                     fontWeight: 'normal'
-                }}>Sigma © 2023</h5>
+                }}>Sigma © 2024</h5>
             </div>
         )
     }
