@@ -64,7 +64,7 @@
 }
 
 .login-logo {
-    height: 4vw;
+    height: 10rem;
     width: auto;
     margin: 0;
     filter: invert(18%) sepia(39%) saturate(9%) hue-rotate(326deg) brightness(30%) contrast(92%);
@@ -88,7 +88,6 @@
 }
 
 .login-image {
-    margin: 2vw 0;
 }
 
 .forgot-pass-link {
