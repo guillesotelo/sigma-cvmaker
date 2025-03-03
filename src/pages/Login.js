@@ -7,6 +7,7 @@ import InputField from '../components/InputField'
 import { APP_COLORS } from '../constants/app'
 import { logIn } from '../store/reducers/user'
 import MoonLoader from "react-spinners/MoonLoader"
+import Logo from '../assets/images/logo.png'
 
 export default function Login() {
     const [data, setData] = useState({})
@@ -53,7 +54,7 @@ export default function Login() {
             <div className='login-box'>
                 <div className='login-image'>
                     <img
-                        src='https://sigmait.pl/wp-content/uploads/2021/12/sigma-logo-black.png'
+                        src={Logo}
                         className='login-logo'
                         loading='lazy'
                     />
