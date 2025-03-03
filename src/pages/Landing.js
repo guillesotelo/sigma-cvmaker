@@ -8,6 +8,7 @@ import { APP_COLORS, VERSION } from '../constants/app'
 import { logIn } from '../store/reducers/user'
 import MoonLoader from "react-spinners/MoonLoader"
 import LandingBg from '../assets/images/landing-bg.jpg'
+import Logo from '../assets/images/logo.png'
 
 export default function Landing() {
     const [data, setData] = useState({})
@@ -58,7 +59,7 @@ export default function Landing() {
                     <div className='login-box landing-login-box'>
                         <div className='login-image'>
                             <img
-                                src='https://sigmait.pl/wp-content/uploads/2021/12/sigma-logo-black.png'
+                                src={Logo}
                                 className='login-logo'
                                 loading='lazy'
                             />
