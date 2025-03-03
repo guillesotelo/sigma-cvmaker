@@ -2,7 +2,7 @@
   "name": "cvmaker",
   "version": "1.1.0",
   "engines": {
-    "node": "16.14.2"
+    "node": "22.x"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
