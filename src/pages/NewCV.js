@@ -97,6 +97,7 @@ export default function NewCV() {
         if (allResumes.length) {
             const edit = new URLSearchParams(document.location.search).get('edit')
             if (edit) setEditData(edit)
+            else setData({...data, type: 'Master'})
         }
     }, [allResumes])
 
