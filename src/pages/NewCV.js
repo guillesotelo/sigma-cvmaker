@@ -1623,10 +1623,6 @@ export default function NewCV() {
                         }
                     </div>
                 </div>
-
-                {
-                    user.isManager &&
-                    <>
                         <div className='separator' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}></div>
                         <div className='resume-fill-internal' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}>
                             <div className='resume-fill-col1'>
@@ -1638,8 +1634,12 @@ export default function NewCV() {
                                 data={data}
                                 managers={managers}
                                 manager={data.manager}
-                            />
+                                />
                         </div>
+                                
+                        {
+                            user.isManager &&
+                                <>
                         <div className='separator' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}></div>
                         <div className='resume-fill-internal' style={{ filter: masterModal || importPDF || previewModal ? 'blur(10px)' : 'none' }}>
                             <div className='resume-fill-col1'>
@@ -1677,7 +1677,7 @@ export default function NewCV() {
                             </div>
                         </div>
                     </>
-                }
+                        }
                 {!previewModal && !masterModal ?
                     <div className='new-resume-btns'>
                         <CTAButton
